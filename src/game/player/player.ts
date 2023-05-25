@@ -301,6 +301,7 @@ export class Player extends BasicElement<PlayerEvents> {
     this.lbMember.delete()
     this._staticItems().playerDied(this.uniqueId)
     this.died(true)
+    this.gameServer().players.delete(this.uniqueId)
   }
 
   makeMessage(content: string) {
