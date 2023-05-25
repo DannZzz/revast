@@ -4,14 +4,15 @@ import { GameServer } from './game/server'
 import { Point, Size, combineClasses } from './global/global'
 import { GameMap, Biome, BiomeOptions, BiomeEffect } from './structures/GameMap'
 import { rectToPolygon } from './utils/polygons'
+import config from 'config'
 
 import { MainServer } from './ws/events/events'
 
-export const PORT = 5000
+export const PORT = config.get('PORT')
 
 export const SERVER_API: (combine?: string) => string = (
   combine: string = '',
-) => `http://localhost:${PORT}${combine}`
+) => `${config.get('SERVER')}${combine}`
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
