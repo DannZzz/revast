@@ -1,0 +1,22 @@
+import { Images } from 'src/structures/image-base'
+import createSettable from 'src/structures/item-creator/create-settable'
+import { verifyItemOfTeam } from '../config-type'
+
+export default createSettable(62)
+  .itIsWall('gold')
+  .name('Golden Door')
+  .sources('GOLDEN_DOOR', 'GOLDEN_DOOR')
+  .craftable({
+    state: { workbench: true },
+    required: {
+      19: 30,
+      60: 1,
+    },
+  })
+  .mode({
+    cover: false,
+    trigger: 'attack',
+    verify: verifyItemOfTeam,
+    source: Images.GOLDEN_DOOR_OPEN,
+  })
+  .build()

@@ -1,0 +1,100 @@
+import { boxPoint } from 'intersects'
+import { Point, Size } from 'src/global/global'
+import { Converter } from './Converter'
+import { Exclude } from 'class-transformer'
+
+export class BiomeEffect {
+  speed: number = 0
+  hungry: number = 0
+  temperatureDay: number = 0
+  temperatureNight: number = 0
+
+  constructor(data: Partial<BiomeEffect> = {}) {
+    Object.assign(this, data)
+  }
+}
+
+export class BiomeOptions {
+  size: Size
+  point: Point
+  bgColor: string
+  borderColor?: string
+  @Exclude()
+  effect: BiomeEffect
+
+  constructor(data: BiomeOptions) {
+    Object.assign(this, data)
+  }
+}
+
+export enum Biome {
+  forest,
+  winter,
+  beach,
+  ocean,
+  desert,
+}
+
+export type Biomes = { [k in Biome]?: BiomeOptions }
+
+export interface GameMapOptions {
+  biomes: Biomes
+  tileSize: Size
+  size: Size
+  mapSource: string
+}
+
+export class GameMap implements GameMapOptions {
+  biomes: Biomes
+  tileSize: Size
+  size: Size
+  mapSource: string
+
+  constructor(data: GameMapOptions) {
+    Object.assign(this, data)
+  }
+
+  get absoluteSize() {
+    return new Size(
+      this.size.width * this.tileSize.width,
+      this.size.height * this.tileSize.height,
+    )
+  }
+
+  absoluteBiome(biome: Biome): BiomeOptions | null {
+    if (biome in this.biomes) {
+      const { bgColor, borderColor, point, size, effect } = this.biomes[biome]
+      return {
+        bgColor,
+        borderColor,
+        point: new Point(
+          this.tileSize.width * point.x,
+          this.tileSize.height * point.y,
+        ),
+        size: new Size(
+          this.tileSize.width * size.width,
+          this.tileSize.height * size.height,
+        ),
+        effect: effect,
+      }
+    } else {
+      return null
+    }
+  }
+
+  biomeOf(point: Point): Biome {
+    for (let biome in this.biomes) {
+      const data = this.absoluteBiome(biome as any)
+      if (
+        boxPoint(
+          ...Converter.pointToXYArray(data.point),
+          data.size.width,
+          data.size.height,
+          ...Converter.pointToXYArray(point),
+        )
+      )
+        return +biome as any
+    }
+    return Biome.forest
+  }
+}
