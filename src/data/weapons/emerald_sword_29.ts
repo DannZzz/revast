@@ -17,6 +17,5 @@ export default createItem(29, 'weapon')
   })
   .data({
     damage: 30,
-    damageBuilding: 20,
   })
   .build()
