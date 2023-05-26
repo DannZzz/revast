@@ -8,7 +8,7 @@ export default createItem(41)
     required: {
       3: 20,
     },
-    state: { workbench: true },
+    state: { fire: true },
   })
   .iconSource('PAPER')
   .build()
