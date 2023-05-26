@@ -6,11 +6,11 @@ export default createMob(MobNames.wolf)
   .givesXP(150)
   .hp(300)
   .damage(30, 1)
-  .radius(300, 100)
+  .radius(300, 70)
   .size(150, 150)
-  .speed(140)
+  .speed(120)
   .sources('WOLF', 'HURT_WOLF')
-  .hitbox({ radius: 50, type: 'circle' })
+  .hitbox(50)
   .drop({
     32: 1,
     30: 3,

@@ -1,5 +1,10 @@
 import { IsNumber } from 'class-validator'
 
+export interface Vector2d {
+  x: number
+  y: number
+}
+
 export class Point {
   @IsNumber()
   public x: number
@@ -32,7 +37,7 @@ export class Size {
   round() {
     return new Size(Math.round(this.width), Math.round(this.height))
   }
-  
+
   clone() {
     return new Size(this.width, this.height)
   }

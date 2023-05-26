@@ -8,9 +8,9 @@ export default createMob(MobNames.dragon)
   .damage(65, 1)
   .radius(300, 100)
   .size(300, 300)
-  .speed(135)
+  .speed(115)
   .sources('DRAGON', 'HURT_DRAGON')
-  .hitbox({ radius: 100, type: 'circle' })
+  .hitbox(100)
   .drop({
     51: 1,
     30: 15,

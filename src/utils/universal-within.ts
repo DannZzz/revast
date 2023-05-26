@@ -8,10 +8,13 @@ import {
   polygonPoint,
   polygonPolygon,
 } from 'intersects'
-import { Point } from 'src/global/global'
+import { Point, Vector2d } from 'src/global/global'
 import { Converter } from 'src/structures/Converter'
 
-export type UniversalHitbox = Point | Point[] | { point: Point; radius: number }
+export type UniversalHitbox =
+  | Vector2d
+  | Vector2d[]
+  | { point: Vector2d; radius: number }
 
 export const universalWithin = (
   first: UniversalHitbox,

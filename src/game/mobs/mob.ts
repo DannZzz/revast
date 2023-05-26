@@ -1,5 +1,5 @@
 import { uuid } from 'anytool'
-import { boxPoint, polygonCircle, polygonPoint } from 'intersects'
+import { boxPoint, circlePoint, polygonCircle, polygonPoint } from 'intersects'
 import { Point, Size } from 'src/global/global'
 import { getPointByTheta, getDistance, getAngle } from '../animations/rotation'
 import {
@@ -14,7 +14,7 @@ import { Converter } from 'src/structures/Converter'
 import { Biome } from 'src/structures/GameMap'
 import { StaticItems } from 'src/structures/StaticItems'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
-import { universalWithin } from 'src/utils/universal-within'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { BasicMath } from 'src/utils/math'
 
 export interface MobProps {
@@ -54,18 +54,17 @@ export class Mob extends BasicMob {
     this.point = point
   }
 
-  within(points: Point[]) {
+  within(hitbox: UniversalHitbox) {
     // const hitboxPoints = pointsOfRotatedRectangle(
     //   this.centerPoint(),
     //   this.hitbox,
     //   this.theta,
     // )
 
-    return polygonCircle(
-      Converter.pointArrayToXYArray(points),
-      ...Converter.pointToXYArray(this.centerPoint()),
-      this.attackRadius,
-    )
+    return universalWithin(hitbox, {
+      radius: this.attackRadius,
+      point: this.centerPoint(),
+    })
   }
 
   readyToDamage(players: Player[]) {
@@ -75,20 +74,14 @@ export class Mob extends BasicMob {
       timer(1000).subscribe(() => {
         this.damageIntervalObj = setInterval(() => {
           // hurting player
-          let check: any = {
-            point: this.centerPoint(),
-            // @ts-ignore
-            radius: this.hitbox.radius,
-          }
-          if (this.hitbox.type === 'rect') {
-            check = pointsOfRotatedRectangle(
-              this.centerPoint(),
-              new Size(this.hitbox.width, this.hitbox.height),
-              this.theta,
-            )
-          }
           players.forEach((player) => {
-            if (universalWithin(check, player.point())) {
+            if (
+              circlePoint(
+                ...Converter.pointToXYArray(this.centerPoint()),
+                this.hitbox,
+                ...Converter.pointToXYArray(player.point()),
+              )
+            ) {
               player.damage(this.damage, 'mob')
             }
           })
@@ -116,10 +109,16 @@ export class Mob extends BasicMob {
     if (this.died) {
       this.hurt(0, {} as any)
     }
+
+    const attackTactic = this.moveTactic.otherTactics.find(
+      (t) => t.type == MobMoveStatus.ATTACK,
+    )
+
     const speed = (sp: number) => sp * delta
     const useTactic = (
       tactic: Partial<MoveTactic<MobMoveStatus>>,
       theta: number,
+      _interval: number | (() => number) = tactic.interval,
     ) => {
       if (!this.nextStopTime || Date.now() >= this.nextStopTime) {
         if (this.waitUntil >= Date.now()) {
@@ -128,9 +127,7 @@ export class Mob extends BasicMob {
         } else {
           this.theta = theta
           const interval =
-            typeof tactic.interval === 'number'
-              ? tactic.interval
-              : tactic.interval()
+            typeof _interval === 'number' ? _interval : _interval()
           const targetPoint = getPointByTheta(
             this.point,
             this.theta,
@@ -161,27 +158,26 @@ export class Mob extends BasicMob {
             this.spawn.size.height,
             ...Converter.pointToXYArray(this.centerPoint(nextPoint)),
           ) ||
-          this.staticItems.someWithin(() => {
-            if (this.hitbox.type === 'circle') {
-              return [this.centerPoint(), this.hitbox.radius]
-            }
-            return [
-              pointsOfRotatedRectangle(
-                nextPoint,
-                new Size(this.hitbox.width, this.hitbox.height),
-                this.theta,
-              ),
-            ]
-          })
-        )
+          this.staticItems.someWithin(() => [
+            this.centerPoint(nextPoint),
+            this.hitbox,
+          ])
+        ) {
+          // this.target = null
+          this.targetPoint = null
+          this.readyToDamage([])
+          useTactic(
+            this.moveTactic.idleTactic,
+            $.randomNumber(0, Math.PI * 2),
+            attackTactic.interval,
+          )
           return
+        }
 
         this.moveTo(nextPoint)
       }
     }
-    const attackTactic = this.moveTactic.otherTactics.find(
-      (t) => t.type == MobMoveStatus.ATTACK,
-    )
+
     if (this.target && !this.target.died()) {
       const distance = getDistance(this.target.point(), this.centerPoint())
       if (distance < speed(attackTactic.speed)) {

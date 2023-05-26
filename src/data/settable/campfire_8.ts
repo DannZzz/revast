@@ -9,7 +9,7 @@ export default createSettable(8, 'campfire')
   .name('Campfire')
   .size(202, 189)
   .hp(250)
-  .setMode(new Point(0, -120), { type: 'rect', ...new Size(80, 80) })
+  .setMode(new Point(0, -120), { type: 'rect', ...new Size(100, 100) })
   .craftable({
     givesXp: 30,
     duration: 8,

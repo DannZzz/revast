@@ -6,11 +6,11 @@ export default createMob(MobNames.bear)
   .givesXP(150)
   .hp(550)
   .damage(40, 1)
-  .radius(300, 100)
+  .radius(300, 90)
   .size(200, 200)
-  .speed(145)
+  .speed(125)
   .sources('BEAR', 'HURT_BEAR')
-  .hitbox({ radius: 70, type: 'circle' })
+  .hitbox(70)
   .drop({
     48: 3,
     30: 4,

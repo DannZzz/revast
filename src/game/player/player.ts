@@ -146,13 +146,11 @@ export class Player extends BasicElement<PlayerEvents> {
     // this.body.rotation(angle)
   }
 
-  moveTo(point: Point) {
-    this.point(point)
-    this.cache.data.biome = this.gameServer().map.biomeOf(point)
+  moveFromHere(point: Point) {
+    this.moveTo(combineClasses(point, this.point()))
   }
 
-  moveFromHere(point: Point) {
-    const absolute = combineClasses(point, this.point())
+  moveTo(absolute: Point) {
     const { width: mapW, height: mapH } = this.camera.map()
 
     if (absolute.x < 0) {
@@ -167,7 +165,8 @@ export class Player extends BasicElement<PlayerEvents> {
     }
 
     this.camera.calculateCameraPoint(absolute)
-    this.moveTo(absolute)
+    this.point(absolute)
+    this.cache.data.biome = this.gameServer().map.biomeOf(absolute)
   }
 
   socketRegistering() {

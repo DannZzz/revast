@@ -6,11 +6,11 @@ export default createMob(MobNames.piranha)
   .givesXP(150)
   .hp(250)
   .damage(30, 1)
-  .radius(300, 100)
+  .radius(300, 70)
   .size(150, 150)
-  .speed(130)
+  .speed(110)
   .sources('PIRANHA', 'HURT_PIRANHA')
-  .hitbox({ radius: 50, type: 'circle' })
+  .hitbox(50)
   .drop({
     49: 2,
     45: 3,

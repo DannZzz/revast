@@ -25,6 +25,7 @@ import { BasicDrop } from '../basic/drop.basic'
 import { Images } from 'src/structures/image-base'
 import { Size } from 'src/global/global'
 import { WearingEntity } from 'src/entities/wearing.entity'
+import { UniversalHitbox } from 'src/utils/universal-within'
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -150,6 +151,21 @@ export class PlayerItems {
       this.player
         .gameServer()
         .alivePlayers.some((player) => settable.withinStrict(player.points))
+    )
+      return -1
+
+    // checkin mobs
+    const itemUniversalHitBox: UniversalHitbox =
+      settable.data.setMode.itemSize.type === 'circle'
+        ? {
+            point: settable.centerPoint,
+            radius: settable.data.setMode.itemSize.radius,
+          }
+        : settable.points
+    if (
+      this.player
+        .gameServer()
+        .mobs.all.some((mob) => mob.within(itemUniversalHitBox))
     )
       return -1
     this.player.staticItems.addSettables(settable)

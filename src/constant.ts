@@ -35,6 +35,9 @@ export const ITEM_DIR_NAMES = [
   'settable',
   'helmets',
 ]
+
+export const MOB_GLOBAL_SPEED_EFFECT = 0
+
 export const MOB_DIR_NAMES = ['mobs']
 
 export const PLAYER_NAME_MAX_SIZE = 18
@@ -48,8 +51,8 @@ export const MESSAGE_DURATION = 8
 export const GAME_DAY_SECONDS = 600
 
 export const BASIC_PLAYER_SPEED = 180
-export const PLAYER_DECREASE_SPEED_WEAPON = 20
-export const PLAYER_DECREASE_SPEED_CLICK = 10
+export const PLAYER_DECREASE_SPEED_WEAPON = 45
+export const PLAYER_DECREASE_SPEED_CLICK = 30
 
 export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 

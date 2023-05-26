@@ -6,11 +6,11 @@ export default createMob(MobNames.arctic_fox)
   .givesXP(150)
   .hp(300)
   .damage(30, 1)
-  .radius(300, 100)
+  .radius(300, 70)
   .size(150, 150)
-  .speed(125)
+  .speed(105)
   .sources('ARCTIC_FOX', 'HURT_ARCTIC_FOX')
-  .hitbox({ radius: 50, type: 'circle' })
+  .hitbox(50)
   .drop({
     47: 1,
     30: 3,

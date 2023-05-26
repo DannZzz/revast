@@ -23,9 +23,7 @@ export interface BasicMobProps {
   hurtSource: string
   givesXP: number
   size: Size
-  hitbox:
-    | { type: 'rect'; width: number; height: number }
-    | { type: 'circle'; radius: number }
+  hitbox: number
   reactRadius: number
   damage: number
   name: MobNames
@@ -40,6 +38,7 @@ export class BasicMob implements BasicMobProps {
   constructor(data: BasicMobProps) {
     Object.assign(this, data)
   }
+  hitbox: number
   drop: { [k: number]: number }
   hurtSource: string
   hp: number
@@ -51,8 +50,5 @@ export class BasicMob implements BasicMobProps {
   damageInterval: number
   size: Size
   reactRadius: number
-  hitbox:
-    | { type: 'rect'; width: number; height: number }
-    | { type: 'circle'; radius: number }
   moveTactic: MobDefaultMoveTactic
 }

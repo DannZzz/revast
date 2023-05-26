@@ -2,6 +2,7 @@ import { BasicMob, MobMoveStatus, MoveTactic } from 'src/game/basic/mob.basic'
 import { Images } from '../image-base'
 import { Size } from 'src/global/global'
 import { MobNames } from 'src/data/mobs'
+import { MOB_GLOBAL_SPEED_EFFECT } from 'src/constant'
 
 class MobCreator {
   extend: Partial<BasicMob> = { moveTactic: { otherTactics: [] } as any }
@@ -41,12 +42,12 @@ class MobCreator {
   }
 
   speed(amount: number) {
-    this._speed = amount
+    this._speed = amount + MOB_GLOBAL_SPEED_EFFECT
     return this
   }
 
-  hitbox(hit: BasicMob['hitbox']) {
-    this.extend.hitbox = hit
+  hitbox(radius: number) {
+    this.extend.hitbox = radius
     return this
   }
 

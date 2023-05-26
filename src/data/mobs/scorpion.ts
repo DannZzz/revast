@@ -6,11 +6,11 @@ export default createMob(MobNames.scorpion)
   .givesXP(150)
   .hp(5000)
   .damage(65, 1)
-  .radius(300, 100)
+  .radius(300, 90)
   .size(250, 250)
-  .speed(145)
+  .speed(125)
   .sources('SCORPION', 'HURT_SCORPION')
-  .hitbox({ radius: 70, type: 'circle' })
+  .hitbox(70)
   .drop({
     52: 1,
     30: 15,
