@@ -43,7 +43,7 @@ export class MainGateway
     this.gameServer.disconnectPlayer(client.id)
   }
 
-  @WsRateLimit(10, 10)
+  // @WsRateLimit(10, 10)
   @SubscribeMessage('messageRequest')
   messageRequest(
     @ConnectedSocket() client: MainSocket,
@@ -52,7 +52,7 @@ export class MainGateway
     this.gameServer.to(client.id)?.makeMessage(data[0])
   }
 
-  @WsRateLimit(4, 2)
+  // @WsRateLimit(4, 2)
   @SubscribeMessage('dropRequest')
   dropRequest(
     @ConnectedSocket() client: MainSocket,
@@ -62,7 +62,7 @@ export class MainGateway
     if (player) player.items.dropItem(data[0], NB.from(data[1]))
   }
 
-  @WsRateLimit(20, 3)
+  // @WsRateLimit(20, 3)
   @SubscribeMessage('autofood')
   autofood(
     @ConnectedSocket() client: MainSocket,
@@ -72,7 +72,7 @@ export class MainGateway
     if (player) player.cache.data.autofood = NB.from(data[0])
   }
 
-  @WsRateLimit(15, 5)
+  // @WsRateLimit(15, 5)
   @SubscribeMessage('screenSize')
   screenSize(
     @ConnectedSocket() client: MainSocket,
@@ -82,7 +82,7 @@ export class MainGateway
     if (player) player.camera.screenSize(data[0], player.point())
   }
 
-  @WsRateLimit(5, 2)
+  // @WsRateLimit(5, 2)
   @SubscribeMessage('setItemRequest')
   setItemRequest(
     @ConnectedSocket() client: MainSocket,
@@ -94,7 +94,7 @@ export class MainGateway
     }
   }
 
-  @WsRateLimit(10, 2)
+  // @WsRateLimit(10, 2)
   @SubscribeMessage('craftRequest')
   craftRequest(
     @ConnectedSocket() client: MainSocket,
@@ -103,7 +103,7 @@ export class MainGateway
     this.gameServer.to(client.id)?.items.craftItem(+data[0])
   }
 
-  @WsRateLimit(20, 3)
+  // @WsRateLimit(20, 3)
   @SubscribeMessage('clickItem')
   clickItem(
     @ConnectedSocket() client: MainSocket,
@@ -128,7 +128,7 @@ export class MainGateway
     this.gameServer.to(client.id)?.toggle.set(data)
   }
 
-  @WsRateLimit(3, 10)
+  // @WsRateLimit(3, 10)
   @SubscribeMessage('joinServer')
   joinServer(
     @ConnectedSocket() client: MainSocket,
