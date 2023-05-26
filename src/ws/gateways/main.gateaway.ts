@@ -82,7 +82,7 @@ export class MainGateway
     if (player) player.camera.screenSize(data[0], player.point())
   }
 
-  @WsRateLimit(3, 2)
+  @WsRateLimit(5, 2)
   @SubscribeMessage('setItemRequest')
   setItemRequest(
     @ConnectedSocket() client: MainSocket,
