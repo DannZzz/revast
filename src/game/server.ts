@@ -61,19 +61,19 @@ export class GameServer implements GameProps {
   constructor(options: GameProps) {
     Object.assign(this, options)
     //
-    // this.mapItems().layers[0].data.forEach((mapId, i) => {
-    //   if (mapId) {
-    //     // console.log(mapId)
-    //     const bio = bioItemByMapId(
-    //       mapId,
-    //       BasicMath.xy(i, this.map.size, this.map.tileSize),
-    //     )
-    //     if (!bio) return
-    //     bio.gameServer = () => this
-    //     this.staticItems.addBios(bio)
-    //   }
-    // })
-    // console.log(this.staticItems.bio.length) //
+    this.mapItems().layers[0].data.forEach((mapId, i) => {
+      if (mapId) {
+        // console.log(mapId)
+        const bio = bioItemByMapId(
+          mapId,
+          BasicMath.xy(i, this.map.size, this.map.tileSize),
+        )
+        if (!bio) return
+        bio.gameServer = () => this
+        this.staticItems.addBios(bio)
+      }
+    })
+    console.log(this.staticItems.bio.length) //
     this.day = new GameDay(this.madeAt)
     this.updateLeaderboard()
     this.updateDayAndNight()

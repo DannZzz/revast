@@ -60,16 +60,9 @@ export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
 export const START_ITEMS = () => [
-  [29, { quantity: 999, equiped: false, item: itemById(29) }],
-  [59, { quantity: 999, equiped: false, item: itemById(59) }],
+  [1, { quantity: 1, equiped: false, item: itemById(1) }],
   [6, { quantity: 999, equiped: false, item: itemById(6) }],
-  [8, { quantity: 999, equiped: false, item: itemById(8) }],
-  [70, { quantity: 1, equiped: false, item: itemById(70) }],
-  [71, { quantity: 1, equiped: false, item: itemById(71) }],
-  [72, { quantity: 1, equiped: false, item: itemById(72) }],
-  [73, { quantity: 1, equiped: false, item: itemById(73) }],
-  [74, { quantity: 1, equiped: false, item: itemById(74) }],
-  [75, { quantity: 1, equiped: false, item: itemById(75) }],
+  [8, { quantity: 3, equiped: false, item: itemById(8) }],
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>

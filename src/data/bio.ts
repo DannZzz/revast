@@ -9,6 +9,7 @@ import BioDiamond2 from './bios/diamond2_map_8'
 import BioAmethyst from './bios/amethyst_map_9'
 import BioRuby from './bios/ruby_map_10'
 import BioEmerald from './bios/emerald_map_11'
+import BioWinterTree from './bios/winter_tree_12'
 
 import { Chest } from 'anytool'
 import { BasicBioItem, Bio } from '../game/basic/bio-item.basic'
@@ -27,6 +28,7 @@ export const BioItems = new Chest<number, BasicBioItem>(
     BioAmethyst,
     BioRuby,
     BioEmerald,
+    BioWinterTree,
   ].map((bio) => [bio.data.mapId, bio]),
 )
 
@@ -35,11 +37,8 @@ export const bioItemByMapId = (mapId: number, point: Point): Bio => {
   try {
     const bio = item.generate()
     bio.preCreate(
-      // new Point(
-      //   point.x - item.data.size.width / 2,
-      //   point.y - item.data.size.height / 2,
-      // ),
-      point,
+      new Point(point.x, point.y - item.data.size.height),
+      // point,
     )
     return bio
   } catch (e) {
