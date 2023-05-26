@@ -13,7 +13,6 @@ export class GameMap {
         s.width * mapDto.tileSize.width,
         s.height * mapDto.tileSize.height
       )
-    console.log(mapDto.biomes)
     mapDto.biomes.forEach((biome) => {
       const rect = new Konva.Rect({
         ...aP(biome.point),
