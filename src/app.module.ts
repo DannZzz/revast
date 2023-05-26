@@ -20,10 +20,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
       rootPath: join(__dirname, '..', 'assets'),
     }),
     WsModule,
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 5,
-    }),
+    // ThrottlerModule.forRoot({
+    //   ttl: 60,
+    //   limit: 5,
+    // }),
   ],
   controllers: [CraftsController, ServersController, ItemsController],
   providers: [
