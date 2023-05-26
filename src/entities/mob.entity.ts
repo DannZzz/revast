@@ -39,7 +39,7 @@ export class MobEntity implements Partial<Mob> {
   spawn: { startPoint: Point; size: Size }
   staticItems: StaticItems
   target?: Player
-  currentBiom: Biome
+  currentBiom: string
   theta: number
   damage: number
   source: string

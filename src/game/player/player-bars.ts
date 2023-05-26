@@ -51,8 +51,9 @@ export class PlayerBars {
   }
 
   private actualTemperatureChanges() {
-    const effect =
-      this.player.gameServer().map.biomes[this.player.cache.get('biome')].effect
+    const effect = this.player
+      .gameServer()
+      .map.biomes.find((b) => b.name === this.player.cache.get('biome')).effect
     let percentOfDecreasing = effect.temperatureDay
     if (!this.player.gameServer().day.isDay())
       percentOfDecreasing = effect.temperatureNight

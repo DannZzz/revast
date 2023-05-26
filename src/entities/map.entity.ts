@@ -22,7 +22,6 @@ export class MapEntity implements GameMap {
   }
 
   @Type(() => BiomeOptions)
-  @Transform(({ value }) => Object.values(value))
   biomes: Biomes
 
   @Exclude()
@@ -33,12 +32,12 @@ export class MapEntity implements GameMap {
   }
 
   @Exclude()
-  biomeOf(point: Point): Biome {
+  biomeOf(point: Point): string {
     throw new Error('Method not implemented.')
   }
 
   @Exclude()
-  absoluteBiome(biome: Biome): BiomeOptions {
+  absoluteBiome(name: string): BiomeOptions {
     throw new Error('Method not implemented.')
   }
 }

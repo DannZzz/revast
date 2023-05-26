@@ -1,9 +1,8 @@
 import { formatNumber } from 'anytool'
 import { Command, CommandArgument } from '../Command'
-import { Player } from 'src/game/player/player'
 
 export default new Command('change-score', {
-  aliases: ['cs'],
+  aliases: ['cs', 'give-score', 'gs'],
   args: [
     {
       desc: 'Player Id',

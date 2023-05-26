@@ -73,8 +73,10 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
       size: new Size(300, 300),
       tileSize: new Size(70, 70),
       mapSource: 'map1-mini.png',
-      biomes: {
-        [Biome.winter]: new BiomeOptions({
+      biomes: [
+        new BiomeOptions({
+          type: Biome.winter,
+          name: 'winter',
           size: new Size(150, 100),
           bgColor: '#f8f6f1',
           point: new Point(0, 0),
@@ -84,7 +86,10 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             speed: -30,
           }),
         }),
-        [Biome.forest]: new BiomeOptions({
+
+        new BiomeOptions({
+          type: Biome.forest,
+          name: 'forest',
           size: new Size(140, 100),
           bgColor: '#133a2b',
           point: new Point(0, 100),
@@ -93,7 +98,9 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             temperatureNight: -20,
           }),
         }),
-        [Biome.beach]: new BiomeOptions({
+        new BiomeOptions({
+          type: Biome.beach,
+          name: 'beach',
           size: new Size(10, 100),
           bgColor: '#fbefbc',
           point: new Point(140, 100),
@@ -102,7 +109,9 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             temperatureNight: -20,
           }),
         }),
-        [Biome.desert]: new BiomeOptions({
+        new BiomeOptions({
+          type: Biome.desert,
+          name: 'desert',
           size: new Size(150, 100),
           bgColor: '#d1c69b',
           point: new Point(0, 200),
@@ -112,7 +121,9 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             temperatureNight: -20,
           }),
         }),
-        [Biome.ocean]: new BiomeOptions({
+        new BiomeOptions({
+          type: Biome.ocean,
+          name: 'ocean',
           size: new Size(150, 300),
           bgColor: '#0b6a84',
           point: new Point(150, 0),
@@ -122,75 +133,103 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             temperatureNight: -30,
           }),
         }),
-      },
+        new BiomeOptions({
+          type: Biome.cave,
+          name: 'desert-cave',
+          priority: true,
+          bgColor: '#545055',
+          size: new Size(67, 31),
+          point: new Point(4, 266),
+          effect: new BiomeEffect({
+            speed: -20,
+            temperatureDay: 0,
+            temperatureNight: -20,
+          }),
+        }),
+        new BiomeOptions({
+          type: Biome.cave,
+          priority: true,
+          name: 'winter-cave',
+          bgColor: '#545055',
+          size: new Size(37, 21),
+          point: new Point(62, 1),
+          effect: new BiomeEffect({
+            temperatureDay: -20,
+            temperatureNight: -40,
+            speed: -30,
+          }),
+        }),
+      ],
     }),
     initMobs: (game) => {
-      const forest = game.map.absoluteBiome(Biome.forest)
-      const desert = game.map.absoluteBiome(Biome.desert)
-      const winter = game.map.absoluteBiome(Biome.winter)
-      const ocean = game.map.absoluteBiome(Biome.ocean)
+      const forest = game.map.absoluteBiome('forest')
+      const desert = game.map.absoluteBiome('desert')
+      const winter = game.map.absoluteBiome('winter')
+      const ocean = game.map.absoluteBiome('ocean')
+      const winterCave = game.map.absoluteBiome('winter-cave')
+      const desertCave = game.map.absoluteBiome('desert-cave')
       return Mobs.generateForServer(
         {
           [MobNames.wolf]: {
-            biome: Biome.forest,
+            biome: 'forest',
             canOut: false,
             maxCount: 50,
             reAddEachSeconds: 10,
             spawn: { startPoint: forest.point, size: forest.size },
           },
           [MobNames.spider]: {
-            biome: Biome.forest,
+            biome: 'forest',
             canOut: false,
             maxCount: 50,
             reAddEachSeconds: 10,
             spawn: { startPoint: forest.point, size: forest.size },
           },
           [MobNames.bear]: {
-            biome: Biome.forest,
+            biome: 'forest',
             canOut: false,
             maxCount: 20,
             reAddEachSeconds: 20,
             spawn: { startPoint: forest.point, size: forest.size },
           },
           [MobNames.arctic_fox]: {
-            biome: Biome.winter,
+            biome: 'winter',
             canOut: false,
             maxCount: 40,
             reAddEachSeconds: 10,
             spawn: { startPoint: winter.point, size: winter.size },
           },
           [MobNames.polar_bear]: {
-            biome: Biome.winter,
+            biome: 'winter',
             canOut: false,
             maxCount: 30,
             reAddEachSeconds: 10,
             spawn: { startPoint: winter.point, size: winter.size },
           },
           [MobNames.dragon]: {
-            biome: Biome.winter,
+            biome: 'winter-cave',
             canOut: false,
-            maxCount: 30,
+            maxCount: 10,
             reAddEachSeconds: 10,
-            spawn: { startPoint: winter.point, size: winter.size },
+            spawn: { startPoint: winterCave.point, size: winterCave.size },
           },
           [MobNames.piranha]: {
-            biome: Biome.ocean,
+            biome: 'ocean',
             canOut: false,
             maxCount: 30,
             reAddEachSeconds: 10,
             spawn: { startPoint: ocean.point, size: ocean.size },
           },
           [MobNames.megalodon]: {
-            biome: Biome.ocean,
+            biome: 'ocean',
             canOut: false,
             maxCount: 30,
             reAddEachSeconds: 10,
             spawn: { startPoint: ocean.point, size: ocean.size },
           },
           [MobNames.scorpion]: {
-            biome: Biome.desert,
+            biome: 'desert',
             canOut: false,
-            maxCount: 30,
+            maxCount: 50,
             reAddEachSeconds: 10,
             spawn: { startPoint: desert.point, size: desert.size },
           },

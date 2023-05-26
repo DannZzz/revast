@@ -59,7 +59,7 @@ export class VisualPlayerData {
 
 export interface PlayerCache {
   lastSentPosition?: Point
-  biome?: Biome
+  biome?: string
   lastSentCameraPosition?: Point
   staticBios?: Bio[]
   staticSettables?: StaticSettableItem[]
@@ -78,7 +78,7 @@ export const PlayerCacheInit: () => PlayerCache = () => {
     staticSettables: [],
     mobs: [],
     otherPlayers: [],
-    biome: Biome.forest,
+    biome: 'forest',
     drops: [],
     lastSentDay: 0,
   }

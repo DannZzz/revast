@@ -15,6 +15,12 @@ export class BiomeEffect {
 }
 
 export class BiomeOptions {
+  @Exclude()
+  name: string
+  @Exclude()
+  type: Biome
+  @Exclude()
+  priority?: boolean
   size: Size
   point: Point
   bgColor: string
@@ -33,9 +39,10 @@ export enum Biome {
   beach,
   ocean,
   desert,
+  cave,
 }
 
-export type Biomes = { [k in Biome]?: BiomeOptions }
+export type Biomes = BiomeOptions[]
 
 export interface GameMapOptions {
   biomes: Biomes
@@ -61,12 +68,16 @@ export class GameMap implements GameMapOptions {
     )
   }
 
-  absoluteBiome(biome: Biome): BiomeOptions | null {
-    if (biome in this.biomes) {
-      const { bgColor, borderColor, point, size, effect } = this.biomes[biome]
+  absoluteBiome(biomeName: string): BiomeOptions | null {
+    const biome = this.biomes.find((bo) => bo.name === biomeName)
+    if (biome) {
+      const { bgColor, borderColor, point, size, effect } = biome
       return {
+        name: biomeName,
+        type: biome.type,
         bgColor,
         borderColor,
+        priority: biome.priority,
         point: new Point(
           this.tileSize.width * point.x,
           this.tileSize.height * point.y,
@@ -82,9 +93,9 @@ export class GameMap implements GameMapOptions {
     }
   }
 
-  biomeOf(point: Point): Biome {
-    for (let biome in this.biomes) {
-      const data = this.absoluteBiome(biome as any)
+  biomeOf(point: Point): string {
+    for (let biome of this.biomes) {
+      const data = this.absoluteBiome(biome.name)
       if (
         boxPoint(
           ...Converter.pointToXYArray(data.point),
@@ -93,8 +104,8 @@ export class GameMap implements GameMapOptions {
           ...Converter.pointToXYArray(point),
         )
       )
-        return +biome as any
+        return data.name
     }
-    return Biome.forest
+    return 'forest'
   }
 }

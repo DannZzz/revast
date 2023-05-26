@@ -21,7 +21,7 @@ export interface MobProps {
   point: Point
   spawn: { startPoint: Point; size: Size }
   staticItems: StaticItems
-  currentBiom: Biome
+  currentBiom: string
   theta: number
 }
 
@@ -36,7 +36,7 @@ export class Mob extends BasicMob {
   point?: Point = new Point(0, 0)
   staticItems: StaticItems
   target?: Player
-  currentBiom: Biome
+  currentBiom: string
   theta: number
   drop: { [k: number]: number }
   attackRadius: number

@@ -121,7 +121,7 @@ export class GameServer implements GameProps {
     this.players.set(login.playerId, player)
 
     this.checkLoop()
-    player.moveTo(this.randomEmptyPoint())
+    player.moveTo(this.randomEmptyPoint(35))
   }
 
   to(socketId: string): Player {
@@ -141,21 +141,25 @@ export class GameServer implements GameProps {
     return this.players.filter((player) => !player.died())
   }
 
-  randomEmptyPoint(): Point
-  randomEmptyPoint(point: Point, size: Size): Point
-  randomEmptyPoint(startPoint?: Point, size?: Size): Point {
+  randomEmptyPoint(forObjectRadius: number): Point
+  randomEmptyPoint(forObjectRadius: number, point: Point, size: Size): Point
+  randomEmptyPoint(
+    forObjectRadius: number,
+    startPoint?: Point,
+    size?: Size,
+  ): Point {
     const forest =
       startPoint && size
         ? { size, point: startPoint }
-        : this.map.absoluteBiome(Biome.forest)
+        : this.map.absoluteBiome('forest')
     let randomPoint = () =>
       new Point(
         +$.randomNumber(forest.point.x, forest.point.x + forest.size.width),
         +$.randomNumber(forest.point.y, forest.point.y + forest.size.height),
       )
     let point = randomPoint()
-    const bios = this.staticItems.bio
-    while (bios.some((bio) => bio.within(PLAYER_BODY_POINTS(point)))) {
+    const items = this.staticItems
+    while (items.someWithin(() => [point, forObjectRadius])) {
       point = randomPoint()
     }
     return point

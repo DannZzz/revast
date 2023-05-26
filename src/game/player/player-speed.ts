@@ -15,7 +15,9 @@ export class PlayerSpeed {
       let sp = speed
 
       // biome effect
-      sp += gameServer.map.biomes[this.player.cache.get('biome')].effect.speed
+      sp += gameServer.map.biomes.find(
+        (b) => b.name === this.player.cache.get('biome'),
+      ).effect.speed
 
       // weapon equiped
       if (this.player.items.equiped?.item.data.type === 'weapon')

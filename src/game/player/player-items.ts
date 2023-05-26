@@ -142,7 +142,7 @@ export class PlayerItems {
     // checking water
     if (
       !settable.data.onThe.water &&
-      this.player.gameServer().map.biomeOf(settable.centerPoint) == Biome.ocean
+      this.player.gameServer().map.biomeOf(settable.centerPoint) === 'ocean'
     )
       return -1
 
@@ -172,6 +172,7 @@ export class PlayerItems {
     this._items.get(itemId).quantity--
     this._items = this.filterItems(this._items)
     this.update()
+    this.player.actions.state.update()
     return itemId
   }
 
