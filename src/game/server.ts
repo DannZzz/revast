@@ -120,9 +120,8 @@ export class GameServer implements GameProps {
     })
     this.players.set(login.playerId, player)
 
-    player.moveTo(this.randomEmptyPoint())
-
     this.checkLoop()
+    player.moveTo(this.randomEmptyPoint())
   }
 
   to(socketId: string): Player {
