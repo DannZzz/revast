@@ -3,8 +3,8 @@ import { Point, Size, combineClasses } from 'src/global/global'
 export class BasicMath {
   static xy(index: number, colls: Size, tile: Size = new Size(1, 1)) {
     return new Point(
-      Math.floor(index % colls.width) * tile.width + tile.width / 2,
-      Math.floor(index / colls.height) * tile.height + tile.height / 2,
+      Math.floor(index % colls.width) * tile.width + tile.width,
+      Math.floor(index / colls.height) * tile.height + tile.height,
     )
   }
 
