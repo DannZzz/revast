@@ -27,10 +27,10 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
   ],
   controllers: [CraftsController, ServersController, ItemsController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
   ],
 })
 export class AppModule {}

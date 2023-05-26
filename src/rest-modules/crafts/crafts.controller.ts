@@ -9,7 +9,7 @@ import { Items } from 'src/data/items'
 import { ItemCompactEntity } from 'src/entities/item.entity'
 import { Transformer } from 'src/structures/Transformer'
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('api/crafts')
 export class CraftsController {
   @Get('/list')

@@ -3,7 +3,7 @@ import { SkipThrottle } from '@nestjs/throttler'
 import { SERVER_API } from 'src/constant'
 import GameServers from 'src/servers/game-servers'
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('api/servers')
 export class ServersController {
   @Get()
