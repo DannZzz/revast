@@ -2,6 +2,7 @@ import createItem from 'src/structures/item-creator/create-item'
 
 export default createItem(73, 'tool')
   .equipableDefault()
+  .name('Amethyst Hammer')
   .setEquipmentItemSize('hammers')
   .sources('AMETHYST_HAMMER', 'ICON_AMETHYST_HAMMER')
   .setItemResourceType('amethyst')

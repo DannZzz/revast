@@ -5,6 +5,7 @@ export default createItem(75, 'tool')
   .setEquipmentItemSize('hammers')
   .sources('SUPER_HAMMER', 'ICON_SUPER_HAMMER')
   .setItemResourceType('emerald')
+  .name('Super Hammer')
   .setVariant('hammer')
   .data({
     damage: 12,

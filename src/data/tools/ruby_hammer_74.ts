@@ -6,6 +6,7 @@ export default createItem(74, 'tool')
   .sources('RUBY_HAMMER', 'ICON_RUBY_HAMMER')
   .setItemResourceType('ruby')
   .setVariant('hammer')
+  .name('Ruby Hammer')
   .data({
     damage: 6,
     damageBuilding: 70,

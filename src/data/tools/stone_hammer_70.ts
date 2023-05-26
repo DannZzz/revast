@@ -5,6 +5,7 @@ export default createItem(70, 'tool')
   .setEquipmentItemSize('hammers')
   .sources('STONE_HAMMER', 'ICON_STONE_HAMMER')
   .setItemResourceType('stone')
+  .name('Stone Hammer')
   .setVariant('hammer')
   .data({
     damage: 1,

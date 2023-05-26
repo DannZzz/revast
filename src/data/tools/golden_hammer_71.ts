@@ -6,6 +6,7 @@ export default createItem(71, 'tool')
   .sources('GOLDEN_HAMMER', 'ICON_GOLDEN_HAMMER')
   .setItemResourceType('gold')
   .setVariant('hammer')
+  .name('Golden Hammer')
   .data({
     damage: 2,
     damageBuilding: 40,
