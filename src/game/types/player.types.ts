@@ -2,7 +2,7 @@ import { Expose, Type } from 'class-transformer'
 import { EquipmentEntity } from 'src/entities/equipment.entity'
 import { PlayerSkinEntity } from 'src/entities/player-skin.entity'
 import { Point, Size } from 'src/global/global'
-import { Biome } from 'src/structures/GameMap'
+import { Biome, MapAreaName } from 'src/structures/GameMap'
 import { LBMember } from 'src/structures/leaderboard/Leaderboard'
 import { Token } from 'src/structures/tokens/Token'
 import { Bio } from '../basic/bio-item.basic'
@@ -59,7 +59,7 @@ export class VisualPlayerData {
 
 export interface PlayerCache {
   lastSentPosition?: Point
-  biome?: string
+  biome?: MapAreaName[]
   lastSentCameraPosition?: Point
   staticBios?: Bio[]
   staticSettables?: StaticSettableItem[]
@@ -78,7 +78,7 @@ export const PlayerCacheInit: () => PlayerCache = () => {
     staticSettables: [],
     mobs: [],
     otherPlayers: [],
-    biome: 'forest',
+    biome: ['forest'],
     drops: [],
     lastSentDay: 0,
   }
@@ -87,7 +87,7 @@ export const PlayerCacheInit: () => PlayerCache = () => {
 export interface PlayerProps {
   name: string
   cameraOptions: { size: Size; map: Size }
-  gameServer: () => GameServer
+  gameServer: GameServer
   token: Token
   lbMember: LBMember
   uniqueId: number

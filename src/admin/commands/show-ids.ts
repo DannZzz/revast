@@ -4,7 +4,7 @@ export default new Command('show-ids', {
   aliases: ['si'],
   args: [],
   onMatch(author) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
     author
       .socket()
       .emit('playerMessage', [

@@ -41,11 +41,15 @@ export class BasicDrop<T = any> implements BasicDropProps<T> {
   onEnd: (drop: BasicDrop<T>) => void
   authorId: string
 
-  within(hitbox: UniversalHitbox) {
-    return universalWithin(hitbox, {
+  get universalHitbox() {
+    return {
       radius: this.hitboxRadius,
       point: this.point,
-    })
+    }
+  }
+
+  within(hitbox: UniversalHitbox) {
+    return universalWithin(hitbox, this.universalHitbox)
   }
 
   hurt(damage: number, player: Player) {

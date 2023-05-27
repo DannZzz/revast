@@ -41,6 +41,7 @@ import { BasicDrop } from '../basic/drop.basic'
 import { Images } from 'src/structures/image-base'
 import { percentOf } from 'src/utils/percentage'
 import { Message } from 'src/structures/Message'
+import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
@@ -57,7 +58,7 @@ export class Player extends BasicElement<PlayerEvents> {
   readonly toggle = new Toggle()
   readonly speed: PlayerSpeed
   readonly items: PlayerItems
-  readonly _staticItems: () => StaticItems
+  readonly staticItems: StaticItemsHandler
   readonly bars: PlayerBars
   readonly camera: Camera
   cache: Cache<PlayerCache> = new Cache(PlayerCacheInit)
@@ -71,11 +72,11 @@ export class Player extends BasicElement<PlayerEvents> {
 
   readonly socket: () => MainSocket = () =>
     perfectSocket(
-      this.gameServer().socketServer.sockets.get(
+      this.gameServer.socketServer.sockets.get(
         TokenChest.get(this.token.current)?.currentSocketId,
       ),
     )
-  readonly gameServer: () => GameServer
+  readonly gameServer: GameServer
 
   constructor(props: ElementProps<PlayerProps>) {
     const {
@@ -94,12 +95,12 @@ export class Player extends BasicElement<PlayerEvents> {
     this.name = name
     this.pointOnScreen
     this.lbMember = lbMember
-    this._staticItems = () => gameServer().staticItems
+    this.staticItems = gameServer.staticItems
     this.actions = new PlayerAction(this)
     this.items = new PlayerItems(this)
     this.bars = new PlayerBars(this)
     this.camera = new Camera(new Point(), cameraOptions)
-    this.speed = new PlayerSpeed(this.gameServer(), this)
+    this.speed = new PlayerSpeed(this.gameServer, this)
     this.loop = new PlayerLoop(this)
     this.socketRegistering()
   }
@@ -107,10 +108,6 @@ export class Player extends BasicElement<PlayerEvents> {
   moveToCenterOfScreen(size: Size) {
     const centerPoint = this.calculatePointForCentering(size)
     this.moveTo(centerPoint)
-  }
-
-  get staticItems() {
-    return this._staticItems()
   }
 
   get bodyCenterOnScreen() {
@@ -166,12 +163,12 @@ export class Player extends BasicElement<PlayerEvents> {
 
     this.camera.calculateCameraPoint(absolute)
     this.point(absolute)
-    this.cache.data.biome = this.gameServer().map.biomeOf(absolute)
+    this.cache.data.biome = this.gameServer.map.biomeOf(this.camera.viewRect())
   }
 
   socketRegistering() {
     const socket = this.socket()
-    const gameServer = this.gameServer()
+    const gameServer = this.gameServer
     socket.emit('joinServer', [
       Transformer.toPlain(
         new PlayerJoinedEntity({
@@ -274,7 +271,7 @@ export class Player extends BasicElement<PlayerEvents> {
       hurtSource: Images.HURT_CRATE,
       size: new Size(75, 125),
       onEnd: (drop) => {
-        this.staticItems.removeDrop(drop.id)
+        this.staticItems.for(this.cache.get('biome')).removeDrop(drop.id)
       },
       take(player, data) {
         data.forEach((item) => {
@@ -283,7 +280,7 @@ export class Player extends BasicElement<PlayerEvents> {
         })
       },
     })
-    this.staticItems.addDrop(crate)
+    this.staticItems.for(this.cache.get('biome')).addDrop(crate)
 
     this.socket()?.emit('playerDied', [
       Transformer.toPlain(
@@ -298,9 +295,11 @@ export class Player extends BasicElement<PlayerEvents> {
       ),
     ])
     this.lbMember.delete()
-    this._staticItems().playerDied(this.uniqueId)
+    this.staticItems.for(this.cache.get('biome')).playerDied(this.uniqueId)
     this.died(true)
-    this.gameServer().players.delete(this.uniqueId)
+    this.gameServer.players.delete(this.uniqueId)
+    this.gameServer.alivePlayers.delete(this.uniqueId)
+    this.gameServer.checkLoop()
   }
 
   makeMessage(content: string) {
@@ -308,7 +307,7 @@ export class Player extends BasicElement<PlayerEvents> {
     // sharing
     if (message.public()) {
       message.filter()
-      const players = this.gameServer().alivePlayers
+      const players = this.gameServer.alivePlayers
       this.socket().emit('playerMessage', [this.id(), message.content])
       players.forEach(
         (player) =>

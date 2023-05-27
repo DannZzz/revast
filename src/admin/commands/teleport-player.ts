@@ -22,7 +22,7 @@ export default new Command('teleport-player', {
     },
   ],
   onMatch(author, [playerId, x, y]) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
     const selectedPlayers: Player[] = []
     if (playerId === 'all') {
       selectedPlayers.push(...players.values())
@@ -32,7 +32,7 @@ export default new Command('teleport-player', {
       selectedPlayers.push(p)
     }
 
-    const map = author.gameServer().map.absoluteSize
+    const map = author.gameServer.map.absoluteSize
 
     const pos = new Point(+x, +y)
     if (pos.x < 0 || pos.x > map.width || pos.y < 0 || pos.y > map.height)

@@ -7,7 +7,7 @@ import {
   polygonPolygon,
 } from 'intersects'
 import { Point, Size, combineClasses } from 'src/global/global'
-import { GameServer } from '../server'
+import { GameServer, Players } from '../server'
 import { getPointByTheta, getAngle } from '../animations/rotation'
 import { timer } from 'rxjs'
 import { Converter } from 'src/structures/Converter'
@@ -15,14 +15,21 @@ import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { GetSet } from 'src/structures/GetSet'
 import { Player } from '../player/player'
 import { percentFrom, percentOf } from 'src/utils/percentage'
+import { StaticItems } from 'src/structures/StaticItems'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
+import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
     const { ...otherProps } = props
     super(otherProps)
   }
-  toSettable(authorId: number, gameServer: () => GameServer) {
-    return new StaticSettableItem(authorId, this.data, gameServer)
+  toSettable(
+    authorId: number,
+    players: Players,
+    staticItems: StaticItemsHandler,
+  ) {
+    return new StaticSettableItem(authorId, this.data, players, staticItems)
   }
 }
 
@@ -33,26 +40,22 @@ export class StaticSettableItem {
   theta: number = Math.PI
   readonly id: string = uuid(50)
   points: Point[] = []
-  readonly authorId: number
-  readonly data: ItemProps<Settable>
-  private gameServer: () => GameServer
+
   modeEnabled = GetSet(false)
   destroyed = false
 
   constructor(
-    authorId: number,
-    data: ItemProps<Settable>,
-    gameServer: () => GameServer,
+    readonly authorId: number,
+    readonly data: ItemProps<Settable>,
+    private players: Players,
+    private staticItems: StaticItemsHandler,
   ) {
-    this.authorId = authorId
-    this.data = data
-    this.gameServer = gameServer
     this.tempHp = GetSet(data.hp)
 
     if (this.data.durationSeconds)
       timer(this.data.durationSeconds * 1000).subscribe(() => {
         if (!this.destroyed)
-          this.gameServer().staticItems.removeSettable(this.id)
+          this.staticItems.for(this.universalHitbox).removeSettable(this.id)
       })
   }
 
@@ -83,49 +86,28 @@ export class StaticSettableItem {
     return new Point(this.point.x, this.point.y)
   }
 
+  get universalHitbox(): UniversalHitbox {
+    if (this.data.setMode.itemSize.type == 'circle') {
+      return {
+        point: this.centerPoint,
+        radius: this.data.setMode.itemSize.radius,
+      }
+    } else {
+      return this.points
+    }
+  }
+
   isSpecial(key: keyof SpecialSettable) {
     return key in (this.data.special || {})
   }
 
-  withinStrict(points: Point[]): boolean
-  withinStrict(point: Point, radius: number): boolean
-  withinStrict(arg1: Point | Point[], radius?: number) {
-    if (this.data.setMode.itemSize.type === 'circle') {
-      if (Array.isArray(arg1)) {
-        return polygonCircle(
-          Converter.pointArrayToXYArray(arg1),
-          ...Converter.pointToXYArray(this.centerPoint),
-          this.data.setMode.itemSize.radius,
-        )
-      } else {
-        return circleCircle(
-          ...Converter.pointToXYArray(arg1),
-          radius,
-          ...Converter.pointToXYArray(this.centerPoint),
-          this.data.setMode.itemSize.radius,
-        )
-      }
-    } else {
-      if (Array.isArray(arg1)) {
-        return polygonPolygon(
-          Converter.pointArrayToXYArray(arg1),
-          Converter.pointArrayToXYArray(this.points),
-        )
-      } else {
-        return circlePolygon(
-          ...Converter.pointToXYArray(arg1),
-          radius,
-          Converter.pointArrayToXYArray(this.points),
-        )
-      }
-    }
+  withinStrict(hitbox: UniversalHitbox) {
+    return universalWithin(hitbox, this.universalHitbox)
   }
 
-  within(points: Point[]): boolean
-  within(point: Point, radius: number): boolean
-  within(arg1: Point | Point[], radius?: number) {
+  within(hitbox: UniversalHitbox) {
     if (this.modeEnabled() ? this.data.mode?.cover : this.data.cover)
-      return this.withinStrict(arg1 as any, radius)
+      return this.withinStrict(hitbox)
     return false
   }
 
@@ -135,7 +117,7 @@ export class StaticSettableItem {
     if (this.tempHp() > this.data.hp) this.tempHp(this.data.hp)
     if (this.tempHp() <= 0) {
       this.destroyed = true
-      this.gameServer().staticItems.removeSettable(this.id)
+      this.staticItems.for(this.universalHitbox).removeSettable(this.id)
     }
   }
 
@@ -146,7 +128,7 @@ export class StaticSettableItem {
     } else {
     }
     if (this.destroyed) return
-    const alivePlayers = this.gameServer().alivePlayers
+    const alivePlayers = this.players
     if (this.data.mode && equiped?.item?.data.specialName !== 'repair') {
       if (
         this.data.mode.verify.call(this, by) &&

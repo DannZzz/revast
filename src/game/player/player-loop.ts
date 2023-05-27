@@ -43,7 +43,7 @@ export class PlayerLoop {
     this.player.actions.doPositionChanges()
     this.player.actions.clicking()
 
-    const staticItems = this.player._staticItems()
+    const staticItems = this.player.staticItems.for(this.player.cache.get('biome'))
     const viewRect = this.player.camera.viewRect()
 
     // bios
@@ -95,17 +95,15 @@ export class PlayerLoop {
     }
 
     // send other users
-    const playersInView = this.player
-      .gameServer()
-      .dynamicItems.filter(
-        (item) =>
-          item.id() !== this.player.id() &&
-          pointPolygon(
-            ...Converter.pointToXYArray(item.point()),
-            Converter.pointArrayToXYArray(viewRect),
-            1,
-          ),
-      )
+    const playersInView = this.player.gameServer.dynamicItems.filter(
+      (item) =>
+        item.id() !== this.player.id() &&
+        pointPolygon(
+          ...Converter.pointToXYArray(item.point()),
+          Converter.pointArrayToXYArray(viewRect),
+          1,
+        ),
+    )
     const playersInViewArray = playersInView.map((player) => player)
     const otherCachedPlayers = this.cache.get('otherPlayers')
     const visualPlayers = playersInView.map(
@@ -153,15 +151,13 @@ export class PlayerLoop {
     const dynamicItems = [otherPlayers]
 
     // mobs
-    const mobsInView = this.player
-      .gameServer()
-      .mobs.all.filter((mob) =>
-        pointPolygon(
-          ...Converter.pointToXYArray(mob.point),
-          Converter.pointArrayToXYArray(viewRect),
-          1,
-        ),
-      )
+    const mobsInView = this.player.gameServer.mobs.all.filter((mob) =>
+      pointPolygon(
+        ...Converter.pointToXYArray(mob.point),
+        Converter.pointArrayToXYArray(viewRect),
+        1,
+      ),
+    )
     const cachedMobs = this.cache.get('mobs')
     const mobInViewIds = mobsInView.map((mob) => mob.id)
     if (mobsInView.size !== cachedMobs.length || mobsInView.size !== 0) {
@@ -184,7 +180,7 @@ export class PlayerLoop {
     // drops
     const cachedDrops = this.cache.get('drops')
     const cachedDropsIds = this.cache.get('drops', true)
-    const dropsInView = this.player.staticItems.drops.filter((drop) =>
+    const dropsInView = staticItems.drops.filter((drop) =>
       drop.within(viewRect),
     )
     const dropsInViewIds = dropsInView.map((drop) => drop.id)

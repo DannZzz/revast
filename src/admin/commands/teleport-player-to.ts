@@ -16,7 +16,7 @@ export default new Command('teleport-player-to', {
     },
   ],
   onMatch(author, [target, playerId]) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
 
     const to = players.get(+playerId)?.point().clone()
     if (!to) return author.serverMessage('Invalid Player Id')

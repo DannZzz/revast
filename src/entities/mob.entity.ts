@@ -3,10 +3,11 @@ import { MobDefaultMoveTactic } from '../game/basic/mob.basic'
 import { MobNames } from '../data/mobs'
 import { Mob } from '../game/mobs/mob'
 import { Player } from '../game/player/player'
-import { Biome } from '../structures/GameMap'
+import { Biome, MapAreaName } from '../structures/GameMap'
 import { StaticItems } from '../structures/StaticItems'
 import { Exclude, Expose } from 'class-transformer'
 import { AssetLink } from 'src/structures/Transformer'
+import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 
 @Exclude()
 export class MobEntity implements Partial<Mob> {
@@ -37,9 +38,9 @@ export class MobEntity implements Partial<Mob> {
   }
 
   spawn: { startPoint: Point; size: Size }
-  staticItems: StaticItems
+  staticItems: StaticItemsHandler
   target?: Player
-  currentBiom: string
+  currentArea: MapAreaName
   theta: number
   damage: number
   source: string

@@ -13,10 +13,9 @@ export class PlayerSpeed {
   constructor(gameServer: GameServer, private player: Player) {
     this.current.pipe((speed) => {
       let sp = speed
-
       // biome effect
-      sp += gameServer.map.biomes.find(
-        (b) => b.name === this.player.cache.get('biome'),
+      sp += gameServer.map.biomes.find((b) =>
+        this.player.cache.get('biome').includes(b.name),
       ).effect.speed
 
       // weapon equiped

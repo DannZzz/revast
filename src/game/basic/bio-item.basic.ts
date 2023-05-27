@@ -3,14 +3,14 @@ import { getAngle, getPointByTheta } from '../animations/rotation'
 import { PlayerItems } from '../player/player-items'
 import { ResourceGetting } from './item.basic'
 import { Point, Size, combineClasses } from 'src/global/global'
-import { GameServer } from '../server'
+import { Players } from '../server'
 import { circleCircle, circlePolygon, polygonPolygon } from 'intersects'
 import { Player } from '../player/player'
 import { Converter } from 'src/structures/Converter'
 import { GetSet } from 'src/structures/GetSet'
 import { rectToPolygon } from 'src/utils/polygons'
 import { Items } from 'src/data/items'
-import { universalWithin } from 'src/utils/universal-within'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 
 export type ResourceTypes =
   | 'wood'
@@ -86,15 +86,15 @@ export class Bio {
   readonly id: string = uuid(50)
   point: Point
   private _interval
-  gameServer: () => GameServer
+  players: Players
   resources: GetSet<number>
   points: Point[] = []
   constructor(readonly data: BioItemProps) {
     this.resources = GetSet(data.resources)
     if (data.onResourcesChangeDrawEvent) {
       this.resources.onChange((res) => {
-        const playerSockets = this.gameServer()
-          .alivePlayers.filter(
+        const playerSockets = this.players
+          .filter(
             (player) =>
               player.online() &&
               player.cache.get('staticBios', true).includes(this.id),
@@ -121,6 +121,18 @@ export class Bio {
       this.points = this.data.validPosition.points.map(
         (point) => new Point(point.x + this.point.x, point.y + this.point.y),
       )
+    }
+  }
+
+  get universalHitbox(): UniversalHitbox {
+    const pos = this.data.validPosition
+    if (pos.isCirclePosition()) {
+      return {
+        point: this.centerPoint,
+        radius: pos.radius,
+      }
+    } else {
+      return this.points
     }
   }
 
@@ -179,42 +191,13 @@ export class Bio {
     player.items.addItem(getThisRes.id, validAmount)
   }
 
-  within(points: Point[]): boolean
-  within(point: Point, radius: number): boolean
-  within(arg1: Point | Point[], radius?: number) {
-    const pos = this.data.validPosition
-    if (Array.isArray(arg1)) {
-      if (pos.isCirclePosition()) {
-        return circlePolygon(
-          ...Converter.pointToXYArray(this.centerPoint),
-          pos.radius,
-          Converter.pointArrayToXYArray(arg1),
-        )
-      }
-      return polygonPolygon(
-        Converter.pointArrayToXYArray(arg1),
-        Converter.pointArrayToXYArray(this.points),
-      )
-    } else {
-      if (pos.isCirclePosition()) {
-        return circleCircle(
-          ...Converter.pointToXYArray(this.centerPoint),
-          pos.radius,
-          ...Converter.pointToXYArray(arg1),
-          radius,
-        )
-      }
-      return circlePolygon(
-        ...Converter.pointToXYArray(arg1),
-        radius,
-        Converter.pointArrayToXYArray(this.points),
-      )
-    }
+  within(hitbox: UniversalHitbox) {
+    return universalWithin(hitbox, this.universalHitbox)
   }
 
   getAttacked(from: Point) {
-    const playerSockets = this.gameServer()
-      .alivePlayers.filter(
+    const playerSockets = this.players
+      .filter(
         (player) =>
           player.online() &&
           player.cache.get('staticBios', true).includes(this.id),

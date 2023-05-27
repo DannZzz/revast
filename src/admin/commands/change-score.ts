@@ -16,7 +16,7 @@ export default new Command('change-score', {
     },
   ],
   onMatch(author, [playerId, score]) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
 
     const target = players.get(+playerId)
     if (!target) return author.serverMessage('Invalid Player Id')

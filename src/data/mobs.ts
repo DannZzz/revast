@@ -1,5 +1,5 @@
 import { Chest } from 'anytool'
-import { Biome, GameMap } from '../structures/GameMap'
+import { Biome, GameMap, MapAreaName } from '../structures/GameMap'
 import { interval } from 'rxjs'
 import { Point, Size } from 'src/global/global'
 import { BasicMob } from 'src/game/basic/mob.basic'
@@ -21,7 +21,7 @@ export enum MobNames {
 export interface ServerMobOptions {
   maxCount: number
   reAddEachSeconds: number
-  biome: string
+  biome: MapAreaName
   canOut: boolean
   spawn: { startPoint: Point; size: Size }
 }
@@ -45,7 +45,7 @@ export class Mobs {
       for (let i = 0; i < conf.maxCount; i++) {
         const mob = new Mob({
           ...mobBasic,
-          currentBiom: conf.biome,
+          currentArea: conf.biome,
           spawn: conf.spawn,
           point: game.randomEmptyPoint(
             mobBasic.hitbox,
@@ -82,7 +82,7 @@ export class Mobs {
 
         const mob = new Mob({
           ...mobBasic,
-          currentBiom: conf.biome,
+          currentArea: conf.biome,
           spawn: conf.spawn,
           point: this.game.randomEmptyPoint(
             mobBasic.hitbox,

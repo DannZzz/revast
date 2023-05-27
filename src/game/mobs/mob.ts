@@ -11,18 +11,26 @@ import {
 import { Player } from '../player/player'
 import { timer } from 'rxjs'
 import { Converter } from 'src/structures/Converter'
-import { Biome } from 'src/structures/GameMap'
+import { Biome, MapAreaName } from 'src/structures/GameMap'
 import { StaticItems } from 'src/structures/StaticItems'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { BasicMath } from 'src/utils/math'
+import { Cache } from 'src/structures/cache/cache'
+import { StaticSettableItem } from '../basic/static-item.basic'
+import { Bio } from '../basic/bio-item.basic'
+import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 
 export interface MobProps {
   point: Point
   spawn: { startPoint: Point; size: Size }
-  staticItems: StaticItems
-  currentBiom: string
+  staticItems: StaticItemsHandler
+  currentArea: MapAreaName
   theta: number
+}
+
+interface MobCache {
+  staticItems: Array<StaticSettableItem | Bio>
 }
 
 export class Mob extends BasicMob {
@@ -34,9 +42,10 @@ export class Mob extends BasicMob {
   died: boolean = false
   spawn: { startPoint: Point; size: Size }
   point?: Point = new Point(0, 0)
-  staticItems: StaticItems
+  staticItems: StaticItemsHandler
+  readonly cache = new Cache<MobCache>(() => ({ staticItems: [] }))
   target?: Player
-  currentBiom: string
+  currentArea: MapAreaName
   theta: number
   drop: { [k: number]: number }
   attackRadius: number
@@ -45,6 +54,7 @@ export class Mob extends BasicMob {
   private nextStopTime: number
   private waitUntil: number
   private damageIntervalObj: any
+  private viewRadius = 1000
 
   centerPoint(point: Point = this.point) {
     return point.clone()
@@ -54,6 +64,13 @@ export class Mob extends BasicMob {
     this.point = point
   }
 
+  get universalHitbox() {
+    return {
+      radius: this.attackRadius,
+      point: this.centerPoint(),
+    }
+  }
+
   within(hitbox: UniversalHitbox) {
     // const hitboxPoints = pointsOfRotatedRectangle(
     //   this.centerPoint(),
@@ -61,10 +78,7 @@ export class Mob extends BasicMob {
     //   this.theta,
     // )
 
-    return universalWithin(hitbox, {
-      radius: this.attackRadius,
-      point: this.centerPoint(),
-    })
+    return universalWithin(hitbox, this.universalHitbox)
   }
 
   readyToDamage(players: Player[]) {
@@ -101,7 +115,7 @@ export class Mob extends BasicMob {
         })
       }
       player.lbMember.add(this.givesXP)
-      player.gameServer().mobs.all.delete(this.id)
+      player.gameServer.mobs.all.delete(this.id)
     }
   }
 
@@ -115,11 +129,20 @@ export class Mob extends BasicMob {
     )
 
     const speed = (sp: number) => sp * delta
-    const useTactic = (
-      tactic: Partial<MoveTactic<MobMoveStatus>>,
-      theta: number,
-      _interval: number | (() => number) = tactic.interval,
-    ) => {
+    const useTactic = (options: {
+      tactic: Partial<MoveTactic<MobMoveStatus>>
+      theta: number
+      _interval?: number | (() => number)
+      _speed?: number
+      noCheck?: boolean
+    }) => {
+      const {
+        tactic,
+        theta,
+        _interval = tactic.interval,
+        _speed = tactic.speed,
+        noCheck = false,
+      } = options
       if (!this.nextStopTime || Date.now() >= this.nextStopTime) {
         if (this.waitUntil >= Date.now()) {
           this.targetPoint = null
@@ -131,7 +154,7 @@ export class Mob extends BasicMob {
           const targetPoint = getPointByTheta(
             this.point,
             this.theta,
-            tactic.duration * speed(tactic.speed),
+            tactic.duration * speed(_speed),
           )
           this.targetPoint = targetPoint
           this.nextStopTime = Date.now() + tactic.duration * 1000
@@ -139,38 +162,54 @@ export class Mob extends BasicMob {
         }
       }
       if (this.targetPoint) {
+        const calcSpeed = speed(
+          BasicMath.pythagorean(
+            _speed,
+            Math.abs(this.targetPoint.y - this.point.y),
+          ),
+        )
         const nextPoint = getPointByTheta(
           this.point,
           this.theta,
 
-          speed(
-            BasicMath.pythagorean(
-              tactic.speed,
-              Math.abs(this.targetPoint.y - this.point.y),
-            ),
-          ),
+          calcSpeed,
         )
-
+        const itemWithin = this.staticItems
+          .for(nextPoint)
+          .itemWithin(this.universalHitbox)
         if (
           !boxPoint(
             ...Converter.pointToXYArray(this.spawn.startPoint),
             this.spawn.size.width,
             this.spawn.size.height,
             ...Converter.pointToXYArray(this.centerPoint(nextPoint)),
-          ) ||
-          this.staticItems.someWithin(() => [
-            this.centerPoint(nextPoint),
-            this.hitbox,
-          ])
+          )
         ) {
-          // this.target = null
           this.targetPoint = null
           this.readyToDamage([])
-          useTactic(
-            this.moveTactic.idleTactic,
-            $.randomNumber(0, Math.PI * 2),
-            attackTactic.interval,
-          )
+
+          // this.target = null
+
+          useTactic({
+            tactic: this.moveTactic.idleTactic,
+            theta: $.randomNumber(0, Math.PI * 2),
+            _interval: attackTactic.interval,
+          })
+          return
+        } else if (itemWithin && !noCheck) {
+          this.targetPoint = null
+          this.readyToDamage([])
+          useTactic({
+            tactic: this.moveTactic.idleTactic,
+            theta:
+              getAngle(
+                this.centerPoint(nextPoint),
+                itemWithin.centerPoint || itemWithin.point,
+              ) + Math.PI,
+            _interval: attackTactic.interval,
+            _speed: attackTactic.speed * 2,
+            noCheck: true,
+          })
           return
         }
 
@@ -187,13 +226,16 @@ export class Mob extends BasicMob {
       if (distance > this.reactRadius) {
         this.target = null
       } else {
-        useTactic(
-          attackTactic,
-          getAngle(this.centerPoint(), this.target.point()),
-        )
+        useTactic({
+          tactic: attackTactic,
+          theta: getAngle(this.centerPoint(), this.target.point()),
+        })
       }
     } else {
-      useTactic(this.moveTactic.idleTactic, $.randomNumber(0, Math.PI * 2))
+      useTactic({
+        tactic: this.moveTactic.idleTactic,
+        theta: $.randomNumber(0, Math.PI * 2),
+      })
 
       for (let player of players) {
         if (!player) continue

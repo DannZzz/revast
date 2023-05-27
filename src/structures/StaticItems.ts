@@ -2,95 +2,66 @@ import { Point } from 'src/global/global'
 import { Bio } from '../game/basic/bio-item.basic'
 import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
+import { UniversalHitbox } from 'src/utils/universal-within'
 
 export class StaticItems {
-  private _bio: Bio[] = []
-  private _settable: StaticSettableItem[] = []
-  private _drops: BasicDrop[] = []
-
-  get drops() {
-    return [...this._drops]
-  }
+  bio: Bio[] = []
+  settable: StaticSettableItem[] = []
+  drops: BasicDrop[] = []
 
   addDrop(...drops: BasicDrop[]) {
-    this._drops.push(...drops)
+    this.drops.push(...drops)
     return this
   }
 
   removeDrop(id: string) {
-    this._drops = this._drops.filter((drop) => drop.id !== id)
+    this.drops = this.drops.filter((drop) => drop.id !== id)
     return this
-  }
-
-  get bio() {
-    return [...this._bio]
-  }
-
-  set bio(val) {
-    this._bio = val
   }
 
   addBios(...bios: Bio[]) {
-    this._bio.push(...bios)
+    this.bio.push(...bios)
     return this
-  }
-
-  get settable() {
-    return [...this._settable]
-  }
-
-  set settable(val) {
-    this._settable = val
   }
 
   addSettables(...settables: StaticSettableItem[]) {
-    this._settable.push(...settables)
+    this.settable.push(...settables)
     return this
   }
 
-  get all() {
-    return [...this._bio, ...this._settable]
-  }
-
-  someWithin(
-    points:
-      | Point[]
-      | (() => [points: Point[]] | [point: Point, radius: number]),
-    strict: boolean = false,
-  ) {
-    const argArray: [points: Point[]] | [point: Point, radius: number] =
-      Array.isArray(points) ? [points] : points()
-    return this.all.some((item) => {
-      if (strict) {
-        if ('withinStrict' in item) {
-          // @ts-ignore
-          return item.withinStrict(...argArray)
-        } else {
-          // @ts-ignore
-          return item.within(...argArray)
-        }
-      } else {
-        // @ts-ignore
-        return 'ignoreCheckers' in item ? false : item.within(...argArray)
-      }
-    })
-  }
-
-  itemWithin(points: Point[]) {
-    return this.all.find((item) => item.within(points))
-  }
-
-  itemWithinArray(points: Point[]) {
-    return this.all.filter((item) => item.within(points))
-  }
-
   playerDied(playerId: number) {
-    this._settable = this._settable.filter(
+    this.settable = this.settable.filter(
       (settable) => settable.authorId !== playerId,
     )
   }
 
   removeSettable(id: string) {
-    this._settable = this._settable.filter((settable) => settable.id !== id)
+    this.settable = this.settable.filter((settable) => settable.id !== id)
+  }
+
+  get all() {
+    return [...this.bio, ...this.settable]
+  }
+
+  someWithin(hitbox: UniversalHitbox, strict: boolean = false) {
+    return this.all.some((item) => {
+      if (strict) {
+        if ('withinStrict' in item) {
+          return item.withinStrict(hitbox)
+        } else {
+          return item.within(hitbox)
+        }
+      } else {
+        return 'ignoreCheckers' in item ? false : item.within(hitbox)
+      }
+    })
+  }
+
+  itemWithin(hitbox: UniversalHitbox) {
+    return this.all.find((item) => item.within(hitbox))
+  }
+
+  itemWithinArray(hitbox: UniversalHitbox) {
+    return this.all.filter((item) => item.within(hitbox))
   }
 }

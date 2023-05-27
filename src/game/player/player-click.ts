@@ -103,7 +103,7 @@ export class PlayerClick {
     const range = equiped ? equiped.item.data.range : this.player.range
     const damage = equiped ? equiped.item.data.damage : 3
     const attackedArea = attackedPoint(range)
-    const alivePlayers = this.player.gameServer().alivePlayers
+    const alivePlayers = this.player.gameServer.alivePlayers
 
     // players
     const players = this.player.cache.get('otherPlayers')

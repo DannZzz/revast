@@ -14,9 +14,9 @@ export default new Command('godmode', {
   onMatch(author, [playerId, statusString]) {
     const status = NB.from(+statusString as any)
 
-    const player = author
-      .gameServer()
-      .alivePlayers.find((player) => player.uniqueId === +playerId)
+    const player = author.gameServer.alivePlayers.find(
+      (player) => player.uniqueId === +playerId,
+    )
 
     if (player) {
       player?.godMode(status)

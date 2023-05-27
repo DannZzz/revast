@@ -73,7 +73,9 @@ export class PlayerAction {
 
     const tryTo = (mainPoint: Point, combine: Point) => {
       const pos = this.player.bodyPositions(combine)
-      const itemWithin = this.player.staticItems.itemWithin(pos.points)
+      const itemWithin = this.player.staticItems
+        .for(pos.points)
+        .itemWithin(pos.points)
       if (itemWithin) {
         if (combine.x) {
           const absX = Math.abs(combine.x) / 4
@@ -82,14 +84,22 @@ export class PlayerAction {
             const posAfterPhysics = this.player.bodyPositions(
               new Point(0, -absX),
             )
-            if (!this.player.staticItems.someWithin(posAfterPhysics.points)) {
+            if (
+              !this.player.staticItems
+                .for(posAfterPhysics.points)
+                .someWithin(posAfterPhysics.points)
+            ) {
               mainPoint.y -= absX
             }
           } else if (itemWithin.centerPoint.y < this.player.point().y) {
             const posAfterPhysics = this.player.bodyPositions(
               new Point(0, absX),
             )
-            if (!this.player.staticItems.someWithin(posAfterPhysics.points)) {
+            if (
+              !this.player.staticItems
+                .for(posAfterPhysics.points)
+                .someWithin(posAfterPhysics.points)
+            ) {
               mainPoint.y += absX
             }
           }
@@ -100,14 +110,22 @@ export class PlayerAction {
             const posAfterPhysics = this.player.bodyPositions(
               new Point(-absY, 0),
             )
-            if (!this.player.staticItems.someWithin(posAfterPhysics.points)) {
+            if (
+              !this.player.staticItems
+                .for(posAfterPhysics.points)
+                .someWithin(posAfterPhysics.points)
+            ) {
               mainPoint.x -= absY
             }
           } else if (itemWithin.centerPoint.x < this.player.point().x) {
             const posAfterPhysics = this.player.bodyPositions(
               new Point(absY, 0),
             )
-            if (!this.player.staticItems.someWithin(posAfterPhysics.points)) {
+            if (
+              !this.player.staticItems
+                .for(posAfterPhysics.points)
+                .someWithin(posAfterPhysics.points)
+            ) {
               mainPoint.x += absY
             }
           }

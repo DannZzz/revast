@@ -51,17 +51,18 @@ export class PlayerBars {
   }
 
   private actualTemperatureChanges() {
-    const effect = this.player
-      .gameServer()
-      .map.biomes.find((b) => b.name === this.player.cache.get('biome')).effect
+    const currentAreas = this.player.cache.get('biome')
+    const effect = this.player.gameServer.map.biomes.find((b) =>
+      currentAreas.includes(b.name),
+    ).effect
     let percentOfDecreasing = effect.temperatureDay
-    if (!this.player.gameServer().day.isDay())
+    if (!this.player.gameServer.day.isDay())
       percentOfDecreasing = effect.temperatureNight
 
     // fires within
-    const firesAround = this.player
-      .gameServer()
-      .staticItems.settable.filter(
+    const firesAround = this.player.staticItems
+      .for(currentAreas)
+      .settable.filter(
         (settable) =>
           settable.isSpecial('firePlace') &&
           settable.data.special.firePlace.within.call(

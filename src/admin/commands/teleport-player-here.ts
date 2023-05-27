@@ -11,7 +11,7 @@ export default new Command('teleport-player-here', {
     },
   ],
   onMatch(author, [playerId]) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
     const selectedPlayers: Player[] = []
     if (playerId === 'all') {
       selectedPlayers.push(...players.values())

@@ -20,7 +20,7 @@ export default new Command('add-item', {
     },
   ],
   onMatch(author, [playerId, itemId, q = 1]) {
-    const players = author.gameServer().alivePlayers
+    const players = author.gameServer.alivePlayers
     const item = Items.get(+itemId)
     if (!item) return author.serverMessage('Invalid Item Id')
     if (playerId !== 'all') {

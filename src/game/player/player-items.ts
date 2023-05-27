@@ -125,32 +125,31 @@ export class PlayerItems {
     )
     const settable = item.toSettable(
       this.player.uniqueId,
-      this.player.gameServer,
+      this.player.gameServer.alivePlayers,
+      this.player.staticItems,
     )
     settable.preDraw(pointOfItem, this.player.theta(), this.player.angle())
     // checking settable items and bios
     if (
       //
-      this.player.staticItems.someWithin(() => {
-        if (settable.data.setMode.itemSize.type === 'circle')
-          return [settable.centerPoint, settable.data.setMode.itemSize.radius]
-        return [settable.points]
-      }, true)
+      this.player.staticItems
+        .for(settable.universalHitbox)
+        .someWithin(settable.universalHitbox, true)
     )
       return -1
 
     // checking water
     if (
       !settable.data.onThe.water &&
-      this.player.gameServer().map.biomeOf(settable.centerPoint) === 'ocean'
+      this.player.gameServer.map.biomeOf(settable.centerPoint).includes('ocean')
     )
       return -1
 
     // checking other players
     if (
-      this.player
-        .gameServer()
-        .alivePlayers.some((player) => settable.withinStrict(player.points))
+      this.player.gameServer.alivePlayers.some((player) =>
+        settable.withinStrict(player.points),
+      )
     )
       return -1
 
@@ -163,12 +162,12 @@ export class PlayerItems {
           }
         : settable.points
     if (
-      this.player
-        .gameServer()
-        .mobs.all.some((mob) => mob.within(itemUniversalHitBox))
+      this.player.gameServer.mobs.all.some((mob) =>
+        mob.within(itemUniversalHitBox),
+      )
     )
       return -1
-    this.player.staticItems.addSettables(settable)
+    this.player.staticItems.for(settable.universalHitbox).addSettables(settable)
     this._items.get(itemId).quantity--
     this._items = this.filterItems(this._items)
     this.update()
@@ -196,14 +195,14 @@ export class PlayerItems {
       hurtSource: Images.HURT_DROP_BOX,
       point: this.player.point().clone(),
       onEnd: (drop) => {
-        this.player.staticItems.removeDrop(drop.id)
+        this.player.staticItems.for(drop.universalHitbox).removeDrop(drop.id)
       },
       take(player, data) {
         player.items.addable(data.id) &&
           player.items.addItem(data.id, data.quantity)
       },
     })
-    this.player.staticItems.addDrop(item)
+    this.player.staticItems.for(item.universalHitbox).addDrop(item)
   }
 
   craftItem(id: number) {

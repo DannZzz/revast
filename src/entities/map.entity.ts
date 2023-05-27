@@ -1,9 +1,16 @@
 import { Point, Size } from 'src/global/global'
-import { BiomeOptions, Biome, GameMap, Biomes } from 'src/structures/GameMap'
+import {
+  BiomeOptions,
+  Biome,
+  GameMap,
+  Biomes,
+  MapAreaName,
+} from 'src/structures/GameMap'
 import { AssetLink } from 'src/structures/Transformer'
 import { Exclude, Expose, Transform, Type } from 'class-transformer'
+import { UniversalHitbox } from 'src/utils/universal-within'
 
-export class MapEntity implements GameMap {
+export class MapEntity implements Partial<GameMap> {
   size: Size
   tileSize: Size
 
@@ -32,7 +39,7 @@ export class MapEntity implements GameMap {
   }
 
   @Exclude()
-  biomeOf(point: Point): string {
+  biomeOf(hitbox: UniversalHitbox): MapAreaName[] {
     throw new Error('Method not implemented.')
   }
 

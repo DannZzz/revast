@@ -1,5 +1,5 @@
 import BasicMap from '../maps/maps-json/main.json'
-import { Chest } from 'anytool'
+import { Chest } from 'anytool/dist/Chest'
 import { Player } from './player/player'
 import { interval } from 'rxjs'
 import {
@@ -27,6 +27,7 @@ import { NB } from 'src/utils/NumberBoolean'
 import { MainServer } from 'src/ws/events/events'
 import { bioItemByMapId } from 'src/data/bio'
 import { BasicMath } from 'src/utils/math'
+import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 
 export type TMap = typeof BasicMap
 
@@ -39,6 +40,8 @@ export interface GameProps {
   initMobs: (game: GameServer) => Mobs
 }
 
+export type Players = Chest<number, Player>
+
 export class GameServer implements GameProps {
   initMobs: (game: GameServer) => Mobs
   mapItems: () => TMap = () => BasicMap
@@ -48,7 +51,8 @@ export class GameServer implements GameProps {
   readonly information: any = {}
   readonly mapSource: string
   readonly players = new Chest<number, Player>()
-  readonly staticItems: StaticItems = new StaticItems()
+  readonly alivePlayers = new Chest<number, Player>()
+  readonly staticItems: StaticItemsHandler = new StaticItemsHandler()
   private _gameLoopInterval: any
   private _gameFPS = 60
   _lastFrame: number = Date.now()
@@ -61,6 +65,7 @@ export class GameServer implements GameProps {
   constructor(options: GameProps) {
     Object.assign(this, options)
     //
+    this.staticItems.init(this.map)
     this.mapItems().layers[0].data.forEach((mapId, i) => {
       if (mapId) {
         // console.log(mapId)
@@ -69,11 +74,10 @@ export class GameServer implements GameProps {
           BasicMath.xy(i, this.map.size, this.map.tileSize),
         )
         if (!bio) return
-        bio.gameServer = () => this
-        this.staticItems.addBios(bio)
+        bio.players = this.alivePlayers
+        this.staticItems.for(this.map.biomeOf(bio.universalHitbox)).addBios(bio)
       }
     })
-    console.log(this.staticItems.bio.length) //
     this.day = new GameDay(this.madeAt)
     this.updateLeaderboard()
     this.updateDayAndNight()
@@ -111,7 +115,7 @@ export class GameServer implements GameProps {
       uniqueId: login.playerId,
       point: new Point(),
       size: PLAYER_BODY_SIZE,
-      gameServer: () => this,
+      gameServer: this,
       lbMember: this.leaderboard.addMember(login.playerId),
       cameraOptions: {
         size: screen,
@@ -119,6 +123,7 @@ export class GameServer implements GameProps {
       },
     })
     this.players.set(login.playerId, player)
+    this.alivePlayers.set(login.playerId, player)
 
     this.checkLoop()
     player.moveTo(this.randomEmptyPoint(35))
@@ -135,10 +140,6 @@ export class GameServer implements GameProps {
     this.players.get(playerId).disconnect()
     // this.players.delete(playerId)
     this.checkLoop()
-  }
-
-  get alivePlayers() {
-    return this.players.filter((player) => !player.died())
   }
 
   randomEmptyPoint(forObjectRadius: number): Point
@@ -158,8 +159,8 @@ export class GameServer implements GameProps {
         +$.randomNumber(forest.point.y, forest.point.y + forest.size.height),
       )
     let point = randomPoint()
-    const items = this.staticItems
-    while (items.someWithin(() => [point, forObjectRadius])) {
+    const items = this.staticItems.for({ radius: forObjectRadius, point })
+    while (items.someWithin({ radius: forObjectRadius, point })) {
       point = randomPoint()
     }
     return point
@@ -171,7 +172,7 @@ export class GameServer implements GameProps {
     return i
   }
 
-  private checkLoop() {
+  checkLoop() {
     const players = this.alivePlayers.filter((player) => player.online())
     const size = players.size
     if (size === 0) {

@@ -2,6 +2,9 @@ import { boxPoint } from 'intersects'
 import { Point, Size } from 'src/global/global'
 import { Converter } from './Converter'
 import { Exclude } from 'class-transformer'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
+import { rectToPolygon } from 'src/utils/polygons'
+import { StaticItems } from './StaticItems'
 
 export class BiomeEffect {
   speed: number = 0
@@ -14,9 +17,18 @@ export class BiomeEffect {
   }
 }
 
+export type MapAreaName =
+  | 'winter-cave'
+  | 'desert-cave'
+  | 'winter'
+  | 'desert'
+  | 'beach'
+  | 'forest'
+  | 'ocean'
+
 export class BiomeOptions {
   @Exclude()
-  name: string
+  name: MapAreaName
   @Exclude()
   type: Biome
   @Exclude()
@@ -32,6 +44,8 @@ export class BiomeOptions {
     Object.assign(this, data)
   }
 }
+
+export type AreaStaticItems = { [k in MapAreaName]?: StaticItems }
 
 export enum Biome {
   forest,
@@ -53,12 +67,28 @@ export interface GameMapOptions {
 
 export class GameMap implements GameMapOptions {
   biomes: Biomes
+  private absoluteBiomes: Biomes
   tileSize: Size
   size: Size
   mapSource: string
 
   constructor(data: GameMapOptions) {
     Object.assign(this, data)
+
+    this.absoluteBiomes = this.biomes.map(
+      (biome) =>
+        new BiomeOptions({
+          ...biome,
+          point: new Point(
+            this.tileSize.width * biome.point.x,
+            this.tileSize.height * biome.point.y,
+          ),
+          size: new Size(
+            this.tileSize.width * biome.size.width,
+            this.tileSize.height * biome.size.height,
+          ),
+        }),
+    )
   }
 
   get absoluteSize() {
@@ -68,44 +98,16 @@ export class GameMap implements GameMapOptions {
     )
   }
 
-  absoluteBiome(biomeName: string): BiomeOptions | null {
-    const biome = this.biomes.find((bo) => bo.name === biomeName)
-    if (biome) {
-      const { bgColor, borderColor, point, size, effect } = biome
-      return {
-        name: biomeName,
-        type: biome.type,
-        bgColor,
-        borderColor,
-        priority: biome.priority,
-        point: new Point(
-          this.tileSize.width * point.x,
-          this.tileSize.height * point.y,
-        ),
-        size: new Size(
-          this.tileSize.width * size.width,
-          this.tileSize.height * size.height,
-        ),
-        effect: effect,
-      }
-    } else {
-      return null
-    }
+  absoluteBiome(biomeName: MapAreaName): BiomeOptions | null {
+    return this.absoluteBiomes.find((biome) => biome.name === biomeName)
   }
 
-  biomeOf(point: Point): string {
-    for (let biome of this.biomes) {
-      const data = this.absoluteBiome(biome.name)
-      if (
-        boxPoint(
-          ...Converter.pointToXYArray(data.point),
-          data.size.width,
-          data.size.height,
-          ...Converter.pointToXYArray(point),
-        )
-      )
-        return data.name
+  biomeOf(hitbox: UniversalHitbox): MapAreaName[] {
+    const biomes: MapAreaName[] = []
+    for (let data of this.absoluteBiomes) {
+      const points = rectToPolygon(data.point, data.size)
+      if (universalWithin(hitbox, points)) biomes.push(data.name)
     }
-    return 'forest'
+    return biomes
   }
 }
