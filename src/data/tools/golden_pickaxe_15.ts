@@ -18,6 +18,8 @@ export default createItem(15, 'tool')
     startRotationWith: 45,
     resourceGettingPower: {
       stone: 3,
+      gold: 2,
+      diamond: 1,
       wood: 2,
     },
     flip: true,

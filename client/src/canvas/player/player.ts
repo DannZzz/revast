@@ -30,6 +30,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
   readonly leaderboard: PlayerLeaderboard
   readonly controllers: PlayerControllers
   readonly miniMap: MiniMap
+  chatStatus = true
 
   constructor(props: ElementProps<PlayerProps>) {
     const { camera, dayInfo, game, ...basic } = props
@@ -138,6 +139,10 @@ export class Player extends BasicPlayer<PlayerEvents> {
       if (evt.code === "KeyR") {
         this.bars.autofood(!this.bars.autofood())
         socket.emit("autofood", [NB.to(this.bars.autofood())])
+        return
+      } else if (evt.code === "KeyO") {
+        this.chatStatus = !this.chatStatus
+        socket.emit("requestChatStatus", [NB.to(this.chatStatus)])
         return
       }
       this.toggle.set(evt.code, true)

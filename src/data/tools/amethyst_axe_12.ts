@@ -25,6 +25,8 @@ export default createItem(12, 'tool')
     resourceGettingPower: {
       wood: 5,
       stone: 3,
+      gold: 2,
+      diamond: 1,
     },
   })
   .build()

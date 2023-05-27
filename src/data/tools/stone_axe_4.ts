@@ -5,7 +5,7 @@ export default createItem(4, 'tool')
   .equipableDefault()
   .setItemResourceType('stone')
   .setVariant('pickaxe')
-  .name("Stone Axe")
+  .name('Stone Axe')
   .craftable({
     state: {
       workbench: true,
@@ -19,8 +19,8 @@ export default createItem(4, 'tool')
     damage: 2,
     startRotationWith: 45,
     resourceGettingPower: {
-      wood: 1,
-      stone: 2,
+      wood: 2,
+      stone: 1,
     },
     flip: true,
   })

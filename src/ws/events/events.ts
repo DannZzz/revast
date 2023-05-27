@@ -89,6 +89,7 @@ export interface ClientToServerEvents {
   screenSize(data: [size: Size]): void
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void
+  requestChatStatus(data: [status: NumberBoolean]): void
 }
 
 export type MainServer = Namespace<ClientToServerEvents, ServerToClientEvents>

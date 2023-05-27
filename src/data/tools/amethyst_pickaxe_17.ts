@@ -1,13 +1,4 @@
 import createItem from 'src/structures/item-creator/create-item'
-import { Item } from '../../game/basic/item.basic'
-import { Images } from '../../structures/image-base'
-import {
-  CraftGivingXP,
-  CraftDuration,
-  DrawPosByType,
-  EquipmentItemSize,
-  RangeByType,
-} from '../config-type'
 
 export default createItem(17, 'tool')
   .sources('AMETHYST_PICKAXE', 'ICON_AMETHYST_PICKAXE')
@@ -31,6 +22,10 @@ export default createItem(17, 'tool')
     resourceGettingPower: {
       stone: 5,
       wood: 3,
+      gold: 4,
+      diamond: 3,
+      amethyst: 2,
+      ruby: 1,
     },
     damage: 1,
     flip: true,

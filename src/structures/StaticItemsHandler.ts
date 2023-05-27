@@ -37,21 +37,21 @@ class Handler {
 
   get bio() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.bio)
+      aggr.push(...group.bio.filter((item) => !aggr.includes(item.id)))
       return aggr
     }, [])
   }
 
   get settable() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.settable)
+      aggr.push(...group.settable.filter((item) => !aggr.includes(item.id)))
       return aggr
     }, [])
   }
 
   get drops() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.drops)
+      aggr.push(...group.drops.filter((item) => !aggr.includes(item.id)))
       return aggr
     }, [])
   }

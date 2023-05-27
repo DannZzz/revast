@@ -1,7 +1,7 @@
 import { NB } from 'src/utils/NumberBoolean'
 import { Command, CommandArgument } from '../Command'
 
-export default new Command('godmode', {
+export default new Command('god-mode', {
   aliases: ['gm'],
   args: [
     { required: true, validate: CommandArgument.number, desc: 'Player Id' },
@@ -19,7 +19,7 @@ export default new Command('godmode', {
     )
 
     if (player) {
-      player?.godMode(status)
+      player?.settings.godMode(status)
       author.serverMessage(
         `${player.name} now ${status ? 'has' : "hasn't"} God Mode`,
       )

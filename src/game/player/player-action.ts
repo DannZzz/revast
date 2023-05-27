@@ -140,6 +140,5 @@ export class PlayerAction {
     tryTo(l, point)
 
     this.player.moveFromHere(l)
-    this.state.update()
   }
 }

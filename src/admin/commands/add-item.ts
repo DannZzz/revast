@@ -12,7 +12,7 @@ export default new Command('add-item', {
     {
       desc: 'Item Id',
       required: true,
-      validate: CommandArgument.number,
+      validate: () => true,
     },
     {
       desc: 'Quantity (default 1)',
@@ -21,18 +21,23 @@ export default new Command('add-item', {
   ],
   onMatch(author, [playerId, itemId, q = 1]) {
     const players = author.gameServer.alivePlayers
-    const item = Items.get(+itemId)
-    if (!item) return author.serverMessage('Invalid Item Id')
+    const item = isNaN(+itemId)
+      ? Items.find(
+          (item) =>
+            item.data.name?.toLowerCase().split(/ +/g).join('-') === itemId,
+        )
+      : Items.get(+itemId)
+    if (!item) return author.serverMessage('Invalid Item Id or Name')
     if (playerId !== 'all') {
       const p = players.get(+playerId)
       if (!p) {
         author.serverMessage('Invalid Player Id')
       } else {
-        p.items.addItem(+itemId, +q)
+        p.items.addItem(item.id, +q)
         author.serverMessage(`${item.data.name} (${q}) added to ${p.name}`)
       }
     } else {
-      players.forEach((p) => p.items.addItem(+itemId, +q))
+      players.forEach((p) => p.items.addItem(item.id, +q))
       author.serverMessage(`${item.data.name} (${q}) added to everyone`)
     }
   },

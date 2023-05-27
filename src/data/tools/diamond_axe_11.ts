@@ -1,4 +1,3 @@
-
 import createItem from 'src/structures/item-creator/create-item'
 
 export default createItem(11, 'tool')
@@ -14,6 +13,8 @@ export default createItem(11, 'tool')
     resourceGettingPower: {
       wood: 4,
       stone: 3,
+      gold: 2,
+      diamond: 1,
     },
   })
   .craftable({

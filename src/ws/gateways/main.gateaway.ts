@@ -43,6 +43,14 @@ export class MainGateway
     this.gameServer.disconnectPlayer(client.id)
   }
 
+  @SubscribeMessage('requestChatStatus')
+  requestChatStatus(
+    @ConnectedSocket() client: MainSocket,
+    @MessageBody() data: EventData<'requestChatStatus'>,
+  ): void {
+    this.gameServer.to(client.id)?.chatStatus(NB.from(data[0]))
+  }
+
   // @WsRateLimit(10, 10)
   @SubscribeMessage('messageRequest')
   messageRequest(

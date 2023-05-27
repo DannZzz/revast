@@ -23,6 +23,7 @@ export class PlayerLoop {
   }
 
   action() {
+    this.player.actions.state.update()
     this.player.bars.onAction()
     const socket = this.player.socket()
     if (
@@ -43,7 +44,9 @@ export class PlayerLoop {
     this.player.actions.doPositionChanges()
     this.player.actions.clicking()
 
-    const staticItems = this.player.staticItems.for(this.player.cache.get('biome'))
+    const staticItems = this.player.staticItems.for(
+      this.player.cache.get('biome'),
+    )
     const viewRect = this.player.camera.viewRect()
 
     // bios
@@ -114,7 +117,7 @@ export class PlayerLoop {
             duration: player.actions.click.duration,
             status: player.actions.click.clickStatus,
           },
-          name: this.player.admin()
+          name: this.player.settings.admin()
             ? `#${player.uniqueId} ${player.name}`
             : player.name,
           point: player.point(),

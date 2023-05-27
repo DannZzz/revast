@@ -194,11 +194,11 @@ export class BasicPlayer<
     })
 
     bodyGroup.add(
+      rightHand,
+      leftHand,
       body,
       this.wearingNode,
       this.bagNode,
-      rightHand,
-      leftHand,
       setItemImage
     )
     body.zIndex(1)

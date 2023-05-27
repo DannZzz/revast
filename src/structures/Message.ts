@@ -41,7 +41,7 @@ export class Message {
           .slice(`${ADMIN_COMMAND_PREFIX}pass `.length)
           .trim()
         if (ADMIN_PASSWORDS.includes(pass)) {
-          this.author.admin(true)
+          this.author.settings.admin(true)
           this.author.socket().emit('serverMessage', ['Activated!'])
         }
       }
@@ -50,7 +50,7 @@ export class Message {
   }
 
   public() {
-    return !(this.author.admin() && this.isCommandLike())
+    return !(this.author.settings.admin() && this.isCommandLike())
   }
 
   normalizeLength() {

@@ -171,7 +171,6 @@ export class PlayerItems {
     this._items.get(itemId).quantity--
     this._items = this.filterItems(this._items)
     this.update()
-    this.player.actions.state.update()
     return itemId
   }
 
@@ -231,17 +230,23 @@ export class PlayerItems {
     this.update()
     const isBook = this.equiped?.item.data.specialName === 'book'
     this.player.socket().emit('playerCraft', [true, +id, isBook])
-    setTimeout(() => {
-      this.isCrafting = null
-      if (item.data.specialName === 'bag') {
-        this.specialItems[item.data.specialName] = item.id
-        this.update()
-      } else {
-        this.addItem(id, 1)
-      }
-      this.player.lbMember.add(item.craftable.givesXp)
-      this.player.socket().emit('playerCraft', [false, +id])
-    }, (item.craftable.duration * 1000) / (isBook ? 2 : 1))
+    const t = setTimeout(
+      () => {
+        this.isCrafting = null
+        if (item.data.specialName === 'bag') {
+          this.specialItems[item.data.specialName] = item.id
+          this.update()
+        } else {
+          this.addItem(id, 1)
+        }
+        this.player.lbMember.add(item.craftable.givesXp)
+        this.player.socket().emit('playerCraft', [false, +id])
+        clearTimeout(t)
+      },
+      this.player.settings.instaCraft()
+        ? 100
+        : (item.craftable.duration * 1000) / (isBook ? 2 : 1),
+    )
   }
 
   private filterItems(

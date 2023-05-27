@@ -52,8 +52,12 @@ export class Player extends BasicElement<PlayerEvents> {
   }
   readonly pointOnScreen: GetSet<Point>
   readonly actions: PlayerAction
-  readonly admin = GetSet(false)
-  readonly godMode = GetSet(false)
+  readonly settings = {
+    admin: GetSet(false),
+    godMode: GetSet(false),
+    chat: GetSet(true),
+    instaCraft: GetSet(false),
+  }
   readonly name: string
   readonly toggle = new Toggle()
   readonly speed: PlayerSpeed
@@ -192,7 +196,7 @@ export class Player extends BasicElement<PlayerEvents> {
   }
 
   damage(amount: number, type: 'mob' | 'player' | 'absolute', from?: Player) {
-    if (this.godMode()) return
+    if (this.settings.godMode()) return
     if (type !== 'absolute') {
       const deffense = {
         mob: 0,
@@ -304,6 +308,7 @@ export class Player extends BasicElement<PlayerEvents> {
 
   makeMessage(content: string) {
     const message = new Message(content, this)
+    if (!this.settings.chat()) return
     // sharing
     if (message.public()) {
       message.filter()
@@ -311,9 +316,15 @@ export class Player extends BasicElement<PlayerEvents> {
       this.socket().emit('playerMessage', [this.id(), message.content])
       players.forEach(
         (player) =>
+          player.settings.chat() &&
           player.cache.get('otherPlayers', true).includes(this.id()) &&
           player.socket().emit('playerMessage', [this.id(), message.content]),
       )
     }
+  }
+
+  chatStatus(status: boolean) {
+    this.settings.chat(status)
+    this.serverMessage(`Chat is ${status ? 'enabled' : 'disabled'}`)
   }
 }
