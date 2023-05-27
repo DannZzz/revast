@@ -37,21 +37,29 @@ class Handler {
 
   get bio() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.bio.filter((item) => !aggr.includes(item.id)))
+      aggr.push(
+        ...group.bio.filter((item) => !aggr.find((it) => it.id === item.id)),
+      )
       return aggr
     }, [])
   }
 
   get settable() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.settable.filter((item) => !aggr.includes(item.id)))
+      aggr.push(
+        ...group.settable.filter(
+          (item) => !aggr.find((it) => it.id === item.id),
+        ),
+      )
       return aggr
     }, [])
   }
 
   get drops() {
     return this.itemsGroup.reduce((aggr, group) => {
-      aggr.push(...group.drops.filter((item) => !aggr.includes(item.id)))
+      aggr.push(
+        ...group.drops.filter((item) => !aggr.find((it) => it.id === item.id)),
+      )
       return aggr
     }, [])
   }
