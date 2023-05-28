@@ -80,13 +80,13 @@ export const Images = {
   STONE_SHOVEL: 'stone-shovel.png',
   ICON_STONE_SHOVEL: 'stone-shovel.png',
   GOLDEN_SHOVEL: 'golden-shovel.png',
-  ICON_GOLDEN_SHOVEL: 'golden-shovel-icon.png',
+  ICON_GOLDEN_SHOVEL: 'golden-shovel.png',
   DIAMOND_SHOVEL: 'diamond-shovel.png',
-  ICON_DIAMOND_SHOVEL: 'diamond-shovel-icon.png',
+  ICON_DIAMOND_SHOVEL: 'diamond-shovel.png',
   AMETHYST_SHOVEL: 'amethyst-shovel.png',
-  ICON_AMETHYST_SHOVEL: 'amethyst-shovel-icon.png',
+  ICON_AMETHYST_SHOVEL: 'amethyst-shovel.png',
   RUBY_SHOVEL: 'ruby-shovel.png',
-  ICON_RUBY_SHOVEL: 'ruby-shovel-icon.png',
+  ICON_RUBY_SHOVEL: 'ruby-shovel.png',
 
   // bio
   TREE_1: 'tree-1.png',
