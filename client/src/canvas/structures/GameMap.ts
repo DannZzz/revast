@@ -9,7 +9,7 @@ export class GameMap {
     const aP = (p: Point) =>
       new Point(
         p.x * mapDto.tileSize.width + mapDto.tileSize.width,
-        p.y * mapDto.tileSize.height
+        p.y * mapDto.tileSize.height + mapDto.tileSize.height
       )
     const aS = (s: Size) =>
       new Size(

@@ -36,7 +36,7 @@ export const ITEM_DIR_NAMES = [
   'helmets',
 ]
 
-export const MOB_GLOBAL_SPEED_EFFECT = 0
+export const MOB_GLOBAL_SPEED_EFFECT = -15
 
 export const MOB_DIR_NAMES = ['mobs']
 
