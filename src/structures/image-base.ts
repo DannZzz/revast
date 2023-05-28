@@ -22,17 +22,17 @@ export const Images = {
 
   // spears
   STONE_SPEAR: 'stone-spear.png',
-  ICON_STONE_SPEAR: 'stone-spear.png',
+  ICON_STONE_SPEAR: 'stone-spear-icon.png',
   GOLDEN_SPEAR: 'golden-spear.png',
-  ICON_GOLDEN_SPEAR: 'golden-spear.png',
+  ICON_GOLDEN_SPEAR: 'golden-spear-icon.png',
   DIAMOND_SPEAR: 'diamond-spear.png',
-  ICON_DIAMOND_SPEAR: 'diamond-spear.png',
+  ICON_DIAMOND_SPEAR: 'diamond-spear-icon.png',
   AMETHYST_SPEAR: 'amethyst-spear.png',
-  ICON_AMETHYST_SPEAR: 'amethyst-spear.png',
+  ICON_AMETHYST_SPEAR: 'amethyst-spear-icon.png',
   RUBY_SPEAR: 'ruby-spear.png',
-  ICON_RUBY_SPEAR: 'ruby-spear.png',
+  ICON_RUBY_SPEAR: 'ruby-spear-icon.png',
   EMERALD_SPEAR: 'emerald-spear.png',
-  ICON_EMERALD_SPEAR: 'emerald-spear.png',
+  ICON_EMERALD_SPEAR: 'emerald-spear-icon.png',
 
   // axes
   WOODEN_AXE: 'wooden-axe.png',
@@ -64,17 +64,29 @@ export const Images = {
 
   //hammers
   STONE_HAMMER: 'stone-hammer.png',
-  ICON_STONE_HAMMER: 'stone-hammer.png',
+  ICON_STONE_HAMMER: 'stone-hammer-icon.png',
   GOLDEN_HAMMER: 'golden-hammer.png',
-  ICON_GOLDEN_HAMMER: 'golden-hammer.png',
+  ICON_GOLDEN_HAMMER: 'golden-hammer-icon.png',
   DIAMOND_HAMMER: 'diamond-hammer.png',
-  ICON_DIAMOND_HAMMER: 'diamond-hammer.png',
+  ICON_DIAMOND_HAMMER: 'diamond-hammer-icon.png',
   AMETHYST_HAMMER: 'amethyst-hammer.png',
-  ICON_AMETHYST_HAMMER: 'amethyst-hammer.png',
+  ICON_AMETHYST_HAMMER: 'amethyst-hammer-icon.png',
   RUBY_HAMMER: 'ruby-hammer.png',
-  ICON_RUBY_HAMMER: 'ruby-hammer.png',
+  ICON_RUBY_HAMMER: 'ruby-hammer-icon.png',
   SUPER_HAMMER: 'super-hammer.png',
-  ICON_SUPER_HAMMER: 'super-hammer.png',
+  ICON_SUPER_HAMMER: 'super-hammer-icon.png',
+
+  // shovels
+  STONE_SHOVEL: 'stone-shovel.png',
+  ICON_STONE_SHOVEL: 'stone-shovel.png',
+  GOLDEN_SHOVEL: 'golden-shovel.png',
+  ICON_GOLDEN_SHOVEL: 'golden-shovel-icon.png',
+  DIAMOND_SHOVEL: 'diamond-shovel.png',
+  ICON_DIAMOND_SHOVEL: 'diamond-shovel-icon.png',
+  AMETHYST_SHOVEL: 'amethyst-shovel.png',
+  ICON_AMETHYST_SHOVEL: 'amethyst-shovel-icon.png',
+  RUBY_SHOVEL: 'ruby-shovel.png',
+  ICON_RUBY_SHOVEL: 'ruby-shovel-icon.png',
 
   // bio
   TREE_1: 'tree-1.png',
@@ -103,6 +115,7 @@ export const Images = {
   COOKED_MEAT: 'cooked-meat.png',
   FISH: 'fish.png',
   COOKED_FISH: 'cooked-fish.png',
+  WATER_BOTTLE: 'water-bottle.png',
 
   // settable
   WORKBENCH: 'workbench.png',
@@ -167,6 +180,10 @@ export const Images = {
   SCORPION_TAIL: 'scorpion-tail.png',
   REPAIR: 'repair.png',
   REPAIR_ICON: 'repair-icon.png',
+  SAND: 'sand.png',
+  GROUND: 'ground.png',
+  ICE: 'ice.png',
+  BOTTLE: 'bottle.png',
 
   // helemts
   STONE_HELMET: 'stone-helmet.png',

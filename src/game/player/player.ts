@@ -57,6 +57,7 @@ export class Player extends BasicElement<PlayerEvents> {
     godMode: GetSet(false),
     chat: GetSet(true),
     instaCraft: GetSet(false),
+    autofood: GetSet(false)
   }
   readonly name: string
   readonly toggle = new Toggle()
@@ -167,7 +168,7 @@ export class Player extends BasicElement<PlayerEvents> {
 
     this.camera.calculateCameraPoint(absolute)
     this.point(absolute)
-    this.cache.data.biome = this.gameServer.map.biomeOf(this.camera.viewRect())
+    this.cache.data.biome = this.gameServer.map.areaOf(this.camera.viewRect())
   }
 
   socketRegistering() {

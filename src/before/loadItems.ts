@@ -2,6 +2,7 @@ import { glob } from 'glob'
 import { join } from 'path'
 import { ITEM_DIR_NAMES } from 'src/constant'
 import { Items } from 'src/data/items'
+import { Craft } from 'src/structures/Craft'
 
 export async function loadItems() {
   const itemPaths = await glob(
@@ -16,4 +17,5 @@ export async function loadItems() {
   )
   items.forEach((item) => Items.set(item.data.id, item))
   console.log(`${items.length} items were loaded!`)
+  console.log(`${Craft.data.size} crafts were loaded!`)
 }

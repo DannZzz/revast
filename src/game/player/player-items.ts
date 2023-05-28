@@ -26,6 +26,9 @@ import { Images } from 'src/structures/image-base'
 import { Size } from 'src/global/global'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { UniversalHitbox } from 'src/utils/universal-within'
+import { Craft } from 'src/structures/Craft'
+import { CraftDuration } from 'src/data/config-type'
+import { CraftEntity } from 'src/entities/craft.entity'
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -35,13 +38,13 @@ interface PlayerItem<T extends ItemsByTypes> {
 }
 
 export class PlayerItems {
-  private _isCrafting: null | number = null
-  readonly specialItems = { bag: <number>44 }
+  private _isCrafting: null | string = null
+  readonly specialItems = { bag: <number>null }
   private _items = new Chest<number, PlayerItem<ItemsByTypes>>(
     START_ITEMS() as any,
   )
 
-  private itemsAreCraftableRN: Chest<number, Item<ItemsByTypes>> = new Chest()
+  private craftsRN: Chest<string, Craft> = new Chest()
   private craftableItemsAreChanged: boolean
 
   get space() {
@@ -80,15 +83,16 @@ export class PlayerItems {
   }
 
   addable(id: number): boolean
-  addable(id: number, crafting: boolean): boolean
-  addable(id: number, crafting: boolean = false): boolean {
+  addable(id: number, craftingId: string): boolean
+  addable(id: number, craftingId?: string): boolean {
     if (this.has(id)) return true
-    if (!crafting) return this.hasEmptySpace()
+    if (!craftingId) return this.hasEmptySpace()
     const item = Items.get(id)
-    if (!item || !item.craftable) return false
+    const craftData = Craft.data.get(craftingId)
+    if (!item || !item.craftable || !craftData) return false
     if (item.data.notAddable) return true
     let clone = this.items
-    const craft = $(item.craftable.required)
+    const craft = $(craftData.craftable)
     clone.forEach((it) => {
       if (craft.$has(it.item.id)) {
         it.quantity -= craft[it.item.id]
@@ -141,7 +145,9 @@ export class PlayerItems {
     // checking water
     if (
       !settable.data.onThe.water &&
-      this.player.gameServer.map.biomeOf(settable.centerPoint).includes('ocean')
+      this.player.gameServer.map
+        .biomeOf(settable.centerPoint)
+        .includes(Biome.water)
     )
       return -1
 
@@ -204,10 +210,17 @@ export class PlayerItems {
     this.player.staticItems.for(item.universalHitbox).addDrop(item)
   }
 
-  craftItem(id: number) {
-    const item = Items.get(id)
-    if (!item.craftable || !this.addable(id, true) || this.isCrafting) return
-    const craft = $(item.craftable.required)
+  craftItem(craftId: string) {
+    const craftData = Craft.data.get(craftId)
+    if (!craftData) return
+    const item = Items.get(craftData.itemId)
+    if (
+      !item.craftable ||
+      !this.addable(craftData.itemId, craftId) ||
+      this.isCrafting
+    )
+      return
+    const craft = $(craftData.craftable.required)
     if (
       craft.$some((quantity, idOr) => {
         return !this.has(+idOr, quantity)
@@ -226,10 +239,10 @@ export class PlayerItems {
       }
     })
     this._items = this.filterItems(items)
-    this.isCrafting = id
+    this.isCrafting = craftData.id
     this.update()
     const isBook = this.equiped?.item.data.specialName === 'book'
-    this.player.socket().emit('playerCraft', [true, +id, isBook])
+    this.player.socket().emit('playerCraft', [true, craftId, isBook])
     const t = setTimeout(
       () => {
         this.isCrafting = null
@@ -237,15 +250,15 @@ export class PlayerItems {
           this.specialItems[item.data.specialName] = item.id
           this.update()
         } else {
-          this.addItem(id, 1)
+          this.addItem(craftData.itemId, 1)
         }
-        this.player.lbMember.add(item.craftable.givesXp)
-        this.player.socket().emit('playerCraft', [false, +id])
+        this.player.lbMember.add(craftData.craftable.givesXp)
+        this.player.socket().emit('playerCraft', [false, craftId])
         clearTimeout(t)
       },
       this.player.settings.instaCraft()
         ? 100
-        : (item.craftable.duration * 1000) / (isBook ? 2 : 1),
+        : (craftData.craftable.duration * 1000) / (isBook ? 2 : 1),
     )
   }
 
@@ -326,6 +339,7 @@ export class PlayerItems {
     items[items.findIndex((it) => it.item.id == item.id)].quantity--
     this.player.bars.hungry.value += item.data.toFood || 0
     this.player.damage(item.data.toHealth || 0, 'absolute')
+    this.player.bars.h2o.value += item.data.toWater || 0
     this.player.bars.socketUpdate()
     this._items = this.filterItems(items)
     this.update()
@@ -334,8 +348,9 @@ export class PlayerItems {
   setCraftableItems() {
     if (this.isCrafting) return
 
-    const allCraftableItems = Items.filter((item) => !!item.craftable)
-    const itemsAreCraftableRN = allCraftableItems.filter((item) => {
+    const allCraftableItems = Craft.data
+    const craftsRN = allCraftableItems.filter((craft) => {
+      const item = Items.get(craft.itemId)
       if (item.data.maxAmount) {
         if (
           this.has(item.id, item.data.maxAmount) ||
@@ -343,23 +358,21 @@ export class PlayerItems {
         )
           return false
       }
-      if (item.craftable.state) {
+      if (craft.craftable.state) {
         if (
-          $(item.craftable.state).$some(
+          $(craft.craftable.state).$some(
             (value, key) =>
               value && !this.player.actions.state.actualStates[key](),
           )
         )
           return false
       }
-      return $(item.craftable.required).$every((quantity, idOr) => {
-        return this.has(idOr, quantity)
+      return $(craft.craftable.required).$every((quantity, idOr) => {
+        return this.has(+idOr, quantity)
       })
     })
-    this.craftableItemsAreChanged = !$(itemsAreCraftableRN).$same(
-      this.itemsAreCraftableRN,
-    )
-    this.itemsAreCraftableRN = itemsAreCraftableRN
+    this.craftableItemsAreChanged = !$(craftsRN).$same(this.craftsRN)
+    this.craftsRN = craftsRN
   }
 
   update() {
@@ -375,8 +388,14 @@ export class PlayerItems {
         ),
       ),
       {
-        items: this.itemsAreCraftableRN.map((item) =>
-          Transformer.toPlain(new ItemEntity(item.data)),
+        items: this.craftsRN.map((crft) =>
+          Transformer.toPlain(
+            new CraftEntity({
+              id: crft.id,
+              craftDuration: crft.craftable.duration,
+              iconSource: Items.get(crft.itemId).iconSource,
+            }),
+          ),
         ),
         changed: this.craftableItemsAreChanged,
       }, //

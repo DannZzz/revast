@@ -19,21 +19,33 @@ interface BarNode {
   animation: boolean
 }
 
+export type PlayerBar = "hp" | "hungry" | "temperature" | "h2o" | "o2"
+
+export type PlayerBarNodes = { [k in PlayerBar]: BarNode }
+
 export class PlayerBars {
   hp: Bar
   hungry: Bar
   temperature: Bar
+  h2o: Bar
+  o2: Bar
   autofood = GetSet(false)
-  private barNodes: { hp: BarNode; hungry: BarNode; temperature: BarNode } = {
+  private barNodes: PlayerBarNodes = {
     hp: {},
     temperature: {},
     hungry: {},
+    h2o: {},
+    o2: {},
   } as any
+  private barCount = 4
   private barHeight = 35
   private barWidth = 200
   private barGap = 10
   private barPercentFontSize = 20
   private group: Konva.Group
+  private o2BarHeight: number = 15
+  private o2BarGroup: Konva.Group
+  private o2BarWidth: number = this.barCount * this.barWidth * 1.2
 
   constructor(private player: Player) {
     this.socketRegistering()
@@ -56,7 +68,7 @@ export class PlayerBars {
   }
 
   registerEvents() {
-    ;["hp", "hungry", "temperature"].forEach((barName) => {
+    ;["hp", "hungry", "temperature", "h2o"].forEach((barName) => {
       this[barName].events.on("change", (val: number) => {
         const percent = percentFrom(val, this[barName].max)
         animateTo(this.barNodes[barName].bar, {
@@ -81,6 +93,41 @@ export class PlayerBars {
         this.barNodes[barName].percent.setAttr("text", percent.toFixed(0) + "%")
       })
     })
+    this.o2.events.on("change", (val) => {
+      const percent = percentFrom(val, this.o2.max)
+      const currentVisibility = this.o2BarGroup.visible()
+      const visible = percent !== 100
+      if (currentVisibility !== visible) {
+        animateTo(this.o2BarGroup, {
+          duration: 1,
+          to: { points: [{ visible }], absolute: true },
+          noBack: true,
+        })
+      }
+      animateTo(this.barNodes.o2.bar, {
+        to: {
+          points: [
+            {
+              width: percentOf(percent, this.o2BarWidth),
+            },
+          ],
+          absolute: true,
+        },
+        duration: 1,
+        noBack: true,
+      })
+      if (percent > 25) this.barNodes.o2.animation = false
+      if (!this.barNodes.o2.animation && percent <= 25) {
+        this.barNodes.o2.animation = true
+        animateTo(this.barNodes.o2.bar, {
+          to: { points: [{ fill: "white" }] },
+          duration: 0.5,
+          onFinish: (animate) => {
+            if (this.barNodes.o2.animation) animate()
+          },
+        })
+      }
+    })
   }
 
   position() {
@@ -93,7 +140,8 @@ export class PlayerBars {
       this.barHeight
 
     const containerX =
-      screenSize.width / 2 - (this.barWidth * 3 + this.barGap * 2) / 2
+      screenSize.width / 2 -
+      (this.barWidth * this.barCount + this.barGap * 3) / 2
     return new Point(containerX, containerY)
   }
 
@@ -123,8 +171,8 @@ export class PlayerBars {
       const mainBar = new Konva.Rect({
         height: this.barHeight,
         width: barWidthFromPercentage,
+        cornerRadius: 5,
         fill: barColor,
-        cornerRadius: 15,
       })
 
       this.barNodes[id].bar = mainBar
@@ -134,7 +182,7 @@ export class PlayerBars {
         width: this.barWidth,
         stroke: barColor,
         strokeWidth: 5,
-        cornerRadius: 15,
+        cornerRadius: 5,
       })
 
       const mainBarPercentageText = new KonvaText({
@@ -163,6 +211,8 @@ export class PlayerBars {
       this.temperature.value,
       this.temperature.max
     )
+    const currentH2oInPercentage = percentFrom(this.h2o.value, this.h2o.max)
+    const currentO2InPercentage = percentFrom(this.o2.value, this.o2.max)
 
     const hpBars = makeBar({
       i: 0,
@@ -182,8 +232,43 @@ export class PlayerBars {
       barColor: "#53bcd1",
       barWidthInPercentage: currentTemperatureInPercentage,
     })
+    const h2oBars = makeBar({
+      i: 3,
+      id: "h2o",
+      barColor: "#0371bc",
+      barWidthInPercentage: currentH2oInPercentage,
+    })
 
-    group.add(hpBars, hungryBars, temperatureBars)
+    const o2Bar = new Konva.Group({
+      offset: {
+        x:
+          (this.o2BarWidth -
+            (this.barWidth * this.barCount + this.barGap * 3)) /
+          2,
+        y: this.barGap + this.barHeight,
+      },
+      visible: currentO2InPercentage !== 100,
+    })
+
+    const o2Rect = new Konva.Rect({
+      fill: "#bbe8ef",
+      height: this.o2BarHeight,
+      width: this.o2BarWidth,
+      cornerRadius: 5,
+    })
+
+    const o2Stroke = new Konva.Rect({
+      stroke: "#bbe8ef",
+      strokeWidth: 5,
+      height: this.o2BarHeight,
+      width: percentOf(currentO2InPercentage, this.o2BarWidth),
+      cornerRadius: 5,
+    })
+
+    this.barNodes.o2.bar = o2Rect
+    this.o2BarGroup = o2Bar
+    o2Bar.add(o2Rect, o2Stroke)
+    group.add(hpBars, hungryBars, temperatureBars, h2oBars, o2Bar)
     group.listening(false)
     Game.createAlwaysTop(this.player.layer2, group)
     this.group = group

@@ -7,6 +7,7 @@ export type EquipableItemVariant =
   | 'spear'
   | 'sword'
   | 'hammer'
+  | 'shovel'
 
 export const DrawPosByType = {
   axe: new Point(-3, 92),
@@ -14,6 +15,7 @@ export const DrawPosByType = {
   spear: new Point(100, 160),
   sword: new Point(60, 100),
   hammer: new Point(75, 100),
+  shovel: new Point(60, 80),
 }
 
 export const RangeByType = {
@@ -22,6 +24,7 @@ export const RangeByType = {
   sword: 110,
   spear: 150,
   hammer: 110,
+  shovel: 90,
 }
 
 export const CraftDuration = {
@@ -35,13 +38,13 @@ export const CraftDuration = {
 }
 
 export const CraftGivingXP = {
-  wood: 2,
-  stone: 4,
-  gold: 6,
-  diamond: 8,
-  amethyst: 10,
-  ruby: 14,
-  emerald: 26,
+  wood: 50,
+  stone: 125,
+  gold: 250,
+  diamond: 800,
+  amethyst: 1250,
+  ruby: 3500,
+  emerald: 6000,
 }
 
 export const EquipmentItemSize = {

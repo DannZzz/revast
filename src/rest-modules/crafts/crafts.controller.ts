@@ -7,6 +7,7 @@ import {
 import { SkipThrottle } from '@nestjs/throttler'
 import { Items } from 'src/data/items'
 import { ItemCompactEntity } from 'src/entities/item.entity'
+import { Craft } from 'src/structures/Craft'
 import { Transformer } from 'src/structures/Transformer'
 
 // @SkipThrottle()
@@ -14,12 +15,13 @@ import { Transformer } from 'src/structures/Transformer'
 export class CraftsController {
   @Get('/list')
   getCraftList() {
-    const craftables = Items.filter((item) => !!item.data.craftable).map(
-      (item) => ({
-        state: item.data.craftable.state || {},
-        items: item.data.craftable.required || {},
-      }),
-    )
+    const craftables = Craft.data.map((item) => {
+      return {
+        id: item.id,
+        state: item.craftable.state || {},
+        items: item.craftable.required || {},
+      }
+    })
 
     return craftables
   }

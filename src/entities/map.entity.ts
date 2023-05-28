@@ -39,7 +39,7 @@ export class MapEntity implements Partial<GameMap> {
   }
 
   @Exclude()
-  biomeOf(hitbox: UniversalHitbox): MapAreaName[] {
+  areaOf(hitbox: UniversalHitbox): MapAreaName[] {
     throw new Error('Method not implemented.')
   }
 

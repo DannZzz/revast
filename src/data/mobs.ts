@@ -21,7 +21,8 @@ export enum MobNames {
 export interface ServerMobOptions {
   maxCount: number
   reAddEachSeconds: number
-  biome: MapAreaName
+  biome: Biome
+  area: MapAreaName
   canOut: boolean
   spawn: { startPoint: Point; size: Size }
 }
@@ -45,7 +46,8 @@ export class Mobs {
       for (let i = 0; i < conf.maxCount; i++) {
         const mob = new Mob({
           ...mobBasic,
-          currentArea: conf.biome,
+          biome: conf.biome,
+          currentArea: conf.area,
           spawn: conf.spawn,
           point: game.randomEmptyPoint(
             mobBasic.hitbox,
@@ -82,7 +84,8 @@ export class Mobs {
 
         const mob = new Mob({
           ...mobBasic,
-          currentArea: conf.biome,
+          biome: conf.biome,
+          currentArea: conf.area,
           spawn: conf.spawn,
           point: this.game.randomEmptyPoint(
             mobBasic.hitbox,

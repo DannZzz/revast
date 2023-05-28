@@ -1,6 +1,4 @@
-import { boxPoint } from 'intersects'
 import { Point, Size } from 'src/global/global'
-import { Converter } from './Converter'
 import { Exclude } from 'class-transformer'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { rectToPolygon } from 'src/utils/polygons'
@@ -11,6 +9,7 @@ export class BiomeEffect {
   hungry: number = 0
   temperatureDay: number = 0
   temperatureNight: number = 0
+  vast: number = 0
 
   constructor(data: Partial<BiomeEffect> = {}) {
     Object.assign(this, data)
@@ -25,6 +24,7 @@ export type MapAreaName =
   | 'beach'
   | 'forest'
   | 'ocean'
+  | 'lake1'
 
 export class BiomeOptions {
   @Exclude()
@@ -32,13 +32,15 @@ export class BiomeOptions {
   @Exclude()
   type: Biome
   @Exclude()
-  priority?: boolean
+  priority?: number = 1
   size: Size
   point: Point
   bgColor: string
   borderColor?: string
   @Exclude()
   effect: BiomeEffect
+  @Exclude()
+  digItemId?: number
 
   constructor(data: BiomeOptions) {
     Object.assign(this, data)
@@ -51,7 +53,7 @@ export enum Biome {
   forest,
   winter,
   beach,
-  ocean,
+  water,
   desert,
   cave,
 }
@@ -91,6 +93,22 @@ export class GameMap implements GameMapOptions {
     )
   }
 
+  find(areas: MapAreaName[]): BiomeOptions
+  find(biomes: Biome[]): BiomeOptions
+  find(args: Array<Biome | MapAreaName>): BiomeOptions {
+    for (let arg of args) {
+      if (typeof arg === 'string') {
+        const option = this.absoluteBiomes.find((biome) => biome.name === arg)
+        if (option) return option
+      } else {
+        const option = this.absoluteBiomes.find((biome) => biome.type === arg)
+        if (option) return option
+      }
+    }
+
+    return null
+  }
+
   get absoluteSize() {
     return new Size(
       this.size.width * this.tileSize.width,
@@ -102,12 +120,21 @@ export class GameMap implements GameMapOptions {
     return this.absoluteBiomes.find((biome) => biome.name === biomeName)
   }
 
-  biomeOf(hitbox: UniversalHitbox): MapAreaName[] {
-    const biomes: MapAreaName[] = []
+  areaOf(hitbox: UniversalHitbox): MapAreaName[] {
+    const biomes: BiomeOptions[] = []
     for (let data of this.absoluteBiomes) {
       const points = rectToPolygon(data.point, data.size)
-      if (universalWithin(hitbox, points)) biomes.push(data.name)
+      if (universalWithin(hitbox, points)) biomes.push(data)
     }
-    return biomes
+    return biomes.sort((a, b) => b.priority - a.priority).map((b) => b.name)
+  }
+
+  biomeOf(hitbox: UniversalHitbox): Biome[] {
+    const biomes: BiomeOptions[] = []
+    for (let data of this.absoluteBiomes) {
+      const points = rectToPolygon(data.point, data.size)
+      if (universalWithin(hitbox, points)) biomes.push(data)
+    }
+    return biomes.sort((a, b) => b.priority - a.priority).map((b) => b.type)
   }
 }

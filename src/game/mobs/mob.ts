@@ -11,7 +11,7 @@ import {
 import { Player } from '../player/player'
 import { timer } from 'rxjs'
 import { Converter } from 'src/structures/Converter'
-import { Biome, MapAreaName } from 'src/structures/GameMap'
+import { Biome, GameMap, MapAreaName } from 'src/structures/GameMap'
 import { StaticItems } from 'src/structures/StaticItems'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
@@ -26,6 +26,7 @@ export interface MobProps {
   spawn: { startPoint: Point; size: Size }
   staticItems: StaticItemsHandler
   currentArea: MapAreaName
+  biome: Biome
   theta: number
 }
 
@@ -40,6 +41,7 @@ export class Mob extends BasicMob {
   }
   readonly id = uuid(75)
   died: boolean = false
+  biome: Biome
   spawn: { startPoint: Point; size: Size }
   point?: Point = new Point(0, 0)
   staticItems: StaticItemsHandler
@@ -119,7 +121,7 @@ export class Mob extends BasicMob {
     }
   }
 
-  action(players: Player[], delta: number) {
+  action(players: Player[], map: GameMap, delta: number) {
     if (this.died) {
       this.hurt(0, {} as any)
     }
@@ -166,7 +168,10 @@ export class Mob extends BasicMob {
           BasicMath.pythagorean(
             _speed,
             Math.abs(this.targetPoint.y - this.point.y),
-          ),
+          ) +
+            (map.biomeOf(this.point)[0] === Biome.water
+              ? map.find(map.areaOf(this.point))?.effect.speed || 0
+              : 0),
         )
         const nextPoint = getPointByTheta(
           this.point,

@@ -28,6 +28,7 @@ export class PlayerSkin {
 export interface PlayerState {
   fire: boolean
   workbench: boolean
+  water: boolean
 }
 
 export class VisualPlayerData {
@@ -66,14 +67,12 @@ export interface PlayerCache {
   lastSentClickin?: boolean
   otherPlayers?: VisualPlayerData[]
   mobs?: Mob[]
-  autofood: boolean
   drops: BasicDrop[]
   lastSentDay: number
 }
 
 export const PlayerCacheInit: () => PlayerCache = () => {
   return {
-    autofood: false,
     staticBios: [],
     staticSettables: [],
     mobs: [],

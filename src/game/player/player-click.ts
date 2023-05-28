@@ -96,6 +96,14 @@ export class PlayerClick {
         equiped.item.data.range,
         equiped.item.data.resourceGettingPower,
       )
+
+      if (!isNaN(equiped.item.data.digPower)) {
+        const point = getPointByTheta(new Point(x, y), theta, equiped.item.data.range/2)
+        const digItemId = this.player.gameServer.map.find(this.player.gameServer.map.biomeOf(point)).digItemId
+        if (!isNaN(digItemId)) {
+          this.player.items.addItem(digItemId, equiped.item.data.digPower)
+        }
+      }
     } else {
       doAction(x, y, this.player.range, { wood: 1 })
     }

@@ -18,10 +18,11 @@ import {
 } from 'src/game/basic/item.basic'
 import { Point, Size } from 'src/global/global'
 import { Images } from '../image-base'
+import { Craft } from '../Craft'
 
 class ItemCreator {
   private _data: Partial<ItemProps<ItemsByTypes>>
-  readonly extend = <any>{}
+  readonly extend = <any>{ craftable: [] }
 
   setVariant(variant: EquipableItemVariant) {
     this.extend.drawPosition = DrawPosByType[variant]
@@ -33,11 +34,11 @@ class ItemCreator {
     this.extend.name = val
     return this
   }
-  
+
   setItemResourceType(resource: ResourceTypes) {
-    if (!this.extend.craftable) this.extend.craftable = {}
-    this.extend.craftable.givesXp = CraftGivingXP[resource]
-    this.extend.craftable.duration = CraftDuration[resource]
+    if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
+    this.extend.craftable[0].givesXp = CraftGivingXP[resource]
+    this.extend.craftable[0].duration = CraftDuration[resource]
 
     if (this.extend.type === 'helmet') {
       this.extend.defense = {
@@ -50,8 +51,14 @@ class ItemCreator {
   }
 
   craftable(craftable: Partial<Craftable>) {
-    if (!this.extend.craftable) this.extend.craftable = craftable
-    else this.extend.craftable = { ...this.extend.craftable, ...craftable }
+    if (!this.extend.craftable[0]) this.extend.craftable[0] = craftable
+    else
+      this.extend.craftable[0] = { ...this.extend.craftable[0], ...craftable }
+    return this
+  }
+
+  extraCraftable(...craftables: Craftable[]) {
+    this.extend.craftable.push(...craftables)
     return this
   }
 
@@ -104,7 +111,11 @@ class ItemCreator {
   build() {
     // if (this.extend.defense)
     // console.log(new Item({ ...this.extend, ...this._data }))
-    return new Item({ ...this.extend, ...this._data })
+    const { craftable, ...otherProps } = this.extend
+    craftable.forEach((crft) => {
+      Craft.addCraft(this.extend.id, crft)
+    })
+    return new Item({ ...otherProps, ...this._data })
   }
 }
 

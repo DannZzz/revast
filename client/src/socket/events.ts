@@ -188,6 +188,12 @@ export interface WearingDto {
   size: Size
 }
 
+export interface CraftDto {
+  iconUrl: string
+  id: string
+  craftDuration: number
+}
+
 interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
@@ -202,7 +208,7 @@ interface ServerToClientEvents {
   playerItems: (
     data: [
       items: PlayerItemDto[],
-      crafts: { items: ItemDto[]; changed: boolean },
+      crafts: { items: CraftDto[]; changed: boolean },
       space: number,
       bagUrl?: string
     ]
@@ -225,7 +231,7 @@ interface ServerToClientEvents {
   ) => void
   playerDied: (data: [playerInformation: PlayerInformationDto]) => void
   playerCraft: (
-    data: [status: boolean, itemId: number, isBook: boolean]
+    data: [status: boolean, craftId: string, isBook: boolean]
   ) => void
   dynamicItems: (
     data: [players?: OtherPlayersDto, mobs?: MobDynamicDto]
@@ -247,7 +253,7 @@ interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   autofood(data: [value: NumberBoolean]): void
-  craftRequest(data: [itemId: number]): void
+  craftRequest(data: [craftId: string]): void
   clickItem(data: [id: number]): void
   joinServer(data: JoinPlayerDto): void
   mouseAngle(data: [angle: number, theta: number]): void

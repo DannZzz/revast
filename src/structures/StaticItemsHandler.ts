@@ -15,7 +15,7 @@ export class StaticItemsHandler {
     let areas: any[] = []
     if (!(Array.isArray(_areas) && typeof _areas[0] === 'string')) {
       // @ts-ignore
-      areas = this.map.biomeOf(_areas)
+      areas = this.map.areaOf(_areas)
     } else {
       areas = _areas as any
     }

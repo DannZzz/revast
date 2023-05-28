@@ -18,6 +18,7 @@ import { BasicStaticItem } from "../basic/static-item.basic"
 import { Group } from "konva/lib/Group"
 import { Game } from "../game"
 import { NB } from "../utils/NumberBoolean"
+import { CraftDto } from "../../socket/events"
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -32,9 +33,9 @@ export class PlayerItems extends BasicPlayerItems {
   readonly upIfSelected = 5
   private _items: PlayerItem<ItemsByTypes>[] = []
   private space: number = 10
-  private itemsAreCraftableRN: Item<ItemsByTypes>[]
+  private itemsAreCraftableRN: CraftDto[]
   private craftsChanged: boolean
-  isCrafting: null | number
+  isCrafting: null | string
   private isDrew: boolean = false
   declare player: Player
   settingModeItemId: number = null
@@ -56,7 +57,7 @@ export class PlayerItems extends BasicPlayerItems {
     socket.emit("dropRequest", [itemId, NB.to(all)])
   }
 
-  craftItem(id: number, book: boolean) {
+  craftItem(id: string, book: boolean) {
     const node = this.player.element(`#craft-${id}`)
     let duration = this.itemsAreCraftableRN.find(
       (item) => item.id === id
@@ -71,7 +72,7 @@ export class PlayerItems extends BasicPlayerItems {
     })
   }
 
-  craftItemRequest(id: number) {
+  craftItemRequest(id: string) {
     socket.emit("craftRequest", [id])
   }
 
@@ -408,7 +409,7 @@ export class PlayerItems extends BasicPlayerItems {
       })
 
       this._items = [...filteredItems, ...newItems]
-      this.itemsAreCraftableRN = crafts.items.map((item) => new Item(item))
+      this.itemsAreCraftableRN = crafts.items
       this.craftsChanged = crafts.changed
       if (this.space !== space) {
         this.invGroup?.destroy()

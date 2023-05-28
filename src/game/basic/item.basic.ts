@@ -3,10 +3,12 @@ import { ResourceTypes } from './bio-item.basic'
 import { BasicStaticItem, StaticSettableItem } from './static-item.basic'
 import { PlayerState } from '../types/player.types'
 import { Player } from '../player/player'
+import { Craft } from 'src/structures/Craft'
 
 export interface Eatable {
   toFood: number
   toHealth: number
+  toWater: number
   resourceType?: ResourceTypes
 }
 
@@ -45,6 +47,7 @@ export interface Equipable {
     active?: TwoHandModeNode
     noActive?: TwoHandModeNode
   }
+  digPower?: number
 }
 
 export interface Any {}
@@ -102,7 +105,6 @@ export interface Wearable {
     player: number
     mob: number
   }
-  craftable?: Craftable
   drawPosition: Point
   size: Size
 }
@@ -126,7 +128,6 @@ type BasicItemPropsDefault = {
   source?: string
   iconSource: string
   id: number
-  craftable?: Craftable
   flip?: boolean
   specialName?: string
   notAddable?: boolean
@@ -169,7 +170,7 @@ class BasicItem<T extends ItemsByTypes> {
     return this.data.iconSource
   }
   get craftable() {
-    return this.data.craftable
+    return Craft.data.some((crt) => crt.itemId === this.id)
   }
 
   get flip(): boolean {

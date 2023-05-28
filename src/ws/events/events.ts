@@ -3,6 +3,7 @@ import { Namespace, Server, Socket } from 'socket.io'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { PlayerBarsEntity } from 'src/dto/player-bars.dto'
 import { BioEntity } from 'src/entities/bio.entity'
+import { CraftEntity } from 'src/entities/craft.entity'
 import { DropEntity } from 'src/entities/drop.entity'
 import { EquipmentEntity } from 'src/entities/equipment.entity'
 import { ItemEntity } from 'src/entities/item.entity'
@@ -35,7 +36,7 @@ interface ServerToClientEvents {
   playerItems: (
     data: [
       items: PlayerItemsEntity[],
-      crafts: { items: ItemEntity[]; changed: boolean },
+      crafts: { items: CraftEntity[]; changed: boolean },
       space: number,
       bagUrl: string,
     ],
@@ -58,7 +59,7 @@ interface ServerToClientEvents {
   ) => void
   playerDied: (data: [playerInformation: PlayerInformationEntity]) => void
   playerCraft: (
-    data: [status: boolean, itemId: number, isBook?: boolean],
+    data: [status: boolean, craftId: string, isBook?: boolean],
   ) => void
   dynamicItems: (
     data: [players?: OtherPlayersEntity, mobs?: MobDynamicEntity],
@@ -80,7 +81,7 @@ interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   autofood(data: [value: NumberBoolean]): void
-  craftRequest(data: [itemId: number]): void
+  craftRequest(data: [craftId: string]): void
   clickItem(data: [number]): void
   joinServer(data: JoinPlayerDto): void
   mouseAngle(data: [angle: number, theta: number]): void

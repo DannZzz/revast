@@ -1,13 +1,11 @@
-import Konva from "konva"
-import { Layer } from "konva/lib/Layer"
 import { Filter, Node } from "konva/lib/Node"
 import { Point, combineClasses } from "../../global/init"
-import { onChange } from "../utils/OnChange"
 
 type ToOption = Point & {
   rotation?: { amount: number; absolute?: true }
   offset?: Point
   fill?: string
+  visible?: boolean
 } & Size
 interface AnimateOptions {
   to?: { points: Partial<ToOption>[]; absolute?: true }
@@ -75,6 +73,10 @@ export const animateTo = (node: Node, options: AnimateOptions) => {
     if (point.fill) {
       start.fill = point.fill
       back.fill = node.getAttr("fill")
+    }
+    if (typeof point.visible === "boolean") {
+      start.visible = point.visible
+      back.visible = node.visible()
     }
 
     startConfig.start.push(start)

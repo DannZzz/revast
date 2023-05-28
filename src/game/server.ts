@@ -75,7 +75,7 @@ export class GameServer implements GameProps {
         )
         if (!bio) return
         bio.players = this.alivePlayers
-        this.staticItems.for(this.map.biomeOf(bio.universalHitbox)).addBios(bio)
+        this.staticItems.for(this.map.areaOf(bio.universalHitbox)).addBios(bio)
       }
     })
     this.day = new GameDay(this.madeAt)
@@ -208,7 +208,7 @@ export class GameServer implements GameProps {
       (player) => player.online() && player.loop.action(),
     )
     this.mobs.all.forEach(
-      (mob) => !mob.died && mob?.action(alivePlayersAsArray, delta),
+      (mob) => !mob.died && mob?.action(alivePlayersAsArray, this.map, delta),
     )
   }
 

@@ -2,7 +2,7 @@ import createItem from 'src/structures/item-creator/create-item'
 
 export default createItem(46)
   .iconSource('COOKED_MEAT')
-  .name("Cooked Fish")
+  .name('Cooked Fish')
   .craftable({
     duration: 3,
     givesXp: 30,
@@ -16,5 +16,6 @@ export default createItem(46)
   .data({
     toFood: 40,
     toHealth: 0,
+    toWater: 0,
   })
   .build()

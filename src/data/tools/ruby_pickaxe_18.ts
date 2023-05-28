@@ -1,12 +1,5 @@
 import createItem from 'src/structures/item-creator/create-item'
-import { Item } from '../../game/basic/item.basic'
-import { Images } from '../../structures/image-base'
-import {
-  CraftGivingXP,
-  CraftDuration,
-  DrawPosByType,
-  RangeByType,
-} from '../config-type'
+
 
 export default createItem(18, 'tool')
   .sources('RUBY_PICKAXE', 'ICON_RUBY_PICKAXE')

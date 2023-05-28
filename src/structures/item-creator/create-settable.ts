@@ -14,9 +14,10 @@ import {
   WallDoorByResourceType,
   WallDoorCraftDuration,
 } from 'src/data/config-type'
+import { Craft } from '../Craft'
 
 class SettableCreator {
-  readonly extend = <any>{ cover: true, onThe: {} }
+  readonly extend = <any>{ cover: true, onThe: {}, craftable: [] }
   private _data: any = {}
 
   hp(val: number) {
@@ -41,8 +42,9 @@ class SettableCreator {
       radius: 45,
     })
     if (!this.extend.craftable) this.extend.craftable = {}
-    this.extend.craftable.duration = WallDoorCraftDuration[wallType]
-    this.extend.craftable.givesXp = 100
+    if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
+    this.extend.craftable[0].duration = WallDoorCraftDuration[wallType]
+    this.extend.craftable[0].givesXp = 100
     this.extend.showHpRadius = 45
     return this
   }
@@ -53,8 +55,14 @@ class SettableCreator {
   }
 
   craftable(craftable: Partial<Craftable>) {
-    if (!this.extend.craftable) this.extend.craftable = craftable
-    else this.extend.craftable = { ...this.extend.craftable, ...craftable }
+    if (!this.extend.craftable[0]) this.extend.craftable[0] = craftable
+    else
+      this.extend.craftable[0] = { ...this.extend.craftable[0], ...craftable }
+    return this
+  }
+
+  extraCraftable(...craftables: Craftable[]) {
+    this.extend.craftable.push(...craftables)
     return this
   }
 
@@ -113,7 +121,11 @@ class SettableCreator {
   }
 
   build() {
-    return new BasicStaticItem({ ...this.extend, ...this._data })
+    const { craftable, ...otherProps } = this.extend
+    craftable.forEach((crft) => {
+      Craft.addCraft(this.extend.id, crft)
+    })
+    return new BasicStaticItem({ ...otherProps, ...this._data })
   }
 }
 

@@ -7,5 +7,6 @@ export default createItem(6)
     resourceType: 'berry',
     toFood: 20,
     toHealth: 0,
+    toWater: 0,
   })
   .build()

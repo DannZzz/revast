@@ -6,5 +6,6 @@ export default createItem(45)
   .data({
     toFood: 15,
     toHealth: -10,
+    toWater: 0,
   })
   .build()

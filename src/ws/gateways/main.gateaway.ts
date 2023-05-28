@@ -77,7 +77,7 @@ export class MainGateway
     @MessageBody() data: EventData<'autofood'>,
   ): void {
     const player = this.gameServer.to(client.id)
-    if (player) player.cache.data.autofood = NB.from(data[0])
+    if (player) player.settings.autofood(NB.from(data[0]))
   }
 
   // @WsRateLimit(15, 5)
@@ -108,7 +108,7 @@ export class MainGateway
     @ConnectedSocket() client: MainSocket,
     @MessageBody() data: EventData<'craftRequest'>,
   ): void {
-    this.gameServer.to(client.id)?.items.craftItem(+data[0])
+    this.gameServer.to(client.id)?.items.craftItem(data[0])
   }
 
   // @WsRateLimit(20, 3)
