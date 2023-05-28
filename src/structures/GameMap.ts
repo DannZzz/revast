@@ -1,8 +1,10 @@
 import { Point, Size } from 'src/global/global'
-import { Exclude } from 'class-transformer'
+import { Exclude, Expose, Transform } from 'class-transformer'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { rectToPolygon } from 'src/utils/polygons'
 import { StaticItems } from './StaticItems'
+import { pointBox, pointPolygon } from 'intersects'
+import { Converter } from './Converter'
 
 export class BiomeEffect {
   speed: number = 0
@@ -123,17 +125,18 @@ export class GameMap implements GameMapOptions {
   areaOf(hitbox: UniversalHitbox): MapAreaName[] {
     const biomes: BiomeOptions[] = []
     for (let data of this.absoluteBiomes) {
-      const points = rectToPolygon(data.point, data.size)
-      if (universalWithin(hitbox, points)) biomes.push(data)
+      if (universalWithin(hitbox, { point: data.point, size: data.size }))
+        biomes.push(data)
     }
     return biomes.sort((a, b) => b.priority - a.priority).map((b) => b.name)
   }
 
-  biomeOf(hitbox: UniversalHitbox): Biome[] {
+  biomeOf(hitbox: Point, a?: boolean): Biome[] {
     const biomes: BiomeOptions[] = []
     for (let data of this.absoluteBiomes) {
-      const points = rectToPolygon(data.point, data.size)
-      if (universalWithin(hitbox, points)) biomes.push(data)
+      if (universalWithin(hitbox, { point: data.point, size: data.size })) {
+        biomes.push(data)
+      }
     }
     return biomes.sort((a, b) => b.priority - a.priority).map((b) => b.type)
   }

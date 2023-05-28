@@ -9,6 +9,7 @@ import { Bio } from '../basic/bio-item.basic'
 import { Converter } from 'src/structures/Converter'
 import { GetSet } from 'src/structures/GetSet'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
+import { universalWithin } from 'src/utils/universal-within'
 
 export class PlayerClick {
   hand: 'right' | 'left' = 'right'
@@ -98,8 +99,14 @@ export class PlayerClick {
       )
 
       if (!isNaN(equiped.item.data.digPower)) {
-        const point = getPointByTheta(new Point(x, y), theta, equiped.item.data.range/2)
-        const digItemId = this.player.gameServer.map.find(this.player.gameServer.map.biomeOf(point)).digItemId
+        const point = getPointByTheta(
+          new Point(x, y),
+          theta,
+          equiped.item.data.range / 2,
+        )
+        const digItemId = this.player.gameServer.map.find(
+          this.player.gameServer.map.biomeOf(point),
+        ).digItemId
         if (!isNaN(digItemId)) {
           this.player.items.addItem(digItemId, equiped.item.data.digPower)
         }
@@ -116,10 +123,7 @@ export class PlayerClick {
     // players
     const players = this.player.cache.get('otherPlayers')
     const attackedPlayers = players.filter((player) =>
-      polygonPolygon(
-        Converter.pointArrayToXYArray(attackedArea),
-        Converter.pointArrayToXYArray(PLAYER_BODY_POINTS(player.point)),
-      ),
+      universalWithin(attackedArea, PLAYER_BODY_POINTS(player.point)),
     )
     if (attackedPlayers.length > 0) {
       attackedPlayers.forEach((player) => {
@@ -129,11 +133,7 @@ export class PlayerClick {
         alivePlayers.forEach((otherPlayer) => {
           if (
             otherPlayer.online() &&
-            pointPolygon(
-              ...Converter.pointToXYArray(player.point),
-              Converter.pointArrayToXYArray(otherPlayer.camera.viewRect()),
-              1,
-            )
+            universalWithin(player.point, otherPlayer.camera.viewRect())
           ) {
             otherPlayer
               .socket()

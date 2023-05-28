@@ -27,11 +27,8 @@ import {
 import { PlayerAction } from './player-action'
 import { PlayerBars } from './player-bars'
 import { PlayerItems } from './player-items'
-import { PlayerLoop } from './player-loop'
 import { PlayerSpeed } from './player-speed'
 import { Cache } from 'src/structures/cache/cache'
-import { polygonCircle, polygonPolygon } from 'intersects'
-import { Converter } from 'src/structures/Converter'
 import {
   GAME_DAY_SECONDS,
   MAX_ITEM_QUANTITY_IN_CRATE,
@@ -42,6 +39,8 @@ import { Images } from 'src/structures/image-base'
 import { percentOf } from 'src/utils/percentage'
 import { Message } from 'src/structures/Message'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
+import { PlayerLoop } from './player-loop'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
@@ -57,7 +56,7 @@ export class Player extends BasicElement<PlayerEvents> {
     godMode: GetSet(false),
     chat: GetSet(true),
     instaCraft: GetSet(false),
-    autofood: GetSet(false)
+    autofood: GetSet(false),
   }
   readonly name: string
   readonly toggle = new Toggle()
@@ -234,21 +233,8 @@ export class Player extends BasicElement<PlayerEvents> {
     return Boolean(this.socket().id)
   }
 
-  within(points: Point[]): boolean
-  within(point: Point, radius: number): boolean
-  within(arg1: Point | Point[], radius?: number): boolean {
-    if (Array.isArray(arg1)) {
-      return polygonPolygon(
-        Converter.pointArrayToXYArray(PLAYER_BODY_POINTS(this.point())),
-        Converter.pointArrayToXYArray(arg1),
-      )
-    } else {
-      return polygonCircle(
-        Converter.pointArrayToXYArray(PLAYER_BODY_POINTS(this.point())),
-        ...Converter.pointToXYArray(arg1),
-        radius,
-      )
-    }
+  within(hitbox: UniversalHitbox): boolean {
+    return universalWithin(hitbox, this.points)
   }
 
   get points() {

@@ -7,6 +7,7 @@ import { rectToPolygon } from './utils/polygons'
 import config from 'config'
 
 import { MainServer } from './ws/events/events'
+import { UniversalHitbox } from './utils/universal-within'
 
 export const PORT = config.get('PORT')
 
@@ -16,13 +17,12 @@ export const SERVER_API: (combine?: string) => string = (
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
-export const PLAYER_BODY_ACUTAL_SIZE = new Size(70, 50)
+export const PLAYER_BODY_ACUTAL_SIZE = new Size(50, 50)
 
-export const PLAYER_BODY_POINTS = (centerPoint: Point): Point[] =>
-  rectToPolygon(
-    combineClasses(centerPoint, new Point(-35, -25)),
-    PLAYER_BODY_ACUTAL_SIZE,
-  )
+export const PLAYER_BODY_POINTS = (centerPoint: Point): UniversalHitbox => ({
+  point: combineClasses(centerPoint, new Point(-25, -25)),
+  size: PLAYER_BODY_ACUTAL_SIZE,
+})
 
 export const GOD_MOD_ALL = false
 
@@ -173,7 +173,7 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
           priority: 2,
           size: new Size(30, 32),
           bgColor: '#0b6a84',
-          point: new Point(61, 134),
+          point: new Point(60, 134),
           effect: new BiomeEffect({
             speed: -80,
             temperatureDay: -10,

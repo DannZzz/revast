@@ -2,6 +2,7 @@ import { Point, Size } from 'src/global/global'
 import { ChangeEvented, onChange } from '../utils/OnChange'
 import { GetSet } from './GetSet'
 import { rectToPolygon } from '../utils/polygons'
+import { UniversalHitbox } from 'src/utils/universal-within'
 
 export class Camera {
   point: GetSet<Point> = GetSet(new Point())
@@ -17,7 +18,7 @@ export class Camera {
     this.map(sizes.map)
   } //
 
-  viewRect(more: number = 200) {
+  viewRect(more: number = 200): UniversalHitbox {
     const { x, y } = this.point()
     const { width: mapW, height: mapH } = this.map()
     const { width: screenW, height: screenH } = this.size()
@@ -32,10 +33,10 @@ export class Camera {
     if (topLeft.y < 0) topLeft.y = 0
     if (bottomRight.x > mapW) bottomRight.x = mapW
     if (bottomRight.y > mapH) bottomRight.y = mapH
-    return rectToPolygon(
-      topLeft,
-      new Size(bottomRight.x - topLeft.x, bottomRight.y - topLeft.y),
-    )
+    return {
+      point: topLeft,
+      size: new Size(bottomRight.x - topLeft.x, bottomRight.y - topLeft.y),
+    }
   }
 
   registerEvents() {

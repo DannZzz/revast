@@ -11,10 +11,11 @@ import { PlayerSkinEntity } from 'src/entities/player-skin.entity'
 import { StaticSettableEntity } from 'src/entities/static-settable.entity'
 import { Converter } from 'src/structures/Converter'
 import { deepDifference } from 'src/utils/deepDifference'
-import { Player } from './player'
 import { DropEntity } from 'src/entities/drop.entity'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { Items } from 'src/data/items'
+import { Player } from './player'
+import { universalWithin } from 'src/utils/universal-within'
 
 export class PlayerLoop {
   readonly cache: Cache<PlayerCache>
@@ -100,11 +101,7 @@ export class PlayerLoop {
     const playersInView = this.player.gameServer.dynamicItems.filter(
       (item) =>
         item.id() !== this.player.id() &&
-        pointPolygon(
-          ...Converter.pointToXYArray(item.point()),
-          Converter.pointArrayToXYArray(viewRect),
-          1,
-        ),
+        universalWithin(item.point(), viewRect),
     )
     const playersInViewArray = playersInView.map((player) => player)
     const otherCachedPlayers = this.cache.get('otherPlayers')
@@ -154,11 +151,7 @@ export class PlayerLoop {
 
     // mobs
     const mobsInView = this.player.gameServer.mobs.all.filter((mob) =>
-      pointPolygon(
-        ...Converter.pointToXYArray(mob.point),
-        Converter.pointArrayToXYArray(viewRect),
-        1,
-      ),
+      universalWithin(mob.point, viewRect),
     )
     const cachedMobs = this.cache.get('mobs')
     const mobInViewIds = mobsInView.map((mob) => mob.id)

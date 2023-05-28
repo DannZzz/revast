@@ -2,6 +2,7 @@ import { GetSet } from 'src/structures/GetSet'
 import { PlayerState } from '../types/player.types'
 import { Player } from './player'
 import { Biome } from 'src/structures/GameMap'
+import { rectToPolygon } from 'src/utils/polygons'
 
 export class PlayerStates {
   readonly actualStates: { [k in keyof PlayerState]: GetSet<PlayerState[k]> } =
@@ -56,6 +57,8 @@ export class PlayerStates {
     if (_fire !== this.actualStates.fire()) this.actualStates.fire(_fire)
     if (_workbench !== this.actualStates.workbench())
       this.actualStates.workbench(_workbench)
-    if (_water !== this.actualStates.water()) this.actualStates.water(_water)
+    if (_water !== this.actualStates.water()) {
+      this.actualStates.water(_water)
+    }
   }
 }

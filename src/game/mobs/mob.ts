@@ -169,7 +169,8 @@ export class Mob extends BasicMob {
             _speed,
             Math.abs(this.targetPoint.y - this.point.y),
           ) +
-            (map.biomeOf(this.point)[0] === Biome.water
+            (map.biomeOf(this.point)[0] === Biome.water &&
+            this.biome !== Biome.water
               ? map.find(map.areaOf(this.point))?.effect.speed || 0
               : 0),
         )
