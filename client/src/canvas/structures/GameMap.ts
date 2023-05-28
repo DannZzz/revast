@@ -7,10 +7,7 @@ export class GameMap {
   static draw(mapDto: MapDto, config: NodeConfig = {}): Konva.Group {
     const group = new Konva.Group(config)
     const aP = (p: Point) =>
-      new Point(
-        p.x * mapDto.tileSize.width + mapDto.tileSize.width,
-        p.y * mapDto.tileSize.height + mapDto.tileSize.height
-      )
+      new Point(p.x * mapDto.tileSize.width, p.y * mapDto.tileSize.height)
     const aS = (s: Size) =>
       new Size(
         s.width * mapDto.tileSize.width,
