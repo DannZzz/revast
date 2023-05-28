@@ -343,6 +343,7 @@ export class PlayerItems {
     this.player.bars.socketUpdate()
     this._items = this.filterItems(items)
     this.update()
+    if (item.data.giveAfterEat) this.addItem(item.data.giveAfterEat, 1)
   }
 
   setCraftableItems() {

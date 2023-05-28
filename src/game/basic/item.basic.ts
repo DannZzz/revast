@@ -10,6 +10,7 @@ export interface Eatable {
   toHealth: number
   toWater: number
   resourceType?: ResourceTypes
+  giveAfterEat?: number
 }
 
 export interface Resource {

@@ -7,6 +7,7 @@ export default createItem(85)
     toFood: 0,
     toHealth: 0,
     toWater: 50,
+    giveAfterEat: 84
   })
   .extraCraftable(
     {
