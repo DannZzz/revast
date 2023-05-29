@@ -1,6 +1,7 @@
 import Konva from "konva"
 import { DropDto } from "../../socket/events"
 import { loadImage } from "../structures/fetchImages"
+import { zIndexOf } from "../../constants"
 
 export class BasicDrop implements DropDto {
   id: string
@@ -12,12 +13,21 @@ export class BasicDrop implements DropDto {
   private imageNode: Konva.Image
   private canHurt: boolean = true
   destroyed = false
+  private layer: Konva.Layer
+  private layer2: Konva.Layer
 
   constructor(data: DropDto) {
     Object.assign(this, data)
   }
 
-  draw(group: Konva.Layer | Konva.Group) {
+  take(layer: Konva.Layer, layer2: Konva.Layer) {
+    this.layer = layer
+    this.layer2 = layer2
+    return this
+  }
+
+  draw() {
+    const group: Konva.Group = this.layer.findOne("#game-settable-1")
     loadImage(this.hurtUrl)
     this.imageNode = new Konva.Image({
       ...this.point,
@@ -31,7 +41,6 @@ export class BasicDrop implements DropDto {
     })
 
     group.add(this.imageNode)
-    this.imageNode.zIndex(2)
   }
 
   hurt() {

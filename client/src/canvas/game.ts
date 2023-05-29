@@ -17,7 +17,7 @@ import { BasicPlayer } from "./basic/player.basic"
 import { StaticSettableItem } from "./basic/static-item.basic"
 import { StaticItems } from "./structures/StaticItems"
 import { NB } from "./utils/NumberBoolean"
-import { BG_FOREST_BIOM } from "../constants"
+import { BG_FOREST_BIOM, zIndexOf } from "../constants"
 import { loadImage } from "./structures/fetchImages"
 import { GameMap } from "./structures/GameMap"
 import { BasicMob } from "./basic/mob.basic"
@@ -74,7 +74,7 @@ export class Game {
   }
 
   draw() {
-    const mainGroup = new Konva.Group({ id: "game-group" })
+    const mainGroup = new Konva.Group({ id: "game-group", listening: false })
     const gameBg = GameMap.draw(this.map, {
       id: "game-bg",
       perfectDrawEnabled: false,
@@ -88,17 +88,32 @@ export class Game {
       listening: false,
       perfectDrawEnabled: false,
     })
-    mainGroup.add(gameBg)
-    gameBg.zIndex(-100)
-    const itemsGroup = new Konva.Group({ id: "game-static" })
-    const settableGroup = new Konva.Group({ id: "game-settable" })
+    const itemsGroup = new Konva.Group({ id: "game-settable" })
+    const itemsGroup1 = new Konva.Group({ id: "game-settable+1" })
+    const itemsGroup_1 = new Konva.Group({ id: "game-settable-1" })
+    const itemsGroup_2 = new Konva.Group({ id: "game-settable-2" })
+    const mobGroup = new Konva.Group({ id: "game-mobs" })
+    const bioGroup = new Konva.Group({ id: "game-bios" })
+    const playersGroup = new Konva.Group({ id: "game-players" })
     const highlights = new Konva.Group({ id: "highlights", listening: false })
-    const messages = new Konva.Group({ id: "messages", listening: false })
+    const messages = new Konva.Group({ id: "messages" })
     const alwaysTop = new Konva.Group({ id: "always-top" })
-    mainGroup.add(settableGroup, itemsGroup, messages)
+    mainGroup.add(
+      gameBg,
+      itemsGroup_2,
+      itemsGroup_1,
+      playersGroup,
+      mobGroup,
+      itemsGroup,
+      itemsGroup1,
+      bioGroup,
+      messages
+    )
+    gameBg.zIndex(0)
+
     this.layer.add(mainGroup)
     this.layer2.add(night, highlights, alwaysTop)
-    alwaysTop.zIndex(3)
+    alwaysTop.zIndex(2)
 
     this.serverMessageNode = new KonvaText({
       text: "",
@@ -111,11 +126,10 @@ export class Game {
       fontSize: 30,
     })
     Game.createAlwaysTop(this.layer2, this.serverMessageNode)
-    this.serverMessageNode.zIndex(2)
   }
 
   drawStaticBios(bios: Bio[], toRemoveIds: string[]) {
-    const group = this.layer.findOne("#game-static") as Group
+    const group = this.layer.findOne("#game-bios") as Group
     toRemoveIds.forEach((itemId) => this.layer.findOne(`#${itemId}`)?.destroy())
     bios.forEach((bio) => bio.take(this.layer).draw(group))
     this.staticItems.bio = this.staticItems.bio.filter(
@@ -125,9 +139,8 @@ export class Game {
   }
 
   drawStaticSettables(settables: StaticSettableItem[], toRemoveIds: string[]) {
-    const group = this.layer.findOne("#game-settable") as Group
     settables.forEach((settable) =>
-      settable.take(this.layer, this.layer2).draw(group)
+      settable.take(this.layer, this.layer2).draw()
     )
     this.staticItems.settable = this.staticItems.settable.filter((settable) => {
       const res = !toRemoveIds.includes(settable.id)
@@ -139,9 +152,7 @@ export class Game {
   }
 
   drawDrops(drops: BasicDrop[], toRemoveIds: string[]) {
-    const group = this.layer.findOne("#game-settable") as Group
-
-    drops.forEach((drop) => drop.draw(group))
+    drops.forEach((drop) => drop.take(this.layer, this.layer2).draw())
     this.staticItems.drops = this.staticItems.drops.filter((drop) => {
       const res = !toRemoveIds.includes(drop.id)
       if (res) return true
@@ -214,7 +225,7 @@ export class Game {
         this.mobs[mobExistsIndex].angle = mob.angle
       } else {
         const createdMob = new BasicMob(mob)
-        createdMob.draw(this.layer.findOne(`#game-settable`) as any)
+        createdMob.draw(this.layer.findOne(`#game-mobs`) as any)
         this.mobs.push(createdMob)
       }
     })
@@ -328,14 +339,14 @@ export class Game {
       const itemNode = this.layer.findOne(`#${itemId}`)
       const item = this.staticItems.all.find((item) => item.id === itemId)
       if (!itemNode || !item) return
-      if (mode && "tryMode" in item) item.tryMode(mode.enabled, mode.cover)
-      if (showHpAngle && "tryArcAngle" in item) item.tryArcAngle(showHpAngle)
       const to = getPointByTheta(item.fixedPosition(), theta, 10)
       animateTo(itemNode, {
         to: { absolute: true, points: [{ ...to }] },
         duration: 0.2,
         backTo: { point: item.fixedPosition() },
       })
+      if (mode && "tryMode" in item) item.tryMode(mode)
+      if (showHpAngle && "tryArcAngle" in item) item.tryArcAngle(showHpAngle)
     })
 
     socket.on("staticItemMiscellaneous", ([bioId, currentResources, type]) => {

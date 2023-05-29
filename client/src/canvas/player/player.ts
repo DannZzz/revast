@@ -118,6 +118,9 @@ export class Player extends BasicPlayer<PlayerEvents> {
   registerEvents(): void {
     this.events.on("set.angle", (angle) => {
       this.setAngle(angle)
+      if (this.items.settingMode.id && this.items.settingMode.grid) {
+        this.items.settingMode.node?.rotation(-angle)
+      }
       this.layer
         .findOne("#item-range")
         .setAttr(
@@ -152,7 +155,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
     })
     this.events.on("request.click", (click) => {
       if (click) {
-        if (this.items.settingModeItemId) {
+        if (this.items.settingMode.id) {
           this.items.setItemRequest()
           this.toggle.set("clicking", false)
           return

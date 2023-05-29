@@ -38,7 +38,7 @@ export class PlayerItems extends BasicPlayerItems {
   isCrafting: null | string
   private isDrew: boolean = false
   declare player: Player
-  settingModeItemId: number = null
+
   private invGroup: Konva.Group
 
   constructor(player: Player) {
@@ -158,9 +158,10 @@ export class PlayerItems extends BasicPlayerItems {
   }
 
   startSetMode(itemId: number) {
-    const itemNode = this.player.element(`#${this.player.id("set")}`)
-    if (itemId === this.settingModeItemId) {
-      this.settingModeItemId = null
+    const itemNode = this.settingMode.node
+    if (itemId === this.settingMode.id) {
+      this.settingMode.id = null
+      itemNode.rotation(0)
       itemNode.visible(false)
       itemNode.setAttr("image", null)
       return
@@ -168,38 +169,46 @@ export class PlayerItems extends BasicPlayerItems {
     const item = this._items.find(
       (item) => item.item.id == itemId
     ) as PlayerItem<Settable>
-    this.settingModeItemId = itemId
+    this.settingMode.id = itemId
+    this.settingMode.grid = item.item.data.setMode.grid
+
+    const offset = this.settingMode.grid
+      ? new Point(item.item.data.size.width / 2, item.item.data.size.height / 2)
+      : combineClasses(
+          new Point(
+            item.item.data.size.width / 2,
+            item.item.data.size.height / 2
+          ),
+          new Point(item.item.data.setMode.offset)
+        )
+
+    const pos = this.settingMode.grid
+      ? combineClasses(
+          new Point(this.player.size.width / 2, this.player.size.height / 2),
+          new Point(item.item.data.setMode.offset)
+        )
+      : new Point(this.player.size.width / 2, this.player.size.height / 2)
+
     itemNode.setAttr(
       "image",
       loadImage(item.item.url, (img) => itemNode.setAttr("image", img))
     )
-    itemNode.position(
-      new Point(this.player.size.width / 2, this.player.size.height / 2)
-    )
-
-    itemNode.offset(
-      combineClasses(
-        new Point(
-          item.item.data.size.width / 2,
-          item.item.data.size.height / 2
-        ),
-        new Point(item.item.data.setMode.offset)
-      )
-    )
+    itemNode.position(pos)
+    itemNode.offset(offset)
     itemNode.size(item.item.data.size)
     itemNode.visible(true)
   }
 
   setItemRequest() {
-    if (!this.settingModeItemId) return
-    socket.emit("setItemRequest", [this.settingModeItemId])
+    if (!this.settingMode.id) return
+    socket.emit("setItemRequest", [this.settingMode.id])
   }
 
   setItemResponse() {
-    const itemNode = this.player.element(`#${this.player.id("set")}`)
-    this.settingModeItemId = null
-    itemNode.visible(false)
-    itemNode.setAttr("image", null)
+    const itemNode = this.settingMode.node
+    this.settingMode.id = null
+    this.settingMode.grid = false
+    itemNode.rotation(0).visible(false).setAttr("image", null)
   }
 
   drawItems() {

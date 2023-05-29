@@ -32,6 +32,7 @@ export interface Equipable {
 
 export interface Settable {
   setMode: {
+    grid: boolean
     offset: Point
     itemSize: Size
   }

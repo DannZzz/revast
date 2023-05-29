@@ -123,7 +123,10 @@ export interface StaticSettableDto {
   iconUrl: string
   size: Size
   setMode: SetMode
-  modeEnabled: boolean
+  mode: {
+    enabled: boolean
+    cover: boolean
+  }
   modeUrl: string
   cover: boolean
   type?: string

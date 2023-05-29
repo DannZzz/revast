@@ -82,8 +82,12 @@ class SettableCreator {
     return this
   }
 
-  setMode(offset: Point, itemSize: Settable['setMode']['itemSize']) {
-    this.extend.setMode = { offset, itemSize }
+  setMode(
+    offset: Point,
+    itemSize: Settable['setMode']['itemSize'],
+    grid: boolean = false,
+  ) {
+    this.extend.setMode = { offset, itemSize, grid }
     return this
   }
 

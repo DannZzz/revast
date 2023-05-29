@@ -187,19 +187,19 @@ export class BasicPlayer<
     rightHandItem.zIndex(-1)
     leftHand.add(leftHandItem, handBase.clone())
 
-    const setItemImage = new Konva.Image({
+    this.items.settingMode.node = new Konva.Image({
       image: null,
       id: `${id}-set`,
       visible: false,
     })
 
     bodyGroup.add(
+      this.items.settingMode.node,
       rightHand,
       leftHand,
       body,
       this.wearingNode,
-      this.bagNode,
-      setItemImage
+      this.bagNode
     )
     body.zIndex(1)
     this.wearingNode.zIndex(2)
@@ -215,8 +215,7 @@ export class BasicPlayer<
       visible: false,
     })
     group.listening(false)
-    ;(this.layer.findOne("#game-settable") as any).add(group, itemRange)
-    group.zIndex(3)
+    ;(this.layer.findOne("#game-players") as any).add(group, itemRange)
   }
   registerEvents(): void {
     // throw new Error("Method not implemented.")

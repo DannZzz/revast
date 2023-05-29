@@ -1,9 +1,34 @@
 // export const SERVER_API = `http://34.140.94.14:5000`
 
+import Konva from "konva"
+
 export const SERVER_ASSET = (fileName: string) => `/assets/${fileName}`
 
 export const BG_FOREST_BIOM = {
   day: "#133A2B",
   night: "#00000099",
   // night: "#000",
+}
+
+export const zIndexOf = (
+  type:
+    | "player"
+    | "bio"
+    | "settable -1"
+    | "settable -2"
+    | "settable"
+    | "settable +1"
+    | "mob"
+    | "messages"
+): number => {
+  return {
+    messages: 8,
+    bio: 7,
+    mob: 6,
+    "settable +1": 5,
+    settable: 4,
+    player: 3,
+    "settable -1": 2,
+    "settable -2": 1,
+  }[type]
 }

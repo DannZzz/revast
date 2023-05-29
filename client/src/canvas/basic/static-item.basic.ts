@@ -13,6 +13,7 @@ import {
 import { StaticItemsAddons } from "../data/staticItemAddons"
 import { Shape } from "konva/lib/Shape"
 import { Game } from "../game"
+import { zIndexOf } from "../../constants"
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -25,7 +26,7 @@ export class StaticSettableItem implements StaticSettableDto {
   constructor(data: StaticSettableDto) {
     Object.assign(this, data)
   }
-  modeEnabled: boolean
+  mode: { enabled: boolean; cover: boolean }
   modeUrl: string
   cover: boolean
   url: string
@@ -63,19 +64,25 @@ export class StaticSettableItem implements StaticSettableDto {
     )
   }
 
-  tryMode(val: boolean, cover: boolean) {
+  tryMode(val: { enabled: boolean; cover: boolean }) {
     if (!this.modeUrl || this.modeUrl.endsWith("undefined")) return
-    this.modeEnabled = val
+    this.mode = val
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
     node.image(
-      loadImage(this.modeEnabled ? this.modeUrl : this.url, (img) =>
+      loadImage(this.mode.enabled ? this.modeUrl : this.url, (img) =>
         node.image(img)
       )
     )
-    this.node.zIndex(cover ? 3 : 1)
+    this.node.moveTo(
+      this.mode.cover
+        ? this.layer.findOne("#game-settable")
+        : this.layer.findOne("#game-settable-1")
+    )
   }
 
-  draw(layer: Layer | Group) {
+  draw() {
+    const gr: any = this.layer.findOne("#game-settable")
+
     const itemGroup = new Konva.Group({
       id: this.id,
       x: this.point.x - this.size.width / 2,
@@ -117,9 +124,14 @@ export class StaticSettableItem implements StaticSettableDto {
       itemGroup.add(this.showHpArc)
     }
 
-    layer.add(itemGroup)
-    itemGroup.zIndex(this.cover ? 4 : 1)
+    if (this.cover) {
+      gr.add(itemGroup)
+    } else {
+      ;(this.layer.findOne("#game-settable-2") as any).add(itemGroup)
+    }
+
     this.node = itemGroup
+    this.tryMode(this.mode)
 
     if (this.highlight) {
       let highlightNode: Konva.Circle | Konva.Rect

@@ -3,12 +3,19 @@ import { EquipmentDto, WearingDto } from "../../socket/events"
 import { BasicPlayer } from "./player.basic"
 import { Point } from "../../global/init"
 import { loadImage } from "../structures/fetchImages"
+import Konva from "konva"
 
 export class BasicPlayerItems {
   equiped: EquipmentDto
   layer: Layer
   bagUrl: string
   weared: WearingDto
+
+  readonly settingMode: { id: number; grid: boolean; node: Konva.Image } = {
+    id: null,
+    grid: false,
+    node: null,
+  }
 
   constructor(protected player: BasicPlayer) {
     this.layer = player.layer2
@@ -64,7 +71,6 @@ export class BasicPlayerItems {
   }
 
   updateWearing() {
-    console.log(this.bagUrl, this.weared)
     if (this.weared) {
       this.player.wearingNode.image(
         loadImage(this.weared.url, (img) => this.player.wearingNode.image(img))

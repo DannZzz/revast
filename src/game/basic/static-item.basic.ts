@@ -41,7 +41,13 @@ export class StaticSettableItem {
   readonly id: string = uuid(50)
   points: Point[] = []
 
-  modeEnabled = GetSet(false)
+  mode: {
+    enabled: GetSet<boolean>
+    cover: boolean
+  } = {
+    enabled: GetSet(false),
+    cover: true,
+  }
   destroyed = false
 
   constructor(
@@ -57,6 +63,10 @@ export class StaticSettableItem {
         if (!this.destroyed)
           this.staticItems.for(this.universalHitbox).removeSettable(this.id)
       })
+
+    this.mode.enabled.onChange((val) => {
+      this.mode.cover = Boolean(val ? this.data.mode?.cover : this.data.cover)
+    })
   }
 
   preDraw(point: Point, theta: number, rotation: number) {
@@ -106,7 +116,7 @@ export class StaticSettableItem {
   }
 
   within(hitbox: UniversalHitbox) {
-    if (this.modeEnabled() ? this.data.mode?.cover : this.data.cover)
+    if (this.mode.enabled() ? this.data.mode?.cover : this.data.cover)
       return this.withinStrict(hitbox)
     return false
   }
@@ -132,11 +142,11 @@ export class StaticSettableItem {
     if (this.data.mode && equiped?.item?.data.specialName !== 'repair') {
       if (
         this.data.mode.verify.call(this, by) &&
-        (this.modeEnabled()
+        (this.mode.enabled()
           ? !alivePlayers.some((player) => this.withinStrict(player.points))
           : true)
       )
-        this.modeEnabled(!this.modeEnabled())
+        this.mode.enabled(!this.mode.enabled())
     }
 
     const playerSockets = alivePlayers
@@ -152,8 +162,8 @@ export class StaticSettableItem {
         this.id,
         getAngle(this.point, from) + Math.PI,
         {
-          enabled: this.modeEnabled(),
-          cover: this.modeEnabled() ? this.data.mode?.cover : this.data.cover,
+          enabled: this.mode.enabled(),
+          cover: this.mode.cover,
         },
         this.data.showHpRadius &&
           percentOf(percentFrom(this.tempHp(), this.data.hp), 360),

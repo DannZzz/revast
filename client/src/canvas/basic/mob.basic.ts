@@ -1,6 +1,7 @@
 import { MobDto } from "../../socket/events"
 import Konva from "konva"
 import { loadImage } from "../structures/fetchImages"
+import { zIndexOf } from "../../constants"
 
 export class BasicMob implements MobDto {
   id: string
@@ -17,7 +18,7 @@ export class BasicMob implements MobDto {
     Object.assign(this, data)
   }
 
-  draw(layer: Konva.Layer | Konva.Group) {
+  draw(layer: Konva.Group) {
     loadImage(this.hurtUrl)
     this.imageNode = new Konva.Image({
       image: loadImage(this.url, (img) => this.imageNode.image(img)),

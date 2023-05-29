@@ -139,6 +139,7 @@ export const Images = {
   RUBY_WALL: 'ruby-wall.png',
   RUBY_DOOR: 'ruby-door-closed.png',
   RUBY_DOOR_OPEN: 'ruby-door-open.png',
+  BRIDGE: 'bridge.png',
 
   // mobs
   WOLF: 'wolf.png',

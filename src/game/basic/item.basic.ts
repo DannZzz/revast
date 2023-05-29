@@ -80,6 +80,7 @@ export interface Settable {
   hp: number
   showHpRadius?: number
   setMode: {
+    grid?: boolean
     offset: Point
     itemSize:
       | { type: 'circle'; radius: number }

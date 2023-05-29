@@ -31,9 +31,11 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   }
 
   @Expose()
-  @Transform(({ value }) => value())
-  modeEnabled: GetSet<boolean>
-
+  @Transform(({ value }) => ({ ...value, enabled: value.enabled() }))
+  mode: {
+    enabled: GetSet<boolean>
+    cover: boolean
+  }
   @AssetLink()
   @Expose()
   get modeUrl() {
