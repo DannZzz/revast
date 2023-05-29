@@ -8,5 +8,7 @@ export class Transformer {
 }
 
 export function AssetLink() {
-  return Transform(({ value }) => SERVER_API(`/assets/${value}`))
+  return Transform(({ value }) =>
+    typeof value === 'string' ? SERVER_API(`/assets/${value}`) : value,
+  )
 }

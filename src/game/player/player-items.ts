@@ -105,6 +105,12 @@ export class PlayerItems {
     if (!quantity) return false
     const item = Items.get(id)
     if (!this.addable(id) || !item) return false
+    if (item.data.specialName === 'bag') {
+      if (this.specialItems.bag) return false
+      this.specialItems[item.data.specialName] = item.id
+      this.update()
+      return true
+    }
     if (!this._items.has(id)) {
       this._items.set(+id, {
         item,
