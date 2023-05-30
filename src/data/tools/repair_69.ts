@@ -1,7 +1,8 @@
 import { Point, Size } from 'src/global/global'
 import createItem from 'src/structures/item-creator/create-item'
+import { SpecialItemTypes } from '../config-type'
 
-export default createItem(69, 'tool', 'repair')
+export default createItem(69, 'tool', SpecialItemTypes.repair)
   .equipableDefault()
   .sources('REPAIR', 'REPAIR_ICON')
   .name('Repair')

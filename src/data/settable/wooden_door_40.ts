@@ -13,7 +13,7 @@ export default createSettable(40)
     },
   })
   .mode({
-    cover: false,
+    cover: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
     source: Images.WOODEN_DOOR_OPEN,

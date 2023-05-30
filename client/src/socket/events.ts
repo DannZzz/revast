@@ -125,10 +125,10 @@ export interface StaticSettableDto {
   setMode: SetMode
   mode: {
     enabled: boolean
-    cover: boolean
+    cover: number
   }
   modeUrl: string
-  cover: boolean
+  cover: number
   type?: string
   highlight?: Highlight<HighlightType>
   showHp?: {
@@ -223,7 +223,7 @@ interface ServerToClientEvents {
     data: [
       id: string,
       theta: number,
-      mode?: { enabled: boolean; cover: boolean },
+      mode?: { enabled: boolean; cover: number },
       showHpAngle?: number
     ]
   ) => void

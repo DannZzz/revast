@@ -4,6 +4,7 @@ import { StaticItems } from './StaticItems'
 import { Bio } from 'src/game/basic/bio-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
 import { StaticSettableItem } from 'src/game/basic/static-item.basic'
+import { SettableCheckers } from 'src/game/basic/item.basic'
 
 export class StaticItemsHandler {
   areas: AreaStaticItems = {}
@@ -35,7 +36,7 @@ export class StaticItemsHandler {
 class Handler {
   constructor(private itemsGroup: StaticItems[]) {}
 
-  get bio() {
+  get bio(): Bio[] {
     return this.itemsGroup.reduce((aggr, group) => {
       aggr.push(
         ...group.bio.filter((item) => !aggr.find((it) => it.id === item.id)),
@@ -44,7 +45,7 @@ class Handler {
     }, [])
   }
 
-  get settable() {
+  get settable(): StaticSettableItem[] {
     return this.itemsGroup.reduce((aggr, group) => {
       aggr.push(
         ...group.settable.filter(
@@ -55,7 +56,7 @@ class Handler {
     }, [])
   }
 
-  get drops() {
+  get drops(): BasicDrop<any>[] {
     return this.itemsGroup.reduce((aggr, group) => {
       aggr.push(
         ...group.drops.filter((item) => !aggr.find((it) => it.id === item.id)),
@@ -111,17 +112,31 @@ class Handler {
     return [...this.bio, ...this.settable]
   }
 
-  someWithin(hitbox: UniversalHitbox, strict: boolean = false) {
+  someWithin(
+    hitbox: UniversalHitbox,
+    strict: boolean = false,
+    checkers: { type: string; ignore: SettableCheckers } = <any>{},
+  ) {
+    const { ignore, type } = checkers
     return this.all.some((item) => {
       if (strict) {
+        if (
+          ignore === 'all' ||
+          ('ignoreCheckers' in item.data && item.data.ignoreCheckers == 'all')
+        )
+          return false
+        if (
+          (ignore === 'type' ||
+            ('ignoreCheckers' in item.data &&
+              item.data.ignoreCheckers == 'type')) &&
+          item?.data?.type !== type
+        )
+          return false
         if ('withinStrict' in item) {
           return item.withinStrict(hitbox)
-        } else {
-          return item.within(hitbox)
         }
-      } else {
-        return 'ignoreCheckers' in item ? false : item.within(hitbox)
       }
+      return item.within(hitbox)
     })
   }
 

@@ -17,7 +17,7 @@ import {
 import { Craft } from '../Craft'
 
 class SettableCreator {
-  readonly extend = <any>{ cover: true, onThe: {}, craftable: [] }
+  readonly extend = <any>{ cover: 1, onThe: {}, craftable: [] }
   private _data: any = {}
 
   hp(val: number) {
@@ -50,7 +50,12 @@ class SettableCreator {
   }
 
   disableCover() {
-    this.extend.cover = false
+    this.extend.cover = 0
+    return this
+  }
+
+  cover(val: number) {
+    this.extend.cover = val
     return this
   }
 

@@ -15,8 +15,11 @@ export class PlayerSpeed {
       let sp = speed
       // biome effect
       sp +=
-        gameServer.map.find(gameServer.map.biomeOf(this.player.point()))?.effect
-          .speed || 0
+        gameServer.map.find(gameServer.map.biomeOf(this.player.point()))?.[
+          this.player.actions.state.actualStates.onBridge()
+            ? 'onBridgeEffect'
+            : 'effect'
+        ].speed || 0
 
       // weapon equiped
       if (this.player.items.equiped?.item.data.type === 'weapon')

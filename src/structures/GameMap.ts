@@ -43,9 +43,15 @@ export class BiomeOptions {
   effect: BiomeEffect
   @Exclude()
   digItemId?: number
+  @Exclude()
+  onBridgeEffect?: BiomeEffect
 
   constructor(data: BiomeOptions) {
     Object.assign(this, data)
+    this.onBridgeEffect = new BiomeEffect({
+      ...this.effect,
+      ...(this.onBridgeEffect || {}),
+    })
   }
 }
 

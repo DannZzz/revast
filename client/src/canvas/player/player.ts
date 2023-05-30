@@ -113,14 +113,15 @@ export class Player extends BasicPlayer<PlayerEvents> {
   moveTo(point: Point) {
     point = new Point(point)
     this.point = point
+    this.items.updateGridSettingMode()
   }
 
   registerEvents(): void {
     this.events.on("set.angle", (angle) => {
       this.setAngle(angle)
-      if (this.items.settingMode.id && this.items.settingMode.grid) {
-        this.items.settingMode.node?.rotation(-angle)
-      }
+
+      this.items.updateGridSettingMode()
+
       this.layer
         .findOne("#item-range")
         .setAttr(

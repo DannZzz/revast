@@ -19,7 +19,7 @@ export default createSettable(8, 'campfire')
     },
   })
   .duration(180)
-  .highlight({ type: 'circle', data: { radius: 200 } })
+  .highlight({ type: 'circle', data: { radius: 230 } })
   .special({
     firePlace: {
       within(point) {

@@ -59,12 +59,27 @@ export class PlayerBars {
 
   private vastingAndO2() {
     const inWater = this.player.actions.state.actualStates.water()
+    const onBridge = this.player.actions.state.actualStates.onBridge()
     const effect =
       this.player.gameServer.map.find(
         this.player.gameServer.map.biomeOf(this.player.point()),
-      )?.effect.vast || 0
+      )?.[
+        this.player.actions.state.actualStates.onBridge()
+          ? 'onBridgeEffect'
+          : 'effect'
+      ].vast || 0
+
     if (inWater) {
       this.h2o.value += 20
+    } else {
+      if (this.h2o.value === 0) {
+        this.player.damage(30, 'absolute')
+      } else {
+        this.h2o.value += -3 + effect
+      }
+    }
+
+    if (inWater && !onBridge) {
       if (this.o2.value === 0) {
         this.player.damage(30, 'absolute')
       } else {
@@ -72,11 +87,6 @@ export class PlayerBars {
       }
     } else {
       this.o2.value += 25
-      if (this.h2o.value === 0) {
-        this.player.damage(30, 'absolute')
-      } else {
-        this.h2o.value += -3 - effect
-      }
     }
   }
 
@@ -84,7 +94,11 @@ export class PlayerBars {
     const currentAreas = this.player.cache.get('biome')
     const effect = this.player.gameServer.map.find(
       this.player.gameServer.map.biomeOf(this.player.point()),
-    )?.effect
+    )?.[
+      this.player.actions.state.actualStates.onBridge()
+        ? 'onBridgeEffect'
+        : 'effect'
+    ]
     let percentOfDecreasing = effect.temperatureDay
     if (!this.player.gameServer.day.isDay())
       percentOfDecreasing = effect.temperatureNight

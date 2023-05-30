@@ -14,7 +14,7 @@ export default createSettable(62)
     },
   })
   .mode({
-    cover: false,
+    cover: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
     source: Images.GOLDEN_DOOR_OPEN,

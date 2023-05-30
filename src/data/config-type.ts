@@ -1,6 +1,11 @@
 import { SettableMode } from 'src/game/basic/item.basic'
 import { Point, Size } from 'src/global/global'
 
+export enum SpecialItemTypes {
+  bridge = 'bridge',
+  repair = 'repair',
+}
+
 export type EquipableItemVariant =
   | 'axe'
   | 'pickaxe'

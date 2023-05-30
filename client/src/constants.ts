@@ -4,6 +4,8 @@ import Konva from "konva"
 
 export const SERVER_ASSET = (fileName: string) => `/assets/${fileName}`
 
+export const GRID_SET_RANGE = 100
+
 export const BG_FOREST_BIOM = {
   day: "#133A2B",
   night: "#00000099",

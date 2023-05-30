@@ -17,18 +17,19 @@ import { Biome } from 'src/structures/GameMap'
 import { BasicStaticItem } from '../basic/static-item.basic'
 import {
   BAG_SPACE,
+  GRID_SET_RANGE,
   PLAYER_ITEMS_SPACE,
   SERVER_API,
   START_ITEMS,
 } from 'src/constant'
 import { BasicDrop } from '../basic/drop.basic'
 import { Images } from 'src/structures/image-base'
-import { Size } from 'src/global/global'
+import { Point, Size, combineClasses } from 'src/global/global'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { UniversalHitbox } from 'src/utils/universal-within'
 import { Craft } from 'src/structures/Craft'
-import { CraftDuration } from 'src/data/config-type'
 import { CraftEntity } from 'src/entities/craft.entity'
+import { SpecialItemTypes } from 'src/data/config-type'
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -128,23 +129,51 @@ export class PlayerItems {
   setItem(itemId: number): number {
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
-    const pointOfItem = getPointByTheta(
-      this.player.point(),
-      this.player.theta(),
-      Math.abs(item.data.setMode.offset.y),
-    )
+
+    let point: Point, theta: number, angle: number
+
+    if (item.data.setMode.grid) {
+      theta = angle = 0
+      const absolutePoint = getPointByTheta(
+        combineClasses(
+          new Point(item.data.size.width / 2, item.data.size.height / 2),
+          this.player.point(),
+        ),
+        this.player.theta(),
+        GRID_SET_RANGE,
+      )
+      const tile = this.player.gameServer.map.tileSize
+      point = new Point(
+        absolutePoint.x - (absolutePoint.x % tile.width),
+        absolutePoint.y - (absolutePoint.y % tile.height),
+      )
+
+      point.x -= tile.width / 2
+      point.y -= tile.height / 2
+    } else {
+      theta = this.player.theta()
+      angle = this.player.angle()
+      point = getPointByTheta(
+        this.player.point(),
+        this.player.theta(),
+        Math.abs(item.data.setMode.offset.y),
+      )
+    }
+
     const settable = item.toSettable(
       this.player.uniqueId,
       this.player.gameServer.alivePlayers,
       this.player.staticItems,
     )
-    settable.preDraw(pointOfItem, this.player.theta(), this.player.angle())
+    settable.preDraw(point, theta, angle)
+    const staticItems = this.player.staticItems.for(settable.universalHitbox)
     // checking settable items and bios
     if (
       //
-      this.player.staticItems
-        .for(settable.universalHitbox)
-        .someWithin(settable.universalHitbox, true)
+      staticItems.someWithin(settable.universalHitbox, true, {
+        ignore: settable.data.ignoreCheckers,
+        type: settable.data.type,
+      })
     )
       return -1
 
@@ -153,32 +182,39 @@ export class PlayerItems {
       !settable.data.onThe.water &&
       this.player.gameServer.map
         .biomeOf(settable.centerPoint)
-        .includes(Biome.water)
+        .includes(Biome.water) &&
+      !staticItems.someWithin(point, true, {
+        type: SpecialItemTypes.bridge,
+        ignore: 'type',
+      })
     )
       return -1
 
-    // checking other players
-    if (
-      this.player.gameServer.alivePlayers.some((player) =>
-        settable.withinStrict(player.points),
+    if (!settable.data.ignoreCheckers) {
+      // checking other players
+      if (
+        this.player.gameServer.alivePlayers.some((player) =>
+          settable.withinStrict(player.points),
+        )
       )
-    )
-      return -1
+        return -1
 
-    // checkin mobs
-    const itemUniversalHitBox: UniversalHitbox =
-      settable.data.setMode.itemSize.type === 'circle'
-        ? {
-            point: settable.centerPoint,
-            radius: settable.data.setMode.itemSize.radius,
-          }
-        : settable.points
-    if (
-      this.player.gameServer.mobs.all.some((mob) =>
-        mob.within(itemUniversalHitBox),
+      // checkin mobs
+      const itemUniversalHitBox: UniversalHitbox =
+        settable.data.setMode.itemSize.type === 'circle'
+          ? {
+              point: settable.centerPoint,
+              radius: settable.data.setMode.itemSize.radius,
+            }
+          : settable.points
+      if (
+        this.player.gameServer.mobs.all.some((mob) =>
+          mob.within(itemUniversalHitBox),
+        )
       )
-    )
-      return -1
+        return -1
+    }
+
     this.player.staticItems.for(settable.universalHitbox).addSettables(settable)
     this._items.get(itemId).quantity--
     this._items = this.filterItems(this._items)

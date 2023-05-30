@@ -48,7 +48,7 @@ interface ServerToClientEvents {
     data: [
       id: string,
       theta: number,
-      mode?: { enabled: boolean; cover: boolean },
+      mode?: { enabled: boolean; cover: number },
       showHpAngle?: number,
     ],
   ) => void

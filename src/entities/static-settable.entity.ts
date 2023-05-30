@@ -34,7 +34,7 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   @Transform(({ value }) => ({ ...value, enabled: value.enabled() }))
   mode: {
     enabled: GetSet<boolean>
-    cover: boolean
+    cover: number
   }
   @AssetLink()
   @Expose()

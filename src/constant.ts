@@ -56,6 +56,8 @@ export const PLAYER_DECREASE_SPEED_CLICK = 30
 
 export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 
+export const GRID_SET_RANGE = 100
+
 export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
@@ -63,6 +65,7 @@ export const START_ITEMS = () => [
   [1, { quantity: 1, equiped: false, item: itemById(1) }],
   [6, { quantity: 999, equiped: false, item: itemById(6) }],
   [8, { quantity: 3, equiped: false, item: itemById(8) }],
+  [86, { quantity: 36, equiped: false, item: itemById(86) }],
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>
@@ -71,7 +74,7 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
     socketServer: server,
     map: new GameMap({
       size: new Size(300, 300),
-      tileSize: new Size(70, 70),
+      tileSize: new Size(100, 100),
       mapSource: 'map1-mini.png',
       biomes: [
         new BiomeOptions({
@@ -137,6 +140,11 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             temperatureDay: -10,
             temperatureNight: -30,
           }),
+          onBridgeEffect: new BiomeEffect({
+            temperatureDay: -3,
+            temperatureNight: -20,
+            speed: 0,
+          }),
         }),
         new BiomeOptions({
           type: Biome.cave,
@@ -178,6 +186,11 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             speed: -80,
             temperatureDay: -10,
             temperatureNight: -30,
+          }),
+          onBridgeEffect: new BiomeEffect({
+            temperatureDay: -3,
+            temperatureNight: -20,
+            speed: 0,
           }),
         }),
       ],

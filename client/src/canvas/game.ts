@@ -92,6 +92,7 @@ export class Game {
     const itemsGroup1 = new Konva.Group({ id: "game-settable+1" })
     const itemsGroup_1 = new Konva.Group({ id: "game-settable-1" })
     const itemsGroup_2 = new Konva.Group({ id: "game-settable-2" })
+    const itemsGroup_3 = new Konva.Group({ id: "game-settable-3" })
     const mobGroup = new Konva.Group({ id: "game-mobs" })
     const bioGroup = new Konva.Group({ id: "game-bios" })
     const playersGroup = new Konva.Group({ id: "game-players" })
@@ -100,6 +101,7 @@ export class Game {
     const alwaysTop = new Konva.Group({ id: "always-top" })
     mainGroup.add(
       gameBg,
+      itemsGroup_3,
       itemsGroup_2,
       itemsGroup_1,
       playersGroup,
@@ -356,6 +358,7 @@ export class Game {
     })
 
     socket.on("dynamicItems", ([otherPlayers, mobs]) => {
+      console.log(typeof otherPlayers, otherPlayers?.players?.length, "plg")
       if (otherPlayers) {
         this.drawOtherPlayers(otherPlayers.players, otherPlayers.toRemoveIds)
       }
@@ -437,6 +440,22 @@ export class Game {
     this.otherPlayers.forEach((player) => player.update(true, true, true))
     this.mobs.forEach((mob) => mob.update())
     requestAnimationFrame(this.updateLoop.bind(this))
+  }
+
+  static settableHoistId(cover: number) {
+    switch (cover) {
+      case 1:
+        return "#game-settable"
+
+      case 0:
+        return "#game-settable-2"
+
+      case -1:
+        return "#game-settable-3"
+
+      default:
+        return "#game-settable"
+    }
   }
 
   static createHighlight(layer2: Layer, ...shapes: any[]) {

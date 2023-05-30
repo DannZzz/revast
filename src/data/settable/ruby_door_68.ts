@@ -14,7 +14,7 @@ export default createSettable(68)
     },
   })
   .mode({
-    cover: false,
+    cover: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
     source: Images.RUBY_DOOR_OPEN,

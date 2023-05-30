@@ -32,7 +32,8 @@ export const deepDifference = (
         v.rotation !== v2.rotation ||
         v.clicking.status !== v2.clicking.status ||
         v.equipment?.source !== v2.equipment?.source ||
-        v.wearing?.source !== v2.wearing?.source
+        v.wearing?.source !== v2.wearing?.source ||
+        v.bagSource !== v2.bagSource
       )
     })
   )

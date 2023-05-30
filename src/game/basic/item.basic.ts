@@ -73,12 +73,15 @@ export interface SettableMode {
   trigger: 'attack'
   verify: (this: StaticSettableItem, player: Player) => boolean
   source: string
-  cover: boolean
+  cover: number
 }
+
+export type SettableCheckers = 'all' | 'type'
 
 export interface Settable {
   hp: number
   showHpRadius?: number
+  ignoreCheckers?: SettableCheckers
   setMode: {
     grid?: boolean
     offset: Point
@@ -87,7 +90,7 @@ export interface Settable {
       | { type: 'rect'; width: number; height: number }
   }
   size: Size
-  cover: boolean
+  cover: number
   type?: string
   highlight?: Highlight<HighlightType>
   durationSeconds?: number

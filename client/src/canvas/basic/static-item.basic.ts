@@ -26,9 +26,9 @@ export class StaticSettableItem implements StaticSettableDto {
   constructor(data: StaticSettableDto) {
     Object.assign(this, data)
   }
-  mode: { enabled: boolean; cover: boolean }
+  mode: { enabled: boolean; cover: number }
   modeUrl: string
-  cover: boolean
+  cover: number
   url: string
   iconUrl: string
   size: Size
@@ -64,7 +64,7 @@ export class StaticSettableItem implements StaticSettableDto {
     )
   }
 
-  tryMode(val: { enabled: boolean; cover: boolean }) {
+  tryMode(val: { enabled: boolean; cover: number }) {
     if (!this.modeUrl || this.modeUrl.endsWith("undefined")) return
     this.mode = val
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
@@ -73,16 +73,11 @@ export class StaticSettableItem implements StaticSettableDto {
         node.image(img)
       )
     )
-    this.node.moveTo(
-      this.mode.cover
-        ? this.layer.findOne("#game-settable")
-        : this.layer.findOne("#game-settable-1")
-    )
+
+    this.node.moveTo(this.layer.findOne(Game.settableHoistId(this.mode.cover)))
   }
 
   draw() {
-    const gr: any = this.layer.findOne("#game-settable")
-
     const itemGroup = new Konva.Group({
       id: this.id,
       x: this.point.x - this.size.width / 2,
@@ -124,11 +119,9 @@ export class StaticSettableItem implements StaticSettableDto {
       itemGroup.add(this.showHpArc)
     }
 
-    if (this.cover) {
-      gr.add(itemGroup)
-    } else {
-      ;(this.layer.findOne("#game-settable-2") as any).add(itemGroup)
-    }
+    ;(this.layer.findOne(Game.settableHoistId(this.cover)) as any).add(
+      itemGroup
+    )
 
     this.node = itemGroup
     this.tryMode(this.mode)

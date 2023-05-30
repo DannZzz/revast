@@ -18,6 +18,7 @@ import { percentFrom, percentOf } from 'src/utils/percentage'
 import { StaticItems } from 'src/structures/StaticItems'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
+import { SpecialItemTypes } from 'src/data/config-type'
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -43,10 +44,10 @@ export class StaticSettableItem {
 
   mode: {
     enabled: GetSet<boolean>
-    cover: boolean
+    cover: number
   } = {
     enabled: GetSet(false),
-    cover: true,
+    cover: 1,
   }
   destroyed = false
 
@@ -65,7 +66,7 @@ export class StaticSettableItem {
       })
 
     this.mode.enabled.onChange((val) => {
-      this.mode.cover = Boolean(val ? this.data.mode?.cover : this.data.cover)
+      this.mode.cover = this.data.mode?.cover || this.data.cover || 1
     })
   }
 
@@ -116,7 +117,7 @@ export class StaticSettableItem {
   }
 
   within(hitbox: UniversalHitbox) {
-    if (this.mode.enabled() ? this.data.mode?.cover : this.data.cover)
+    if ((this.mode.enabled() ? this.data.mode?.cover : this.data.cover) > 0)
       return this.withinStrict(hitbox)
     return false
   }
@@ -139,7 +140,10 @@ export class StaticSettableItem {
     }
     if (this.destroyed) return
     const alivePlayers = this.players
-    if (this.data.mode && equiped?.item?.data.specialName !== 'repair') {
+    if (
+      this.data.mode &&
+      equiped?.item?.data.specialName !== SpecialItemTypes.repair
+    ) {
       if (
         this.data.mode.verify.call(this, by) &&
         (this.mode.enabled()

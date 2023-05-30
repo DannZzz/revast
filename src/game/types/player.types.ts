@@ -29,6 +29,7 @@ export interface PlayerState {
   fire: boolean
   workbench: boolean
   water: boolean
+  onBridge: boolean
 }
 
 export class VisualPlayerData {

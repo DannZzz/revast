@@ -9,7 +9,10 @@ export type StaticItemAddonName = "berry" | "campfire"
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
-    alsoDraw?: (props: Bio | StaticSettableItem) => {items: Shape | Shape[] | Group | Group[], afterDraw?: () => void}
+    alsoDraw?: (props: Bio | StaticSettableItem) => {
+      items: Shape | Shape[] | Group | Group[]
+      afterDraw?: () => void
+    }
     drawByResourceChange?: (bio: Bio, currentResources: number) => void
   }
 } = {
@@ -69,7 +72,7 @@ export const StaticItemsAddons: {
         }
       })
 
-      return {items: groupOfBerries}
+      return { items: groupOfBerries }
     },
     drawByResourceChange: (bio: Bio, currentResources: number) => {
       $.$ArrayLength(bio.data.maxResources, (i) => {
@@ -80,30 +83,45 @@ export const StaticItemsAddons: {
   campfire: {
     alsoDraw: (props: StaticSettableItem) => {
       const center = new Point(props.size.width / 2, props.size.height / 2)
-      const circle = new Konva.Circle({radius: 200, fill: '#FFC40066', ...center})
-      const smallCircle = new Konva.Circle({radius: 120, fill: '#FFC40099', ...center})
-     
+      const circle = new Konva.Circle({
+        radius: 200,
+        fill: "#FFC40066",
+        opacity: 0.8,
+        ...center,
+      })
+      const smallCircle = new Konva.Circle({
+        radius: 120,
+        fill: "#FFC40099",
+        opacity: 0.8,
+        ...center,
+      })
 
-      const fireGroup = new Konva.Group({...center})
+      const fireGroup = new Konva.Group({ ...center })
 
-      const circle1 = new Konva.Circle({radius: 60, fill: '#FFC4009E'})
-      const circle2 = new Konva.Circle({radius: 40, fill: 'rgba(255,255,0,.8)'})
-      const circle3 = new Konva.Circle({radius: 20, fill: '#EA8033aa'})
+      const circle1 = new Konva.Circle({ radius: 60, fill: "#FFC4009E" })
+      const circle2 = new Konva.Circle({
+        radius: 40,
+        fill: "rgba(255,255,0,.8)",
+      })
+      const circle3 = new Konva.Circle({ radius: 20, fill: "#EA8033aa" })
       fireGroup.add(circle1, circle2, circle3)
 
       const period = 2000
       var anim = new Konva.Animation((frame) => {
         var scale = 0.025 * Math.sin((frame.time * 2 * Math.PI) / period) + 1
-        fireGroup.scale({ x: scale, y: scale });
+        fireGroup.scale({ x: scale, y: scale })
         if (props.destroyed) anim.stop()
-      });
+      })
 
-      anim.start();
-      
-      return {items: [circle, smallCircle, fireGroup]as any, afterDraw: () => {
-        circle.zIndex(-10)
-        smallCircle.zIndex(-9)
-      }}
+      anim.start()
+
+      return {
+        items: [circle, smallCircle, fireGroup] as any,
+        afterDraw: () => {
+          circle.zIndex(-10)
+          smallCircle.zIndex(-9)
+        },
+      }
     },
-  }
+  },
 }

@@ -14,11 +14,11 @@ import { KonvaText } from "../structures/KonvaText"
 import { loadImage } from "../structures/fetchImages"
 import { socket } from "../../socket/socket"
 import { BasicPlayerItems } from "../basic/player-items.basic"
-import { BasicStaticItem } from "../basic/static-item.basic"
-import { Group } from "konva/lib/Group"
 import { Game } from "../game"
 import { NB } from "../utils/NumberBoolean"
 import { CraftDto } from "../../socket/events"
+import { getPointByTheta } from "../animations/rotation"
+import { GRID_SET_RANGE } from "../../constants"
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -38,6 +38,7 @@ export class PlayerItems extends BasicPlayerItems {
   isCrafting: null | string
   private isDrew: boolean = false
   declare player: Player
+  private readonly gridMaxRange = GRID_SET_RANGE
 
   private invGroup: Konva.Group
 
@@ -157,6 +158,40 @@ export class PlayerItems extends BasicPlayerItems {
     this.isDrew = true
   }
 
+  updateGridSettingMode() {
+    if (!this.settingMode.id || !this.settingMode.grid) return
+    const node = this.settingMode.node
+    node?.rotation(-this.player.angle || 0)
+    const screen = this.player.camera.point.value
+    const screenPos = combineClasses(
+      new Point(screen),
+      new Point(this.player.point.x - screen.x, this.player.point.y - screen.y)
+    )
+    const { item } = this._items.find(
+      (item) => item.item.id == this.settingMode.id
+    ) as PlayerItem<Settable>
+    const pointAbsolutePos = combineClasses(
+      new Point(screenPos),
+      getPointByTheta(
+        new Point(item.data.size.width / 2, item.data.size.height / 2),
+        this.player.theta || 0,
+        this.gridMaxRange
+      )
+    )
+    const tile = this.player.game().map.tileSize
+    const gridPos = new Point(
+      pointAbsolutePos.x - (pointAbsolutePos.x % tile.width),
+      pointAbsolutePos.y - (pointAbsolutePos.y % tile.height)
+    )
+
+    gridPos.x -= tile.width / 2
+    gridPos.y -= tile.height / 2
+
+    gridPos.x -= screen.x
+    gridPos.y -= screen.y
+    this.settingMode.node.absolutePosition(gridPos)
+  }
+
   startSetMode(itemId: number) {
     const itemNode = this.settingMode.node
     if (itemId === this.settingMode.id) {
@@ -226,7 +261,6 @@ export class PlayerItems extends BasicPlayerItems {
         id: `${this.player.id("inventory", `${i}`)}`,
         x,
         ...this.itemSize,
-
         y: indexedItem ? -this.upIfSelected : 0,
         draggable: !!indexedItem,
         dragBoundFunc: function (pos) {
