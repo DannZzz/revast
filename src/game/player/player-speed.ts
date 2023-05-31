@@ -13,9 +13,17 @@ export class PlayerSpeed {
   constructor(gameServer: GameServer, private player: Player) {
     this.current.pipe((speed) => {
       let sp = speed
+      const biomeOptions = gameServer.map.find(
+        gameServer.map.biomeOf(this.player.point()),
+      )
+
+      const states = this.player.actions.state.actualStates
+
+      const wearing = this.player.items.weared?.item
+
       // biome effect
       sp +=
-        gameServer.map.find(gameServer.map.biomeOf(this.player.point()))?.[
+        biomeOptions?.[
           this.player.actions.state.actualStates.onBridge()
             ? 'onBridgeEffect'
             : 'effect'
@@ -28,6 +36,16 @@ export class PlayerSpeed {
       // clicking
       if (this.player.actions.click.clickStatus)
         sp -= PLAYER_DECREASE_SPEED_CLICK
+
+      // in water speed change (wearing)
+      if (
+        wearing &&
+        wearing.data.effect?.inWaterSpeed &&
+        states.water() &&
+        !states.onBridge()
+      ) {
+        sp += wearing.data.effect.inWaterSpeed
+      }
 
       return gameServer.lastFrameDelta * sp
     })

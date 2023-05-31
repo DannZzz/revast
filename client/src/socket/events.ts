@@ -46,6 +46,7 @@ export class PlayerJoinedDto {
   token: string
   id: string
   dayInfo: DayInfo
+  timeout: [weapon: number, helmet: number, building: number]
 }
 
 export type TwoHandMode = {
@@ -216,8 +217,10 @@ interface ServerToClientEvents {
       bagUrl?: string
     ]
   ) => void
-  playerEquipment: (data: [weapon: EquipmentDto]) => void
-  playerWearing: (data: [weapon: WearingDto]) => void
+  playerEquipment: (
+    data: [weapon: EquipmentDto, timeout: NumberBoolean]
+  ) => void
+  playerWearing: (data: [weapon: WearingDto, timeout: NumberBoolean]) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
     data: [
@@ -240,7 +243,7 @@ interface ServerToClientEvents {
     data: [players?: OtherPlayersDto, mobs?: MobDynamicDto]
   ) => void
   playerBodyEffect: (data: [playerId: string, effectType: "attacked"]) => void
-  setItemResponse: (data: [itemId: number]) => void
+  setItemResponse: (data: [itemId: number, timeout: NumberBoolean]) => void
   leaderboard: (
     data: [
       members: LeaderboardMemberDto[],

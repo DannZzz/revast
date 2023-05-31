@@ -1,4 +1,4 @@
-import { DayInfo } from "../../socket/events"
+import { DayInfo, PlayerJoinedDto } from "../../socket/events"
 import { Item } from "../basic/item.basic"
 import { Game } from "../game"
 import { Camera } from "../structures/Camera"
@@ -22,6 +22,7 @@ export interface PlayerProps {
   dayInfo: DayInfo
   id: string
   game: () => Game
+  timeout: PlayerJoinedDto["timeout"]
 }
 
 export type PlayerEvents = {

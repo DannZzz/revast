@@ -20,6 +20,7 @@ import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { NB } from 'src/utils/NumberBoolean'
 import GameServers from 'src/servers/game-servers'
 import { WsRateLimit } from '../WsRateLimit'
+import { NumberBoolean } from 'src/game/types/any.types'
 
 @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
 export class MainGateway
@@ -95,9 +96,14 @@ export class MainGateway
   setItemRequest(
     @ConnectedSocket() client: MainSocket,
     @MessageBody() data: EventData<'setItemRequest'>,
-  ): WsResponse<[number]> {
+  ): WsResponse<[number, NumberBoolean]> {
+    const player = this.gameServer.to(client.id)
+    if (!player) return
     return {
-      data: [this.gameServer.to(client.id)?.items.setItem(data[0])],
+      data: [
+        player.items.setItem(data[0]),
+        NB.to(player.items.timeout.building > Date.now()),
+      ],
       event: 'setItemResponse',
     }
   }

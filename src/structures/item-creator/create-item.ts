@@ -15,6 +15,7 @@ import {
   ItemProps,
   ItemsByTypes,
   Wearable,
+  WearableEffect,
 } from 'src/game/basic/item.basic'
 import { Point, Size } from 'src/global/global'
 import { Images } from '../image-base'
@@ -47,6 +48,11 @@ class ItemCreator {
       }
     }
 
+    return this
+  }
+
+  wearableEffect(effect: Partial<WearableEffect>) {
+    this.extend.effect = new WearableEffect(effect)
     return this
   }
 
@@ -97,6 +103,7 @@ class ItemCreator {
   }
 
   wearable() {
+    this.extend.effect = new WearableEffect({})
     this.extend.drawPosition = new Point()
     this.extend.size = new Size(226, 216)
     this.extend.wearing = true

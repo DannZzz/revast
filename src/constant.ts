@@ -34,7 +34,12 @@ export const ITEM_DIR_NAMES = [
   'resources',
   'settable',
   'helmets',
+  'hats',
 ]
+
+export const TIMEOUT_UNPICK_WEAPON = 6
+export const TIMEOUT_UNWEAR_HELMET = 3
+export const TIMEOUT_BUILDING = 1.5
 
 export const MOB_GLOBAL_SPEED_EFFECT = -15
 
@@ -93,7 +98,7 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
           type: Biome.forest,
           digItemId: 81,
           name: 'forest',
-          size: new Size(140, 100),
+          size: new Size(150, 100),
           bgColor: '#133a2b',
           point: new Point(0, 100),
           effect: new BiomeEffect({
@@ -103,6 +108,7 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
         }),
         new BiomeOptions({
           type: Biome.beach,
+          priority: 2,
           digItemId: 83,
           name: 'beach',
           size: new Size(10, 100),
@@ -135,8 +141,8 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
           point: new Point(150, 0),
           effect: new BiomeEffect({
             speed: -80,
-            temperatureDay: -10,
-            temperatureNight: -30,
+            temperatureDay: -5,
+            temperatureNight: -25,
           }),
           onBridgeEffect: new BiomeEffect({
             temperatureDay: -3,
@@ -182,8 +188,8 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
           point: new Point(60, 134),
           effect: new BiomeEffect({
             speed: -80,
-            temperatureDay: -10,
-            temperatureNight: -30,
+            temperatureDay: -5,
+            temperatureNight: -25,
           }),
           onBridgeEffect: new BiomeEffect({
             temperatureDay: -3,
@@ -262,8 +268,8 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             area: 'ocean',
             biome: Biome.water,
             canOut: false,
-            maxCount: 30,
-            reAddEachSeconds: 10,
+            maxCount: 100,
+            reAddEachSeconds: 5,
             spawn: { startPoint: ocean.point, size: ocean.size },
           },
           [MobNames.scorpion]: {

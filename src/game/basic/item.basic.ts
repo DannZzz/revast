@@ -101,8 +101,21 @@ export interface Settable {
   mode?: SettableMode
 }
 
+export type DayNight<T = number> = { [k in 'day' | 'night']: T }
+
+export class WearableEffect {
+  inWaterSpeed: number = 0
+  oxygenLoss: number = 0
+  heatPerc: DayNight = { day: 0, night: 0 }
+  tempLossPerc: DayNight = { day: 0, night: 0 }
+
+  constructor(data: Partial<WearableEffect>) {
+    Object.assign(this, data)
+  }
+}
+
 export interface Wearable {
-  type: 'helmet'
+  type: 'helmet' | 'hat'
   wearing: true
   source: string
   iconSource: string
@@ -110,6 +123,7 @@ export interface Wearable {
     player: number
     mob: number
   }
+  effect: WearableEffect
   drawPosition: Point
   size: Size
 }

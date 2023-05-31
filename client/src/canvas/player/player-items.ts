@@ -19,6 +19,7 @@ import { NB } from "../utils/NumberBoolean"
 import { CraftDto } from "../../socket/events"
 import { getPointByTheta } from "../animations/rotation"
 import { GRID_SET_RANGE } from "../../constants"
+import { time } from "console"
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -475,13 +476,19 @@ export class PlayerItems extends BasicPlayerItems {
       }
       this.drawCrafts()
     })
-    socket.on("playerEquipment", ([weapon]) => {
+    socket.on("playerEquipment", ([weapon, timeout]) => {
       this.equiped = weapon
       this.updateEquipment()
+      if (NB.from(timeout)) {
+        this.player.timeout.try("weapon")
+      }
     })
-    socket.on("playerWearing", ([wearing]) => {
+    socket.on("playerWearing", ([wearing, timeout]) => {
       this.weared = wearing
       this.updateWearing()
+      if (NB.from(timeout)) {
+        this.player.timeout.try("helmet")
+      }
     })
     socket.on("playerCraft", ([status, itemId, isBook]) => {
       if (status) {

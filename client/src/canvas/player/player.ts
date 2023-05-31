@@ -17,6 +17,8 @@ import { MiniMap } from "../structures/MiniMap"
 import { Converter } from "../structures/Converter"
 import { getPointByTheta } from "../animations/rotation"
 import { NB } from "../utils/NumberBoolean"
+import { PlayerTimeout } from "./player-timeout"
+import { PlayerJoinedDto } from "../../socket/events"
 
 export class Player extends BasicPlayer<PlayerEvents> {
   range: number
@@ -30,10 +32,11 @@ export class Player extends BasicPlayer<PlayerEvents> {
   readonly leaderboard: PlayerLeaderboard
   readonly controllers: PlayerControllers
   readonly miniMap: MiniMap
+  timeout: PlayerTimeout
   chatStatus = true
 
   constructor(props: ElementProps<PlayerProps>) {
-    const { camera, dayInfo, game, ...basic } = props
+    const { camera, dayInfo, game, timeout, ...basic } = props
     super({ ...basic })
     this.game = game
     this.items = new PlayerItems(this)
@@ -43,6 +46,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
     this.leaderboard = new PlayerLeaderboard(this.layer2, this.miniMap)
     this.controllers = new PlayerControllers(this, dayInfo)
     this.camera = camera
+    this.timeout = new PlayerTimeout(this.layer, this.layer2, timeout)
     this.draw()
   }
 
@@ -179,8 +183,12 @@ export class Player extends BasicPlayer<PlayerEvents> {
       this.actions.click.canClick = clicking
       this.actions.click.clickDuration = clickDuration
     })
-    socket.on("setItemResponse", ([itemId]) => {
-      if (itemId !== -1) this.items.setItemResponse()
+    socket.on("setItemResponse", ([itemId, timeout]) => {
+      if (itemId !== -1) {
+        this.items.setItemResponse()
+        if (NB.from(timeout)) {
+          this.timeout.try('building')
+        }}
     })
     socket.on("playerMessage", ([playerId, content]) => {
       if (playerId === this.id()) {

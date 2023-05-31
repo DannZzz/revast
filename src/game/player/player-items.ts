@@ -21,6 +21,9 @@ import {
   PLAYER_ITEMS_SPACE,
   SERVER_API,
   START_ITEMS,
+  TIMEOUT_BUILDING,
+  TIMEOUT_UNPICK_WEAPON,
+  TIMEOUT_UNWEAR_HELMET,
 } from 'src/constant'
 import { BasicDrop } from '../basic/drop.basic'
 import { Images } from 'src/structures/image-base'
@@ -30,6 +33,8 @@ import { UniversalHitbox } from 'src/utils/universal-within'
 import { Craft } from 'src/structures/Craft'
 import { CraftEntity } from 'src/entities/craft.entity'
 import { SpecialItemTypes } from 'src/data/config-type'
+import { PlayerItemTimeout } from '../types/player.types'
+import { NB } from 'src/utils/NumberBoolean'
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -44,6 +49,12 @@ export class PlayerItems {
   private _items = new Chest<number, PlayerItem<ItemsByTypes>>(
     START_ITEMS() as any,
   )
+
+  readonly timeout: PlayerItemTimeout = {
+    weapon: 0,
+    helmet: 0,
+    building: 0,
+  }
 
   private craftsRN: Chest<string, Craft> = new Chest()
   private craftableItemsAreChanged: boolean
@@ -127,6 +138,7 @@ export class PlayerItems {
   }
 
   setItem(itemId: number): number {
+    if (this.timeout.building > Date.now()) return -1
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
 
@@ -216,6 +228,7 @@ export class PlayerItems {
     }
 
     this.player.staticItems.for(settable.universalHitbox).addSettables(settable)
+    this.timeout.building = Date.now() + TIMEOUT_BUILDING * 1000
     this._items.get(itemId).quantity--
     this._items = this.filterItems(this._items)
     this.update()
@@ -319,25 +332,33 @@ export class PlayerItems {
   }
 
   requestEquip(id: number) {
+    if (this.timeout.weapon > Date.now()) return
     const item = this._items.find((it) => it.item.id === id)
     if (!item || !item.item.isEquipable()) return
     const clone = this.items
     this._items.forEach((item) => {
       if (!item.item.isEquipable()) return
-      if (item.item.id === id) item.equiped = !item.equiped
-      else item.equiped = false
+      if (item.item.id === id) {
+        item.equiped = !item.equiped
+        if (item.item.data.type === 'weapon' && item.equiped)
+          this.timeout.weapon = Date.now() + TIMEOUT_UNPICK_WEAPON * 1000
+      } else item.equiped = false
     })
     this.update()
   }
 
   requestWearing(id: number) {
+    if (this.timeout.helmet > Date.now()) return
     const item = this._items.find((it) => it.item.id === id)
     if (!item || !item.item.isWearable()) return
     const clone = this.items
     this._items.forEach((item) => {
       if (!item.item.isWearable()) return
-      if (item.item.id === id) item.weared = !item.weared
-      else item.weared = false
+      if (item.item.id === id) {
+        item.weared = !item.weared
+        if (item.item.data.type === 'helmet' && item.weared)
+          this.timeout.helmet = Date.now() + TIMEOUT_UNWEAR_HELMET * 1000
+      } else item.weared = false
     })
     this.update()
   }
@@ -452,12 +473,14 @@ export class PlayerItems {
       equipment
         ? Transformer.toPlain(new EquipmentEntity(equipment.item.data))
         : null,
+      NB.to(this.timeout.weapon > Date.now()),
     ])
     const wearing = this.weared
     socket.emit('playerWearing', [
       wearing
         ? Transformer.toPlain(new WearingEntity(wearing.item.data))
         : null,
+      NB.to(this.timeout.helmet > Date.now()),
     ])
   }
 }

@@ -41,8 +41,12 @@ interface ServerToClientEvents {
       bagUrl: string,
     ],
   ) => void
-  playerEquipment: (data: [weapon: EquipmentEntity]) => void
-  playerWearing: (data: [wearing: WearingEntity]) => void
+  playerEquipment: (
+    data: [weapon: EquipmentEntity, timeout: NumberBoolean],
+  ) => void
+  playerWearing: (
+    data: [wearing: WearingEntity, timeout: NumberBoolean],
+  ) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
     data: [
@@ -65,7 +69,7 @@ interface ServerToClientEvents {
     data: [players?: OtherPlayersEntity, mobs?: MobDynamicEntity],
   ) => void
   playerBodyEffect: (data: [playerId: string, effectType: 'attacked']) => void
-  setItemResponse: (data: [itemId: number]) => void
+  setItemResponse: (data: [itemId: number, timeout: NumberBoolean]) => void
   leaderboard: (
     data: [
       members: LeaderboardMemberEntity[],

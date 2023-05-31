@@ -25,6 +25,12 @@ export class PlayerSkin {
   }
 }
 
+export interface PlayerItemTimeout {
+  weapon: number
+  helmet: number
+  building: number
+}
+
 export interface PlayerState {
   fire: boolean
   workbench: boolean

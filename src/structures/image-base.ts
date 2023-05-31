@@ -199,6 +199,9 @@ export const Images = {
   ICON_RUBY_HELMET: 'ruby-helmet.png',
   EMERALD_HELMET: 'emerald-helmet.png',
   ICON_EMERALD_HELMET: 'emerald-helmet.png',
+
+  // hats
+  DIVING_MASK: 'diving-mask.png',
 } as const
 
 export type Images = typeof Images

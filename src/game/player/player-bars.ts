@@ -60,6 +60,8 @@ export class PlayerBars {
   private vastingAndO2() {
     const inWater = this.player.actions.state.actualStates.water()
     const onBridge = this.player.actions.state.actualStates.onBridge()
+    const o2Effect =
+      this.player.items.weared?.item.data?.effect?.oxygenLoss || 0
     const effect =
       this.player.gameServer.map.find(
         this.player.gameServer.map.biomeOf(this.player.point()),
@@ -83,10 +85,10 @@ export class PlayerBars {
       if (this.o2.value === 0) {
         this.player.damage(30, 'absolute')
       } else {
-        this.o2.value -= 30
+        this.o2.value -= 30 + o2Effect
       }
     } else {
-      this.o2.value += 25
+      this.o2.value += 35
     }
   }
 
@@ -99,9 +101,19 @@ export class PlayerBars {
         ? 'onBridgeEffect'
         : 'effect'
     ]
-    let percentOfDecreasing = effect.temperatureDay
+
+    const wearingEffect = this.player.items.weared?.item.data?.effect
+
+    let tempChange =
+      effect.temperatureDay +
+      percentOf(wearingEffect?.tempLossPerc.day || 0, effect.temperatureDay)
     if (!this.player.gameServer.day.isDay())
-      percentOfDecreasing = effect.temperatureNight
+      tempChange =
+        effect.temperatureNight +
+        percentOf(
+          wearingEffect?.tempLossPerc.night || 0,
+          effect.temperatureNight,
+        )
 
     // fires within
     const firesAround = this.player.staticItems
@@ -115,20 +127,24 @@ export class PlayerBars {
           ),
       )
     if (!!firesAround.length) {
-      percentOfDecreasing = Math.max(
+      tempChange = Math.max(
         ...firesAround.map(
           (settable) => settable.data.special.firePlace.addsTemperature,
         ),
+      )
+
+      tempChange += percentOf(
+        this.player.gameServer.day.isDay()
+          ? wearingEffect?.heatPerc.day
+          : wearingEffect?.heatPerc.night,
+        tempChange,
       )
     } else if (this.temperature.value === 0) {
       this.player.damage(20, 'absolute')
       this.healingChecking = 0
     }
 
-    this.temperature.value += percentOf(
-      percentOfDecreasing,
-      this.temperature.max,
-    )
+    this.temperature.value += tempChange
   }
 
   stop() {

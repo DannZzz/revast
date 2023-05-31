@@ -303,6 +303,7 @@ export class Game {
         id: data.id,
         dayInfo: data.dayInfo,
         game: () => this,
+        timeout: data.timeout,
       })
       // player.moveToCenterOfScreen(this.size)
       this.player = player
@@ -358,7 +359,7 @@ export class Game {
     })
 
     socket.on("dynamicItems", ([otherPlayers, mobs]) => {
-      console.log(typeof otherPlayers, otherPlayers?.players?.length, "plg")
+      // console.log(typeof otherPlayers, otherPlayers?.players?.length, "plg")
       if (otherPlayers) {
         this.drawOtherPlayers(otherPlayers.players, otherPlayers.toRemoveIds)
       }

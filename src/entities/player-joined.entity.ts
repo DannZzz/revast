@@ -1,8 +1,9 @@
 import { Point, Size } from 'src/global/global'
 import { PlayerSkinEntity } from './player-skin.entity'
-import { Type } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import { DayInfo } from '../structures/GameDay'
 import { MapEntity } from './map.entity'
+import { PlayerItemTimeout } from 'src/game/types/player.types'
 
 export class PlayerJoinedEntity {
   @Type(() => PlayerSkinEntity)
@@ -17,6 +18,8 @@ export class PlayerJoinedEntity {
   id: string
   @Type(() => DayInfo)
   dayInfo: DayInfo
+  @Transform(({ value }) => [value.weapon, value.helmet, value.building])
+  timeout: PlayerItemTimeout
 
   constructor(data: PlayerJoinedEntity) {
     Object.assign(this, data)

@@ -4,6 +4,7 @@ import { Point, combineClasses } from "../../global/init"
 type ToOption = Point & {
   rotation?: { amount: number; absolute?: true }
   offset?: Point
+  angle?: number
   fill?: string
   visible?: boolean
 } & Size
@@ -68,6 +69,12 @@ export const animateTo = (node: Node, options: AnimateOptions) => {
     if (!isNaN(point.height)) {
       start.height = point.height
       back.height = node.height()
+    }
+
+    if (!isNaN(point.angle)) {
+      start.angle = point.angle
+      // @ts-ignore
+      back.angle = node?.angle?.() || 0
     }
 
     if (point.fill) {

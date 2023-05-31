@@ -1,7 +1,7 @@
 import createItem from 'src/structures/item-creator/create-item'
 
 export default createItem(46)
-  .iconSource('COOKED_MEAT')
+  .iconSource('COOKED_FISH')
   .name('Cooked Fish')
   .craftable({
     duration: 3,

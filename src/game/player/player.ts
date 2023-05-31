@@ -33,6 +33,9 @@ import {
   GAME_DAY_SECONDS,
   MAX_ITEM_QUANTITY_IN_CRATE,
   PLAYER_BODY_POINTS,
+  TIMEOUT_BUILDING,
+  TIMEOUT_UNPICK_WEAPON,
+  TIMEOUT_UNWEAR_HELMET,
 } from 'src/constant'
 import { BasicDrop } from '../basic/drop.basic'
 import { Images } from 'src/structures/image-base'
@@ -119,8 +122,6 @@ export class Player extends BasicElement<PlayerEvents> {
     const point = new Point()
     point.x = this.point().x - this.camera.point().x
     point.y = this.point().y - this.camera.point().y
-    console.log(this.point(), this.camera.point())
-    console.log(point)
     return point
   }
 
@@ -189,6 +190,11 @@ export class Player extends BasicElement<PlayerEvents> {
           token: this.token.current,
           id: this.id(),
           dayInfo: gameServer.day.now(),
+          timeout: {
+            weapon: TIMEOUT_UNPICK_WEAPON,
+            helmet: TIMEOUT_UNWEAR_HELMET,
+            building: TIMEOUT_BUILDING,
+          },
         }),
       ),
     ])
@@ -291,7 +297,6 @@ export class Player extends BasicElement<PlayerEvents> {
     this.died(true)
     this.gameServer.players.delete(this.uniqueId)
     this.gameServer.alivePlayers.delete(this.uniqueId)
-    this.socket().disconnect(true)
     TokenChest.delete(this.token.current)
     this.gameServer.checkLoop()
   }
@@ -299,10 +304,11 @@ export class Player extends BasicElement<PlayerEvents> {
   makeMessage(content: string) {
     const message = new Message(content, this)
     if (!this.settings.chat()) return
-    if (this.settings.invisibility())
-      return this.serverMessage("You're not visible!")
     // sharing
     if (message.public()) {
+      if (this.settings.invisibility())
+        return this.serverMessage("You're not visible!")
+
       message.filter()
       const players = this.gameServer.alivePlayers
       this.socket().emit('playerMessage', [this.id(), message.content])

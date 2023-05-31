@@ -5,7 +5,6 @@ import {
   createSignal,
   on,
 } from "solid-js"
-import { SERVER_ASSET } from "../../../../constants"
 import { Select } from "@thisbeyond/solid-select"
 import "./MenuCenter.css"
 import { getServers } from "../../../../api/requests"
@@ -45,7 +44,7 @@ const MenuCenter: Component<{}> = (props) => {
       <div
         class="w-[400px] h-32 bg-cover bg-no-repeat bg-center flex justify-start items-end px-4 pb-3"
         style={{
-          "background-image": `url(${SERVER_ASSET("nickname-banner.png")})`,
+          "background-image": `url("images/nickname-banner.png")`,
         }}
       >
         <input
@@ -61,7 +60,7 @@ const MenuCenter: Component<{}> = (props) => {
         <div
           class="p-1 flex-1 h-16 bg-cover bg-no-repeat bg-center"
           style={{
-            "background-image": `url(${SERVER_ASSET("servers.png")})`,
+            "background-image": `url("images/servers.png")`,
           }}
         >
           <Select
@@ -76,7 +75,7 @@ const MenuCenter: Component<{}> = (props) => {
         </div>
         <img
           onClick={onPlay}
-          src={SERVER_ASSET("play-button.png")}
+          src={"images/play-button.png"}
           alt=""
           class="w-28 h-16 mr-2 cursor-pointer"
         />

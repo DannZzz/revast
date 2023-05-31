@@ -202,11 +202,9 @@ export class BasicPlayer<
       rightHand,
       leftHand,
       body,
-      this.wearingNode,
-      this.bagNode
+      this.bagNode,
+      this.wearingNode
     )
-    body.zIndex(1)
-    this.wearingNode.zIndex(2)
 
     group.add(bodyGroup, name)
     const itemRange = new Konva.Line({

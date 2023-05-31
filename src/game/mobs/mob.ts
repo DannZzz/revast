@@ -12,8 +12,6 @@ import { Player } from '../player/player'
 import { timer } from 'rxjs'
 import { Converter } from 'src/structures/Converter'
 import { Biome, GameMap, MapAreaName } from 'src/structures/GameMap'
-import { StaticItems } from 'src/structures/StaticItems'
-import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { BasicMath } from 'src/utils/math'
 import { Cache } from 'src/structures/cache/cache'
@@ -224,18 +222,22 @@ export class Mob extends BasicMob {
     }
 
     if (this.target && !this.target.died()) {
-      const distance = getDistance(this.target.point(), this.centerPoint())
-      if (distance < speed(attackTactic.speed)) {
-        this.moveTo(this.target.point())
-        return
-      }
-      if (distance > this.reactRadius) {
+      if (this.target.settings.invisibility()) {
         this.target = null
       } else {
-        useTactic({
-          tactic: attackTactic,
-          theta: getAngle(this.centerPoint(), this.target.point()),
-        })
+        const distance = getDistance(this.target.point(), this.centerPoint())
+        if (distance < speed(attackTactic.speed)) {
+          this.moveTo(this.target.point())
+          return
+        }
+        if (distance > this.reactRadius) {
+          this.target = null
+        } else {
+          useTactic({
+            tactic: attackTactic,
+            theta: getAngle(this.centerPoint(), this.target.point()),
+          })
+        }
       }
     } else {
       useTactic({
