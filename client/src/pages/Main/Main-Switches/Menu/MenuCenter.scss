@@ -3,7 +3,6 @@
 
   @include flex($dir: column);
   .nickname {
-    background-image: url("images/nickname-banner.png");
     width: 400px;
     height: 256px;
     background-repeat: no-repeat;

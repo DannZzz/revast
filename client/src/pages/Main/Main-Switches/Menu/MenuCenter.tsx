@@ -41,7 +41,12 @@ const MenuCenter: Component<{}> = (props) => {
 
   return (
     <div class="menu-center">
-      <div class="nickname">
+      <div
+        class="nickname"
+        style={{
+          "background-image": "url(images/nickname-banner.png)",
+        }}
+      >
         <input
           ref={nicknameInputRef}
           placeholder="Your Username.."
