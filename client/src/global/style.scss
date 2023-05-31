@@ -1,11 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
 
 $text-color: #252525;
+$text2-color: #606060;
+$mini-window-bg: linear-gradient(to bottom, #271e10, #3a2c16);
 $bg-effect-color: rgba(255, 255, 255, 0.33);
+$btn-text-color: #252525;
+$btn-bg-color: rgba(
+  $color: #000000,
+  $alpha: 0.8,
+);
 
 @mixin main-font {
   font-family: "Bebas Neue", cursive;
   font-family: "Righteous", cursive;
+}
+
+@mixin second-font {
+  font-family: "Chocolate_Cyr-Lat", cursive;
 }
 
 @mixin flex($items: center, $content: center, $dir: row, $wrap: nowrap) {
@@ -16,12 +27,14 @@ $bg-effect-color: rgba(255, 255, 255, 0.33);
 }
 
 @mixin style-button($type: basic, $size: 15px) {
-  @include main-font();
+  @include second-font();
+  font-weight: bold;
+  -webkit-text-stroke: 2px #606060; /* width and color */
   outline: none;
-  padding: $size calc($size * 2);
+  padding: calc($size / 4) calc($size / 2);
   font-size: calc($size + 10px);
   cursor: pointer;
-  border-radius: $size;
+  // border-radius: calc($size / 2);
   box-shadow: 0 2px 1px rgb(39, 39, 39);
   transition: color 0.15s ease-in-out, background 0.15s ease-in-out,
     border 0.15s ease-in-out, transform 0.05s;
@@ -32,13 +45,22 @@ $bg-effect-color: rgba(255, 255, 255, 0.33);
   }
 
   @if $type == basic {
-    background: $text-color;
-    color: #ccc;
-    border: 3px solid $text-color;
+    background: $btn-bg-color;
+    color: $btn-text-color;
+    border: 3px solid $btn-text-color;
 
     &:hover {
-      color: $text-color;
-      background: #ccc;
+      color: $btn-bg-color;
+    }
+  } @else if $type == secondary {
+    background: darken($color: $text2-color, $amount: 10);
+    box-shadow: unset;
+    color: $btn-text-color;
+    border: 1px solid black;
+
+    &:hover {
+      border-radius: 10px;
+      color: #ccc;
     }
   }
 }

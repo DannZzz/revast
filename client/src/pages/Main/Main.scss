@@ -1,0 +1,28 @@
+.slide-fade-enter-active,
+.slide-fade-exit-active {
+  transition: opacity 1s;
+}
+.slide-fade-enter,
+.slide-fade-exit-to {
+  opacity: 0;
+}
+.slide-fade-enter {
+  opacity: 1;
+}
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  @include flex;
+
+  .game-bg {
+    background-image: url("/images/lobby-bg.png");
+    z-index: -100;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    // background: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}

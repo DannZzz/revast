@@ -2,9 +2,9 @@ import { Component, Match, Show, Switch, createEffect, on } from "solid-js"
 import Menu from "./Main-Switches/Menu"
 import GameOver from "./Main-Switches/GameOver/GameOver"
 import { Transition } from "solid-transition-group"
-import "./Main.css"
+import "./Main.scss"
 import gameState from "../../store/game-state"
-import Canvas from "./Main-Switches/Canvas"
+import Canvas from "./Main-Switches/Canvas/Canvas"
 
 const Main: Component = () => {
   const { gs, playerEndedInfo } = gameState
@@ -12,12 +12,9 @@ const Main: Component = () => {
   document.oncontextmenu = (e) => e.preventDefault()
 
   return (
-    <div class="main w-[100vw] h-[100vh] flex justify-center items-center">
+    <div class="main">
       <Show when={gs.gamePage !== "game"}>
-        <div
-          style={{ "background-image": `url(/images/lobby-bg.png)` }}
-          class="-z-10 w-full h-full absolute bg-no-repeat bg-center bg-cover"
-        ></div>
+        <div class="game-bg "></div>
       </Show>
       <Transition name="slide-fade">
         <Switch>

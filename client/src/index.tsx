@@ -3,7 +3,7 @@ import { render } from "solid-js/web"
 import "@thisbeyond/solid-select/style.css"
 import initTypes from "datypes"
 initTypes()
-import "./index.css"
+import "./index.scss"
 import App from "./App"
 
 const root = document.getElementById("root")

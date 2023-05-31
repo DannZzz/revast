@@ -66,7 +66,7 @@ export class StaticSettableItem {
       })
 
     this.mode.enabled.onChange((val) => {
-      this.mode.cover = this.data.mode?.cover || this.data.cover || 1
+      this.mode.cover = val ? this.data.mode?.cover : this.data.cover
     })
   }
 

@@ -64,7 +64,7 @@ export class MiniMap {
     })
 
     const skullImg = new Konva.Image({
-      image: loadImage(SERVER_ASSET("skull.png"), (img) => skullImg.image(img)),
+      image: loadImage("images/skull.png", (img) => skullImg.image(img)),
       width: 30,
       height: 30,
     })

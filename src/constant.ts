@@ -41,7 +41,7 @@ export const TIMEOUT_UNPICK_WEAPON = 6
 export const TIMEOUT_UNWEAR_HELMET = 3
 export const TIMEOUT_BUILDING = 1.5
 
-export const MOB_GLOBAL_SPEED_EFFECT = -15
+export const MOB_GLOBAL_SPEED_EFFECT = 0
 
 export const MOB_DIR_NAMES = ['mobs']
 

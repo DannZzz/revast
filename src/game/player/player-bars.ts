@@ -76,6 +76,7 @@ export class PlayerBars {
     } else {
       if (this.h2o.value === 0) {
         this.player.damage(30, 'absolute')
+        this.healingChecking = 0
       } else {
         this.h2o.value += -3 + effect
       }
@@ -84,6 +85,7 @@ export class PlayerBars {
     if (inWater && !onBridge) {
       if (this.o2.value === 0) {
         this.player.damage(30, 'absolute')
+        this.healingChecking = 0
       } else {
         this.o2.value -= 30 + o2Effect
       }

@@ -74,7 +74,11 @@ export class StaticSettableItem implements StaticSettableDto {
       )
     )
 
-    this.node.moveTo(this.layer.findOne(Game.settableHoistId(this.mode.cover)))
+    this.node.moveTo(
+      this.layer.findOne(
+        Game.settableHoistId(this.mode.enabled ? this.mode.cover : this.cover)
+      )
+    )
   }
 
   draw() {

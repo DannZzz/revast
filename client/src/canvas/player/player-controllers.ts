@@ -2,7 +2,7 @@ import Konva from "konva"
 import { Player } from "./player"
 import { Point, Size } from "../../global/init"
 import { loadImage } from "../structures/fetchImages"
-import {  SERVER_ASSET } from "../../constants"
+import { SERVER_ASSET } from "../../constants"
 import { Game } from "../game"
 import { percentFrom, percentOf } from "../utils/percentage"
 import { DayInfo } from "../../socket/events"
@@ -36,14 +36,12 @@ export class PlayerControllers {
 
     const timerGroup = new Konva.Group({ x: this.containerSize.width - 100 })
     const timerBg = new Konva.Image({
-      image: loadImage(SERVER_ASSET("day-night.png"), (img) =>
-        timerBg.image(img)
-      ),
+      image: loadImage("images/day-night.png", (img) => timerBg.image(img)),
       width: 100,
       height: 100,
     })
     const timerArrow = new Konva.Image({
-      image: loadImage(SERVER_ASSET("day-night-arrow.png"), (img) =>
+      image: loadImage("images/day-night-arrow.png", (img) =>
         timerArrow.image(img)
       ),
       width: 50,
@@ -64,7 +62,7 @@ export class PlayerControllers {
     timerGroup.listening(false)
 
     this.autofood = new Konva.Image({
-      image: loadImage(SERVER_ASSET("auto-food.png"), (img) =>
+      image: loadImage("images/auto-food.png", (img) =>
         this.autofood.image(img)
       ),
       height: 100,

@@ -1,0 +1,47 @@
+.game-container {
+  position: absolute;
+  @include flex;
+
+  &.back {
+    z-index: -10;
+  }
+  #game-canvas {
+    position: absolute;
+  }
+
+  .drop-item {
+    position: absolute;
+    border-radius: 15px;
+    width: 500px;
+    height: 320px;
+    background: $mini-window-bg;
+    @include flex($dir: column);
+
+    .description {
+      font-size: xx-large;
+      color: $text2-color;
+    }
+
+    .buttons {
+      padding: 12px;
+      @include flex;
+      gap: 12px;
+
+      .button {
+        @include style-button(secondary);
+      }
+    }
+  }
+
+  .chat-input {
+    position: absolute;
+    border-radius: 15px;
+    outline: none;
+    top: -120px;
+    border: none;
+    padding: 4px;
+    ::placeholder {
+      color: silver;
+    }
+  }
+}

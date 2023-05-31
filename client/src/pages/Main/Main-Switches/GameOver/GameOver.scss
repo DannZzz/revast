@@ -1,0 +1,23 @@
+.game-over {
+  @include flex($dir: column);
+  width: 600px;
+  gap: 40px;
+  padding: 20px;
+  border-radius: 15px;
+  color: $text2-color;
+  background: $mini-window-bg;
+
+  h1 {
+    font-size: xx-large;
+  }
+
+  .stats {
+    font-size: xx-large;
+    @include flex($dir: column);
+    gap: 8px;
+  }
+
+  button {
+    @include style-button(secondary);
+  }
+}

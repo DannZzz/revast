@@ -7,13 +7,14 @@ import {
   onCleanup,
   onMount,
 } from "solid-js"
-import { Game } from "../../../canvas/game"
+import { Game } from "../../../../canvas/game"
 import Konva from "konva"
 import { KonvaEventObject } from "konva/lib/Node"
-import { Point, Size } from "../../../global/init"
-import gameState from "../../../store/game-state"
-import { disconnectWS, socket } from "../../../socket/socket"
+import { Point, Size } from "../../../../global/init"
+import gameState from "../../../../store/game-state"
+import { disconnectWS, socket } from "../../../../socket/socket"
 import { createStore } from "solid-js/store"
+import "./Canvas.scss"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
@@ -111,25 +112,20 @@ const Canvas: Component<{}> = (props) => {
   })
 
   return (
-    <div
-      class="absolute flex items-center justify-center"
-      classList={{ "-z-10": !started() }}
-    >
-      <div id="game-canvas" class="absolute"></div>
+    <div class="game-container" classList={{ back: !started() }}>
+      <div id="game-canvas"></div>
 
       <Show when={started()}>
         <Show when={!!dropItemId()}>
-          <div class="absolute rounded w-[500px] h-80 bg-[#361f0d] flex flex-col justify-around items-center">
-            <span class="text-3xl text-[#ccc]">
-              Do you want to drop the item?
-            </span>
-            <div class="p-3 flex gap-3 justify-center items-center">
+          <div class="drop-item">
+            <span class="description">Do you want to drop the item?</span>
+            <div class="buttons">
               <button
                 onClick={() => {
                   game?.events.emit("dropItem.response", dropItemId(), false)
                   setDropItemId(null)
                 }}
-                class="btn-primary"
+                class="button"
               >
                 Yes, 1x
               </button>
@@ -138,11 +134,11 @@ const Canvas: Component<{}> = (props) => {
                   game?.events.emit("dropItem.response", dropItemId(), true)
                   setDropItemId(null)
                 }}
-                class="btn-primary"
+                class="button"
               >
                 Yes, all
               </button>
-              <button onClick={() => setDropItemId(null)} class="btn-primary">
+              <button onClick={() => setDropItemId(null)} class="button">
                 No, cancel
               </button>
             </div>
@@ -151,7 +147,7 @@ const Canvas: Component<{}> = (props) => {
         <Show when={openChat()}>
           <input
             ref={chatInputRef}
-            class="absolute rounded outline-none -top-28 border-none placeholder-[silver] p-1"
+            class="chat-input"
             maxLength={160}
             type="text"
           />

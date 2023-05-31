@@ -6,7 +6,7 @@ import {
   on,
 } from "solid-js"
 import { Select } from "@thisbeyond/solid-select"
-import "./MenuCenter.css"
+import "./MenuCenter.scss"
 import { getServers } from "../../../../api/requests"
 import { ServerInformation } from "../../../../api/type"
 import gameState from "../../../../store/game-state"
@@ -40,29 +40,19 @@ const MenuCenter: Component<{}> = (props) => {
   )
 
   return (
-    <div class="flex flex-col justify-center items-center">
-      <div
-        class="w-[400px] h-32 bg-cover bg-no-repeat bg-center flex justify-start items-end px-4 pb-3"
-        style={{
-          "background-image": `url("images/nickname-banner.png")`,
-        }}
-      >
+    <div class="menu-center">
+      <div class="nickname">
         <input
           ref={nicknameInputRef}
           placeholder="Your Username.."
           maxLength={18}
           value={gs.nickname}
           type="text"
-          class="w-[360px] h-10 bg-transparent outline-none border-none text-center placeholder-[#252525] text-[#252525] text-lg"
+          class=""
         />
       </div>
-      <div class="relative flex w-full justify-between px-2 items-center gap-1">
-        <div
-          class="p-1 flex-1 h-16 bg-cover bg-no-repeat bg-center"
-          style={{
-            "background-image": `url("images/servers.png")`,
-          }}
-        >
+      <div class="buttons">
+        <div class="servers">
           <Select
             class="custom"
             onChange={(value) => setServer(value)}
@@ -73,12 +63,9 @@ const MenuCenter: Component<{}> = (props) => {
             options={servers()}
           />
         </div>
-        <img
-          onClick={onPlay}
-          src={"images/play-button.png"}
-          alt=""
-          class="w-28 h-16 mr-2 cursor-pointer"
-        />
+        <button onClick={onPlay} class="play-button">
+          PLAY
+        </button>
       </div>
     </div>
   )
