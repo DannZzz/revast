@@ -34,6 +34,7 @@ const Canvas: Component<{}> = (props) => {
   createEffect(
     on(died, (died) => {
       if (died) {
+        disconnectWS()
         game.end()
       }
     })

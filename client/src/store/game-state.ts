@@ -47,7 +47,6 @@ const createGameState = () => {
   }
 
   const leaveGame = (endedPlayer: PlayerInformationDto) => {
-    disconnectWS()
     batch(() => {
       setState({
         server: null,
