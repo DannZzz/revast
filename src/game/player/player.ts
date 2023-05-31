@@ -57,6 +57,7 @@ export class Player extends BasicElement<PlayerEvents> {
     chat: GetSet(true),
     instaCraft: GetSet(false),
     autofood: GetSet(false),
+    invisibility: GetSet(false),
   }
   readonly name: string
   readonly toggle = new Toggle()
@@ -296,6 +297,8 @@ export class Player extends BasicElement<PlayerEvents> {
   makeMessage(content: string) {
     const message = new Message(content, this)
     if (!this.settings.chat()) return
+    if (this.settings.invisibility())
+      return this.serverMessage("You're not visible!")
     // sharing
     if (message.public()) {
       message.filter()

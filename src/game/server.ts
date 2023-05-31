@@ -204,11 +204,14 @@ export class GameServer implements GameProps {
   private gameLoop(delta: number) {
     this.lastFrameDelta = delta
     const alivePlayersAsArray = [...this.alivePlayers.values()]
+    const aliveVisiblePlayers = alivePlayersAsArray.filter(
+      (player) => !player.settings.invisibility(),
+    )
     alivePlayersAsArray.forEach(
       (player) => player.online() && player.loop.action(),
     )
     this.mobs.all.forEach(
-      (mob) => !mob.died && mob?.action(alivePlayersAsArray, this.map, delta),
+      (mob) => !mob.died && mob?.action(aliveVisiblePlayers, this.map, delta),
     )
   }
 

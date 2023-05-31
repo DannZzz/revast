@@ -79,6 +79,8 @@ const Canvas: Component<{}> = (props) => {
             chatInputRef.value.trim().slice(0, 160),
           ])
         }
+      } else if (openChat() && evt.code === "Escape") {
+        setOpenChat(false)
       } else if (!openChat()) {
         game.events.emit("keyboard.down", evt)
       }

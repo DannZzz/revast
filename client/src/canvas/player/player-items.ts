@@ -228,7 +228,9 @@ export class PlayerItems extends BasicPlayerItems {
     itemNode
       .setAttr(
         "image",
-        loadImage(item.item.url, (img) => itemNode.setAttr("image", img))
+        loadImage(item.item.url, (img) =>
+          itemNode.setAttr("image", img).cache().green(150)
+        )
       )
       .position(pos)
       .offset(offset)

@@ -100,6 +100,7 @@ export class PlayerLoop {
     // send other users
     const playersInView = this.player.gameServer.dynamicItems.filter(
       (item) =>
+        !item.settings.invisibility() &&
         item.id() !== this.player.id() &&
         universalWithin(item.point(), viewRect),
     )
