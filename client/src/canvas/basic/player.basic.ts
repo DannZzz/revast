@@ -191,7 +191,11 @@ export class BasicPlayer<
       image: null,
       id: `${id}-set`,
       visible: false,
+      filters: [Konva.Filters.RGB],
+      opacity: 0.7,
     })
+
+    this.items.settingMode.node.cache()
 
     bodyGroup.add(
       this.items.settingMode.node,

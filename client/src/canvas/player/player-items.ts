@@ -194,9 +194,10 @@ export class PlayerItems extends BasicPlayerItems {
 
   startSetMode(itemId: number) {
     const itemNode = this.settingMode.node
+    itemNode.rotation(0)
+
     if (itemId === this.settingMode.id) {
       this.settingMode.id = null
-      itemNode.rotation(0)
       itemNode.visible(false)
       itemNode.setAttr("image", null)
       return
@@ -224,13 +225,19 @@ export class PlayerItems extends BasicPlayerItems {
         )
       : new Point(this.player.size.width / 2, this.player.size.height / 2)
 
-    itemNode.setAttr(
-      "image",
-      loadImage(item.item.url, (img) => itemNode.setAttr("image", img))
-    )
-    itemNode.position(pos)
-    itemNode.offset(offset)
-    itemNode.size(item.item.data.size)
+    itemNode
+      .setAttr(
+        "image",
+        loadImage(item.item.url, (img) => itemNode.setAttr("image", img))
+      )
+      .position(pos)
+      .offset(offset)
+      .size(item.item.data.size)
+      .cache()
+      .green(150)
+
+    this.updateGridSettingMode()
+
     itemNode.visible(true)
   }
 
