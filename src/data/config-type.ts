@@ -26,8 +26,8 @@ export const DrawPosByType = {
 export const RangeByType = {
   axe: 100,
   pickaxe: 100,
-  sword: 110,
-  spear: 150,
+  sword: 105,
+  spear: 170,
   hammer: 110,
   shovel: 90,
 }
