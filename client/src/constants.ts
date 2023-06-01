@@ -2,7 +2,7 @@
 
 import Konva from "konva"
 
-export const SERVER_ASSET = (fileName: string) => `/assets/${fileName}`
+export const SERVER_ASSET = (fileName: string) => `/api/images/${fileName}`
 
 export const GRID_SET_RANGE = 100
 

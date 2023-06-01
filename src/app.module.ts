@@ -5,8 +5,6 @@ import { WsModule } from './ws/ws.module'
 import { CraftsController } from './rest-modules/crafts/crafts.controller'
 import { ServersController } from './rest-modules/servers/servers.controller'
 import { ItemsController } from './rest-modules/items/items.controller'
-import { APP_GUARD } from '@nestjs/core'
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 
 @Module({
   imports: [
@@ -16,8 +14,14 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
           res.set('Access-Control-Allow-Origin', '*')
         },
       },
-      serveRoot: '/assets',
+      serveRoot: '/api/images',
       rootPath: join(__dirname, '..', 'assets'),
+    }),
+    ServeStaticModule.forRoot({
+      serveStaticOptions: {},
+      renderPath: '/*',
+      exclude: ['/api', '/ws'],
+      rootPath: join(__dirname, '..', 'client', 'dist'),
     }),
     WsModule,
     // ThrottlerModule.forRoot({

@@ -465,7 +465,7 @@ export class PlayerItems {
       }, //
       this.space,
       this.specialItems.bag
-        ? SERVER_API(`/assets/${Items.get(this.specialItems.bag).source}`)
+        ? SERVER_API(`/api/images/${Items.get(this.specialItems.bag).source}`)
         : null,
     ])
     const equipment = this.equiped
