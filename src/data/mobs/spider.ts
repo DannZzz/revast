@@ -10,7 +10,6 @@ export default createMob(MobNames.spider)
   .size(150, 150)
   .speed(130)
   .sources('SPIDER', 'HURT_SPIDER')
-  .hitbox(50)
   .drop({
     42: 4,
   })

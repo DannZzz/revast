@@ -10,7 +10,6 @@ export default createMob(MobNames.dragon)
   .size(300, 300)
   .speed(115)
   .sources('DRAGON', 'HURT_DRAGON')
-  .hitbox(100)
   .drop({
     51: 1,
     30: 15,

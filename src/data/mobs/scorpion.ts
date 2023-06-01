@@ -10,7 +10,6 @@ export default createMob(MobNames.scorpion)
   .size(250, 250)
   .speed(125)
   .sources('SCORPION', 'HURT_SCORPION')
-  .hitbox(70)
   .drop({
     52: 1,
     30: 15,

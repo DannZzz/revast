@@ -10,7 +10,6 @@ export default createMob(MobNames.piranha)
   .size(150, 150)
   .speed(130)
   .sources('PIRANHA', 'HURT_PIRANHA')
-  .hitbox(50)
   .drop({
     49: 2,
     45: 3,

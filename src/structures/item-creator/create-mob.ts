@@ -25,9 +25,12 @@ class MobCreator {
     return this
   }
 
-  radius(react: number, attack: number) {
-    this.extend.reactRadius = react
-    this.extend.attackRadius = attack
+  radius(react: number, attack: number, collision: number = 25) {
+    this.extend.radius = {
+      react,
+      attack,
+      collision,
+    }
     return this
   }
 
@@ -43,11 +46,6 @@ class MobCreator {
 
   speed(amount: number) {
     this._speed = amount + MOB_GLOBAL_SPEED_EFFECT
-    return this
-  }
-
-  hitbox(radius: number) {
-    this.extend.hitbox = radius
     return this
   }
 

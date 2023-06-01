@@ -23,12 +23,14 @@ export interface BasicMobProps {
   hurtSource: string
   givesXP: number
   size: Size
-  hitbox: number
-  reactRadius: number
   damage: number
   name: MobNames
   hp: number
-  attackRadius: number
+  radius: {
+    attack: number
+    react: number
+    collision: number
+  }
   damageInterval: number
   drop: { [k: number]: number }
   moveTactic: MobDefaultMoveTactic
@@ -38,17 +40,15 @@ export class BasicMob implements BasicMobProps {
   constructor(data: BasicMobProps) {
     Object.assign(this, data)
   }
-  hitbox: number
+  radius: { attack: number; react: number; collision: number }
   drop: { [k: number]: number }
   hurtSource: string
   hp: number
   givesXP: number
   damage: number
-  attackRadius: number
   source: string
   name: MobNames
   damageInterval: number
   size: Size
-  reactRadius: number
   moveTactic: MobDefaultMoveTactic
 }

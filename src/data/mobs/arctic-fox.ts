@@ -10,7 +10,6 @@ export default createMob(MobNames.arctic_fox)
   .size(150, 150)
   .speed(105)
   .sources('ARCTIC_FOX', 'HURT_ARCTIC_FOX')
-  .hitbox(50)
   .drop({
     47: 1,
     30: 3,

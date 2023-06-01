@@ -10,7 +10,6 @@ export default createMob(MobNames.megalodon)
   .size(250, 250)
   .speed(130)
   .sources('MEGALODON', 'HURT_MEGALODON')
-  .hitbox(100)
   .drop({
     50: 1,
     45: 10,

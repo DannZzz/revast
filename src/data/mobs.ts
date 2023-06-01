@@ -50,7 +50,7 @@ export class Mobs {
           currentArea: conf.area,
           spawn: conf.spawn,
           point: game.randomEmptyPoint(
-            mobBasic.hitbox,
+            mobBasic.radius.collision,
             conf.spawn.startPoint,
             conf.spawn.size,
           ),
@@ -88,7 +88,7 @@ export class Mobs {
           currentArea: conf.area,
           spawn: conf.spawn,
           point: this.game.randomEmptyPoint(
-            mobBasic.hitbox,
+            mobBasic.radius.collision,
             conf.spawn.startPoint,
             conf.spawn.size,
           ),

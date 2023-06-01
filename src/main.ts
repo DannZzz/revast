@@ -13,7 +13,12 @@ import config from 'config'
 async function bootstrap() {
   await Promise.all([loadItems(), loadMobs(), loadAdminCommands()])
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: { origin: config.get('WEB') },
+    cors: {
+      origin:
+        config.util.getEnv('NODE_ENV') === 'production'
+          ? config.get('WEB')
+          : '*',
+    },
   })
 
   app.useGlobalPipes(new ValidationPipe())

@@ -48,13 +48,11 @@ export class Mob extends BasicMob {
   currentArea: MapAreaName
   theta: number
   drop: { [k: number]: number }
-  attackRadius: number
   damageInterval: number
   private targetPoint: Point
   private nextStopTime: number
   private waitUntil: number
   private damageIntervalObj: any
-  private viewRadius = 1000
 
   centerPoint(point: Point = this.point) {
     return point.clone()
@@ -66,39 +64,60 @@ export class Mob extends BasicMob {
 
   get universalHitbox() {
     return {
-      radius: this.attackRadius,
+      radius: this.radius.attack,
       point: this.centerPoint(),
     }
   }
 
-  within(hitbox: UniversalHitbox) {
+  get universalCollisionHitbox() {
+    return {
+      radius: this.radius.collision,
+      point: this.centerPoint(),
+    }
+  }
+
+  within(hitbox: UniversalHitbox, collision: boolean = false) {
     // const hitboxPoints = pointsOfRotatedRectangle(
     //   this.centerPoint(),
     //   this.hitbox,
     //   this.theta,
     // )
 
-    return universalWithin(hitbox, this.universalHitbox)
+    return universalWithin(
+      hitbox,
+      collision ? this.universalCollisionHitbox : this.universalHitbox,
+    )
   }
 
   readyToDamage(players: Player[]) {
     if (!this.target || this.died) {
       clearInterval(this.damageIntervalObj)
     } else {
+      let max = 0
       timer(1000).subscribe(() => {
         this.damageIntervalObj = setInterval(() => {
           // hurting player
+          let attacked = false
           players.forEach((player) => {
             if (
               circlePoint(
                 ...Converter.pointToXYArray(this.centerPoint()),
-                this.hitbox,
+                this.radius.attack,
                 ...Converter.pointToXYArray(player.point()),
               )
             ) {
+              attacked = true
               player.damage(this.damage, 'mob')
             }
           })
+          if (!attacked) {
+            max++
+          } else {
+            max = 0
+          }
+          if (max === 3) {
+            clearTimeout(this.damageIntervalObj)
+          }
         }, this.damageInterval * 1000)
       })
     }
@@ -180,7 +199,7 @@ export class Mob extends BasicMob {
         )
         const itemWithin = this.staticItems
           .for(nextPoint)
-          .itemWithin(this.universalHitbox)
+          .itemWithin(this.universalCollisionHitbox)
         if (
           !boxPoint(
             ...Converter.pointToXYArray(this.spawn.startPoint),
@@ -202,6 +221,7 @@ export class Mob extends BasicMob {
           return
         } else if (itemWithin && !noCheck) {
           this.targetPoint = null
+          this.target = null
           this.readyToDamage([])
           useTactic({
             tactic: this.moveTactic.idleTactic,
@@ -211,7 +231,7 @@ export class Mob extends BasicMob {
                 itemWithin.centerPoint || itemWithin.point,
               ) + Math.PI,
             _interval: attackTactic.interval,
-            _speed: attackTactic.speed * 2,
+            _speed: attackTactic.speed,
             noCheck: true,
           })
           return
@@ -228,9 +248,10 @@ export class Mob extends BasicMob {
         const distance = getDistance(this.target.point(), this.centerPoint())
         if (distance < speed(attackTactic.speed)) {
           this.moveTo(this.target.point())
+          this.theta = getAngle(this.centerPoint(), this.target.point())
           return
         }
-        if (distance > this.reactRadius) {
+        if (distance > this.radius.react) {
           this.target = null
         } else {
           useTactic({
@@ -248,7 +269,7 @@ export class Mob extends BasicMob {
       for (let player of players) {
         if (!player) continue
         if (
-          getDistance(player.point(), this.centerPoint()) <= this.reactRadius
+          getDistance(player.point(), this.centerPoint()) <= this.radius.react
         ) {
           this.target = player
           this.waitUntil = null

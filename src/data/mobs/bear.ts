@@ -10,7 +10,6 @@ export default createMob(MobNames.bear)
   .size(200, 200)
   .speed(125)
   .sources('BEAR', 'HURT_BEAR')
-  .hitbox(70)
   .drop({
     48: 3,
     30: 4,
