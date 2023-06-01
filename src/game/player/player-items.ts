@@ -401,9 +401,9 @@ export class PlayerItems {
     const items = this.items
     items[items.findIndex((it) => it.item.id == item.id)].quantity--
     this.player.bars.hungry.value += item.data.toFood || 0
-    this.player.damage(item.data.toHealth || 0, 'absolute')
     this.player.bars.h2o.value += item.data.toWater || 0
     this.player.bars.socketUpdate()
+    this.player.damage(-item.data.toHealth || 0, 'absolute')
     this._items = this.filterItems(items)
     this.update()
     if (item.data.giveAfterEat) this.addItem(item.data.giveAfterEat, 1)
