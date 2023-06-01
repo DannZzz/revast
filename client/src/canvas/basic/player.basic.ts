@@ -74,6 +74,7 @@ export class BasicPlayer<
       text: this.name,
       align: "center",
       width: 300,
+      wrap: "none",
       offsetX: 150 - this.size.width / 2,
       fill: "#cccccc",
       y: -25,

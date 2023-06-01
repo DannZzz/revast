@@ -1,7 +1,7 @@
 {
   "style": "scss",
   "component": "function",
-  "fileExtension": "jsx",
+  "fileExtension": "tsx",
   "sourceDir": "src",
   "directoryComponent": "yes",
   "nativeStyle": "file"

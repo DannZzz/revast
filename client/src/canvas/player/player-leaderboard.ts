@@ -113,6 +113,7 @@ export class PlayerLeaderboard {
           fill: "white",
           width: percentOf(65, width),
           x: percentOf(10, width),
+          wrap: "none",
         })
 
         const xpText = new KonvaText({

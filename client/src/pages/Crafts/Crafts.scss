@@ -1,0 +1,35 @@
+.crafts {
+  background: linear-gradient(to right, rgb(7, 36, 7), rgb(1, 48, 1));
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+
+  @include flex($content: start, $dir: column);
+  gap: 20px;
+
+  @include screen(med-small) {
+    display: block;
+  }
+
+  .bar {
+    @include flex();
+    gap: 20px;
+  }
+  .container {
+    overflow-y: scroll;
+    width: 60%;
+    @include bg-effect;
+    @include scroll-bar(#252525);
+    padding: 20px;
+    display: grid;
+    place-items: center;
+
+    @include screen(med-small) {
+      width: 100%;
+    }
+
+    > * {
+      flex-basis: 1;
+    }
+  }
+}

@@ -3,3 +3,14 @@ export interface ServerInformation {
   api: string
   players: number
 }
+
+export interface Craft {
+  id: number
+  state: { workbench?: boolean; fire?: boolean; water?: boolean }
+  items: { duration: number; givesXp: number; required: Record<number, number> }
+}
+
+export interface CompactItem {
+  id: number
+  iconUrl: string
+}

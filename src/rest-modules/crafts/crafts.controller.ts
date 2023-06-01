@@ -17,13 +17,13 @@ export class CraftsController {
   getCraftList() {
     const craftables = Craft.data.map((item) => {
       return {
-        id: item.id,
+        id: item.itemId,
         state: item.craftable.state || {},
-        items: item.craftable.required || {},
+        items: item.craftable || {},
       }
     })
 
-    return craftables
+    return craftables.sort((a, b) => a.id - b.id)
   }
 
   @Get('/items')

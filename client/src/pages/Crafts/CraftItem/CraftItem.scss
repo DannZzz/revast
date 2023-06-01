@@ -1,0 +1,42 @@
+.craft-item {
+  width: 100%;
+  @include flex($content: space-around);
+  padding: 20px 10px;
+
+  .main-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .req-container {
+    padding: 10px;
+    min-width: 200px;
+    @include bg-effect;
+    @include flex();
+    gap: 10px;
+    // height: 200px;
+
+    .recept-item-icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    .recept {
+      width: 100%;
+      @include flex($dir: column);
+      .recept-item {
+        @include flex();
+        gap: 5px;
+        color: #ccc;
+      }
+    }
+    .additional {
+      @include flex($dir: column);
+      gap: 10px;
+    }
+  }
+
+  &:not(:last-of-type) {
+    border-bottom: 2px solid #252525;
+  }
+}

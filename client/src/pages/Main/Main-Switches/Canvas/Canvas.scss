@@ -14,7 +14,8 @@
     border-radius: 15px;
     width: 500px;
     height: 320px;
-    background: $mini-window-bg;
+
+    @include window-bg-colored;
     @include flex($dir: column);
 
     .description {
@@ -25,20 +26,17 @@
     .buttons {
       padding: 12px;
       @include flex;
-      gap: 12px;
-
-      .button {
-        @include style-button(secondary);
-      }
+      gap: 15px;
     }
   }
 
   .chat-input {
     position: absolute;
-    border-radius: 15px;
+    border-radius: 5px;
     outline: none;
-    top: -120px;
+    top: 50px;
     border: none;
+    font-size: 18px;
     padding: 4px;
     ::placeholder {
       color: silver;

@@ -16,6 +16,7 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
+    "@solidjs/router": "^0.8.2",
     "@thisbeyond/solid-select": "^0.14.0",
     "anytool": "^1.0.2",
     "axios": "^1.4.0",

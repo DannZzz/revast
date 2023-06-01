@@ -15,6 +15,7 @@ import gameState from "../../../../store/game-state"
 import { disconnectWS, socket } from "../../../../socket/socket"
 import { createStore } from "solid-js/store"
 import "./Canvas.scss"
+import Button from "../../../../components/Button/Button"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
@@ -120,27 +121,23 @@ const Canvas: Component<{}> = (props) => {
           <div class="drop-item">
             <span class="description">Do you want to drop the item?</span>
             <div class="buttons">
-              <button
+              <Button
                 onClick={() => {
                   game?.events.emit("dropItem.response", dropItemId(), false)
                   setDropItemId(null)
                 }}
-                class="button"
               >
                 Yes, 1x
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   game?.events.emit("dropItem.response", dropItemId(), true)
                   setDropItemId(null)
                 }}
-                class="button"
               >
                 Yes, all
-              </button>
-              <button onClick={() => setDropItemId(null)} class="button">
-                No, cancel
-              </button>
+              </Button>
+              <Button onClick={() => setDropItemId(null)}>No, cancel</Button>
             </div>
           </div>
         </Show>
