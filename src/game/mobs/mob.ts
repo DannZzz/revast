@@ -117,6 +117,7 @@ export class Mob extends BasicMob {
           }
           if (max === 3) {
             clearTimeout(this.damageIntervalObj)
+            this.readyToDamage(players)
           }
         }, this.damageInterval * 1000)
       })
