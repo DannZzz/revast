@@ -67,13 +67,12 @@ export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
 export const START_ITEMS = () => [
-  [1, { quantity: 1, equiped: false, item: itemById(1) }],
   [8, { quantity: 3, equiped: false, item: itemById(8) }],
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>
   new GameServer({
-    information: { name: 'Main' },
+    information: { name: 'Europe' },
     socketServer: server,
     map: new GameMap({
       size: new Size(300, 300),

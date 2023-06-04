@@ -145,10 +145,10 @@ export class BasicPlayer<
 
     const handBase = new Konva.Image({
       image: loadImage(this.skin.handUrl, (img) => handBase.image(img)),
-      width: 22,
-      height: 22,
-      offsetX: 11,
-      offsetY: 11,
+      width: 35,
+      height: 35,
+      offsetX: 17.5,
+      offsetY: 17.5,
     })
     handBase.cache()
 

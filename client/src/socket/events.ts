@@ -198,6 +198,20 @@ export interface CraftDto {
   craftDuration: number
 }
 
+export interface ActionableHolderDto {
+  quantity: number
+  itemId: number
+  iconUrl: string
+  drawOffset: Point
+  noBackground: boolean
+  takeable: boolean
+}
+
+export interface ActionableSettableDrawOptionsDto {
+  backgroundUrl: string
+  size: Size
+}
+
 interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
@@ -223,12 +237,10 @@ interface ServerToClientEvents {
   playerWearing: (data: [weapon: WearingDto, timeout: NumberBoolean]) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
-    data: [
-      id: string,
-      theta: number,
-      mode?: { enabled: boolean; cover: number },
-      showHpAngle?: number
-    ]
+    data: [id: string, theta: number, showHpAngle?: number]
+  ) => void
+  staticItemMode: (
+    data: [settableId: string, mode?: { enabled: boolean; cover: number }]
   ) => void
   drops: (data: [toAdd: DropDto[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
@@ -255,6 +267,16 @@ interface ServerToClientEvents {
   day: (data: [day: NumberBoolean]) => void
   playerMessage: (data: [id: string, content: string]) => void
   serverMessage: (data: [content: string]) => void
+  actionableHolder: (
+    data: [
+      settableId: string,
+      settableType: string,
+      drawOptions: ActionableSettableDrawOptionsDto,
+      allow: number[] | null,
+      holders: ActionableHolderDto[]
+    ]
+  ) => void
+  removeActionable: (data: [settableId: string]) => void
 }
 
 export interface ClientToServerEvents {
@@ -277,6 +299,10 @@ export interface ClientToServerEvents {
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void
   requestChatStatus(data: [status: NumberBoolean]): void
+  requestActionableHolder(
+    data: [settableId: string, itemId: number, x10: boolean]
+  ): void
+  requestActionableHolderTake(data: [settableId: string, i: number]): void
 }
 
 export type MainSocket = Socket<ServerToClientEvents, ClientToServerEvents>

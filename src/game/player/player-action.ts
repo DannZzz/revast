@@ -3,6 +3,8 @@ import type { Player } from './player'
 import { PlayerClick } from './player-click'
 import { PlayerStates } from './player-state'
 import { getPointByTheta } from '../animations/rotation'
+import { ActionableSettableItem } from '../extended/settable/actionable.settable'
+import { EventData } from 'src/ws/events/events'
 
 export class PlayerAction {
   clicks = 0
@@ -140,5 +142,30 @@ export class PlayerAction {
     tryTo(l, point)
 
     this.player.moveFromHere(l)
+  }
+
+  actionablesUpdate() {
+    this.player.cache.get('staticSettables').forEach((settable) => {
+      if (settable instanceof ActionableSettableItem) settable.update()
+    })
+  }
+
+  actionableTake(data: EventData<'requestActionableHolderTake'>) {
+    const [settableId, i] = data
+    const settable = this.player.cache
+      .get('staticSettables')
+      .find((settable) => settable.id === settableId)
+    if (settable instanceof ActionableSettableItem) {
+      settable.take(i, this.player)
+    }
+  }
+  actionableHold(data: EventData<'requestActionableHolder'>) {
+    const [settableId, itemId, x10] = data
+    const settable = this.player.cache
+      .get('staticSettables')
+      .find((settable) => settable.id === settableId)
+    if (settable instanceof ActionableSettableItem) {
+      settable.hold(itemId, x10 ? 10 : 1, this.player)
+    }
   }
 }

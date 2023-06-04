@@ -140,6 +140,9 @@ export const Images = {
   RUBY_DOOR: 'ruby-door-closed.png',
   RUBY_DOOR_OPEN: 'ruby-door-open.png',
   BRIDGE: 'bridge.png',
+  CHEST: 'chest.png',
+  FURNACE: 'furnace.png',
+  FURNACE_ENABLED: 'furnace-enabled.png',
 
   // mobs
   WOLF: 'wolf.png',
@@ -205,3 +208,5 @@ export const Images = {
 } as const
 
 export type Images = typeof Images
+
+export type ImageSource = keyof Images

@@ -19,6 +19,7 @@ import { getPointByTheta } from "../animations/rotation"
 import { NB } from "../utils/NumberBoolean"
 import { PlayerTimeout } from "./player-timeout"
 import { PlayerJoinedDto } from "../../socket/events"
+import { PlayerActionable } from "./player-actionable"
 
 export class Player extends BasicPlayer<PlayerEvents> {
   range: number
@@ -32,6 +33,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
   readonly leaderboard: PlayerLeaderboard
   readonly controllers: PlayerControllers
   readonly miniMap: MiniMap
+  readonly actionable: PlayerActionable
   timeout: PlayerTimeout
   chatStatus = true
 
@@ -41,6 +43,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
     this.game = game
     this.items = new PlayerItems(this)
     this.actions = new PlayerAction(this)
+    this.actionable = new PlayerActionable(this.layer2, this.items)
     this.bars = new PlayerBars(this)
     this.miniMap = new MiniMap(this.layer2, this.game().map, this)
     this.leaderboard = new PlayerLeaderboard(this.layer2, this.miniMap)
@@ -174,6 +177,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
       this.leaderboard.resize()
       this.bars.resize()
       this.miniMap.resize()
+      this.actionable.resize()
     })
     socket.on("playerPosition", ([point, screen]) => {
       this.moveTo(point)
@@ -187,8 +191,9 @@ export class Player extends BasicPlayer<PlayerEvents> {
       if (itemId !== -1) {
         this.items.setItemResponse()
         if (NB.from(timeout)) {
-          this.timeout.try('building')
-        }}
+          this.timeout.try("building")
+        }
+      }
     })
     socket.on("playerMessage", ([playerId, content]) => {
       if (playerId === this.id()) {

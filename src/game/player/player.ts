@@ -200,6 +200,7 @@ export class Player extends BasicElement<PlayerEvents> {
     ])
     this.bars.socketUpdate()
     this.items.update()
+    this.actions.actionablesUpdate()
   }
 
   damage(amount: number, type: 'mob' | 'player' | 'absolute', from?: Player) {

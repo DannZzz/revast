@@ -44,6 +44,22 @@ export class MainGateway
     this.gameServer.disconnectPlayer(client.id)
   }
 
+  @SubscribeMessage('requestActionableHolderTake')
+  requestActionableHolderTake(
+    @ConnectedSocket() client: MainSocket,
+    @MessageBody() data: EventData<'requestActionableHolderTake'>,
+  ): void {
+    this.gameServer.to(client.id)?.actions.actionableTake(data)
+  }
+
+  @SubscribeMessage('requestActionableHolder')
+  requestActionableHolder(
+    @ConnectedSocket() client: MainSocket,
+    @MessageBody() data: EventData<'requestActionableHolder'>,
+  ): void {
+    const player = this.gameServer.to(client.id)?.actions.actionableHold(data)
+  }
+
   @SubscribeMessage('requestChatStatus')
   requestChatStatus(
     @ConnectedSocket() client: MainSocket,

@@ -19,6 +19,7 @@ import { StaticItems } from 'src/structures/StaticItems'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { SpecialItemTypes } from 'src/data/config-type'
+import { EventEmitter } from 'src/utils/EventEmitter'
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -34,13 +35,18 @@ export class BasicStaticItem extends Item<Settable> {
   }
 }
 
-export class StaticSettableItem {
+type SettableEvents = {
+  destroy: [item: StaticSettableItem]
+}
+
+export class StaticSettableItem extends EventEmitter<SettableEvents> {
   point: Point = new Point(0, 0)
   rotation: number = 0
   tempHp: GetSet<number>
   theta: number = Math.PI
   readonly id: string = uuid(50)
   points: Point[] = []
+  timeouts: Record<any, any> = {}
 
   mode: {
     enabled: GetSet<boolean>
@@ -54,19 +60,28 @@ export class StaticSettableItem {
   constructor(
     readonly authorId: number,
     readonly data: ItemProps<Settable>,
-    private players: Players,
-    private staticItems: StaticItemsHandler,
+    readonly players: Players,
+    readonly staticItems: StaticItemsHandler,
   ) {
+    super()
     this.tempHp = GetSet(data.hp)
-
+    if (this.data.onDestroy) this.on('destroy', this.data.onDestroy)
     if (this.data.durationSeconds)
       timer(this.data.durationSeconds * 1000).subscribe(() => {
-        if (!this.destroyed)
-          this.staticItems.for(this.universalHitbox).removeSettable(this.id)
+        this.destroy()
       })
 
     this.mode.enabled.onChange((val) => {
       this.mode.cover = val ? this.data.mode?.cover : this.data.cover
+      this.validPlayersSockets().forEach((socket) => {
+        socket.emit('staticItemMode', [
+          this.id,
+          {
+            enabled: this.mode.enabled(),
+            cover: this.mode.cover,
+          },
+        ])
+      })
     })
   }
 
@@ -127,9 +142,17 @@ export class StaticSettableItem {
     this.tempHp(this.tempHp() - damage)
     if (this.tempHp() > this.data.hp) this.tempHp(this.data.hp)
     if (this.tempHp() <= 0) {
-      this.destroyed = true
-      this.staticItems.for(this.universalHitbox).removeSettable(this.id)
+      this.destroy()
     }
+  }
+
+  destroy() {
+    if (this.destroyed) {
+      return
+    }
+    this.emit('destroy', this)
+    this.destroyed = true
+    this.staticItems.for(this.universalHitbox).removeSettable(this.id)
   }
 
   getAttacked(from: Point, by: Player) {
@@ -145,6 +168,7 @@ export class StaticSettableItem {
       equiped?.item?.data.specialName !== SpecialItemTypes.repair
     ) {
       if (
+        this.data.mode.trigger === 'attack' &&
         this.data.mode.verify.call(this, by) &&
         (this.mode.enabled()
           ? !alivePlayers.some((player) => this.withinStrict(player.points))
@@ -153,25 +177,25 @@ export class StaticSettableItem {
         this.mode.enabled(!this.mode.enabled())
     }
 
-    const playerSockets = alivePlayers
+    const playerSockets = this.validPlayersSockets()
+
+    playerSockets.forEach((socket) =>
+      socket.emit('staticItemAttacked', [
+        this.id,
+        getAngle(this.point, from) + Math.PI,
+        this.data.showHpRadius &&
+          percentOf(percentFrom(this.tempHp(), this.data.hp), 360),
+      ]),
+    )
+  }
+
+  validPlayersSockets() {
+    return this.players
       .filter(
         (player) =>
           player.online() &&
           player.cache.get('staticSettables', true).includes(this.id),
       )
       .map((player) => player.socket())
-
-    playerSockets.forEach((socket) =>
-      socket.emit('staticItemAttacked', [
-        this.id,
-        getAngle(this.point, from) + Math.PI,
-        {
-          enabled: this.mode.enabled(),
-          cover: this.mode.cover,
-        },
-        this.data.showHpRadius &&
-          percentOf(percentFrom(this.tempHp(), this.data.hp), 360),
-      ]),
-    )
   }
 }

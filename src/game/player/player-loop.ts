@@ -16,6 +16,7 @@ import { WearingEntity } from 'src/entities/wearing.entity'
 import { Items } from 'src/data/items'
 import { Player } from './player'
 import { universalWithin } from 'src/utils/universal-within'
+import { ActionableSettableItem } from '../extended/settable/actionable.settable'
 
 export class PlayerLoop {
   readonly cache: Cache<PlayerCache>
@@ -96,6 +97,12 @@ export class PlayerLoop {
       ])
       this.cache.data.staticSettables = settablesInView
     }
+
+    // checking actionable settable items
+    this.cache.data.staticSettables.forEach(
+      (item) =>
+        item instanceof ActionableSettableItem && item.actionable(this.player),
+    )
 
     // send other users
     const playersInView = this.player.gameServer.dynamicItems.filter(

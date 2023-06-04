@@ -14,6 +14,7 @@ import { StaticItemsAddons } from "../data/staticItemAddons"
 import { Shape } from "konva/lib/Shape"
 import { Game } from "../game"
 import { zIndexOf } from "../../constants"
+import { EventEmitter } from "../utils/EventEmitter"
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -22,10 +23,20 @@ export class BasicStaticItem extends Item<Settable> {
   }
 }
 
-export class StaticSettableItem implements StaticSettableDto {
+type StaticItemEvents = {
+  destroy: [item: StaticSettableItem]
+  mode: [item: StaticSettableItem]
+}
+
+export class StaticSettableItem
+  extends EventEmitter<StaticItemEvents>
+  implements StaticSettableDto
+{
   constructor(data: StaticSettableDto) {
+    super()
     Object.assign(this, data)
   }
+
   mode: { enabled: boolean; cover: number }
   modeUrl: string
   cover: number
@@ -66,19 +77,22 @@ export class StaticSettableItem implements StaticSettableDto {
 
   tryMode(val: { enabled: boolean; cover: number }) {
     if (!this.modeUrl || this.modeUrl.endsWith("undefined")) return
+    let coverChanged = this.mode.cover !== val.cover
     this.mode = val
+    this.emit("mode", this)
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
     node.image(
       loadImage(this.mode.enabled ? this.modeUrl : this.url, (img) =>
         node.image(img)
       )
     )
-
-    this.node.moveTo(
-      this.layer.findOne(
-        Game.settableHoistId(this.mode.enabled ? this.mode.cover : this.cover)
+    if (coverChanged) {
+      this.node.moveTo(
+        this.layer.findOne(
+          Game.settableHoistId(this.mode.enabled ? this.mode.cover : this.cover)
+        )
       )
-    )
+    }
   }
 
   draw() {
@@ -99,13 +113,15 @@ export class StaticSettableItem implements StaticSettableDto {
     })
     itemGroup.add(image)
     if (this.type in StaticItemsAddons) {
-      const also = StaticItemsAddons[this.type]?.alsoDraw(this)
+      const also = StaticItemsAddons[this.type].alsoDraw?.(this)
       if (also) {
         itemGroup.add(
           ...(Array.isArray(also.items) ? also.items : [also.items])
         )
         also?.afterDraw?.()
       }
+
+      StaticItemsAddons[this.type].drawSeparately?.(this)
     }
 
     if (this.showHp) {
@@ -128,6 +144,7 @@ export class StaticSettableItem implements StaticSettableDto {
     )
 
     this.node = itemGroup
+
     this.tryMode(this.mode)
 
     if (this.highlight) {
@@ -166,6 +183,7 @@ export class StaticSettableItem implements StaticSettableDto {
   }
 
   destroy() {
+    this.emit("destroy", this)
     this.destroyed = true
     this.node.destroy()
     this.highlightNode?.destroy()

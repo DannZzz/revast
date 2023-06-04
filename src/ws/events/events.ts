@@ -2,6 +2,8 @@ import { WsResponse } from '@nestjs/websockets'
 import { Namespace, Server, Socket } from 'socket.io'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { PlayerBarsEntity } from 'src/dto/player-bars.dto'
+import { ActionableHolderEntity } from 'src/entities/actionable-holder.entity'
+import { ActionableSettableDrawOptionsEntity } from 'src/entities/actionable-settable-draw-options.entity'
 import { BioEntity } from 'src/entities/bio.entity'
 import { CraftEntity } from 'src/entities/craft.entity'
 import { DropEntity } from 'src/entities/drop.entity'
@@ -49,12 +51,10 @@ interface ServerToClientEvents {
   ) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
-    data: [
-      id: string,
-      theta: number,
-      mode?: { enabled: boolean; cover: number },
-      showHpAngle?: number,
-    ],
+    data: [id: string, theta: number, showHpAngle?: number],
+  ) => void
+  staticItemMode: (
+    data: [settableId: string, mode?: { enabled: boolean; cover: number }],
   ) => void
   drops: (data: [toAdd: DropEntity[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
@@ -81,6 +81,16 @@ interface ServerToClientEvents {
   day: (data: [day: NumberBoolean]) => void
   playerMessage: (data: [id: string, content: string]) => void
   serverMessage: (data: [content: string]) => void
+  actionableHolder: (
+    data: [
+      settableId: string,
+      settableType: string,
+      drawOptions: ActionableSettableDrawOptionsEntity,
+      allow: number[] | null,
+      holders: ActionableHolderEntity[],
+    ],
+  ) => void
+  removeActionable: (data: [settableId: string]) => void
 }
 
 export interface ClientToServerEvents {
@@ -95,6 +105,10 @@ export interface ClientToServerEvents {
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void
   requestChatStatus(data: [status: NumberBoolean]): void
+  requestActionableHolder(
+    data: [settableId: string, itemId: number, x10: boolean],
+  ): void
+  requestActionableHolderTake(data: [settableId: string, i: number]): void
 }
 
 export type MainServer = Namespace<ClientToServerEvents, ServerToClientEvents>

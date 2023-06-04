@@ -1,11 +1,12 @@
 import Konva from "konva"
-import { Point } from "../../global/init"
+import { Point, combineClasses } from "../../global/init"
 import { Bio } from "../basic/bio-item.basic"
 import { Group } from "konva/lib/Group"
 import { Shape } from "konva/lib/Shape"
 import { StaticSettableItem } from "../basic/static-item.basic"
+import { Game } from "../game"
 
-export type StaticItemAddonName = "berry" | "campfire"
+export type StaticItemAddonName = "berry" | "campfire" | "furnace"
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -14,6 +15,7 @@ export const StaticItemsAddons: {
       afterDraw?: () => void
     }
     drawByResourceChange?: (bio: Bio, currentResources: number) => void
+    drawSeparately?: (item: StaticSettableItem) => void
   }
 } = {
   berry: {
@@ -122,6 +124,32 @@ export const StaticItemsAddons: {
           smallCircle.zIndex(-9)
         },
       }
+    },
+  },
+  furnace: {
+    drawSeparately: (item) => {
+      const center = item.point
+
+      const circle = new Konva.Circle({
+        radius: 200,
+        fill: "#FFC40066",
+        opacity: 0.8,
+      })
+      const smallCircle = new Konva.Circle({
+        radius: 120,
+        fill: "#FFC40099",
+        opacity: 0.8,
+      })
+
+      const fireGroup = new Konva.Group({ ...center })
+      fireGroup.add(circle, smallCircle)
+      Game.groupAdd(item.layer, Game.settableHoistId(0), fireGroup)
+      item.on("destroy", (item) => {
+        fireGroup.destroy()
+      })
+      item.on("mode", (item) => {
+        fireGroup.visible(item.mode.enabled)
+      })
     },
   },
 }

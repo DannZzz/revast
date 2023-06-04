@@ -70,7 +70,7 @@ export interface SpecialSettable {
 }
 
 export interface SettableMode {
-  trigger: 'attack'
+  trigger: 'attack' | 'custom'
   verify: (this: StaticSettableItem, player: Player) => boolean
   source: string
   cover: number
@@ -99,6 +99,7 @@ export interface Settable {
     water: boolean
   }
   mode?: SettableMode
+  onDestroy?: (settable: StaticSettableItem) => void
 }
 
 export type DayNight<T = number> = { [k in 'day' | 'night']: T }

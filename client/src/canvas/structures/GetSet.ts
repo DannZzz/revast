@@ -31,7 +31,7 @@ export const GetSet = <Type>(val: Type): GetSet<Type> => {
     }
     const old = obj.val
     obj.val = newVal
-    obj.events.emit("onChange", newVal, old)
+    if (obj.val !== old) obj.events.emit("onChange", newVal, old)
     return newVal
   } as any
   fn.onChange = (cb: CB<Type, "onChange">) =>

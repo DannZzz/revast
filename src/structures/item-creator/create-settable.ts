@@ -1,5 +1,5 @@
 import { Point, Size } from 'src/global/global'
-import { Images } from '../image-base'
+import { ImageSource, Images } from '../image-base'
 import {
   Craftable,
   Highlight,
@@ -9,12 +9,24 @@ import {
   SettableMode,
   SpecialSettable,
 } from 'src/game/basic/item.basic'
-import { BasicStaticItem } from 'src/game/basic/static-item.basic'
+import {
+  BasicStaticItem,
+  StaticSettableItem,
+} from 'src/game/basic/static-item.basic'
 import {
   WallDoorByResourceType,
   WallDoorCraftDuration,
 } from 'src/data/config-type'
 import { Craft } from '../Craft'
+import {
+  ActionableInitializator,
+  BasicActionableStatic,
+  ExtendedSettable,
+} from 'src/game/extended/settable/actionable.basic'
+import {
+  ActionableHolderProps,
+  ActionableItemHolder,
+} from 'src/game/extended/settable/actionable-holder'
 
 class SettableCreator {
   readonly extend = <any>{ cover: 1, onThe: {}, craftable: [] }
@@ -119,7 +131,7 @@ class SettableCreator {
     return this
   }
 
-  data(data: Partial<ItemProps<Settable>>) {
+  data<T = ItemProps<Settable>>(data: Partial<T>) {
     this._data = data
     return this
   }
@@ -127,6 +139,46 @@ class SettableCreator {
   highlight<T extends HighlightType>(hl: Highlight<T>) {
     this.extend.highlight = hl
     return this
+  }
+
+  holders(...holders: ActionableHolderProps[]) {
+    this.extend.holders = holders
+    return this
+  }
+
+  onInit(cb: ActionableInitializator) {
+    this.extend.onInit = cb
+    return this
+  }
+
+  actionable(
+    settable: Partial<
+      ExtendedSettable<{
+        draw: { backgroundSource: ImageSource } & ExtendedSettable['draw']
+      }>
+    >,
+  ) {
+    if (settable.draw) {
+      settable.draw.backgroundSource = Images[
+        settable.draw.backgroundSource
+      ] as any
+    }
+
+    Object.assign(this.extend, settable)
+    return this
+  }
+
+  onDestroy(cb: (settable: StaticSettableItem) => void) {
+    this.extend.onDestroy = cb
+    return this
+  }
+
+  buildActionable() {
+    const { craftable, ...otherProps } = this.extend
+    craftable.forEach((crft) => {
+      Craft.addCraft(this.extend.id, crft)
+    })
+    return new BasicActionableStatic({ ...otherProps, ...this._data })
   }
 
   build() {

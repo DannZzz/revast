@@ -7,6 +7,6 @@ export const connectWS = (api: string) => {
 }
 
 export const disconnectWS = () => {
-  socket.disconnect()
+  socket?.disconnect()
   socket = null
 }

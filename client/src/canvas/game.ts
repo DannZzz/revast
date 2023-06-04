@@ -338,7 +338,7 @@ export class Game {
       drop.hurt()
     })
 
-    socket.on("staticItemAttacked", ([itemId, theta, mode, showHpAngle]) => {
+    socket.on("staticItemAttacked", ([itemId, theta, showHpAngle]) => {
       const itemNode = this.layer.findOne(`#${itemId}`)
       const item = this.staticItems.all.find((item) => item.id === itemId)
       if (!itemNode || !item) return
@@ -348,8 +348,12 @@ export class Game {
         duration: 0.2,
         backTo: { point: item.fixedPosition() },
       })
-      if (mode && "tryMode" in item) item.tryMode(mode)
       if (showHpAngle && "tryArcAngle" in item) item.tryArcAngle(showHpAngle)
+    })
+
+    socket.on("staticItemMode", ([itemId, mode]) => {
+      const item = this.staticItems.settable.find((item) => item.id === itemId)
+      if (mode && "tryMode" in item) item.tryMode(mode)
     })
 
     socket.on("staticItemMiscellaneous", ([bioId, currentResources, type]) => {
@@ -457,6 +461,10 @@ export class Game {
       default:
         return "#game-settable"
     }
+  }
+
+  static groupAdd(layer: Konva.Layer, id: string, ...shapes: any[]) {
+    ;(layer.findOne(id) as Group).add(...shapes)
   }
 
   static createHighlight(layer2: Layer, ...shapes: any[]) {

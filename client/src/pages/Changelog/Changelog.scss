@@ -1,0 +1,9 @@
+.changelog {
+  width: 100vw;
+  height: 100vh;
+  @include flex;
+  font-size: xx-large;
+  background: $dark-gradient;
+
+  color: white;
+}

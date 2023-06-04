@@ -46,9 +46,7 @@ interface PlayerItem<T extends ItemsByTypes> {
 export class PlayerItems {
   private _isCrafting: null | string = null
   readonly specialItems = { bag: <number>null }
-  private _items = new Chest<number, PlayerItem<ItemsByTypes>>(
-    START_ITEMS() as any,
-  )
+  _items = new Chest<number, PlayerItem<ItemsByTypes>>(START_ITEMS() as any)
 
   readonly timeout: PlayerItemTimeout = {
     weapon: 0,
@@ -482,5 +480,6 @@ export class PlayerItems {
         : null,
       NB.to(this.timeout.helmet > Date.now()),
     ])
+    this.player.actions.actionablesUpdate()
   }
 }

@@ -11,3 +11,4 @@ export const PlayerSkins: PlayerSkin[] = [
 
 export const skinByName = (name: PlayerSkinName): PlayerSkin =>
   PlayerSkins.find((s) => s.name === name)
+//

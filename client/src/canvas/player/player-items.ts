@@ -20,6 +20,7 @@ import { CraftDto } from "../../socket/events"
 import { getPointByTheta } from "../animations/rotation"
 import { GRID_SET_RANGE } from "../../constants"
 import { time } from "console"
+import { GetSet } from "../structures/GetSet"
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -32,8 +33,8 @@ export class PlayerItems extends BasicPlayerItems {
   readonly itemIconSize = new Size(40, 40)
   readonly gap = 10
   readonly upIfSelected = 5
-  private _items: PlayerItem<ItemsByTypes>[] = []
-  private space: number = 10
+  _items: PlayerItem<ItemsByTypes>[] = []
+  space = GetSet(10)
   private itemsAreCraftableRN: CraftDto[]
   private craftsChanged: boolean
   isCrafting: null | string
@@ -262,7 +263,7 @@ export class PlayerItems extends BasicPlayerItems {
       id: `${this.player.id("inventory")}`,
       ...startPos,
     })
-    for (let i = 0; i < this.space; i++) {
+    for (let i = 0; i < this.space(); i++) {
       const indexedItem = this._items[i]
 
       const x = i * this.itemSize.width + i * this.gap
@@ -319,8 +320,9 @@ export class PlayerItems extends BasicPlayerItems {
         id: `${this.player.id("inventory", `${i}`, "quantity")}`,
         width: this.itemSize.width - 5,
         align: "right",
-        fontSize: 15,
-        y: this.itemSize.height - 20,
+        fontSize: 13,
+        y: this.itemSize.height - 18,
+        wrap: "none",
         text: `x${indexedItem?.quantity}`,
         fill: "white",
         visible: !!indexedItem,
@@ -338,10 +340,10 @@ export class PlayerItems extends BasicPlayerItems {
       const itemIndexByPositionX = (x: number) => {
         if (
           x < 0 ||
-          x > this.inventoryItemXByIndex(this.space - 1) + this.itemSize.width
+          x > this.inventoryItemXByIndex(this.space() - 1) + this.itemSize.width
         )
           return -1
-        for (let i = 0; i < this.space; i++) {
+        for (let i = 0; i < this.space(); i++) {
           const startX = this.inventoryItemXByIndex(i)
           if (x >= startX && x <= startX + this.itemSize.width) return i
         }
@@ -374,7 +376,7 @@ export class PlayerItems extends BasicPlayerItems {
 
   update() {
     this.drawCrafts()
-    for (let i = 0; i < this.space; i++) {
+    for (let i = 0; i < this.space(); i++) {
       const node = this.player.element(
         `#${this.player.id("inventory", `${i}`)}`
       )
@@ -421,9 +423,9 @@ export class PlayerItems extends BasicPlayerItems {
     this.invGroup.position(startPos)
   }
 
-  private getInventoryStartPos() {
+  getInventoryStartPos() {
     const screen = this.layer.getStage()
-    const maxWidthOfSpace = (this.itemSize.width + this.gap) * this.space
+    const maxWidthOfSpace = (this.itemSize.width + this.gap) * this.space()
     return new Point(
       screen.width() / 2 - maxWidthOfSpace / 2,
       screen.height() - this.gap - this.itemSize.height
@@ -461,14 +463,16 @@ export class PlayerItems extends BasicPlayerItems {
         item.quantity = currItem.quantity
       })
 
+      this.player.actionable?.showAddButtonsFor()
+
       this._items = [...filteredItems, ...newItems]
       this.itemsAreCraftableRN = crafts.items
       this.craftsChanged = crafts.changed
-      if (this.space !== space) {
+      if (this.space() !== space) {
         this.invGroup?.destroy()
         this.isDrew = false
       }
-      this.space = space
+      this.space(space)
       if (this.isDrew) {
         this.update()
       } else {

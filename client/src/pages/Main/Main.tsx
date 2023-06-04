@@ -5,7 +5,7 @@ import { Transition } from "solid-transition-group"
 import "./Main.scss"
 import gameState from "../../store/game-state"
 import Canvas from "./Main-Switches/Canvas/Canvas"
-import Nav from "./Nav/Nav"
+import Nav from "../../components/Nav/Nav"
 
 const Main: Component = () => {
   const { gamePage, playerEndedInfo } = gameState
@@ -14,8 +14,6 @@ const Main: Component = () => {
 
   return (
     <>
-      <Nav />
-
       <div class="main">
         <Show when={gamePage() !== "game"}>
           <div class="game-bg "></div>

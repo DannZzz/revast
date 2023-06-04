@@ -137,7 +137,8 @@ export class PlayerBars {
       this.player.items.upIfSelected -
       this.player.items.itemSize.height -
       this.player.items.gap * 2 -
-      this.barHeight
+      this.barHeight -
+      this.player.actionable.addButtonSize.height
 
     const containerX =
       screenSize.width / 2 -
