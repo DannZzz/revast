@@ -150,7 +150,7 @@ export class BasicPlayer<
       offsetX: 17.5,
       offsetY: 17.5,
     })
-    handBase.cache()
+    handBase.cache() //
 
     const rightHandItem = new Konva.Image({
       id: `${id}-equiped-right`,
