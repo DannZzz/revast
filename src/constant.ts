@@ -17,12 +17,16 @@ export const SERVER_API: (combine?: string) => string = (
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
+export const ONE_DAY_MS = 86400 * 1000
+
 export const PLAYER_BODY_ACUTAL_SIZE = new Size(50, 50)
 
 export const PLAYER_BODY_POINTS = (centerPoint: Point): UniversalHitbox => ({
   point: combineClasses(centerPoint, new Point(-25, -25)),
   size: PLAYER_BODY_ACUTAL_SIZE,
 })
+
+export const XP_AFTER_EACH_DAY = 500
 
 export const GOD_MOD_ALL = false
 
@@ -68,6 +72,7 @@ export const ADMIN_COMMAND_PREFIX = '/'
 
 export const START_ITEMS = () => [
   [8, { quantity: 3, equiped: false, item: itemById(8) }],
+  [89, { quantity: 3, equiped: false, item: itemById(89) }],
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>

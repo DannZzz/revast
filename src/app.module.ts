@@ -5,9 +5,12 @@ import { WsModule } from './ws/ws.module'
 import { CraftsController } from './rest-modules/crafts/crafts.controller'
 import { ServersController } from './rest-modules/servers/servers.controller'
 import { ItemsController } from './rest-modules/items/items.controller'
+import { UsersModule } from './rest-modules/users/users.module'
+import { CacheModule } from '@nestjs/cache-manager'
 
 @Module({
   imports: [
+    CacheModule.register({ isGlobal: true }),
     ServeStaticModule.forRoot({
       serveStaticOptions: {
         setHeaders(res, path, stat) {
@@ -24,6 +27,7 @@ import { ItemsController } from './rest-modules/items/items.controller'
       rootPath: join(__dirname, '..', 'client', 'dist'),
     }),
     WsModule,
+    UsersModule,
     // ThrottlerModule.forRoot({
     //   ttl: 60,
     //   limit: 5,

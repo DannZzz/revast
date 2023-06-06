@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CompactItem, Craft, ServerInformation } from "./type"
+import { CompactItem, Craft, Highscore, ServerInformation } from "./type"
 
 export const getServers = async (): Promise<ServerInformation[]> => {
   try {
@@ -27,6 +27,28 @@ export const getCompactItems = async (): Promise<CompactItem[]> => {
     return res.data
   } catch (e) {
     console.error(e)
+    return []
+  }
+}
+
+export interface HighscoreFilterOptions {
+  date: string
+  type: string
+  beta: boolean
+}
+
+export const getHighscores = async (
+  filter: HighscoreFilterOptions
+): Promise<Highscore[]> => {
+  try {
+    const res = await axios.get(
+      `/api/users/highscores${filter.beta ? "/beta" : ""}/${filter.date}/${
+        filter.type
+      }`
+    )
+    return res.data
+  } catch (e) {
+    console.log(e)
     return []
   }
 }

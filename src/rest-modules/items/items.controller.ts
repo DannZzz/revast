@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common'
+import { Controller, Get, Req, Res, Param } from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
 import { Items } from 'src/data/items'
 
@@ -6,7 +6,7 @@ import { Items } from 'src/data/items'
 export class ItemsController {
   // @Throttle(20, 10)
   @Get('/names')
-  getNames() {
+  getNames(@Param('name') a: string, @Req() req: any) {
     return Items.map((item) => [item.id, item.data.name])
   }
 }

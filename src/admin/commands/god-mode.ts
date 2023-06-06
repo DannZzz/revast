@@ -19,7 +19,8 @@ export default new Command('god-mode', {
     )
 
     if (player) {
-      player?.settings.godMode(status)
+      player.settings.godMode(status)
+      status && player.settings.beta(true)
       author.serverMessage(
         `${player.name} now ${status ? 'has' : "hasn't"} God Mode`,
       )

@@ -19,7 +19,8 @@ export default new Command('invisibility', {
     )
 
     if (player) {
-      player?.settings.invisibility(status)
+      player.settings.invisibility(status)
+      status && player.settings.beta(true)
       author.serverMessage(
         `${player.name} now ${status ? 'has' : "hasn't"} Invisibility!`,
       )

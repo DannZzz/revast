@@ -66,11 +66,11 @@ export default createSettable(89, 'furnace')
     verify: () => true,
     source: Images.FURNACE_ENABLED,
   })
-  .size(150, 150)
+  .size(200, 200)
   .data<ExtendedSettable>({
     setMode: {
-      itemSize: { type: 'circle', radius: 65 },
-      offset: new Point(0, -150),
+      itemSize: { type: 'circle', radius: 76 },
+      offset: new Point(0, -170),
     },
   })
   .buildActionable()

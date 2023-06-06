@@ -9,9 +9,15 @@ import { PORT } from './constant'
 import { loadAdminCommands } from './before/loadAdminCoomands'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import config from 'config'
+import { connectMongo } from './db/connect'
 
 async function bootstrap() {
-  await Promise.all([loadItems(), loadMobs(), loadAdminCommands()])
+  await Promise.all([
+    connectMongo(),
+    loadItems(),
+    loadMobs(),
+    loadAdminCommands(),
+  ])
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: {
       origin:

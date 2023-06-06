@@ -44,6 +44,7 @@ import { Message } from 'src/structures/Message'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { PlayerLoop } from './player-loop'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
+import { DatabaseHandler } from 'src/db/handler'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
@@ -61,6 +62,7 @@ export class Player extends BasicElement<PlayerEvents> {
     instaCraft: GetSet(false),
     autofood: GetSet(false),
     invisibility: GetSet(false),
+    beta: GetSet(false),
   }
   readonly name: string
   readonly toggle = new Toggle()
@@ -252,7 +254,21 @@ export class Player extends BasicElement<PlayerEvents> {
   die() {
     if (this.died()) return
     this.bars.stop()
-
+    // survived days
+    const days = Math.floor(
+      (Date.now() - (this.createdAt.getTime() || Date.now())) /
+        1000 /
+        GAME_DAY_SECONDS,
+    )
+    // registering in db
+    DatabaseHandler.registerHighscore({
+      beta: this.settings.beta(),
+      name: this.name,
+      sub: null,
+      xp: this.lbMember.xp,
+      days,
+    })
+    // ending in db
     const crate = new BasicDrop({
       authorId: this.id(),
       data: this.items.items.shuffle().map((playerItem) => ({
@@ -285,11 +301,7 @@ export class Player extends BasicElement<PlayerEvents> {
       Transformer.toPlain(
         new PlayerInformationEntity({
           xp: this.lbMember.xp,
-          days: Math.floor(
-            (Date.now() - (this.createdAt.getTime() || Date.now())) /
-              1000 /
-              GAME_DAY_SECONDS,
-          ),
+          days,
         }),
       ),
     ])

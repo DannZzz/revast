@@ -1,5 +1,5 @@
 .crafts {
-  background: linear-gradient(to right, rgb(7, 36, 7), rgb(1, 48, 1));
+  background: $dark-gradient;
   width: 100vw;
   height: 100vh;
   padding: 10px;
@@ -7,26 +7,20 @@
   @include flex($content: start, $dir: column);
   gap: 20px;
 
-  @include screen(med-small) {
-    display: block;
-  }
-
   .container {
     margin-top: 70px;
     overflow-y: scroll;
+    @include scroll-bar(#252525);
     width: 60%;
     @include bg-effect;
-    @include scroll-bar(#252525);
     padding: 20px;
-    display: grid;
-    place-items: center;
-
+    // display: grid;
+    // align-items: center;
+    gap: 10px;
+    @include flex($wrap: wrap);
+    // grid-template-columns: repeat(auto-fill, 150px);
     @include screen(med-small) {
       width: 100%;
-    }
-
-    > * {
-      flex-basis: 1;
     }
   }
 }

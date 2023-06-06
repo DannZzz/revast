@@ -19,7 +19,8 @@ export default new Command('insta-craft', {
     )
 
     if (player) {
-      player?.settings.instaCraft(status)
+      player.settings.instaCraft(status)
+      status && player.settings.beta(true)
       author.serverMessage(
         `${player.name} now has insta-craft mode ${
           status ? 'enabled' : 'disabled'

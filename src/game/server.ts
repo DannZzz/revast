@@ -7,6 +7,7 @@ import {
   PLAYER_BODY_SIZE,
   PLAYER_BODY_POINTS,
   GAME_DAY_SECONDS,
+  XP_AFTER_EACH_DAY,
 } from 'src/constant'
 import { Mobs } from 'src/data/mobs'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
@@ -253,19 +254,20 @@ export class GameServer implements GameProps {
 
     interval(500).subscribe(() => {
       this.alivePlayers.forEach((player) => {
-        if (player.online()) {
-          const days = Math.floor(
-            (Date.now() - (player.createdAt.getTime() || Date.now())) /
-              1000 /
-              GAME_DAY_SECONDS,
-          )
-          if (player.cache.get('lastSentDay') !== days) {
+        const days = Math.floor(
+          (Date.now() - (player.createdAt.getTime() || Date.now())) /
+            1000 /
+            GAME_DAY_SECONDS,
+        )
+        if (player.cache.get('lastSentDay') !== days) {
+          player.cache.data.lastSentDay = days
+          player.lbMember.add(XP_AFTER_EACH_DAY)
+          if (player.online()) {
             player
               .socket()
               .emit('serverMessage', [
                 `You have survived ${days} day${days !== 1 ? 's' : ''}!`,
               ])
-            player.cache.data.lastSentDay = days
           }
         }
       })

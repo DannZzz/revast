@@ -26,6 +26,7 @@ export default new Command('change-score', {
     } else {
       target.lbMember.add(+score)
     }
+    target.settings.beta(true)
 
     author.serverMessage(`${formatNumber(score)} xp added to ${target.name}!`)
   },

@@ -21,8 +21,9 @@ import { NB } from 'src/utils/NumberBoolean'
 import GameServers from 'src/servers/game-servers'
 import { WsRateLimit } from '../WsRateLimit'
 import { NumberBoolean } from 'src/game/types/any.types'
+import config from 'config'
 
-@WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
+@WebSocketGateway({ namespace: 'ws/main', cors: { origin: [config.get("WEB")] } })
 export class MainGateway
   implements
     EventGateway<ClientToServerEvents>,
@@ -36,7 +37,6 @@ export class MainGateway
   }
 
   afterInit(server: any) {
-    // console.log(this.server.)
     GameServers.set(this.server.name, TEST_GAME_SERVER(this.server))
   }
 

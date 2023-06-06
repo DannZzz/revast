@@ -10,8 +10,8 @@ $btn-bg-color: rgba(
   $alpha: 0.8,
 );
 $dark-gradient: linear-gradient(to bottom, #252525, #313131);
-$shadow1: rgba(94, 71, 35, 0.5);
-$shadow2: rgba(253, 187, 65, 0.5);
+$shadow1: rgba(31, 26, 18, 0.5);
+$shadow2: rgba(37, 35, 31, 0.5);
 
 @mixin main-font {
   font-family: "Bebas Neue", cursive;
@@ -70,7 +70,8 @@ $shadow2: rgba(253, 187, 65, 0.5);
 
 @mixin window-bg-colored {
   box-shadow: -2px -2px 5px $shadow1, 2px 2px 5px $shadow2;
-  background: $mini-window-bg;
+  // background: $mini-window-bg;
+  background: $dark-gradient;
 }
 
 @mixin bg-effect() {
@@ -133,4 +134,13 @@ $breakpoint-med: 1175px;
   } @else {
     @content;
   }
+}
+
+@mixin hide-scroll-bar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

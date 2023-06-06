@@ -16,11 +16,13 @@ import { disconnectWS, socket } from "../../../../socket/socket"
 import { createStore } from "solid-js/store"
 import "./Canvas.scss"
 import Button from "../../../../components/Button/Button"
+import modalState from "../../../../components/Modal/modal-state"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
   const [dropItemId, setDropItemId] = createSignal<number>()
   let chatInputRef: HTMLInputElement
+  const { showModal, closeModal } = modalState
 
   const [openChat, setOpenChat] = createSignal(false)
   const { gs, started, died } = gameState
@@ -38,6 +40,7 @@ const Canvas: Component<{}> = (props) => {
       if (died) {
         disconnectWS()
         game.end()
+        closeModal()
       }
     })
   )
@@ -112,35 +115,45 @@ const Canvas: Component<{}> = (props) => {
     stage.on("mousemove", onMouseMove)
   })
 
+  createEffect(
+    on(dropItemId, (id) => {
+      if (!id) return closeModal()
+      showModal({
+        content: (
+          <span class="drop-item-description">
+            Do you want to drop the item?
+          </span>
+        ),
+        buttons: [
+          {
+            onClick: () => {
+              game?.events.emit("dropItem.response", dropItemId(), false)
+              setDropItemId(null)
+            },
+            children: "Yes, 1x",
+          },
+          {
+            onClick: () => {
+              game?.events.emit("dropItem.response", dropItemId(), true)
+              setDropItemId(null)
+            },
+            children: "Yes, All",
+          },
+          {
+            onClick: () => setDropItemId(null),
+            children: "Cancel",
+          },
+        ],
+        onClose: () => setDropItemId(null),
+      })
+    })
+  )
+
   return (
     <div class="game-container" classList={{ back: !started() }}>
       <div id="game-canvas"></div>
 
       <Show when={started()}>
-        <Show when={!!dropItemId()}>
-          <div class="drop-item">
-            <span class="description">Do you want to drop the item?</span>
-            <div class="buttons">
-              <Button
-                onClick={() => {
-                  game?.events.emit("dropItem.response", dropItemId(), false)
-                  setDropItemId(null)
-                }}
-              >
-                Yes, 1x
-              </Button>
-              <Button
-                onClick={() => {
-                  game?.events.emit("dropItem.response", dropItemId(), true)
-                  setDropItemId(null)
-                }}
-              >
-                Yes, all
-              </Button>
-              <Button onClick={() => setDropItemId(null)}>No, cancel</Button>
-            </div>
-          </div>
-        </Show>
         <Show when={openChat()}>
           <input
             ref={chatInputRef}

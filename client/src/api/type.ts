@@ -14,3 +14,12 @@ export interface CompactItem {
   id: number
   iconUrl: string
 }
+
+export interface Highscore {
+  name: string
+  xp: number
+  days: number
+  createdAt: number
+  sub?: number
+  beta: boolean
+}

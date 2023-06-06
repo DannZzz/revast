@@ -1,6 +1,7 @@
 import { Component, lazy, onMount } from "solid-js"
 import { Route, Router, Routes } from "@solidjs/router"
 import Nav from "./components/Nav/Nav"
+import Merge from "./components/Merge/Merge"
 
 const Main = lazy(() => import("./pages/Main/Main"))
 const Crafts = lazy(() => import("./pages/Crafts/Crafts"))
@@ -10,7 +11,7 @@ const Changelog = lazy(() => import("./pages/Changelog/Changelog"))
 const App: Component = () => {
   return (
     <Router>
-      <Nav />
+      <Merge />
       <Routes>
         <Route path="/" component={Main} />
         <Route path="/crafts" component={Crafts} />

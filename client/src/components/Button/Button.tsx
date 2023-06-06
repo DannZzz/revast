@@ -5,12 +5,13 @@ export interface ButtonProps {
   class?: string
   onClick?: (e: MouseEvent) => void
   children: any
+  v2?: boolean
 }
 
 const Button: Component<ButtonProps> = (props) => {
   return (
     <button
-      class="custom-button"
+      class={`custom-button${props.v2 ? "-v2" : ""}`}
       classList={{ [props.class]: !!props.class }}
       onClick={props.onClick}
     >

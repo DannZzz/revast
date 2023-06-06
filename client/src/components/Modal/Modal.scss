@@ -1,0 +1,42 @@
+.modal-scale-enter-active,
+.modal-scale-exit-active {
+  transition: all 0.1s;
+}
+.modal-scale-enter,
+.modal-scale-exit-to {
+  scale: 0.8;
+}
+.modal-scale-enter {
+  scale: 0.8;
+}
+
+.modal-container {
+  z-index: 3;
+  width: 100vw;
+  height: 100vh;
+  @include flex;
+  background: transparent;
+  position: absolute;
+  @include no-select;
+
+  .modal {
+    padding: 20px;
+    @include window-bg-colored;
+    @include flex($dir: column);
+    gap: 20px;
+
+    .controllers {
+      width: 100%;
+      @include flex($content: flex-end);
+
+      & > * {
+        cursor: pointer;
+      }
+    }
+
+    .buttons {
+      @include flex();
+      gap: 15px;
+    }
+  }
+}

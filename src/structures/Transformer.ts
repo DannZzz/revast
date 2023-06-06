@@ -1,9 +1,23 @@
-import { Transform, instanceToPlain } from 'class-transformer'
+import {
+  ClassTransformOptions,
+  Transform,
+  instanceToPlain,
+} from 'class-transformer'
 import { SERVER_API } from 'src/constant'
 
 export class Transformer {
-  static toPlain(classObject: object): any {
-    return instanceToPlain(classObject, { enableImplicitConversion: true })
+  static toPlain(
+    classObject: object,
+    options: ClassTransformOptions = {},
+  ): any {
+    return instanceToPlain(classObject, {
+      enableImplicitConversion: true,
+      ...options,
+    })
+  }
+
+  toPlain() {
+    return Transformer.toPlain(this) //
   }
 }
 

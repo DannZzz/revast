@@ -1,5 +1,6 @@
 {
   "WEB": "http://localhost:3000",
   "PORT": 5000,
-  "SERVER": "http://localhost:5000"
+  "SERVER": "http://localhost:5000",
+  "MONGO": "mongodb+srv://dann:asdf1234@revast.yro7zgg.mongodb.net/beta?retryWrites=true&w=majority"
 }

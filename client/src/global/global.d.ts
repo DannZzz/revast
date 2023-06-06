@@ -11,3 +11,5 @@ declare interface Point {
 declare type Img = HTMLImageElement
 
 declare type NumberBoolean = 0 | 1
+
+export {}

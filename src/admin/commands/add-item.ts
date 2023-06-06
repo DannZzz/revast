@@ -34,10 +34,14 @@ export default new Command('add-item', {
         author.serverMessage('Invalid Player Id')
       } else {
         p.items.addItem(item.id, +q)
+        p.settings.beta(true)
         author.serverMessage(`${item.data.name} (${q}) added to ${p.name}`)
       }
     } else {
-      players.forEach((p) => p.items.addItem(item.id, +q))
+      players.forEach((p) => {
+        p.items.addItem(item.id, +q)
+        p.settings.beta(true)
+      })
       author.serverMessage(`${item.data.name} (${q}) added to everyone`)
     }
   },
