@@ -72,7 +72,6 @@ export const ADMIN_COMMAND_PREFIX = '/'
 
 export const START_ITEMS = () => [
   [8, { quantity: 3, equiped: false, item: itemById(8) }],
-  [89, { quantity: 3, equiped: false, item: itemById(89) }],
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>
