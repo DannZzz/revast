@@ -161,7 +161,7 @@ export class GameServer implements GameProps {
       )
     let point = randomPoint()
     const items = this.staticItems.for({ radius: forObjectRadius, point })
-    while (items.someWithin({ radius: forObjectRadius, point })) {
+    while (items.someWithin({ radius: forObjectRadius, point }, true)) {
       point = randomPoint()
     }
     return point
