@@ -93,6 +93,9 @@ export class Game {
     const itemsGroup_1 = new Konva.Group({ id: "game-settable-1" })
     const itemsGroup_2 = new Konva.Group({ id: "game-settable-2" })
     const itemsGroup_3 = new Konva.Group({ id: "game-settable-3" })
+    const itemsGroup_4 = new Konva.Group({ id: "game-settable-4" })
+    const itemsGroup_5 = new Konva.Group({ id: "game-settable-5" })
+    const itemsGroup_6 = new Konva.Group({ id: "game-settable-6" })
     const mobGroup = new Konva.Group({ id: "game-mobs" })
     const bioGroup = new Konva.Group({ id: "game-bios" })
     const playersGroup = new Konva.Group({ id: "game-players" })
@@ -101,6 +104,9 @@ export class Game {
     const alwaysTop = new Konva.Group({ id: "always-top" })
     mainGroup.add(
       gameBg,
+      itemsGroup_6,
+      itemsGroup_5,
+      itemsGroup_4,
       itemsGroup_3,
       itemsGroup_2,
       itemsGroup_1,
@@ -353,7 +359,7 @@ export class Game {
 
     socket.on("staticItemMode", ([itemId, mode]) => {
       const item = this.staticItems.settable.find((item) => item.id === itemId)
-      if (mode && "tryMode" in item) item.tryMode(mode)
+      if (typeof mode === "number" && "tryMode" in item) item.tryMode(mode)
     })
 
     socket.on("staticItemMiscellaneous", ([bioId, currentResources, type]) => {
@@ -457,6 +463,15 @@ export class Game {
 
       case -1:
         return "#game-settable-3"
+
+      case -2:
+        return "#game-settable-4"
+
+      case -3:
+        return "#game-settable-5"
+
+      case -4:
+        return "#game-settable-6"
 
       default:
         return "#game-settable"

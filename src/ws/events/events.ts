@@ -53,9 +53,7 @@ interface ServerToClientEvents {
   staticItemAttacked: (
     data: [id: string, theta: number, showHpAngle?: number],
   ) => void
-  staticItemMode: (
-    data: [settableId: string, mode?: { enabled: boolean; cover: number }],
-  ) => void
+  staticItemMode: (data: [settableId: string, modeIndex: number]) => void
   drops: (data: [toAdd: DropEntity[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (

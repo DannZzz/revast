@@ -8,6 +8,7 @@ import {
   Highlight,
   HighlightType,
   SetMode,
+  SettableModeDto,
   StaticSettableDto,
 } from "../../socket/events"
 import { StaticItemsAddons } from "../data/staticItemAddons"
@@ -36,11 +37,8 @@ export class StaticSettableItem
     super()
     Object.assign(this, data)
   }
-
-  mode: { enabled: boolean; cover: number }
-  modeUrl: string
-  cover: number
-  url: string
+  currentMode: number
+  modes: SettableModeDto[]
   iconUrl: string
   size: Size
   setMode: SetMode
@@ -54,6 +52,10 @@ export class StaticSettableItem
   destroyed: boolean = false
   showHp?: { radius: number; angle: number }
   showHpArc: Konva.Arc
+
+  get mode() {
+    return this.modes[this.currentMode]
+  }
 
   private node: Group
   private highlightNode: Shape
@@ -75,22 +77,17 @@ export class StaticSettableItem
     )
   }
 
-  tryMode(val: { enabled: boolean; cover: number }) {
-    if (!this.modeUrl || this.modeUrl.endsWith("undefined")) return
-    let coverChanged = this.mode.cover !== val.cover
-    this.mode = val
+  tryMode(val: number) {
+    const oldCover = this.mode.cover
+    this.currentMode = val
+    let coverChanged = this.mode.cover !== oldCover
+
     this.emit("mode", this)
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
-    node.image(
-      loadImage(this.mode.enabled ? this.modeUrl : this.url, (img) =>
-        node.image(img)
-      )
-    )
+    node.image(loadImage(this.mode.url, (img) => node.image(img)))
     if (coverChanged) {
       this.node.moveTo(
-        this.layer.findOne(
-          Game.settableHoistId(this.mode.enabled ? this.mode.cover : this.cover)
-        )
+        this.layer.findOne(Game.settableHoistId(this.mode.cover))
       )
     }
   }
@@ -103,7 +100,7 @@ export class StaticSettableItem
     })
     const image = new Konva.Image({
       id: `${this.id}-image`,
-      image: loadImage(this.url, (img) => image.setAttr("image", img)),
+      image: loadImage(this.mode.url, (img) => image.setAttr("image", img)),
       ...this.size,
       offsetX: this.size.width / 2,
       offsetY: this.size.height / 2,
@@ -139,13 +136,12 @@ export class StaticSettableItem
       itemGroup.add(this.showHpArc)
     }
 
-    ;(this.layer.findOne(Game.settableHoistId(this.cover)) as any).add(
+    ;(this.layer.findOne(Game.settableHoistId(this.mode.cover)) as any).add(
       itemGroup
     )
 
     this.node = itemGroup
-
-    this.tryMode(this.mode)
+    this.emit("mode", this)
 
     if (this.highlight) {
       let highlightNode: Konva.Circle | Konva.Rect

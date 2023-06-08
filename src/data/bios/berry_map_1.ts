@@ -1,5 +1,9 @@
 import { Point, Size } from 'src/global/global'
-import { BasicBioItem, RectPosition } from '../../game/basic/bio-item.basic'
+import {
+  BasicBioItem,
+  CirclePosition,
+  RectPosition,
+} from '../../game/basic/bio-item.basic'
 import { Images } from '../../structures/image-base'
 
 export default new BasicBioItem({
@@ -10,7 +14,7 @@ export default new BasicBioItem({
   resources: 6,
   size: new Size(170, 170),
   rechargeAmount: 1,
-  validPosition: new RectPosition(new Point(35, 40), new Size(100, 100)),
+  validPosition: new CirclePosition(60),
   getWithEverything: true,
   onResourcesChangeDrawEvent: true,
 })

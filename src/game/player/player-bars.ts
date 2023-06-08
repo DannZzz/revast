@@ -119,7 +119,7 @@ export class PlayerBars {
 
     // fires within
     const firesAround = this.player.staticItems
-      .for(currentAreas)
+      .for(this.player.camera.viewRect())
       .settable.filter(
         (settable) =>
           settable.isSpecial('firePlace') &&

@@ -4,6 +4,7 @@ import { Point, Size } from 'src/global/global'
 export enum SpecialItemTypes {
   bridge = 'bridge',
   repair = 'repair',
+  plot = 'plot',
 }
 
 export type EquipableItemVariant =

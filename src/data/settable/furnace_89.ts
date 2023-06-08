@@ -24,7 +24,7 @@ export default createSettable(89, 'furnace')
     noBackground: true,
   })
   .actionable({
-    reactRadius: 95,
+    reactRadius: 100,
     draw: {
       backgroundSource: 'FURNACE',
       size: new Size(120, 120),
@@ -32,7 +32,7 @@ export default createSettable(89, 'furnace')
   })
   .onInit((settable) => {
     settable.holders[0].data.onChange((data) => {
-      settable.mode.enabled(data.quantity > 0)
+      settable.currentModeIndex(data.quantity > 0 ? 1 : 0)
       if (data.quantity > 0 && !settable.timeouts.usingWood) {
         settable.timeouts.usingWood = setInterval(() => {
           settable.holders[0].add(3, -1)
@@ -47,7 +47,7 @@ export default createSettable(89, 'furnace')
   .special({
     firePlace: {
       within(point) {
-        if (!this.mode.enabled()) return false
+        if (this.currentModeIndex() === 0) return false
         return pointCircle(
           ...Converter.pointToXYArray(point),
           ...Converter.pointToXYArray(this.point),

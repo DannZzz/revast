@@ -1,35 +1,47 @@
-import { UniversalHitbox } from 'src/utils/universal-within'
+import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { AreaStaticItems, GameMap, MapAreaName } from './GameMap'
 import { StaticItems } from './StaticItems'
 import { Bio } from 'src/game/basic/bio-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
 import { StaticSettableItem } from 'src/game/basic/static-item.basic'
 import { SettableCheckers } from 'src/game/basic/item.basic'
+import { Point, Size } from 'src/global/global'
+import { MAP_GRID_RENDER_AREA_SIZE } from 'src/constant'
+
+export interface Area {
+  position: Point
+  items: StaticItems
+}
 
 export class StaticItemsHandler {
-  areas: AreaStaticItems = {}
+  areas: Area[] = []
   map: GameMap
 
-  for(hitbox: UniversalHitbox): Handler
-  for(areas: MapAreaName[]): Handler
-  for(_areas: UniversalHitbox | MapAreaName[]) {
-    let areas: any[] = []
-    if (!(Array.isArray(_areas) && typeof _areas[0] === 'string')) {
-      // @ts-ignore
-      areas = this.map.areaOf(_areas)
-    } else {
-      areas = _areas as any
-    }
-    const q = areas.map((area) => this.areas[area])
+  for(hitbox: UniversalHitbox) {
+    let areas = this.areas.filter((area) =>
+      universalWithin(hitbox, {
+        point: area.position,
+        size: new Size(MAP_GRID_RENDER_AREA_SIZE, MAP_GRID_RENDER_AREA_SIZE),
+      }),
+    )
+
+    const q = areas.map((area) => area.items)
 
     return new Handler(q)
   }
 
   init(map: GameMap) {
     this.map = map
-    map.biomes.forEach((biome) => {
-      this.areas[biome.name] = new StaticItems()
-    })
+    const size = map.absoluteSize
+
+    for (let x = 0; x < size.width; x += MAP_GRID_RENDER_AREA_SIZE) {
+      for (let y = 0; y < size.height; y += MAP_GRID_RENDER_AREA_SIZE) {
+        this.areas.push({
+          position: new Point(x, y),
+          items: new StaticItems(),
+        })
+      }
+    }
   }
 }
 

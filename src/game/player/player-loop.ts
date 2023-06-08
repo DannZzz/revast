@@ -45,10 +45,8 @@ export class PlayerLoop {
     this.player.actions.doPositionChanges()
     this.player.actions.clicking()
 
-    const staticItems = this.player.staticItems.for(
-      this.player.cache.get('biome'),
-    )
     const viewRect = this.player.camera.viewRect()
+    const staticItems = this.player.staticItems.for(viewRect)
 
     // bios
     const itemsInView = staticItems.bio.filter((bio) => bio.within(viewRect))

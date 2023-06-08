@@ -48,13 +48,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   points: Point[] = []
   timeouts: Record<any, any> = {}
 
-  mode: {
-    enabled: GetSet<boolean>
-    cover: number
-  } = {
-    enabled: GetSet(false),
-    cover: 1,
-  }
+  readonly currentModeIndex = GetSet(0)
   destroyed = false
 
   constructor(
@@ -71,18 +65,15 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
         this.destroy()
       })
 
-    this.mode.enabled.onChange((val) => {
-      this.mode.cover = val ? this.data.mode?.cover : this.data.cover
+    this.currentModeIndex.onChange((val) => {
       this.validPlayersSockets().forEach((socket) => {
-        socket.emit('staticItemMode', [
-          this.id,
-          {
-            enabled: this.mode.enabled(),
-            cover: this.mode.cover,
-          },
-        ])
+        socket.emit('staticItemMode', [this.id, val])
       })
     })
+  }
+
+  get currentMode() {
+    return this.data.modes[this.currentModeIndex()]
   }
 
   preDraw(point: Point, theta: number, rotation: number) {
@@ -132,8 +123,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   }
 
   within(hitbox: UniversalHitbox) {
-    if ((this.mode.enabled() ? this.data.mode?.cover : this.data.cover) > 0)
-      return this.withinStrict(hitbox)
+    if (this.currentMode.cover > 0) return this.withinStrict(hitbox)
     return false
   }
 
@@ -163,18 +153,14 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     }
     if (this.destroyed) return
     const alivePlayers = this.players
-    if (
-      this.data.mode &&
-      equiped?.item?.data.specialName !== SpecialItemTypes.repair
-    ) {
+    if (equiped?.item?.data.specialName !== SpecialItemTypes.repair) {
       if (
-        this.data.mode.trigger === 'attack' &&
-        this.data.mode.verify.call(this, by) &&
-        (this.mode.enabled()
-          ? !alivePlayers.some((player) => this.withinStrict(player.points))
-          : true)
-      )
-        this.mode.enabled(!this.mode.enabled())
+        this.currentMode.trigger === 'attack' &&
+        this.currentMode.verify.call(this, by) &&
+        !alivePlayers.some((player) => this.withinStrict(player.points))
+      ) {
+        this.currentModeIndex(this.currentMode.switchTo || 0)
+      }
     }
 
     const playerSockets = this.validPlayersSockets()

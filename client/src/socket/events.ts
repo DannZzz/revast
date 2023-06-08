@@ -120,22 +120,22 @@ export interface StaticSettableDto {
   point: Point
   rotation: number
   id: string
-  url: string
   iconUrl: string
   size: Size
   setMode: SetMode
-  mode: {
-    enabled: boolean
-    cover: number
-  }
-  modeUrl: string
-  cover: number
+  currentMode: number
+  modes: SettableModeDto[]
   type?: string
   highlight?: Highlight<HighlightType>
   showHp?: {
     radius: number
     angle: number
   }
+}
+
+export interface SettableModeDto {
+  url: string
+  cover: number
 }
 
 export interface SetMode {
@@ -239,9 +239,7 @@ interface ServerToClientEvents {
   staticItemAttacked: (
     data: [id: string, theta: number, showHpAngle?: number]
   ) => void
-  staticItemMode: (
-    data: [settableId: string, mode?: { enabled: boolean; cover: number }]
-  ) => void
+  staticItemMode: (data: [settableId: string, mode: number]) => void
   drops: (data: [toAdd: DropDto[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (

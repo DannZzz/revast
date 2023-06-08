@@ -48,7 +48,7 @@ import { DatabaseHandler } from 'src/db/handler'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
-  range = 30
+  range = 40
   readonly equipment = {
     size: new Size(120, 120),
     hands: { left: { rotation: 0 }, right: { rotation: 180 } },
@@ -286,7 +286,7 @@ export class Player extends BasicElement<PlayerEvents> {
       hurtSource: Images.HURT_CRATE,
       size: new Size(75, 125),
       onEnd: (drop) => {
-        this.staticItems.for(this.cache.get('biome')).removeDrop(drop.id)
+        this.staticItems.for(this.point()).removeDrop(drop.id)
       },
       take(player, data) {
         data.forEach((item) => {
@@ -295,7 +295,7 @@ export class Player extends BasicElement<PlayerEvents> {
         })
       },
     })
-    this.staticItems.for(this.cache.get('biome')).addDrop(crate)
+    this.staticItems.for(this.point()).addDrop(crate)
 
     this.socket()?.emit('playerDied', [
       Transformer.toPlain(
@@ -306,7 +306,7 @@ export class Player extends BasicElement<PlayerEvents> {
       ),
     ])
     this.lbMember.delete()
-    this.staticItems.for(this.cache.get('biome')).playerDied(this.uniqueId)
+    this.staticItems.for(this.point()).playerDied(this.uniqueId)
     this.died(true)
     this.gameServer.players.delete(this.uniqueId)
     this.gameServer.alivePlayers.delete(this.uniqueId)

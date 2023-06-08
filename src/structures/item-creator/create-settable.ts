@@ -29,7 +29,15 @@ import {
 } from 'src/game/extended/settable/actionable-holder'
 
 class SettableCreator {
-  readonly extend = <any>{ cover: 1, onThe: {}, craftable: [] }
+  readonly extend = <any>{
+    modes: [
+      {
+        cover: 1,
+      },
+    ],
+    onThe: {},
+    craftable: [],
+  }
   private _data: any = {}
 
   hp(val: number) {
@@ -61,13 +69,18 @@ class SettableCreator {
     return this
   }
 
+  mainMode(data: Partial<SettableMode>) {
+    this.extend.modes[0] = { ...this.extend.modes[0], ...data }
+    return this
+  }
+
   disableCover() {
-    this.extend.cover = 0
+    this.extend.modes[0].cover = 0
     return this
   }
 
   cover(val: number) {
-    this.extend.cover = val
+    this.extend.modes[0].cover = val
     return this
   }
 
@@ -108,8 +121,8 @@ class SettableCreator {
     return this
   }
 
-  mode(mode: SettableMode) {
-    this.extend.mode = mode
+  mode(...modes: SettableMode[]) {
+    this.extend.modes.push(...modes)
     return this
   }
 
@@ -174,6 +187,7 @@ class SettableCreator {
   }
 
   buildActionable() {
+    this.format()
     const { craftable, ...otherProps } = this.extend
     craftable.forEach((crft) => {
       Craft.addCraft(this.extend.id, crft)
@@ -182,11 +196,23 @@ class SettableCreator {
   }
 
   build() {
+    this.format()
     const { craftable, ...otherProps } = this.extend
     craftable.forEach((crft) => {
       Craft.addCraft(this.extend.id, crft)
     })
     return new BasicStaticItem({ ...otherProps, ...this._data })
+  }
+
+  private format() {
+    this.extend.modes[0] = {
+      source: this.extend.source,
+      ...this.extend.modes[0],
+    }
+    this.extend.modes = this.extend.modes.map(
+      (modeProps) => new SettableMode(modeProps),
+    )
+    return this
   }
 }
 

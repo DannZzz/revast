@@ -4,6 +4,8 @@ import { BasicStaticItem, StaticSettableItem } from './static-item.basic'
 import { PlayerState } from '../types/player.types'
 import { Player } from '../player/player'
 import { Craft } from 'src/structures/Craft'
+import { AssetLink } from 'src/structures/Transformer'
+import { Exclude, Expose } from 'class-transformer'
 
 export interface Eatable {
   toFood: number
@@ -69,11 +71,20 @@ export interface SpecialSettable {
   }
 }
 
-export interface SettableMode {
+@Exclude()
+export class SettableMode {
   trigger: 'attack' | 'custom'
   verify: (this: StaticSettableItem, player: Player) => boolean
-  source: string
+  @AssetLink()
+  @Expose({ name: 'url' })
+  source?: string
+  @Expose()
   cover: number
+  switchTo?: number
+  onStart?: (this: StaticSettableItem) => void
+  constructor(data: Settable) {
+    Object.assign(this, data)
+  }
 }
 
 export type SettableCheckers = 'all' | 'type'
@@ -90,7 +101,6 @@ export interface Settable {
       | { type: 'rect'; width: number; height: number }
   }
   size: Size
-  cover: number
   type?: string
   highlight?: Highlight<HighlightType>
   durationSeconds?: number
@@ -98,7 +108,8 @@ export interface Settable {
   onThe: {
     water: boolean
   }
-  mode?: SettableMode
+  currentMode: number
+  modes?: SettableMode[]
   onDestroy?: (settable: StaticSettableItem) => void
 }
 

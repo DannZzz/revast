@@ -13,8 +13,10 @@ export default createSettable(64)
       62: 1,
     },
   })
+  .mainMode({ switchTo: 1, trigger: 'attack', verify: verifyItemOfTeam })
   .mode({
     cover: 0,
+    switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
     source: Images.DIAMOND_DOOR_OPEN,

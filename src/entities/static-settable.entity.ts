@@ -1,6 +1,6 @@
 import { Point, Size } from 'src/global/global'
 import { ItemProps, Settable, SettableMode } from '../game/basic/item.basic'
-import { Exclude, Expose, Transform } from 'class-transformer'
+import { Exclude, Expose, Transform, Type } from 'class-transformer'
 import { AssetLink } from 'src/structures/Transformer'
 import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { GetSet } from 'src/structures/GetSet'
@@ -24,27 +24,20 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   theta: number
   tempHp?: GetSet<number>
 
+  @Transform(({ value }) => value?.())
+  @Expose({ name: 'currentMode' })
+  currentModeIndex?: GetSet<number>
+
   @Expose()
   showHp?: {
     radius: number
     angle: number
   }
 
+  @Type(() => SettableMode)
   @Expose()
-  @Transform(({ value }) => ({ ...value, enabled: value.enabled() }))
-  mode: {
-    enabled: GetSet<boolean>
-    cover: number
-  }
-  @AssetLink()
-  @Expose()
-  get modeUrl() {
-    return this.data.mode?.source
-  }
-
-  @Expose()
-  get cover() {
-    return this.data.cover
+  get modes() {
+    return this.data.modes
   }
 
   @Expose()
@@ -63,12 +56,6 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   rotation: number
   @Expose()
   id: string
-
-  @AssetLink()
-  @Expose()
-  get url() {
-    return this.data.source
-  }
 
   @AssetLink()
   @Expose()

@@ -76,7 +76,7 @@ export class GameServer implements GameProps {
         )
         if (!bio) return
         bio.players = this.alivePlayers
-        this.staticItems.for(this.map.areaOf(bio.universalHitbox)).addBios(bio)
+        this.staticItems.for(bio.universalHitbox).addBios(bio)
       }
     })
     this.day = new GameDay(this.madeAt)

@@ -65,13 +65,21 @@ export const PLAYER_DECREASE_SPEED_CLICK = 30
 
 export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 
+export const MAP_GRID_RENDER_AREA_SIZE = 2000
+
 export const GRID_SET_RANGE = 100
 
 export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
+const itemFor = (i: number, quantity: number = 999) => [
+  i,
+  { quantity, equiped: false, item: itemById(i) },
+]
+
 export const START_ITEMS = () => [
-  [8, { quantity: 3, equiped: false, item: itemById(8) }],
+  itemFor(8, 3),
+  // itemFor(90)
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>
@@ -81,7 +89,7 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
     map: new GameMap({
       size: new Size(300, 300),
       tileSize: new Size(100, 100),
-      mapSource: 'map1-mini.png',
+      mapSource: 'map1-mini.webp',
       biomes: [
         new BiomeOptions({
           type: Biome.winter,

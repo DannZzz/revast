@@ -3,8 +3,8 @@ import createSettable from 'src/structures/item-creator/create-settable'
 import { SpecialItemTypes } from '../config-type'
 
 export default createSettable(86, SpecialItemTypes.bridge)
-  .sources('BRIDGE', 'BRIDGE')
-  .cover(-1)
+  .sources('BRIDGE', 'ICON_BRIDGE')
+  .cover(-4)
   .name('Bridge')
   .size(100, 100)
   .hp(1000)

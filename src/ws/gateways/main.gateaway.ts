@@ -23,7 +23,8 @@ import { WsRateLimit } from '../WsRateLimit'
 import { NumberBoolean } from 'src/game/types/any.types'
 import config from 'config'
 
-@WebSocketGateway({ namespace: 'ws/main', cors: { origin: [config.get("WEB")] } })
+@WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
+// @WebSocketGateway({ namespace: 'ws/main', cors: { origin: [config.get("WEB")] } })
 export class MainGateway
   implements
     EventGateway<ClientToServerEvents>,

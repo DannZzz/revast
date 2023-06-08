@@ -67,7 +67,7 @@ export const StaticItemsAddons: {
             groupOfBerries.add(createCircle(new Point(70, 60), i))
             break
           case 5:
-            groupOfBerries.add(createCircle(new Point(25, 55), i))
+            groupOfBerries.add(createCircle(new Point(15, 65), i))
             break
           default:
             break
@@ -148,7 +148,7 @@ export const StaticItemsAddons: {
         fireGroup.destroy()
       })
       item.on("mode", (item) => {
-        fireGroup.visible(item.mode.enabled)
+        fireGroup.visible(item.currentMode === 1)
       })
     },
   },
