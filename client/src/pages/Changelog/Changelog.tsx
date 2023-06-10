@@ -18,7 +18,7 @@ const Changelog = () => {
               "Plots, berry seeds and watering can (NOW YOU CAN BE A REAL FARMER!)",
               "Cool hat against cold (USEFUL AT SURVIVING IN WINTER)",
             ])}
-            {cg_list("Fixed", ["Craft visualation losting"])}
+            {cg_list("Fixed", ["Craft visualation losing"])}
           </div>
         </div>
       </div>
