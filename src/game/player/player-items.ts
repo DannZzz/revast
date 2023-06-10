@@ -310,10 +310,10 @@ export class PlayerItems {
       }
     })
     this._items = this.filterItems(items)
-    this.update()
     this.isCrafting = craftData.id
     const isBook = this.equiped?.item.data.specialName === 'book'
     this.player.socket().emit('playerCraft', [true, craftId, isBook])
+    this.update()
     const t = setTimeout(
       () => {
         this.isCrafting = null
@@ -456,9 +456,9 @@ export class PlayerItems {
   }
 
   update() {
-    if (this.isCrafting) return
-    const socket = this.player.socket()
     this.setCraftableItems()
+    const socket = this.player.socket()
+
     socket.emit('playerItems', [
       this._items.map((playerItem) =>
         Transformer.toPlain(

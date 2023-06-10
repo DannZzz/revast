@@ -70,12 +70,17 @@ export class PlayerItems extends BasicPlayerItems {
       (item) => item.id === id
     ).craftDuration
     if (book) duration /= 2
+
+    this.isCrafting = id
+
     node.width(0)
     animateTo(node, {
       to: { points: [{ width: this.itemSize.width }] },
       duration,
       noBack: true,
-      onFinish: () => {},
+      onFinish: () => {
+        this.isCrafting = null
+      },
     })
   }
 

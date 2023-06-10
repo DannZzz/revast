@@ -6,7 +6,7 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
-          {cg_title("- 10/9/2023 - Farm And Cold")}
+          {cg_title("- 10/9/2023 - Welcome to the World of Farm")}
           <div class="content">
             <div class="group">
               {cg_small_img("/api/images/plot.webp")}
@@ -16,7 +16,6 @@ const Changelog = () => {
             </div>
             {cg_list("Added", [
               "Plots, berry seeds and watering can (NOW YOU CAN BE A REAL FARMER!)",
-              "Cool hat against cold (USEFUL AT SURVIVING IN WINTER)",
             ])}
             {cg_list("Fixed", ["Craft visualation losing"])}
           </div>
