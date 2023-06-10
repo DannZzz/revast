@@ -44,7 +44,7 @@ export const ITEM_DIR_NAMES = [
 
 export const TIMEOUT_UNPICK_WEAPON = 6
 export const TIMEOUT_UNWEAR_HELMET = 3
-export const TIMEOUT_BUILDING = 1.2
+export const TIMEOUT_BUILDING = 0.8
 
 export const MOB_GLOBAL_SPEED_EFFECT = -15
 
