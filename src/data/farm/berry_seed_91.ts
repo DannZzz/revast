@@ -38,7 +38,7 @@ export default createSettable(91, 'berry-seed')
       dehydratedEmpty: 2,
       grown: 1,
     },
-    growthTime: GAME_DAY_SECONDS,
+    growthTime: GAME_DAY_SECONDS / 2,
     dehydrateTime: GAME_DAY_SECONDS,
     resourceInterval: 10,
     maxResource: 3,
