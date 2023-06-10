@@ -5,6 +5,7 @@ export enum SpecialItemTypes {
   bridge = 'bridge',
   repair = 'repair',
   plot = 'plot',
+  watering_can = 'watering_can',
 }
 
 export type EquipableItemVariant =

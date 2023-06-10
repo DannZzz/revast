@@ -19,8 +19,12 @@ import { NB } from "../utils/NumberBoolean"
 import { CraftDto } from "../../socket/events"
 import { getPointByTheta } from "../animations/rotation"
 import { GRID_SET_RANGE } from "../../constants"
-import { time } from "console"
 import { GetSet } from "../structures/GetSet"
+import {
+  makeItemIconBg,
+  makeItemIconBgEmpty,
+  makeItemIconBgNotEmpty,
+} from "../utils/make-item-icon"
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -136,11 +140,9 @@ export class PlayerItems extends BasicPlayerItems {
         document.body.style.cursor = "default"
       })
       itemGroup.on("click", () => this.craftItemRequest(item.id))
-      const containerRect = new Konva.Rect({
+      const containerRect = makeItemIconBg({
+        size: this.itemSize,
         id: `craft-${item.id}`,
-        fill: "#397463",
-        cornerRadius: 10,
-        ...this.itemSize,
       })
       const icon = new Konva.Image({
         image: loadImage(item.iconUrl, (image) => {
@@ -291,10 +293,10 @@ export class PlayerItems extends BasicPlayerItems {
         if (e.evt.button === 0) this.click(i)
         else if (e.evt.button === 2) this.dropItemRequest(i)
       })
-      const containerRect = new Konva.Rect({
-        fill: "#397463",
-        cornerRadius: 10,
-        ...this.itemSize,
+      const containerRect = makeItemIconBg({
+        size: this.itemSize,
+        empty: !indexedItem,
+        id: `${this.player.id("inventory", `${i}`, "container")}`,
       })
 
       const icon = new Konva.Image({
@@ -385,6 +387,12 @@ export class PlayerItems extends BasicPlayerItems {
       if (!playerItem) {
         if (node.y() !== 0) node.y(0)
         node.draggable(false)
+        makeItemIconBgEmpty(
+          this.player.element(
+            `#${this.player.id("inventory", `${i}`, "container")}`
+          )
+        )
+
         this.player
           .element(`#${this.player.id("inventory", `${i}`, "quantity")}`)
           .visible(false)
@@ -398,6 +406,12 @@ export class PlayerItems extends BasicPlayerItems {
       if (node.y() === 0) node.y(-5)
       const quantity = this.player.element(
         `#${this.player.id("inventory", `${i}`, "quantity")}`
+      )
+
+      makeItemIconBgNotEmpty(
+        this.player.element(
+          `#${this.player.id("inventory", `${i}`, "container")}`
+        )
       )
 
       quantity.setAttr(

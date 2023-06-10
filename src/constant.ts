@@ -31,6 +31,7 @@ export const XP_AFTER_EACH_DAY = 500
 export const GOD_MOD_ALL = false
 
 export const ITEM_DIR_NAMES = [
+  'farm',
   'any',
   'feed',
   'tools',
@@ -79,7 +80,11 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(90)
+  // itemFor(90),
+  // itemFor(91),
+  // itemFor(69),
+  // itemFor(92),
+  // itemFor(93),
 ]
 
 export const TEST_GAME_SERVER = (server: MainServer) =>

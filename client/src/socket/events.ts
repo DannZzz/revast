@@ -131,6 +131,10 @@ export interface StaticSettableDto {
     radius: number
     angle: number
   }
+  seedResource?: {
+    resources: number
+    maxResources: number
+  }
 }
 
 export interface SettableModeDto {

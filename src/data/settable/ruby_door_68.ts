@@ -19,6 +19,6 @@ export default createSettable(68)
     switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
-    source: Images.RUBY_DOOR_OPEN,
+    source: 'RUBY_DOOR_OPEN',
   })
   .build()

@@ -1,6 +1,6 @@
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { AreaStaticItems, GameMap, MapAreaName } from './GameMap'
-import { StaticItems } from './StaticItems'
+import { CheckingOptions, StaticItems, filterStaticItems } from './StaticItems'
 import { Bio } from 'src/game/basic/bio-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
 import { StaticSettableItem } from 'src/game/basic/static-item.basic'
@@ -126,37 +126,22 @@ class Handler {
 
   someWithin(
     hitbox: UniversalHitbox,
-    strict: boolean = false,
-    checkers: { type: string; ignore: SettableCheckers } = <any>{},
+    options: CheckingOptions | boolean = false,
   ) {
-    const { ignore, type } = checkers
-    return this.all.some((item) => {
-      if (strict) {
-        if (
-          ignore === 'all' ||
-          ('ignoreCheckers' in item.data && item.data.ignoreCheckers == 'all')
-        )
-          return false
-        if (
-          (ignore === 'type' ||
-            ('ignoreCheckers' in item.data &&
-              item.data.ignoreCheckers == 'type')) &&
-          item?.data?.type !== type
-        )
-          return false
-        if ('withinStrict' in item) {
-          return item.withinStrict(hitbox)
-        }
-      }
-      return item.within(hitbox)
-    })
+    return this.all.some(filterStaticItems(hitbox, options))
   }
 
-  itemWithin(hitbox: UniversalHitbox) {
-    return this.all.find((item) => item.within(hitbox))
+  itemWithin(
+    hitbox: UniversalHitbox,
+    options: CheckingOptions | boolean = false,
+  ) {
+    return this.all.find(filterStaticItems(hitbox, options))
   }
 
-  itemWithinArray(hitbox: UniversalHitbox) {
-    return this.all.filter((item) => item.within(hitbox))
+  itemWithinArray(
+    hitbox: UniversalHitbox,
+    options: CheckingOptions | boolean = false,
+  ) {
+    return this.all.filter(filterStaticItems(hitbox, options))
   }
 }

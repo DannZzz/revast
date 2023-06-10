@@ -1,7 +1,7 @@
 import { Accessor, batch, createRoot, createSignal } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ServerInformation } from "../api/type"
-import { connectWS, disconnectWS } from "../socket/socket"
+import { connectWS, disconnectWS, socket } from "../socket/socket"
 import { PlayerInformationDto } from "../socket/events"
 
 export interface GameState {
@@ -21,6 +21,7 @@ const initialState: GameState = {
 const createGameState = () => {
   const [started, setStarted] = createSignal(false)
   const [died, setDied] = createSignal(false)
+  const [loading, setLoading] = createSignal(false)
   const [playerEndedInfo, setPlayerEndedInfo] =
     createSignal<PlayerInformationDto>({} as any)
 
@@ -38,9 +39,15 @@ const createGameState = () => {
         nickname: nickname,
         server,
       })
-      setPage("game")
       setStarted(true)
       setDied(false)
+    })
+  }
+
+  const showGame = () => {
+    batch(() => {
+      setLoading(false)
+      setPage("game")
     })
   }
 
@@ -65,6 +72,9 @@ const createGameState = () => {
     started,
     died,
     playerEndedInfo,
+    loading,
+    setLoading,
+    showGame,
   }
 }
 

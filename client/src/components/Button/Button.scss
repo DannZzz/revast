@@ -23,8 +23,7 @@
   text-decoration: none;
   transition: 0.2s;
   @include no-select;
-  font-family: "Inter", sans-serif;
-  // @include main-font;
+  @include common-font;
 
   svg {
     left: -20px;

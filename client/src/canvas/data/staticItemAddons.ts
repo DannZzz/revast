@@ -6,7 +6,11 @@ import { Shape } from "konva/lib/Shape"
 import { StaticSettableItem } from "../basic/static-item.basic"
 import { Game } from "../game"
 
-export type StaticItemAddonName = "berry" | "campfire" | "furnace"
+export type StaticItemAddonName =
+  | "berry"
+  | "campfire"
+  | "furnace"
+  | "berry-seed"
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -14,7 +18,10 @@ export const StaticItemsAddons: {
       items: Shape | Shape[] | Group | Group[]
       afterDraw?: () => void
     }
-    drawByResourceChange?: (bio: Bio, currentResources: number) => void
+    drawByResourceChange?: (
+      item: Bio | StaticSettableItem,
+      currentResources: number
+    ) => void
     drawSeparately?: (item: StaticSettableItem) => void
   }
 } = {
@@ -55,16 +62,16 @@ export const StaticItemsAddons: {
             break
           }
           case 1:
-            groupOfBerries.add(createCircle(new Point(70, 30), i))
+            groupOfBerries.add(createCircle(new Point(90, 30), i))
             break
           case 2:
-            groupOfBerries.add(createCircle(new Point(45, 40), i))
+            groupOfBerries.add(createCircle(new Point(55, 40), i))
             break
           case 3:
-            groupOfBerries.add(createCircle(new Point(40, 70), i))
+            groupOfBerries.add(createCircle(new Point(50, 70), i))
             break
           case 4:
-            groupOfBerries.add(createCircle(new Point(70, 60), i))
+            groupOfBerries.add(createCircle(new Point(90, 60), i))
             break
           case 5:
             groupOfBerries.add(createCircle(new Point(15, 65), i))
@@ -149,6 +156,65 @@ export const StaticItemsAddons: {
       })
       item.on("mode", (item) => {
         fireGroup.visible(item.currentMode === 1)
+      })
+    },
+  },
+  "berry-seed": {
+    alsoDraw: (props: StaticSettableItem) => {
+      const groupOfBerries = new Konva.Group({
+        x: 15,
+        y: 10,
+      })
+
+      const createCircle = (point: Point, i: number) => {
+        const circleGroup = new Konva.Group({
+          ...point,
+        })
+        const circle = new Konva.Circle({
+          // id: `${props.id}-berry-${i}`,
+          radius: 10,
+          fill: "#AD232B",
+          stroke: "black",
+          strokeWidth: 0.5,
+        })
+        const circleWithin = new Konva.Circle({
+          radius: 3.5,
+          fill: "#E66368",
+          x: 0,
+          y: -2,
+        })
+        circleGroup.visible(i + 1 <= props.seedResource.resources)
+        props.alsoSavedNodes[i] = circleGroup
+        circleGroup.add(circle, circleWithin)
+        return circleGroup
+      }
+
+      $.$ArrayLength(props.seedResource.maxResources, (i) => {
+        switch (i) {
+          case 0: {
+            groupOfBerries.add(createCircle(new Point(20, 30), i))
+            break
+          }
+          case 1:
+            groupOfBerries.add(createCircle(new Point(50, 40), i))
+            break
+          case 2:
+            groupOfBerries.add(createCircle(new Point(20, 60), i))
+            break
+
+          default:
+            break
+        }
+      })
+
+      return { items: groupOfBerries }
+    },
+    drawByResourceChange: (
+      bio: StaticSettableItem,
+      currentResources: number
+    ) => {
+      $.$ArrayLength(bio.seedResource.maxResources, (i) => {
+        bio.alsoSavedNodes[i]?.visible(i + 1 <= currentResources)
       })
     },
   },

@@ -19,6 +19,6 @@ export default createSettable(62)
     switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
-    source: Images.GOLDEN_DOOR_OPEN,
+    source: 'GOLDEN_DOOR_OPEN',
   })
   .build()

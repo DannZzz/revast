@@ -14,8 +14,11 @@ $shadow1: rgba(31, 26, 18, 0.5);
 $shadow2: rgba(37, 35, 31, 0.5);
 
 @mixin main-font {
-  font-family: "Bebas Neue", cursive;
   font-family: "Righteous", cursive;
+}
+
+@mixin common-font {
+  font-family: "Inter", sans-serif;
 }
 
 @mixin second-font {
@@ -143,4 +146,31 @@ $breakpoint-med: 1175px;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+@mixin rainbow-text($speed: 6s) {
+  background: linear-gradient(
+    to right,
+    #6666ff,
+    #0099ff,
+    #00ff00,
+    #ff3399,
+    #6666ff
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation $speed ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
 }

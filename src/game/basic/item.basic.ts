@@ -6,6 +6,9 @@ import { Player } from '../player/player'
 import { Craft } from 'src/structures/Craft'
 import { AssetLink } from 'src/structures/Transformer'
 import { Exclude, Expose } from 'class-transformer'
+import { ImageSource } from 'src/structures/image-base'
+import { StaticItems } from 'src/structures/StaticItems'
+import { GameMap } from 'src/structures/GameMap'
 
 export interface Eatable {
   toFood: number
@@ -77,7 +80,7 @@ export class SettableMode {
   verify: (this: StaticSettableItem, player: Player) => boolean
   @AssetLink()
   @Expose({ name: 'url' })
-  source?: string
+  source?: ImageSource
   @Expose()
   cover: number
   switchTo?: number
@@ -111,6 +114,11 @@ export interface Settable {
   currentMode: number
   modes?: SettableMode[]
   onDestroy?: (settable: StaticSettableItem) => void
+  customSettingFilter?: (
+    staticItems: StaticItems,
+    settable: StaticSettableItem,
+    map: GameMap,
+  ) => boolean
 }
 
 export type DayNight<T = number> = { [k in 'day' | 'night']: T }

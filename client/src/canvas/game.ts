@@ -316,6 +316,8 @@ export class Game {
       this.player.point = new Point(data.player.point.x, data.player.point.y)
       this.newPeriodOfDay(NB.from(data.dayInfo.isDay))
       localStorage.setItem("_", data.token)
+
+      this.events.emit("loaded")
     })
 
     socket.on("staticBios", ([bios, toRemoveIds]) => {
@@ -363,7 +365,7 @@ export class Game {
     })
 
     socket.on("staticItemMiscellaneous", ([bioId, currentResources, type]) => {
-      const bio = this.staticItems.bio.find((item) => item.id === bioId)
+      const bio = this.staticItems.all.find((item) => item.id === bioId)
       if (!bio) return
       StaticItemsAddons[type].drawByResourceChange(bio, currentResources)
     })

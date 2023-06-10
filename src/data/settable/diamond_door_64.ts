@@ -19,6 +19,6 @@ export default createSettable(64)
     switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
-    source: Images.DIAMOND_DOOR_OPEN,
+    source: 'DIAMOND_DOOR_OPEN',
   })
   .build()

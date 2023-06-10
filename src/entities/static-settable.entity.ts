@@ -5,6 +5,7 @@ import { AssetLink } from 'src/structures/Transformer'
 import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { GetSet } from 'src/structures/GetSet'
 import { percentFrom, percentOf } from 'src/utils/percentage'
+import { SeedSettableItem } from 'src/game/extended/settable/seed.settable'
 
 @Exclude()
 export class StaticSettableEntity implements Partial<StaticSettableItem> {
@@ -14,6 +15,13 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
       this.showHp = {
         radius: data.data.showHpRadius,
         angle: percentOf(percentFrom(data.tempHp(), data.data.hp), 360),
+      }
+    }
+
+    if (data instanceof SeedSettableItem) {
+      this.seedResource = {
+        resources: data.resource(),
+        maxResources: data.data.maxResource,
       }
     }
   }
@@ -32,6 +40,12 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   showHp?: {
     radius: number
     angle: number
+  }
+
+  @Expose()
+  seedResource?: {
+    resources: number
+    maxResources: number
   }
 
   @Type(() => SettableMode)

@@ -55,6 +55,9 @@
           border-bottom: 1px solid white;
         }
       }
+      @include screen(med) {
+        width: 100%;
+      }
 
       @include screen(med-small) {
         width: 100%;

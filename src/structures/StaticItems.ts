@@ -3,6 +3,15 @@ import { Bio } from '../game/basic/bio-item.basic'
 import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
 import { UniversalHitbox } from 'src/utils/universal-within'
+import { SettableCheckers } from 'src/game/basic/item.basic'
+
+export interface CheckingOptions {
+  strict?: boolean
+  ignoreTypes?: string[]
+  ignore?: SettableCheckers
+  type?: string
+  onlyTypes?: string[]
+}
 
 export class StaticItems {
   bio: Bio[] = []
@@ -43,25 +52,62 @@ export class StaticItems {
     return [...this.bio, ...this.settable]
   }
 
-  someWithin(hitbox: UniversalHitbox, strict: boolean = false) {
-    return this.all.some((item) => {
-      if (strict) {
-        if ('withinStrict' in item) {
-          return item.withinStrict(hitbox)
-        } else {
-          return item.within(hitbox)
-        }
+  someWithin(
+    hitbox: UniversalHitbox,
+    options: CheckingOptions | boolean = false,
+  ) {
+    return this.all.some(filterStaticItems(hitbox, options))
+  }
+
+  itemWithin(
+    hitbox: UniversalHitbox,
+    options: CheckingOptions | boolean = false,
+  ) {
+    return this.all.find(filterStaticItems(hitbox, options))
+  }
+
+  itemWithinArray(
+    hitbox: UniversalHitbox,
+    options: CheckingOptions | boolean = false,
+  ) {
+    return this.all.filter(filterStaticItems(hitbox, options))
+  }
+}
+
+export function filterStaticItems(
+  hitbox: UniversalHitbox,
+  options: CheckingOptions | boolean,
+): (item: Bio | StaticSettableItem) => boolean {
+  let _options: CheckingOptions =
+    typeof options === 'boolean' ? { strict: options } : options
+
+  const { strict, ignoreTypes = [], ignore, type, onlyTypes = [] } = _options
+  return (item) => {
+    if (ignoreTypes.includes(item.data.type)) return false
+
+    const can = onlyTypes.length > 0 ? onlyTypes.includes(item.data.type) : true
+
+    if (strict) {
+      if (
+        ignore === 'all' ||
+        ('ignoreCheckers' in item.data && item.data.ignoreCheckers == 'all')
+      )
+        return false
+      if (
+        (ignore === 'type' ||
+          ('ignoreCheckers' in item.data &&
+            item.data.ignoreCheckers == 'type')) &&
+        item?.data?.type !== type
+      )
+        return false
+
+      if ('withinStrict' in item) {
+        return item.withinStrict(hitbox) && can
       } else {
-        return 'ignoreCheckers' in item ? false : item.within(hitbox)
+        return item.within(hitbox) && can
       }
-    })
-  }
-
-  itemWithin(hitbox: UniversalHitbox) {
-    return this.all.find((item) => item.within(hitbox))
-  }
-
-  itemWithinArray(hitbox: UniversalHitbox) {
-    return this.all.filter((item) => item.within(hitbox))
+    } else {
+      return 'ignoreCheckers' in item ? false : item.within(hitbox) && can
+    }
   }
 }

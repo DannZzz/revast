@@ -6,9 +6,10 @@ import "./Main.scss"
 import gameState from "../../store/game-state"
 import Canvas from "./Main-Switches/Canvas/Canvas"
 import Nav from "../../components/Nav/Nav"
+import { Loader } from "./Loader/Loader"
 
 const Main: Component = () => {
-  const { gamePage, playerEndedInfo } = gameState
+  const { gamePage, playerEndedInfo, loading } = gameState
 
   document.oncontextmenu = (e) => e.preventDefault()
 
@@ -29,6 +30,9 @@ const Main: Component = () => {
           </Switch>
         </Transition>
         <Canvas />
+        <Show when={loading()}>
+          <Loader />
+        </Show>
       </div>
     </>
   )

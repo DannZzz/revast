@@ -27,6 +27,7 @@ import {
   ActionableHolderProps,
   ActionableItemHolder,
 } from 'src/game/extended/settable/actionable-holder'
+import { BasicSeed, ExtendedSeed } from 'src/game/extended/settable/seed.basic'
 
 class SettableCreator {
   readonly extend = <any>{
@@ -122,7 +123,12 @@ class SettableCreator {
   }
 
   mode(...modes: SettableMode[]) {
-    this.extend.modes.push(...modes)
+    this.extend.modes.push(
+      ...modes.map((mode) => ({
+        ...mode,
+        source: mode.source && Images[mode.source],
+      })),
+    )
     return this
   }
 
@@ -181,27 +187,29 @@ class SettableCreator {
     return this
   }
 
+  seed(settable: Partial<ExtendedSeed>) {
+    Object.assign(this.extend, settable)
+    return this
+  }
+
   onDestroy(cb: (settable: StaticSettableItem) => void) {
     this.extend.onDestroy = cb
     return this
   }
 
+  buildSeed() {
+    this.format()
+    return new BasicSeed({ ...this.extend, ...this._data })
+  }
+
   buildActionable() {
     this.format()
-    const { craftable, ...otherProps } = this.extend
-    craftable.forEach((crft) => {
-      Craft.addCraft(this.extend.id, crft)
-    })
-    return new BasicActionableStatic({ ...otherProps, ...this._data })
+    return new BasicActionableStatic({ ...this.extend, ...this._data })
   }
 
   build() {
     this.format()
-    const { craftable, ...otherProps } = this.extend
-    craftable.forEach((crft) => {
-      Craft.addCraft(this.extend.id, crft)
-    })
-    return new BasicStaticItem({ ...otherProps, ...this._data })
+    return new BasicStaticItem({ ...this.extend, ...this._data })
   }
 
   private format() {
@@ -212,6 +220,12 @@ class SettableCreator {
     this.extend.modes = this.extend.modes.map(
       (modeProps) => new SettableMode(modeProps),
     )
+
+    const { craftable, ...otherProps } = this.extend
+    craftable.forEach((crft) => {
+      Craft.addCraft(this.extend.id, crft)
+    })
+    delete this.extend.craftable
     return this
   }
 }

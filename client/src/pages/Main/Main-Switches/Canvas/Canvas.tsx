@@ -25,12 +25,16 @@ const Canvas: Component<{}> = (props) => {
   const { showModal, closeModal } = modalState
 
   const [openChat, setOpenChat] = createSignal(false)
-  const { gs, started, died } = gameState
+  const { gs, started, died, leaveGame, showGame } = gameState
 
   createEffect(
     on(started, (started) => {
       if (started) {
         game.joinPlayer({ name: gs.nickname, token: gs.token() })
+
+        socket.on("playerDied", ([playerInformationDto]) => {
+          leaveGame(playerInformationDto)
+        })
       }
     })
   )
@@ -63,6 +67,8 @@ const Canvas: Component<{}> = (props) => {
     stage.add(layer1, layer2)
     // init game
     game.init({ layer: layer1, layer2: layer2 })
+
+    game.events.on("loaded", showGame)
 
     // events
     window.onresize = () => {

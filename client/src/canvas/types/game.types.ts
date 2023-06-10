@@ -22,4 +22,5 @@ export type GameEvents = {
   "screen.resize": [size: Size]
   "dropItem.request": [itemId: number]
   "dropItem.response": [itemId: number, all: boolean]
+  loaded: []
 }

@@ -208,6 +208,14 @@ export const Images = {
 
   // hats
   DIVING_MASK: 'diving-mask.webp',
+
+  // farm
+  WATERING_CAN: 'watering-can.webp',
+  WATERING_CAN_FULL: 'full-watering-can.webp',
+  ICON_WATERING_CAN_FULL: 'full-watering-can-icon.webp',
+  DEHYDRATED_BERRY_BUSH: 'dehydrated-berry-bush.webp',
+  PRE_BERRY_BUSH: 'pre-berry-bush.webp',
+  BERRY_SEEDS: 'berry-seeds.webp',
 } as const
 
 export type Images = typeof Images

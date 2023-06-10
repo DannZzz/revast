@@ -52,6 +52,9 @@ export class StaticSettableItem
   destroyed: boolean = false
   showHp?: { radius: number; angle: number }
   showHpArc: Konva.Arc
+  seedResource?: { resources: number; maxResources: number }
+
+  alsoSavedNodes: Array<Shape | Group> = []
 
   get mode() {
     return this.modes[this.currentMode]

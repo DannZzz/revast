@@ -14,21 +14,19 @@ import { socket } from "../../../../socket/socket"
 import { PlayerInformationDto } from "../../../../socket/events"
 
 const MenuCenter: Component<{}> = (props) => {
-  const { gs, startGame, leaveGame, started } = gameState
+  const { gs, startGame, leaveGame, started, loading, setLoading } = gameState
   const [servers] = createResource(getServers)
   const [server, setServer] = createSignal<ServerInformation>()
 
   let nicknameInputRef: HTMLInputElement
 
   function onPlay() {
-    if (started()) return
+    if (started() || loading()) return
     startGame(
       nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
       server()
     )
-    socket.on("playerDied", ([playerInformationDto]) => {
-      leaveGame(playerInformationDto)
-    })
+    setLoading(true)
   }
 
   createEffect(

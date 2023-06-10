@@ -19,6 +19,6 @@ export default createSettable(66)
     switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
-    source: Images.AMETHYST_DOOR_OPEN,
+    source: 'AMETHYST_DOOR_OPEN',
   })
   .build()

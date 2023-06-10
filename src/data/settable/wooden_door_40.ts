@@ -18,6 +18,6 @@ export default createSettable(40)
     switchTo: 0,
     trigger: 'attack',
     verify: verifyItemOfTeam,
-    source: Images.WOODEN_DOOR_OPEN,
+    source: 'WOODEN_DOOR_OPEN',
   })
   .build()

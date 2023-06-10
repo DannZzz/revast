@@ -68,6 +68,9 @@ export class PlayerItems {
     this.player.actions.state.actualStates.workbench.onChange((newVal) => {
       this.update()
     })
+    this.player.actions.state.actualStates.water.onChange((newVal) => {
+      this.update()
+    })
   }
 
   get isCrafting() {
@@ -136,7 +139,7 @@ export class PlayerItems {
   }
 
   setItem(itemId: number): number {
-    if (this.timeout.building > Date.now()) return -1
+    if (this.timeout.building > Date.now() || this.isCrafting) return -1
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
 
@@ -177,52 +180,67 @@ export class PlayerItems {
     )
     settable.preDraw(point, theta, angle)
     const staticItems = this.player.staticItems.for(settable.universalHitbox)
-    // checking settable items and bios
-    if (
-      //
-      staticItems.someWithin(settable.universalHitbox, true, {
-        ignore: settable.data.ignoreCheckers,
-        type: settable.data.type,
-      })
-    )
-      return -1
-
-    // checking water
-    if (
-      !settable.data.onThe.water &&
-      this.player.gameServer.map
-        .biomeOf(settable.centerPoint)
-        .includes(Biome.water) &&
-      !staticItems.someWithin(point, true, {
-        type: SpecialItemTypes.bridge,
-        ignore: 'type',
-      })
-    )
-      return -1
-
-    if (!settable.data.ignoreCheckers) {
-      // checking other players
+    if ('customSettingFilter' in settable.data) {
       if (
-        this.player.gameServer.alivePlayers.some((player) =>
-          settable.withinStrict(player.points),
+        !settable.data.customSettingFilter(
+          staticItems,
+          settable,
+          this.player.gameServer.map,
         )
       )
         return -1
-
-      // checkin mobs
-      const itemUniversalHitBox: UniversalHitbox =
-        settable.data.setMode.itemSize.type === 'circle'
-          ? {
-              point: settable.centerPoint,
-              radius: settable.data.setMode.itemSize.radius,
-            }
-          : settable.points
+    } else {
+      // checking settable items and bios
       if (
-        this.player.gameServer.mobs.all.some((mob) =>
-          mob.within(itemUniversalHitBox),
-        )
+        //
+        staticItems.someWithin(settable.universalHitbox, {
+          strict: true,
+          ignore: settable.data.ignoreCheckers,
+          type: settable.data.type,
+        })
       )
         return -1
+
+      // checking water
+      if (
+        !settable.data.onThe.water &&
+        this.player.gameServer.map
+          .biomeOf(settable.centerPoint)
+          .includes(Biome.water) &&
+        !staticItems.someWithin(point, {
+          strict: true,
+          type: SpecialItemTypes.bridge,
+          ignore: 'type',
+        })
+      )
+        return -1
+
+      if (!settable.data.ignoreCheckers) {
+        // checking other players
+        if (
+          this.player.gameServer.alivePlayers.some(
+            (player) =>
+              player.id() !== this.player.id() &&
+              settable.withinStrict(player.points),
+          )
+        )
+          return -1
+
+        // checkin mobs
+        const itemUniversalHitBox: UniversalHitbox =
+          settable.data.setMode.itemSize.type === 'circle'
+            ? {
+                point: settable.centerPoint,
+                radius: settable.data.setMode.itemSize.radius,
+              }
+            : settable.points
+        if (
+          this.player.gameServer.mobs.all.some((mob) =>
+            mob.within(itemUniversalHitBox),
+          )
+        )
+          return -1
+      }
     }
 
     this.player.staticItems.for(settable.universalHitbox).addSettables(settable)
@@ -292,8 +310,8 @@ export class PlayerItems {
       }
     })
     this._items = this.filterItems(items)
-    this.isCrafting = craftData.id
     this.update()
+    this.isCrafting = craftData.id
     const isBook = this.equiped?.item.data.specialName === 'book'
     this.player.socket().emit('playerCraft', [true, craftId, isBook])
     const t = setTimeout(
@@ -438,6 +456,7 @@ export class PlayerItems {
   }
 
   update() {
+    if (this.isCrafting) return
     const socket = this.player.socket()
     this.setCraftableItems()
     socket.emit('playerItems', [

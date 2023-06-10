@@ -64,7 +64,7 @@ export default createSettable(89, 'furnace')
     cover: 1,
     trigger: 'custom',
     verify: () => true,
-    source: Images.FURNACE_ENABLED,
+    source: 'FURNACE_ENABLED',
   })
   .size(200, 200)
   .data<ExtendedSettable>({

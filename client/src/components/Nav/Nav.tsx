@@ -28,7 +28,7 @@ const Nav: Component = () => {
               <span>Leaderboard</span>
             </div>
             <div onClick={() => navTo("/changelog")} class="nav-item">
-              <span>Changelog</span>
+              <span class="rainbow">Changelog</span>
             </div>
             <div onClick={() => navTo("/crafts")} class="nav-item">
               <span>Crafts</span>
