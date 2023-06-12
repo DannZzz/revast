@@ -52,7 +52,7 @@ export interface ServerToClientEvents {
   ) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
-    data: [id: string, theta: number, showHpAngle?: number],
+    data: Array<[id: string, theta: number, showHpAngle?: number]>,
   ) => void
   staticItemMode: (data: [settableId: string, modeIndex: number]) => void
   drops: (data: [toAdd: DropEntity[], toRemoveIds: string[]]) => void

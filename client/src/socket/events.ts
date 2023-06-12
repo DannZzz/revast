@@ -244,7 +244,7 @@ export interface ServerToClientEvents {
   playerWearing: (data: [weapon: WearingDto, timeout: NumberBoolean]) => void
   mobAttacked: (data: [id: string]) => void
   staticItemAttacked: (
-    data: [id: string, theta: number, showHpAngle?: number]
+    data: Array<[id: string, theta: number, showHpAngle?: number]>
   ) => void
   staticItemMode: (data: [settableId: string, mode: number]) => void
   drops: (data: [toAdd: DropDto[], toRemoveIds: string[]]) => void

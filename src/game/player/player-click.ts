@@ -10,6 +10,7 @@ import { Converter } from 'src/structures/Converter'
 import { GetSet } from 'src/structures/GetSet'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { universalWithin } from 'src/utils/universal-within'
+import { optimizeHandleAttackedItems } from 'src/utils/optimize-handle-attacked-items'
 
 export class PlayerClick {
   hand: 'right' | 'left' = 'right'
@@ -88,6 +89,8 @@ export class PlayerClick {
         item.getAttacked(new Point(x, y), this.player)
         if (Bio.is(item)) item.getResources(this.player, resGetting)
       })
+
+      optimizeHandleAttackedItems(touchedObjects, new Point(x, y))
     }
 
     if (equiped) {

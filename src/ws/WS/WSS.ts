@@ -38,6 +38,7 @@ export class Wss {
         socket?.send(bin)
       },
       id: socket?.id,
+      close: () => socket?.close(),
     }
     return emitable
   }

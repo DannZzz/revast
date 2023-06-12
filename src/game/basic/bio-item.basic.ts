@@ -195,26 +195,13 @@ export class Bio {
     return universalWithin(hitbox, this.universalHitbox)
   }
 
-  getAttacked(from: Point) {
-    const playerSockets = this.players
-      .filter(
-        (player) =>
-          player.online() &&
-          player.cache.get('staticBios', true).includes(this.id),
-      )
-      .map((player) => player.socket())
+  getAttacked(from: Point) {}
 
-    playerSockets.forEach((socket) =>
-      socket.emit('staticItemAttacked', [
-        this.id,
-        getAngle(this.centerPoint, from) + Math.PI,
-        // getPointByTheta(
-        //   this.point,
-        //   getAngle(this.centerPoint, from) + Math.PI,
-        //   10,
-        // ),
-        // this.point,
-      ]),
+  validPlayersSockets() {
+    return this.players.filter(
+      (player) =>
+        player.online() &&
+        player.cache.get('staticBios', true).includes(this.id),
     )
   }
 

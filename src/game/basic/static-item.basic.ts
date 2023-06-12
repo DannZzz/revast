@@ -66,8 +66,8 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
       })
 
     this.currentModeIndex.onChange((val) => {
-      this.validPlayersSockets().forEach((socket) => {
-        socket.emit('staticItemMode', [this.id, val])
+      this.validPlayersSockets().forEach((player) => {
+        player.socket().emit('staticItemMode', [this.id, val])
       })
     })
   }
@@ -145,7 +145,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     this.staticItems.for(this.universalHitbox).removeSettable(this.id)
   }
 
-  getAttacked(from: Point, by: Player) {
+  getAttacked(from: Point, by: Player): void {
     const equiped = by.items.equiped
     if (equiped && equiped.item.data.damageBuilding) {
       this.hurt(equiped.item.data.damageBuilding)
@@ -162,26 +162,13 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
         this.currentModeIndex(this.currentMode.switchTo || 0)
       }
     }
-
-    const playerSockets = this.validPlayersSockets()
-
-    playerSockets.forEach((socket) =>
-      socket.emit('staticItemAttacked', [
-        this.id,
-        getAngle(this.point, from) + Math.PI,
-        this.data.showHpRadius &&
-          percentOf(percentFrom(this.tempHp(), this.data.hp), 360),
-      ]),
-    )
   }
 
   validPlayersSockets() {
-    return this.players
-      .filter(
-        (player) =>
-          player.online() &&
-          player.cache.get('staticSettables', true).includes(this.id),
-      )
-      .map((player) => player.socket())
+    return this.players.filter(
+      (player) =>
+        player.online() &&
+        player.cache.get('staticSettables', true).includes(this.id),
+    )
   }
 }

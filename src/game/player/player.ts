@@ -310,6 +310,7 @@ export class Player extends BasicElement<PlayerEvents> {
     this.gameServer.players.delete(this.uniqueId)
     this.gameServer.alivePlayers.delete(this.uniqueId)
     TokenChest.delete(this.token.current)
+    this.socket().close()
     this.gameServer.checkLoop()
   }
 

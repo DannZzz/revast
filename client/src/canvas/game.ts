@@ -354,10 +354,12 @@ export class Game {
       drop.hurt()
     })
 
-    socket.on("staticItemAttacked", ([itemId, theta, showHpAngle]) => {
-      const item = this.staticItems.all.find((item) => item.id === itemId)
-      if (!item) return
-      item.getAttacked(theta, showHpAngle)
+    socket.on("staticItemAttacked", (items) => {
+      this.staticItems.all.forEach((staticItem) => {
+        const item = items.find((it) => it[0] == staticItem.id)
+        if (!item) return
+        staticItem.getAttacked(item[1], item[2])
+      })
     })
 
     socket.on("staticItemMode", ([itemId, mode]) => {

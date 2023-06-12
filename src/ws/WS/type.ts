@@ -14,4 +14,5 @@ export interface Emitable {
     ...data: Parameters<ServerToClientEvents[K]>
   ) => void
   id?: string
+  close: () => void
 }
