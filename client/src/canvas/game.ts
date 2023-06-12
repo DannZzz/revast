@@ -23,6 +23,7 @@ import { GameMap } from "./structures/GameMap"
 import { BasicMob } from "./basic/mob.basic"
 import { BasicDrop } from "./basic/drop.basic"
 import { KonvaText } from "./structures/KonvaText"
+import { GameAttr } from "./game-attr"
 
 export class Game {
   layer: Layer
@@ -60,11 +61,13 @@ export class Game {
       this.ended = false
       this.registerSockets()
       this.updateLoop()
-      socket.emit("joinServer", {
-        name: playerData.name,
-        screen: this.size,
-        token: playerData.token,
-      })
+      socket.emit("joinServer", [
+        {
+          name: playerData.name,
+          screen: this.size,
+          token: playerData.token,
+        },
+      ])
     }
   }
 
@@ -79,6 +82,8 @@ export class Game {
       id: "game-bg",
       perfectDrawEnabled: false,
     })
+
+    const gameAttr = new Konva.Group({ id: "game-attr" })
 
     const night = new Konva.Rect({
       id: "game-night",
@@ -104,6 +109,7 @@ export class Game {
     const alwaysTop = new Konva.Group({ id: "always-top" })
     mainGroup.add(
       gameBg,
+      gameAttr,
       itemsGroup_6,
       itemsGroup_5,
       itemsGroup_4,
@@ -138,11 +144,13 @@ export class Game {
 
   drawStaticBios(bios: Bio[], toRemoveIds: string[]) {
     const group = this.layer.findOne("#game-bios") as Group
-    toRemoveIds.forEach((itemId) => this.layer.findOne(`#${itemId}`)?.destroy())
     bios.forEach((bio) => bio.take(this.layer).draw(group))
-    this.staticItems.bio = this.staticItems.bio.filter(
-      (bio) => !toRemoveIds.includes(bio.id)
-    )
+    this.staticItems.bio = this.staticItems.bio.filter((bio) => {
+      const res = !toRemoveIds.includes(bio.id)
+      if (res) return true
+      bio.destroy()
+      return false
+    })
     this.staticItems.addBios(...bios)
   }
 
@@ -347,16 +355,9 @@ export class Game {
     })
 
     socket.on("staticItemAttacked", ([itemId, theta, showHpAngle]) => {
-      const itemNode = this.layer.findOne(`#${itemId}`)
       const item = this.staticItems.all.find((item) => item.id === itemId)
-      if (!itemNode || !item) return
-      const to = getPointByTheta(item.fixedPosition(), theta, 10)
-      animateTo(itemNode, {
-        to: { absolute: true, points: [{ ...to }] },
-        duration: 0.2,
-        backTo: { point: item.fixedPosition() },
-      })
-      if (showHpAngle && "tryArcAngle" in item) item.tryArcAngle(showHpAngle)
+      if (!item) return
+      item.getAttacked(theta, showHpAngle)
     })
 
     socket.on("staticItemMode", ([itemId, mode]) => {
@@ -426,6 +427,10 @@ export class Game {
 
         clearTimeout(this.serverMessageTimeout)
       }, 5000)
+    })
+
+    socket.on("walkEffect", ([effect, x, y, angle]) => {
+      GameAttr.walkEffect(this.layer, effect, new Point(x, y), angle)
     })
   }
 

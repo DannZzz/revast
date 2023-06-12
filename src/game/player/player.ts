@@ -45,6 +45,7 @@ import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { PlayerLoop } from './player-loop'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { DatabaseHandler } from 'src/db/handler'
+import { Emitable } from 'src/ws/WS/type'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
@@ -80,11 +81,9 @@ export class Player extends BasicElement<PlayerEvents> {
   readonly loop: PlayerLoop
   readonly kills = GetSet(0)
 
-  readonly socket: () => MainSocket = () =>
-    perfectSocket(
-      this.gameServer.socketServer.sockets.get(
-        TokenChest.get(this.token.current)?.currentSocketId,
-      ),
+  readonly socket: () => Emitable = () =>
+    this.gameServer.socketServer.emitable(
+      TokenChest.get(this.token.current)?.currentSocketId,
     )
   readonly gameServer: GameServer
 

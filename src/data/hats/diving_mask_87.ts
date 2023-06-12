@@ -5,8 +5,12 @@ export default createItem(87, 'hat')
   .name('Diving Mask')
   .wearable()
   .wearableEffect({
-    oxygenLoss: -15,
-    inWaterSpeed: 30,
+    inWaterTempLoss: {
+      day: -30,
+      night: -30,
+    },
+    oxygenLoss: -20,
+    inWaterSpeed: 40,
   })
   .craftable({
     duration: 10,

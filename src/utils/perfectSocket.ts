@@ -1,5 +1,7 @@
-import { Socket } from 'socket.io'
+import { MainSocket } from 'src/ws/events/events'
 
-export const perfectSocket = <T extends Socket>(socket: T): T => {
-  return socket ? socket : ({ emit: () => {}, on: () => {} } as any)
+export const perfectSocket = <T extends MainSocket>(socket: T): T => {
+  return socket
+    ? socket
+    : ({ send: () => {}, emit: () => {}, on: () => {} } as any)
 }

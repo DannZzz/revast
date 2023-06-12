@@ -1,4 +1,8 @@
 /* @refresh reload */
+import { Buffer } from "buffer"
+
+// @ts-ignore
+window.Buffer = Buffer
 import { render } from "solid-js/web"
 import "@thisbeyond/solid-select/style.css"
 import initTypes from "datypes"

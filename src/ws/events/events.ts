@@ -1,5 +1,4 @@
 import { WsResponse } from '@nestjs/websockets'
-import { Namespace, Server, Socket } from 'socket.io'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { PlayerBarsEntity } from 'src/dto/player-bars.dto'
 import { ActionableHolderEntity } from 'src/entities/actionable-holder.entity'
@@ -18,10 +17,12 @@ import { PlayerJoinedEntity } from 'src/entities/player-joined.entity'
 import { StaticSettableEntity } from 'src/entities/static-settable.entity'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { NumberBoolean } from 'src/game/types/any.types'
+import { WalkEffect } from 'src/game/types/player.types'
 import { Point, Size } from 'src/global/global'
 import { ToggleKeys } from 'src/structures/toggle-options'
+import * as WebSocket from 'ws'
 
-interface ServerToClientEvents {
+export interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioEntity[], bioIdsToRemove: string[]],
   ) => void
@@ -89,13 +90,16 @@ interface ServerToClientEvents {
     ],
   ) => void
   removeActionable: (data: [settableId: string]) => void
+  walkEffect: (
+    data: [effect: WalkEffect, x: number, y: number, angle: number],
+  ) => void
 }
 
 export interface ClientToServerEvents {
   autofood(data: [value: NumberBoolean]): void
   craftRequest(data: [craftId: string]): void
   clickItem(data: [number]): void
-  joinServer(data: JoinPlayerDto): void
+  joinServer(data: [JoinPlayerDto]): void
   mouseAngle(data: [angle: number, theta: number]): void
   toggles(data: ToggleKeys): void
   setItemRequest(data: [itemId: number]): void
@@ -109,8 +113,12 @@ export interface ClientToServerEvents {
   requestActionableHolderTake(data: [settableId: string, i: number]): void
 }
 
-export type MainServer = Namespace<ClientToServerEvents, ServerToClientEvents>
-export type MainSocket = Socket<ClientToServerEvents, ServerToClientEvents>
+export type MainServer = WebSocket.Server & {
+  clientList: Record<string, MainSocket>
+}
+export type MainSocket = WebSocket.WebSocket & {
+  id: string
+}
 
 export type EventHandler<
   EVENTS extends object,

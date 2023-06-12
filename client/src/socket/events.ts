@@ -1,4 +1,3 @@
-import { Socket } from "socket.io-client"
 import { PlayerSkinName } from "../canvas/types/player.types"
 import { StaticItemAddonName } from "../canvas/data/staticItemAddons"
 
@@ -216,7 +215,11 @@ export interface ActionableSettableDrawOptionsDto {
   size: Size
 }
 
-interface ServerToClientEvents {
+export enum WalkEffect {
+  water,
+}
+
+export interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
   ) => void
@@ -279,13 +282,16 @@ interface ServerToClientEvents {
     ]
   ) => void
   removeActionable: (data: [settableId: string]) => void
+  walkEffect: (
+    data: [effect: WalkEffect, x: number, y: number, angle: number]
+  ) => void
 }
 
 export interface ClientToServerEvents {
   autofood(data: [value: NumberBoolean]): void
   craftRequest(data: [craftId: string]): void
   clickItem(data: [id: number]): void
-  joinServer(data: JoinPlayerDto): void
+  joinServer(data: [JoinPlayerDto]): void
   mouseAngle(data: [angle: number, theta: number]): void
   toggles(
     data: [
@@ -307,4 +313,4 @@ export interface ClientToServerEvents {
   requestActionableHolderTake(data: [settableId: string, i: number]): void
 }
 
-export type MainSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+export type MainSocket = WebSocket

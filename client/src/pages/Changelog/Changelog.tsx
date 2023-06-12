@@ -1,10 +1,33 @@
 import "./Changelog.scss"
-import { cg_list, cg_small_img, cg_title } from "./helper"
+import { cg_big_img, cg_list, cg_small_img, cg_title } from "./helper"
 
 const Changelog = () => {
   return (
     <div class="changelog">
       <div class="container">
+        <div class="version">
+          {cg_title("- 12/9/2023 - Water and Oxygen")}
+          <div class="content">
+            {cg_big_img("/images/water-walk.png")}
+            <div class="group">
+              {cg_small_img("/api/images/diving-suit.webp")}
+              {cg_small_img("/api/images/hat.webp")}
+            </div>
+            {cg_list("Added", [
+              "Diving Suit (NEXT LEVEL OF DIVING MASK)",
+              "New Cool Hat (EASY TO SURVIVE IN WINTER)",
+              "New Effect while being in water",
+            ])}
+            {cg_list("Changed", [
+              "Piranhas and Megalodons speed was decreased",
+              "Megalodons cannot come ashore",
+              "Also all mob's damage speed was decreased too",
+              "Building Cooldown: 1.2s --> 0.8s",
+              "More Berry Bushes in the Forest biome",
+              "Berry Seeds growing and dehydrating time was increased",
+            ])}
+          </div>
+        </div>
         <div class="version">
           {cg_title("- 10/9/2023 - Welcome to the World of Farm")}
           <div class="content">

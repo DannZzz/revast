@@ -45,6 +45,10 @@
           width: 80px;
         }
 
+        .big-image {
+          max-width: 200px;
+        }
+
         .group {
           @include flex($content: flex-start);
           gap: 10px;

@@ -7,6 +7,8 @@ type ToOption = Point & {
   angle?: number
   fill?: string
   visible?: boolean
+  scale?: number
+  opacity?: number
 } & Size
 interface AnimateOptions {
   to?: { points: Partial<ToOption>[]; absolute?: true }
@@ -50,6 +52,11 @@ export const animateTo = (node: Node, options: AnimateOptions) => {
       back.rotation = node.rotation() || 0
     }
 
+    if (!isNaN(point.opacity)) {
+      start.opacity = point.opacity
+      back.opacity = node.opacity()
+    }
+
     if (point.offset) {
       if (!isNaN(point.offset.x)) {
         start.offsetX = point.offset.x
@@ -59,6 +66,13 @@ export const animateTo = (node: Node, options: AnimateOptions) => {
         start.offsetY = point.offset.y
         back.offsetY = node.offsetY()
       }
+    }
+
+    if (!isNaN(point.scale)) {
+      start.scaleX = point.scale
+      start.scaleY = point.scale
+      back.scaleX = node.scaleX()
+      back.scaleY = node.scaleY()
     }
 
     if (!isNaN(point.width)) {
@@ -82,7 +96,7 @@ export const animateTo = (node: Node, options: AnimateOptions) => {
       back.fill = node.getAttr("fill")
     }
     if (typeof point.visible === "boolean") {
-      start.visible = point.visible
+      start.visible = !!point.visible
       back.visible = node.visible()
     }
 

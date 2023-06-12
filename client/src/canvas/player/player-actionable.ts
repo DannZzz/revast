@@ -26,16 +26,10 @@ export class PlayerActionable {
   readonly addButtonSize = new Size(20, 20)
 
   draw() {
-    const wSize = _window.size()
+    this.actionableGroup = new Konva.Group()
 
-    this.actionableGroup = new Konva.Group({
-      x: wSize.width - this.rightMargin,
-      y: wSize.height / 2,
-    })
-
-    this.addButtonsGroup = new Konva.Group({
-      ...this.calcButtonsPosition(),
-    })
+    this.addButtonsGroup = new Konva.Group()
+    this.resize()
 
     this.actionableIconNode = new Konva.Image({
       image: null,
@@ -56,7 +50,11 @@ export class PlayerActionable {
   }
 
   resize() {
-    this.actionableGroup.width(_window.size().width / 2)
+    const wSize = _window.size()
+    this.actionableGroup.position({
+      x: wSize.width - this.rightMargin,
+      y: wSize.height / 2,
+    })
     this.addButtonsGroup.position(this.calcButtonsPosition())
   }
 

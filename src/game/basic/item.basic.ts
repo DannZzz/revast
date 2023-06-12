@@ -125,6 +125,7 @@ export type DayNight<T = number> = { [k in 'day' | 'night']: T }
 
 export class WearableEffect {
   inWaterSpeed: number = 0
+  inWaterTempLoss: DayNight = { day: 0, night: 0 }
   oxygenLoss: number = 0
   heatPerc: DayNight = { day: 0, night: 0 }
   tempLossPerc: DayNight = { day: 0, night: 0 }

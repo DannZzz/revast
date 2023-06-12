@@ -1,16 +1,27 @@
 import Konva from "konva"
-import { Point, combineClasses } from "../../global/init"
+import { Point, Size, combineClasses } from "../../global/init"
 import { Bio } from "../basic/bio-item.basic"
 import { Group } from "konva/lib/Group"
 import { Shape } from "konva/lib/Shape"
 import { StaticSettableItem } from "../basic/static-item.basic"
 import { Game } from "../game"
+import { loadImage } from "../structures/fetchImages"
 
 export type StaticItemAddonName =
   | "berry"
   | "campfire"
   | "furnace"
   | "berry-seed"
+
+const size = new Size(20, 20)
+const berryPng = new Konva.Image({
+  image: loadImage("/images/berry.png", (img) => {
+    berryPng.image(img)
+    berryPng.cache()
+  }),
+  ...size,
+  offset: new Point(size.width / 2, size.height / 2),
+})
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -33,25 +44,11 @@ export const StaticItemsAddons: {
       })
 
       const createCircle = (point: Point, i: number) => {
-        const circleGroup = new Konva.Group({
+        const circleGroup = berryPng.clone({
           ...point,
-        })
-        const circle = new Konva.Circle({
-          // id: `${props.id}-berry-${i}`,
-          radius: 10,
-          fill: "#AD232B",
-          stroke: "black",
-          strokeWidth: 0.5,
-        })
-        const circleWithin = new Konva.Circle({
-          radius: 3.5,
-          fill: "#E66368",
-          x: 0,
-          y: -2,
         })
         circleGroup.visible(i + 1 <= props.data.currentResources)
         props.alsoSavedNodes[i] = circleGroup
-        circleGroup.add(circle, circleWithin)
         return circleGroup
       }
 
@@ -167,25 +164,11 @@ export const StaticItemsAddons: {
       })
 
       const createCircle = (point: Point, i: number) => {
-        const circleGroup = new Konva.Group({
+        const circleGroup = berryPng.clone({
           ...point,
-        })
-        const circle = new Konva.Circle({
-          // id: `${props.id}-berry-${i}`,
-          radius: 10,
-          fill: "#AD232B",
-          stroke: "black",
-          strokeWidth: 0.5,
-        })
-        const circleWithin = new Konva.Circle({
-          radius: 3.5,
-          fill: "#E66368",
-          x: 0,
-          y: -2,
         })
         circleGroup.visible(i + 1 <= props.seedResource.resources)
         props.alsoSavedNodes[i] = circleGroup
-        circleGroup.add(circle, circleWithin)
         return circleGroup
       }
 

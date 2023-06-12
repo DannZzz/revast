@@ -208,6 +208,8 @@ export const Images = {
 
   // hats
   DIVING_MASK: 'diving-mask.webp',
+  DIVING_SUIT: 'diving-suit.webp',
+  HAT: 'hat.webp',
 
   // farm
   WATERING_CAN: 'watering-can.webp',

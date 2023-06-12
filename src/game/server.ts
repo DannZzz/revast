@@ -29,12 +29,13 @@ import { MainServer } from 'src/ws/events/events'
 import { bioItemByMapId } from 'src/data/bio'
 import { BasicMath } from 'src/utils/math'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
+import { Wss } from 'src/ws/WS/WSS'
 
 export type TMap = typeof BasicMap
 
 export interface GameProps {
   readonly information: { name: string }
-  readonly socketServer: MainServer
+  readonly socketServer: Wss
   madeAt?: Date
   mapItems?: () => TMap
   map: GameMap
@@ -48,7 +49,7 @@ export class GameServer implements GameProps {
   mapItems: () => TMap = () => BasicMap
   madeAt: Date = new Date()
   map: GameMap
-  readonly socketServer: MainServer
+  readonly socketServer: Wss
   readonly information: any = {}
   readonly mapSource: string
   readonly players = new Chest<number, Player>()

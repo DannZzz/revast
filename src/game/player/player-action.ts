@@ -5,11 +5,17 @@ import { PlayerStates } from './player-state'
 import { getPointByTheta } from '../animations/rotation'
 import { ActionableSettableItem } from '../extended/settable/actionable.settable'
 import { EventData } from 'src/ws/events/events'
+import { GetSet } from 'src/structures/GetSet'
+import { WalkEffect } from '../types/player.types'
+import { Converter } from 'src/structures/Converter'
+import { WALK_EFFECT_SEND_INTERVAL } from 'src/constant'
 
 export class PlayerAction {
   clicks = 0
   readonly click: PlayerClick
   readonly state: PlayerStates
+  readonly walking = GetSet(false)
+  walkEffectCd = 0
   constructor(private player: Player) {
     this.click = new PlayerClick(player)
     this.state = new PlayerStates(player)
@@ -61,7 +67,11 @@ export class PlayerAction {
     else if (this.player.toggle.is('up'))
       angle = !isNaN(angle) ? (angle === 0 ? -45 : -135) : -90
 
-    if (angle === undefined) return
+    if (angle === undefined) {
+      this.walking(false)
+      return
+    }
+    this.walking(true)
 
     const point = getPointByTheta(
       new Point(),
@@ -166,6 +176,34 @@ export class PlayerAction {
       .find((settable) => settable.id === settableId)
     if (settable instanceof ActionableSettableItem) {
       settable.hold(itemId, x10 ? 10 : 1, this.player)
+    }
+  }
+
+  walkEffect() {
+    if (this.walkEffectCd > Date.now()) return
+    const states = this.state.actualStates
+    const players = this.player.gameServer.alivePlayers.filter(
+      (player) =>
+        player.online() &&
+        (player.id() === this.player.id() ||
+          player.cache.get('otherPlayers', true).includes(this.player.id())),
+    )
+    // water effect
+    if (!states.onBridge() && states.water()) {
+      this.walkEffectCd =
+        Date.now() + 1000 * WALK_EFFECT_SEND_INTERVAL * (this.walking() ? 1 : 2)
+
+      players.forEach((player) =>
+        player
+          .socket()
+          .emit('walkEffect', [
+            WalkEffect.water,
+            ...Converter.pointToXYArray(this.player.point()),
+            this.player.angle(),
+          ]),
+      )
+
+      return
     }
   }
 }

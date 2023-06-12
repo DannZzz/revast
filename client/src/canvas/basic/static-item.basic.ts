@@ -16,6 +16,7 @@ import { Shape } from "konva/lib/Shape"
 import { Game } from "../game"
 import { zIndexOf } from "../../constants"
 import { EventEmitter } from "../utils/EventEmitter"
+import { getPointByTheta } from "../animations/rotation"
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -56,6 +57,8 @@ export class StaticSettableItem
 
   alsoSavedNodes: Array<Shape | Group> = []
 
+  attacked: { tween?: Konva.Tween; theta?: number } = {}
+
   get mode() {
     return this.modes[this.currentMode]
   }
@@ -78,6 +81,27 @@ export class StaticSettableItem
       this.point.x - this.size.width / 2,
       this.point.y - this.size.height / 2
     )
+  }
+
+  getAttacked(theta: number, showHpAngle?: number) {
+    const to = getPointByTheta(this.fixedPosition(), theta, 10)
+
+    if (
+      !this.attacked.tween ||
+      this.attacked.theta?.toFixed(2) !== theta.toFixed(2)
+    ) {
+      this.attacked.tween = new Konva.Tween({
+        node: this.node,
+        duration: 0.2,
+        ...to,
+        onFinish: () => this.attacked.tween.reverse(),
+      })
+    }
+
+    this.attacked.theta = theta
+
+    this.attacked.tween.play()
+    if (showHpAngle && "tryArcAngle" in this) this.tryArcAngle(showHpAngle)
   }
 
   tryMode(val: number) {
@@ -186,5 +210,6 @@ export class StaticSettableItem
     this.destroyed = true
     this.node.destroy()
     this.highlightNode?.destroy()
+    this.attacked.tween?.destroy()
   }
 }

@@ -8,12 +8,21 @@ import config from 'config'
 
 import { MainServer } from './ws/events/events'
 import { UniversalHitbox } from './utils/universal-within'
+import { Wss } from './ws/WS/WSS'
 
 export const PORT = config.get('PORT')
 
-export const SERVER_API: (combine?: string) => string = (
+export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   combine: string = '',
-) => `${config.get('SERVER')}${combine}`
+  ws?: boolean,
+) => {
+  let origin: string = config.get('SERVER')
+  if (ws)
+    origin = `${origin.includes('https') ? 'wss' : 'ws'}://${
+      origin.split('://')[1]
+    }`
+  return `${origin}${combine}`
+}
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
@@ -26,7 +35,7 @@ export const PLAYER_BODY_POINTS = (centerPoint: Point): UniversalHitbox => ({
   size: PLAYER_BODY_ACUTAL_SIZE,
 })
 
-export const XP_AFTER_EACH_DAY = 500
+export const XP_AFTER_EACH_DAY = 750
 
 export const GOD_MOD_ALL = false
 
@@ -49,6 +58,8 @@ export const TIMEOUT_BUILDING = 0.8
 export const MOB_GLOBAL_SPEED_EFFECT = -15
 
 export const MOB_DIR_NAMES = ['mobs']
+
+export const WALK_EFFECT_SEND_INTERVAL = 1
 
 export const PLAYER_NAME_MAX_SIZE = 18
 
@@ -80,14 +91,14 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(90),
-  // itemFor(91),
+  // itemFor(94),
+  // itemFor(95),
   // itemFor(69),
   // itemFor(92),
   // itemFor(93),
 ]
 
-export const TEST_GAME_SERVER = (server: MainServer) =>
+export const TEST_GAME_SERVER = (server: Wss) =>
   new GameServer({
     information: { name: 'Europe' },
     socketServer: server,
@@ -286,15 +297,21 @@ export const TEST_GAME_SERVER = (server: MainServer) =>
             canOut: false,
             maxCount: 30,
             reAddEachSeconds: 30,
-            spawn: { startPoint: ocean.point, size: ocean.size },
+            spawn: {
+              startPoint: combineClasses(
+                ocean.point,
+                new Point(7 * game.map.tileSize.width, 0),
+              ),
+              size: ocean.size,
+            },
           },
           [MobNames.scorpion]: {
             area: 'desert',
             biome: Biome.desert,
             canOut: false,
-            maxCount: 50,
+            maxCount: 30,
             reAddEachSeconds: 10,
-            spawn: { startPoint: desert.point, size: desert.size },
+            spawn: { startPoint: desertCave.point, size: desertCave.size },
           },
         },
         game,

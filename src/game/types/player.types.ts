@@ -13,6 +13,10 @@ import { BasicDrop } from '../basic/drop.basic'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { AssetLink } from 'src/structures/Transformer'
 
+export enum WalkEffect {
+  water,
+}
+
 export type PlayerSkinName = 'repeat'
 
 export class PlayerSkin {

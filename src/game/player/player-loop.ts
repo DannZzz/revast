@@ -200,5 +200,7 @@ export class PlayerLoop {
       socket.emit('drops', [toSend, toRemoveIds])
       this.cache.data.drops = dropsInView
     }
+
+    this.player.actions.walkEffect()
   }
 }

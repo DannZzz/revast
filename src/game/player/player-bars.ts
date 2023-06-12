@@ -3,7 +3,8 @@ import { Bar } from 'src/structures/Bar'
 import { percentOf } from 'src/utils/percentage'
 import { Player } from './player'
 import { GOD_MOD_ALL } from 'src/constant'
-import { Eatable, Item } from '../basic/item.basic'
+import { Eatable, Item, WearableEffect } from '../basic/item.basic'
+import { Biome } from 'src/structures/GameMap'
 
 export type PlayerBar = 'hp' | 'hungry' | 'temperature' | 'h2o' | 'o2'
 
@@ -96,26 +97,36 @@ export class PlayerBars {
 
   private actualTemperatureChanges() {
     const currentAreas = this.player.cache.get('biome')
-    const effect = this.player.gameServer.map.find(
+    const biome = this.player.gameServer.map.find(
       this.player.gameServer.map.biomeOf(this.player.point()),
-    )?.[
-      this.player.actions.state.actualStates.onBridge()
-        ? 'onBridgeEffect'
-        : 'effect'
-    ]
+    )
+
+    const effect =
+      biome?.[
+        this.player.actions.state.actualStates.onBridge()
+          ? 'onBridgeEffect'
+          : 'effect'
+      ]
 
     const wearingEffect = this.player.items.weared?.item.data?.effect
+    let inWater = new WearableEffect({}).inWaterTempLoss
+    if (
+      !this.player.actions.state.actualStates.onBridge() &&
+      biome.type === Biome.water
+    )
+      inWater = wearingEffect?.inWaterTempLoss
+
+    const dayEffect =
+      (wearingEffect?.tempLossPerc.day || 0) + (inWater?.day || 0)
+    const nightEffect =
+      (wearingEffect?.tempLossPerc.night || 0) + (inWater?.night || 0)
 
     let tempChange =
-      effect.temperatureDay +
-      percentOf(wearingEffect?.tempLossPerc.day || 0, effect.temperatureDay)
+      effect.temperatureDay + percentOf(dayEffect, effect.temperatureDay)
     if (!this.player.gameServer.day.isDay())
       tempChange =
         effect.temperatureNight +
-        percentOf(
-          wearingEffect?.tempLossPerc.night || 0,
-          effect.temperatureNight,
-        )
+        percentOf(nightEffect, effect.temperatureNight)
 
     // fires within
     const firesAround = this.player.staticItems

@@ -71,8 +71,11 @@ export class BasicBioItem {
 
 export class Bio {
   private layer: Layer
+
+  node: Konva.Group
   // private _interval
   alsoSavedNodes: Array<Shape | Group> = []
+  attacked: { tween?: Konva.Tween; theta?: number } = {}
   // private bioGroup: ChangeEvented<Group>
   // resources: ChangeEvented<number>
   constructor(readonly data: BioItemProps) {
@@ -117,6 +120,26 @@ export class Bio {
     return this
   }
 
+  getAttacked(theta: number) {
+    const to = getPointByTheta(this.fixedPosition(), theta, 10)
+
+    if (
+      !this.attacked.tween ||
+      this.attacked.theta?.toFixed(2) !== theta.toFixed(2)
+    ) {
+      this.attacked.tween = new Konva.Tween({
+        node: this.node,
+        duration: 0.2,
+        ...to,
+        onFinish: () => this.attacked.tween.reverse(),
+      })
+    }
+
+    this.attacked.theta = theta
+
+    this.attacked.tween.play()
+  }
+
   draw(layer: Layer | Group) {
     if (!this.point) return
 
@@ -132,7 +155,7 @@ export class Bio {
       }),
       ...this.data.size,
     })
-    
+
     bioGroup.add(image)
     bioGroup.listening(false)
     if (this.type in StaticItemsAddons) {
@@ -142,6 +165,12 @@ export class Bio {
         also?.afterDraw?.()
       }
     }
+    this.node = bioGroup
     layer.add(bioGroup)
+  }
+
+  destroy() {
+    this.node.destroy()
+    this.attacked.tween?.destroy()
   }
 }

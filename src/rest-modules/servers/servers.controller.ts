@@ -10,7 +10,7 @@ export class ServersController {
   getServers() {
     const servers = GameServers.map((gameServer, apiPath) => ({
       name: gameServer.information.name,
-      api: SERVER_API(apiPath),
+      api: SERVER_API(apiPath, true),
       players: gameServer.alivePlayers.size,
     }))
     return servers

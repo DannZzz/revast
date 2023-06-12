@@ -10,6 +10,7 @@ import { loadAdminCommands } from './before/loadAdminCoomands'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import config from 'config'
 import { connectMongo } from './db/connect'
+import { WsAdapter } from '@nestjs/platform-ws'
 
 async function bootstrap() {
   await Promise.all([
@@ -26,8 +27,9 @@ async function bootstrap() {
           : '*',
     },
   })
-
+  app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
   await app.listen(+PORT)
 }
 bootstrap()
+
