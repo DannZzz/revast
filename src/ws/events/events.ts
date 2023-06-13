@@ -98,7 +98,7 @@ export interface ServerToClientEvents {
 export interface ClientToServerEvents {
   autofood(data: [value: NumberBoolean]): void
   craftRequest(data: [craftId: string]): void
-  clickItem(data: [number]): void
+  clickItem(data: [id: number]): void
   joinServer(data: [JoinPlayerDto]): void
   mouseAngle(data: [angle: number, theta: number]): void
   toggles(data: ToggleKeys): void

@@ -55,6 +55,8 @@ export const TIMEOUT_UNPICK_WEAPON = 6
 export const TIMEOUT_UNWEAR_HELMET = 3
 export const TIMEOUT_BUILDING = 0.8
 
+export const MAX_SCREEN_SIZE = new Size(2540, 2000)
+
 export const MOB_GLOBAL_SPEED_EFFECT = -15
 
 export const MOB_DIR_NAMES = ['mobs']

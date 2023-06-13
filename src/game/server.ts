@@ -8,6 +8,7 @@ import {
   PLAYER_BODY_POINTS,
   GAME_DAY_SECONDS,
   XP_AFTER_EACH_DAY,
+  MAX_SCREEN_SIZE,
 } from 'src/constant'
 import { Mobs } from 'src/data/mobs'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
@@ -30,6 +31,7 @@ import { bioItemByMapId } from 'src/data/bio'
 import { BasicMath } from 'src/utils/math'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { Wss } from 'src/ws/WS/WSS'
+import { correctScreenSize } from 'src/utils/correct-screen-size'
 
 export type TMap = typeof BasicMap
 
@@ -104,14 +106,22 @@ export class GameServer implements GameProps {
         return
       }
     }
-    socket.inGame = true
+
+    if (
+      !correctScreenSize(
+        new Size(screen?.width, screen?.height),
+        MAX_SCREEN_SIZE,
+      )
+    )
+      return socket.close()
+
     const newToken = Token()
     const login = newPlayerLogin(newToken.current, {
       playerId: this.notBusyPlayerId(),
       serverInfo: this.information,
       currentSocketId: socketId,
     })
-
+    socket.inGame = true
     const player = new Player({
       name: name.slice(0, PLAYER_NAME_MAX_SIZE),
       token: newToken,

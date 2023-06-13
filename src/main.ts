@@ -12,6 +12,7 @@ import config from 'config'
 import { connectMongo } from './db/connect'
 import { WsAdapter } from '@nestjs/platform-ws'
 import connectDiscordBot from './apps/discord/discord-bot'
+import helmet from 'helmet'
 
 async function bootstrap() {
   await Promise.all([
@@ -22,20 +23,24 @@ async function bootstrap() {
     connectDiscordBot(),
   ])
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: {
-      origin: process.env.NODE_ENV === 'production' ? config.get('WEB') : '*',
-    },
-  })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
-  console.log(
-    'origin_cors',
-    process.env.NODE_ENV === 'production' ? config.get('WEB') : '*',
-    config.util.getEnv('NODE_ENV'),
-  )
   app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
-  app.enableCors()
+  app.use(helmet())
+  app.enableCors({
+    origin: (origin, cb) => {
+      const allowedOrigins = [config.get('WEB')]
+      console.log(origin, allowedOrigins)
+      if (!origin || allowedOrigins.indexOf(origin) === -1) {
+        cb(new Error('Not allowed by CORS'))
+      } else {
+        cb(null, true)
+      }
+    },
+    methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
+    credentials: true,
+  })
   await app.listen(+PORT)
 }
 bootstrap()

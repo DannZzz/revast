@@ -26,6 +26,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         ws: true,
+        headers: { origin: "http://localhost:3000" },
       },
     },
   },

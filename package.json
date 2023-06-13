@@ -34,6 +34,7 @@
     "datypes": "^1.3.1",
     "discord.js": "^14.11.0",
     "glob": "^10.2.6",
+    "helmet": "^7.0.0",
     "intersects": "^2.7.2",
     "mongoose": "^7.2.2",
     "openai": "^3.2.1",

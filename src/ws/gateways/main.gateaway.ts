@@ -29,7 +29,17 @@ import { Wss } from '../WS/WSS'
 // @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
 @WebSocketGateway({
   path: '/ws/main',
-  cors: { origin: <string>config.get('WEB') || '*' },
+  cors: {
+    origin: (origin, cb) => {
+      const allowedOrigins = [config.get('WEB')]
+      console.log('ws', origin, allowedOrigins)
+      if (!origin || allowedOrigins.indexOf(origin) === -1) {
+        cb(new Error('Not allowed by CORS'))
+      } else {
+        cb(null, true)
+      }
+    },
+  },
   transports: ['websocket'],
 })
 export class MainGateway implements OnGatewayInit {

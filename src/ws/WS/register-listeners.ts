@@ -1,5 +1,6 @@
 import { NB } from 'src/utils/NumberBoolean'
 import { Wss } from './WSS'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export default function registerListeners(this: Wss) {
   this.on('joinServer', (ws, [joinPlayerDto]) => {
@@ -10,15 +11,24 @@ export default function registerListeners(this: Wss) {
       this.gameServer.to(ws.id)?.toggle.set(toggles)
     })
     .on('mouseAngle', (ws, data) => {
+      if ([data[0], data[1]].some((n) => !isNumber(n, -1000, 1000))) {
+        return
+      }
       this.gameServer.to(ws.id)?.setAngle(data[0], data[1])
     })
     .on('clickItem', (ws, data) => {
+      if (!isNumber(data[0], 1, 1000)) {
+        return
+      }
       this.gameServer.to(ws.id)?.items.click(data[0])
     })
     .on('craftRequest', (ws, data) => {
       this.gameServer.to(ws.id)?.items.craftItem(data[0])
     })
     .on('setItemRequest', (ws, data) => {
+      if (!isNumber(data[0], 1, 1000)) {
+        return
+      }
       const player = this.gameServer.to(ws.id)
       if (!player) return
       this.emitable(ws.id).emit('setItemResponse', [
@@ -35,6 +45,9 @@ export default function registerListeners(this: Wss) {
       if (player) player.settings.autofood(NB.from(data[0]))
     })
     .on('dropRequest', (ws, data) => {
+      if (!isNumber(data[0], 1, 1000)) {
+        return
+      }
       const player = this.gameServer.to(ws.id)
       if (player) player.items.dropItem(data[0], NB.from(data[1]))
     })
@@ -45,9 +58,15 @@ export default function registerListeners(this: Wss) {
       this.gameServer.to(ws.id)?.chatStatus(NB.from(data[0]))
     })
     .on('requestActionableHolder', (ws, data) => {
+      if (!isNumber(data[1], 1, 1000)) {
+        return
+      }
       this.gameServer.to(ws.id)?.actions.actionableHold(data)
     })
     .on('requestActionableHolderTake', (ws, data) => {
+      if (!isNumber(data[1], 0, 15)) {
+        return
+      }
       this.gameServer.to(ws.id)?.actions.actionableTake(data)
     })
 }

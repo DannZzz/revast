@@ -3,10 +3,12 @@ import { ChangeEvented, onChange } from '../utils/OnChange'
 import { GetSet } from './GetSet'
 import { rectToPolygon } from '../utils/polygons'
 import { UniversalHitbox } from 'src/utils/universal-within'
+import { MAX_SCREEN_SIZE } from 'src/constant'
+import { correctScreenSize } from 'src/utils/correct-screen-size'
 
 export class Camera {
   point: GetSet<Point> = GetSet(new Point())
-  private readonly maxScreenSize = new Size(2540, 2000)
+  private readonly maxScreenSize = MAX_SCREEN_SIZE
   size: GetSet<Size> = GetSet(null)
   map: GetSet<Size> = GetSet(null)
   private evented: boolean = false
@@ -42,17 +44,10 @@ export class Camera {
   registerEvents() {
     this.size.onChange((newVal) => {
       if (!newVal) return
-      let correctSize = new Size(newVal.width, newVal.height)
-      let shouldReturn = false
-      if (newVal.width > this.maxScreenSize.width) {
-        shouldReturn = true
-        correctSize.width = this.maxScreenSize.width
-      }
-      if (newVal.height > this.maxScreenSize.height) {
-        shouldReturn = true
-        correctSize.height = this.maxScreenSize.height
-      }
-      if (shouldReturn) return correctSize
+      return correctScreenSize(
+        new Size(newVal.width, newVal.height),
+        this.maxScreenSize,
+      )
     })
   }
 
