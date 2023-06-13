@@ -10,7 +10,6 @@ const openai = new OpenAIApi(configuration) //
 export const openAiFind = async (prompt: string): Promise<string> => {
   try {
     const toEng = await translate(prompt, null, 'en')
-    console.log('тоенг', toEng.translation)
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
