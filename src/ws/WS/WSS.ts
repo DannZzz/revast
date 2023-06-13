@@ -15,7 +15,7 @@ export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
 
   constructor(
-    private server: MainServer,
+    readonly server: MainServer,
     private readonly gs: () => GameServer,
   ) {
     this.init()

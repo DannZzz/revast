@@ -20,6 +20,6 @@ export const openAiFind = async (prompt: string): Promise<string> => {
     return completion.data.choices[0]?.message?.content
   } catch (e) {
     console.log('OPEN_AI ERROR', e)
-    return 'Я получаю ошибку извините..'
+    return 'Я получаю ошибку извините, либо не успеваю вам отвечать..'
   }
 }

@@ -19,26 +19,24 @@ export const resolveDJMessage = (
     if (!args[0]) {
       return listenBoss(client, msg)
     }
+  }
 
-    if (
-      ['отвали', 'выключить', 'уйди'].some(
-        (txt) => levenshtein(txt, args[0]) < 3,
-      )
-    ) {
-      msg.reply('Хорошо, хозяин')
-      const data = ListenBossCollectors.get(msg.author.id)
-      data.stoped = true
-      data.collector.stop()
-      return
-    } else {
-      return listenBoss(client, msg)
-    }
+  if (
+    !args[1] &&
+    ['отвали', 'выключить', 'уйди'].some((txt) => levenshtein(txt, args[0]) < 3)
+  ) {
+    msg.reply('Хорошо, хозяин')
+    const data = ListenBossCollectors.get(msg.author.id)
+    data.stoped = true
+    data.collector.stop()
+    return
   }
 
   const commands = DJCommandResolver.values()
   for (let cmd of commands) {
     let i = 0
     let _args = [...args]
+    if (cmd.admin && !MyName.admins.includes(msg.author.id)) continue
     if (
       !cmd.arguments.every((arg) => {
         if (!_args[i]) return false

@@ -1,9 +1,10 @@
 import config from 'config'
 
 export const name: string = config.get('DISCORD_BOT_NAME') || 'икс,x,х' //
-
+const admins: string = config.get('ADMIN_DISCORD_IDS') || ''
 export class MyName {
   static names = name.split(',').map((s) => s.toLowerCase().trim())
+  static admins = admins.split(',')
 
   static has(str: string | string[]): boolean {
     const _names = Array.isArray(str) ? str : [str]
