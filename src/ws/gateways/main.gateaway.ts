@@ -29,7 +29,7 @@ import { Wss } from '../WS/WSS'
 // @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
 @WebSocketGateway({
   path: '/ws/main',
-  cors: { origin: process.env.NODE_ENV || '*' },
+  cors: { origin: <string>config.get('WEB') || '*' },
   transports: ['websocket'],
 })
 export class MainGateway implements OnGatewayInit {
