@@ -11,6 +11,7 @@ import { NestExpressApplication } from '@nestjs/platform-express'
 import config from 'config'
 import { connectMongo } from './db/connect'
 import { WsAdapter } from '@nestjs/platform-ws'
+import connectDiscordBot from './apps/discord/discord-bot'
 
 async function bootstrap() {
   await Promise.all([
@@ -18,7 +19,9 @@ async function bootstrap() {
     loadItems(),
     loadMobs(),
     loadAdminCommands(),
+    connectDiscordBot(),
   ])
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: {
       origin:
@@ -32,4 +35,3 @@ async function bootstrap() {
   await app.listen(+PORT)
 }
 bootstrap()
-

@@ -2,5 +2,8 @@
   "WEB": "http://localhost:3000",
   "PORT": 5000,
   "SERVER": "http://localhost:5000",
-  "MONGO": "mongodb+srv://dann:asdf1234@revast.yro7zgg.mongodb.net/beta?retryWrites=true&w=majority"
+  "MONGO": "mongodb+srv://dann:asdf1234@revast.yro7zgg.mongodb.net/beta?retryWrites=true&w=majority",
+  "DISCORD_BOT_TOKEN": "MTExNzkyMDQzMTA0Nzk4NzI4MA.GYyuxx.74V-OMgXSaR8KeiwZEm6HROUg6qhZ4h_JRV6Zo",
+  "DISCORD_BOT_NAME": "икс,x,х",
+  "OPENAI_KEY": "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"
 }
