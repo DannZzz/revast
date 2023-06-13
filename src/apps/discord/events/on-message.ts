@@ -10,7 +10,7 @@ export const onDiscordMessage = (client: Client) => {
   client.on('messageCreate', (msg) => {
     if (ListenBossCollectors.has(msg.author.id)) return
 
-    if (!msg.content) return
+    if (!msg.content || msg.author.bot) return
     let args = msg.content.split(/ +/g).map((s) => s.toLowerCase())
     const nameInArgs = MyName.find(args)
     if (!nameInArgs) return
