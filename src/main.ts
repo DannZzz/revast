@@ -35,6 +35,7 @@ async function bootstrap() {
   )
   app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
+  app.enableCors()
   await app.listen(+PORT)
 }
 bootstrap()
