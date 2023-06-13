@@ -24,12 +24,15 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: {
-      origin:
-        config.util.getEnv('NODE_ENV') === 'production'
-          ? config.get('WEB')
-          : '*',
+      origin: process.env.NODE_ENV === 'production' ? config.get('WEB') : '*',
     },
   })
+
+  console.log(
+    'origin_cors',
+    process.env.NODE_ENV === 'production' ? config.get('WEB') : '*',
+    config.util.getEnv('NODE_ENV'),
+  )
   app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
   await app.listen(+PORT)

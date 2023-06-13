@@ -25,7 +25,7 @@ import {
   tokenDataBySocketId,
 } from 'src/structures/tokens/token-chest'
 import { NB } from 'src/utils/NumberBoolean'
-import { MainServer } from 'src/ws/events/events'
+import { MainServer, MainSocket } from 'src/ws/events/events'
 import { bioItemByMapId } from 'src/data/bio'
 import { BasicMath } from 'src/utils/math'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
@@ -90,8 +90,9 @@ export class GameServer implements GameProps {
     return new Uptime(this.madeAt)
   }
 
-  joinPlayer(details: JoinPlayerDto & { socketId: string }) {
-    const { socketId, name, screen, token } = details
+  joinPlayer(details: JoinPlayerDto & { socket: MainSocket }) {
+    const { socket, name, screen, token } = details
+    const socketId = socket.id
     if (token && TokenChest.has(token)) {
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {
@@ -103,7 +104,7 @@ export class GameServer implements GameProps {
         return
       }
     }
-
+    socket.inGame = true
     const newToken = Token()
     const login = newPlayerLogin(newToken.current, {
       playerId: this.notBusyPlayerId(),

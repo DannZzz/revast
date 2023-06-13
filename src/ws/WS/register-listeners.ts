@@ -3,8 +3,8 @@ import { Wss } from './WSS'
 
 export default function registerListeners(this: Wss) {
   this.on('joinServer', (ws, [joinPlayerDto]) => {
-    if (ws.id in this.server.clientList) return
-    this.gameServer.joinPlayer({ ...joinPlayerDto, socketId: ws.id })
+    if (ws.inGame) return
+    this.gameServer.joinPlayer({ ...joinPlayerDto, socket: ws })
   })
     .on('toggles', (ws, toggles) => {
       this.gameServer.to(ws.id)?.toggle.set(toggles)

@@ -118,6 +118,7 @@ export type MainServer = WebSocket.Server & {
 }
 export type MainSocket = WebSocket.WebSocket & {
   id: string
+  inGame: boolean
 }
 
 export type EventHandler<

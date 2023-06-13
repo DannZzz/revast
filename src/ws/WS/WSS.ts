@@ -70,6 +70,7 @@ export class Wss {
         }
         return s4() + s4() + '-' + s4()
       })()}`
+      ws.inGame = false
       this.server.clientList[ws.id] = ws
       // ws.binaryType = 'arraybuffer'
       ws.on('message', (data) => {
