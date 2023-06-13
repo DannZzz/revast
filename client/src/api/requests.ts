@@ -2,11 +2,9 @@ import axios from "axios"
 import { CompactItem, Craft, Highscore, ServerInformation } from "./type"
 
 export const getServers = async (): Promise<ServerInformation[]> => {
-  const headers = new Headers()
-  headers.set("Access-Control-Allow-Origin", "*")
   try {
-    const res = await fetch(`/api/servers`, { credentials: "include" })
-    return await res.json()
+    const res = await axios.get(`/api/servers`)
+    return res.data
   } catch (e) {
     console.error(e)
     return []
