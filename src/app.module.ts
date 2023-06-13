@@ -14,6 +14,7 @@ import { CacheModule } from '@nestjs/cache-manager'
     ServeStaticModule.forRoot({
       serveStaticOptions: {
         setHeaders(res, path, stat) {
+          res.set('Access-Control-Allow-Credentials', '*')
           res.set('Access-Control-Allow-Origin', '*')
         },
       },
