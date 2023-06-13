@@ -38,6 +38,7 @@ async function bootstrap() {
         cb(null, true)
       }
     },
+    allowedHeaders: 'Access-Control-Allow-Origin',
     methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
     credentials: true,
   })
