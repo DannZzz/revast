@@ -19,7 +19,7 @@ export const optimizeHandleAttackedItems = (
   players.forEach((player) => {
     const ids = [
       ...player.cache.get('staticBios', true),
-      player.cache.get('staticSettables', true),
+      ...player.cache.get('staticSettables', true),
     ]
     const touched = items.filter((item) => ids.includes(item.id))
     player.socket().emit(
