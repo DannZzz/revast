@@ -14,15 +14,18 @@ import { CacheModule } from '@nestjs/cache-manager'
     ServeStaticModule.forRoot({
       serveStaticOptions: {
         setHeaders(res, path, stat) {
-          res.set('Access-Control-Allow-Credentials', '*')
-          res.set('Access-Control-Allow-Origin', '*')
+          // res.set('Access-Control-Allow-Origin', '*')
         },
       },
       serveRoot: '/api/images',
       rootPath: join(__dirname, '..', 'assets'),
     }),
     ServeStaticModule.forRoot({
-      serveStaticOptions: {},
+      serveStaticOptions: {
+        setHeaders(res, path, stat) {
+          // res.set('Access-Control-Allow-Origin', '*')
+        },
+      },
       renderPath: '/*',
       exclude: ['/api', '/ws'],
       rootPath: join(__dirname, '..', 'client', 'dist'),

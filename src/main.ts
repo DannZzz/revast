@@ -29,16 +29,17 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   app.use(helmet())
   app.enableCors({
-    origin: (origin, cb) => {
-      const allowedOrigins = [config.get('WEB')]
-      console.log(origin, allowedOrigins)
-      if (!origin || allowedOrigins.indexOf(origin) === -1) {
-        cb(new Error('Not allowed by CORS'))
-      } else {
-        cb(null, true)
-      }
-    },
-    methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
+    // origin: (origin, cb) => {
+    //   const allowedOrigins = [config.get('WEB')]
+    //   console.log(origin, allowedOrigins)
+    //   if (!origin || allowedOrigins.indexOf(origin) === -1) {
+    //     cb(new Error('Not allowed by CORS'))
+    //   } else {
+    //     cb(null, true)
+    //   }
+    // },
+    origin: true,
+    methods: ['GET', 'POST'],
     credentials: true,
   })
   await app.listen(+PORT)
