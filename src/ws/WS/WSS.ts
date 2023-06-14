@@ -67,8 +67,8 @@ export class Wss {
       let userAgent = req.headers['user-agent']
       let origin = req.headers['origin']
       // . . .
-      console.log(userAgent, origin)
-      console.log(ip)
+      console.log(origin, ip)
+      console.log(req.headers)
       ws.id = `ws-${(() => {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
