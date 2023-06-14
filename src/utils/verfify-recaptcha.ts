@@ -11,7 +11,6 @@ export const verifyUserRecaptcha = async (token: string): Promise<boolean> => {
       })
       .set('accept', 'json')
 
-    console.log(res.body)
     return res.body.success
   } catch (e) {
     console.log('RECAPTCHA_VERIFY_ERROR', e)

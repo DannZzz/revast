@@ -20,7 +20,6 @@ export class Wss {
   readonly messagesPer5sInterval = new Interval(
     () =>
       this.server.clients.forEach((socket) => {
-        console.log((socket as any).messagesPer5s)
         ;(socket as any).messagesPer5s = 0
       }),
     5000,
