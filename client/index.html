@@ -13,7 +13,7 @@
     />
     <meta name="robots" content="index, follow" />
     <meta name="revisit-after" content="3 days" />
-
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Le7BZkmAAAAAFzckKN6tAuInU-uF2aiG1S9HWcB"></script>
     <title>revast</title>
     <link rel="icon" href="images/water-bottle.png" />
     <link
@@ -27,7 +27,21 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
+    <script>
+      function onClick(e) {
+        e.preventDefault()
+        grecaptcha.enterprise.ready(async () => {
+          const token = await grecaptcha.enterprise.execute(
+            "6Le7BZkmAAAAAFzckKN6tAuInU-uF2aiG1S9HWcB",
+            { action: "LOGIN" }
+          )
+          // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
+          // reCAPTCHA Enterprise to the end user's browser.
+          // This token must be validated by creating an assessment.
+          // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+        })
+      }
+    </script>
     <script src="/src/index.tsx" type="module"></script>
   </body>
 </html>
