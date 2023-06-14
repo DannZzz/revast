@@ -100,6 +100,7 @@ export class StaticSettableItem
 
     this.attacked.theta = theta
 
+    this.attacked.tween.reset()
     this.attacked.tween.play()
     if (showHpAngle && "tryArcAngle" in this) this.tryArcAngle(showHpAngle)
   }

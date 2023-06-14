@@ -136,7 +136,7 @@ export class Bio {
     }
 
     this.attacked.theta = theta
-
+    this.attacked.tween.reset()
     this.attacked.tween.play()
   }
 

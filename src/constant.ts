@@ -24,6 +24,8 @@ export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   return `${origin}${combine}`
 }
 
+export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 150
+
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
 export const ONE_DAY_MS = 86400 * 1000

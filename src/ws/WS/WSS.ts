@@ -11,10 +11,20 @@ import { Emitable, WsMessage } from './type'
 import registerListeners from './register-listeners'
 import config from 'config'
 import c from 'config'
+import { Timeout } from 'src/structures/timers/timeout'
+import { Interval } from 'src/structures/timers/interval'
+import { MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S } from 'src/constant'
 
 export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
-
+  readonly messagesPer5sInterval = new Interval(
+    () =>
+      this.server.clients.forEach((socket) => {
+        console.log((socket as any).messagesPer5s)
+        ;(socket as any).messagesPer5s = 0
+      }),
+    5000,
+  )
   constructor(
     readonly server: MainServer,
     private readonly gs: () => GameServer,
@@ -78,6 +88,15 @@ export class Wss {
         return ws.close()
       }
 
+      ws.autodeleteTimeout = new Timeout(() => {
+        if (!ws.inGame) {
+          delete this.server.clientList[ws.id]
+          ws.close()
+        }
+      }, 5000).run()
+
+      this.messagesPer5sInterval.run()
+      ws.messagesPer5s = 0
       ws.id = `ws-${(() => {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -90,6 +109,10 @@ export class Wss {
       this.server.clientList[ws.id] = ws
       // ws.binaryType = 'arraybuffer'
       ws.on('message', (data) => {
+        ws.messagesPer5s++
+        if (ws.messagesPer5s >= MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
+          return ws.close()
+        }
         const message = binaryMessageToObject(data)
         this.takeMessage(message, ws)
       })
@@ -97,6 +120,7 @@ export class Wss {
       ws.on('close', () => {
         this.gameServer.to(ws.id)?.disconnect()
         delete this.server.clientList[ws.id]
+        if (this.server.clients.size === 0) this.messagesPer5sInterval.stop()
       })
     })
   }

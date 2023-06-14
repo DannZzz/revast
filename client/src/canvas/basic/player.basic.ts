@@ -13,6 +13,7 @@ import { Game } from "../game"
 import { Converter } from "../structures/Converter"
 import { getPointByTheta } from "../animations/rotation"
 import { PlayerMessages } from "../player/player-messages"
+import { playerHighlight } from "../data/cached-nodes"
 
 export interface BasicPlayerProps {
   name: string
@@ -92,13 +93,8 @@ export class BasicPlayer<
       // ...absolutePoint,
     })
     Game.createMessageGroup(this.layer, this.messagesNode)
-    this.highlight = new Konva.Circle({
-      radius: 150,
+    this.highlight = playerHighlight.clone({
       ...absolutePoint,
-      globalCompositeOperation: "destination-out",
-      fill: "rgba(255,255,255)",
-      stroke: "white",
-      // strokeWidth: 1,
       id: `${id}-highlight`,
     })
     Game.createHighlight(this.layer2, this.highlight)

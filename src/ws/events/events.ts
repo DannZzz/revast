@@ -19,6 +19,7 @@ import { WearingEntity } from 'src/entities/wearing.entity'
 import { NumberBoolean } from 'src/game/types/any.types'
 import { WalkEffect } from 'src/game/types/player.types'
 import { Point, Size } from 'src/global/global'
+import { Timeout } from 'src/structures/timers/timeout'
 import { ToggleKeys } from 'src/structures/toggle-options'
 import * as WebSocket from 'ws'
 
@@ -119,6 +120,8 @@ export type MainServer = WebSocket.Server & {
 export type MainSocket = WebSocket.WebSocket & {
   id: string
   inGame: boolean
+  autodeleteTimeout: Timeout
+  messagesPer5s: number
 }
 
 export type EventHandler<
