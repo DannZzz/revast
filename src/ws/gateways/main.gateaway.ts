@@ -23,7 +23,6 @@ import GameServers from 'src/servers/game-servers'
 import { WsRateLimit } from '../WsRateLimit'
 import { NumberBoolean } from 'src/game/types/any.types'
 import config from 'config'
-import { BSON, EJSON } from 'bson'
 import { Wss } from '../WS/WSS'
 
 // @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
@@ -39,6 +38,7 @@ import { Wss } from '../WS/WSS'
         cb(null, true)
       }
     },
+    allowedHeaders: `Access-Control-Allow-Origin: ${config.get('WEB')}`,
   },
   transports: ['websocket'],
 })

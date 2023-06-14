@@ -61,7 +61,14 @@ export class Wss {
   }
 
   private init() {
-    this.server.on('connection', (ws: MainSocket) => {
+    this.server.on('connection', (ws: MainSocket, req) => {
+      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+      // . . .
+      let userAgent = req.headers['user-agent']
+      let origin = req.headers['origin']
+      // . . .
+      console.log(userAgent, origin)
+      console.log(ip)
       ws.id = `ws-${(() => {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
