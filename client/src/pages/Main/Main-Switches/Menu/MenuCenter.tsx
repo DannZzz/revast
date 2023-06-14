@@ -23,9 +23,9 @@ const MenuCenter: Component<{}> = (props) => {
   function onPlay() {
     if (started() || loading()) return
     gc.ready(function () {
-      gc.execute("reCAPTCHA_site_key", { action: "submit" }).then(function (
-        token
-      ) {
+      gc.execute("6LdeAJomAAAAAJlIkoHVVs7UPlxSJw3Ei58k7ilB", {
+        action: "submit",
+      }).then(function (token) {
         console.log(token)
         // Add your logic to submit to your backend server here.
         if (token.score > 0.5) {
