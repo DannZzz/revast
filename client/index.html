@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'sha256-BPHM57EhDNMNoVF7W5VZZZzk4NW7YyPbGuvHeOCQ6+Q=' "
+      content="default-src 'self';
+      script-src 'report-sample' 'self';
+      style-src 'report-sample' 'self' https://fonts.googleapis.com;
+      object-src 'none';
+      base-uri 'self';
+      connect-src 'self';
+      font-src 'self';
+      frame-src 'self';
+      img-src 'self';
+      manifest-src 'self';
+      media-src 'self';
+      report-uri https://648990a7bf4bdd8c5cde7820.endpoint.csper.io/?v=0;
+      worker-src 'none';"
     />
     <title>revast</title>
     <link rel="icon" href="images/water-bottle.png" />
