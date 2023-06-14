@@ -36,12 +36,14 @@
             "6Le7BZkmAAAAAFzckKN6tAuInU-uF2aiG1S9HWcB",
             { action: "LOGIN" }
           )
+          console.log(token)
           // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
           // reCAPTCHA Enterprise to the end user's browser.
           // This token must be validated by creating an assessment.
           // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
         })
       }
+      document.addEventListener("click", onClick, { once: true })
     </script>
     <script src="/src/index.tsx" type="module"></script>
   </body>
