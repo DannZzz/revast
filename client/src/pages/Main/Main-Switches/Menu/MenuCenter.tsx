@@ -23,7 +23,7 @@ const MenuCenter: Component<{}> = (props) => {
   function onPlay() {
     if (started() || loading()) return
     gc.ready(function () {
-      gc.execute("6LdeAJomAAAAAJlIkoHVVs7UPlxSJw3Ei58k7ilB", {
+      gc.execute("6LfREZomAAAAAOSEYPsFlYcKwsixuUcELXRc4RAk", {
         action: "submit",
       }).then(function (token) {
         console.log(token)
