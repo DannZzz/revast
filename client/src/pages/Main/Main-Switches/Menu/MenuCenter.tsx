@@ -12,7 +12,7 @@ import { ServerInformation } from "../../../../api/type"
 import gameState from "../../../../store/game-state"
 import { socket } from "../../../../socket/socket"
 import { PlayerInformationDto } from "../../../../socket/events"
-
+const gc: any = (window as any).grecaptcha
 const MenuCenter: Component<{}> = (props) => {
   const { gs, startGame, leaveGame, started, loading, setLoading } = gameState
   const [servers] = createResource(getServers)
@@ -22,11 +22,21 @@ const MenuCenter: Component<{}> = (props) => {
 
   function onPlay() {
     if (started() || loading()) return
-    startGame(
-      nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
-      server()
-    )
-    setLoading(true)
+    gc.ready(function () {
+      gc.execute("reCAPTCHA_site_key", { action: "submit" }).then(function (
+        token
+      ) {
+        console.log(token)
+        // Add your logic to submit to your backend server here.
+        if (token.score > 0.5) {
+          startGame(
+            nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
+            server()
+          )
+          setLoading(true)
+        }
+      })
+    })
   }
 
   createEffect(
