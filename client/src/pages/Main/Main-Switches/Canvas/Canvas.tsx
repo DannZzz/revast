@@ -30,7 +30,11 @@ const Canvas: Component<{}> = (props) => {
   createEffect(
     on(started, (started) => {
       if (started) {
-        game.joinPlayer({ name: gs.nickname, token: gs.token() })
+        game.joinPlayer({
+          name: gs.nickname,
+          token: gs.token(),
+          recaptcha_token: gs.recaptcha_token,
+        })
 
         socket.on("playerDied", ([playerInformationDto]) => {
           leaveGame(playerInformationDto)

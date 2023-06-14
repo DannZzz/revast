@@ -63,6 +63,7 @@ export class Game {
       this.updateLoop()
       socket.emit("joinServer", [
         {
+          recaptcha_token: playerData.recaptcha_token,
           name: playerData.name,
           screen: this.size,
           token: playerData.token,

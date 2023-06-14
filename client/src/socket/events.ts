@@ -34,6 +34,7 @@ export interface JoinPlayerDto {
   name: string
   screen: Size
   token: string
+  recaptcha_token: string
 }
 
 export class PlayerJoinedDto {

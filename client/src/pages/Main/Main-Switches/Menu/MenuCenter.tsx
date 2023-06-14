@@ -1,5 +1,6 @@
 import {
   Component,
+  batch,
   createEffect,
   createResource,
   createSignal,
@@ -26,15 +27,14 @@ const MenuCenter: Component<{}> = (props) => {
       gc.execute("6LfREZomAAAAAORz_JisAgiuSVK964J_2G2fFFxS", {
         action: "submit",
       }).then(function (token) {
-        console.log(token)
-        // Add your logic to submit to your backend server here.
-        if (token.score > 0.5) {
+        batch(() => {
           startGame(
             nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
-            server()
+            server(),
+            token
           )
           setLoading(true)
-        }
+        })
       })
     })
   }

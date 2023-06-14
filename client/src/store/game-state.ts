@@ -6,6 +6,7 @@ import { PlayerInformationDto } from "../socket/events"
 
 export interface GameState {
   token: () => string
+  recaptcha_token: string
   loaded: boolean
   nickname: string
   server: ServerInformation
@@ -13,6 +14,7 @@ export interface GameState {
 
 const initialState: GameState = {
   token: () => localStorage.getItem("_"),
+  recaptcha_token: null,
   loaded: false,
   nickname: localStorage.getItem("nickname"),
   server: null,
@@ -31,11 +33,16 @@ const createGameState = () => {
 
   const [gs, setState] = createStore<GameState>(initialState)
 
-  const startGame = (nickname: string, server: ServerInformation) => {
+  const startGame = (
+    nickname: string,
+    server: ServerInformation,
+    recaptcha_token: string
+  ) => {
     localStorage.setItem("nickname", nickname)
     connectWS(server.api)
     batch(() => {
       setState({
+        recaptcha_token,
         nickname: nickname,
         server,
       })
@@ -54,6 +61,7 @@ const createGameState = () => {
   const leaveGame = (endedPlayer: PlayerInformationDto) => {
     batch(() => {
       setState({
+        recaptcha_token: null,
         server: null,
       })
       setPage("game-over")

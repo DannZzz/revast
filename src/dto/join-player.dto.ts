@@ -13,4 +13,7 @@ export class JoinPlayerDto {
 
   @IsString()
   token?: string
+
+  @IsString()
+  recaptcha_token: string
 }

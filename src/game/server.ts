@@ -92,7 +92,9 @@ export class GameServer implements GameProps {
     return new Uptime(this.madeAt)
   }
 
-  joinPlayer(details: JoinPlayerDto & { socket: MainSocket }) {
+  joinPlayer(
+    details: Omit<JoinPlayerDto, 'recaptcha_token'> & { socket: MainSocket },
+  ) {
     const { socket, name, screen, token } = details
     const socketId = socket.id
     if (token && TokenChest.has(token)) {

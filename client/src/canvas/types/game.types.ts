@@ -11,6 +11,7 @@ export interface GameProps {
 export interface JoinPlayer {
   name: string
   token: string
+  recaptcha_token: string
 }
 
 export type GameEvents = {
