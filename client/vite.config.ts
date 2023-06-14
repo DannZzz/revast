@@ -30,7 +30,10 @@ export default defineConfig({
       },
     },
   },
+
   build: {
+    minify: true,
+    cssMinify: true,
     target: "esnext",
   },
 })
