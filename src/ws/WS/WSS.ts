@@ -9,7 +9,8 @@ import { GameServer } from 'src/game/server'
 import { binaryMessageToObject, emitDataToBinary } from './binary-converter'
 import { Emitable, WsMessage } from './type'
 import registerListeners from './register-listeners'
-import { BSON } from 'bson'
+import config from 'config'
+import c from 'config'
 
 export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
@@ -68,7 +69,15 @@ export class Wss {
       let origin = req.headers['origin']
       // . . .
       // console.log(origin, ip)
-      // console.log(req.headers)
+
+      const allowedOrigins = [config.get('WEB')]
+      if (
+        process.env.NODE_ENV === 'production' &&
+        (!origin || !allowedOrigins.includes(origin))
+      ) {
+        return ws.close()
+      }
+
       ws.id = `ws-${(() => {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
