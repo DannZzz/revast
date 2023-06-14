@@ -27,7 +27,11 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
-  app.use(helmet())
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  )
   app.enableCors({
     // origin: (origin, cb) => {
     //   const allowedOrigins = [config.get('WEB')]
