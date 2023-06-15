@@ -24,7 +24,7 @@ export const listenBoss = (
     time: 2 * 30000,
   })
 
-  args = args.slice(args.indexOf(name))
+  // args = args.slice(args.indexOf(name))
   const data = <ListenBossData>{ stoped: false, collector: coll }
   ListenBossCollectors.set(msg.author.id, data)
   resolveDJMessage(client, msg, args)

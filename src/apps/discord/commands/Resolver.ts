@@ -22,7 +22,7 @@ export const resolveDJMessage = (
   let forCommands = [...args]
   if (name) {
     args.splice(args.indexOf(name), 1)
-    forCommands.slice(args.indexOf(name))
+    forCommands = forCommands.slice(args.indexOf(name))
     if (!args[0]) {
       return listenBoss(client, msg, name, args)
     }
