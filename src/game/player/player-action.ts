@@ -86,8 +86,8 @@ export class PlayerAction {
     const tryTo = (mainPoint: Point, combine: Point) => {
       const pos = this.player.bodyPositions(combine)
       const itemWithin = this.player.staticItems
-        .for(pos.points)
-        .itemWithin(pos.points)
+        .for(pos.collision)
+        .itemWithin(pos.collision)
       if (itemWithin) {
         if (combine.x) {
           const absX = Math.abs(combine.x) / 4
@@ -98,8 +98,8 @@ export class PlayerAction {
             )
             if (
               !this.player.staticItems
-                .for(posAfterPhysics.points)
-                .someWithin(posAfterPhysics.points)
+                .for(posAfterPhysics.collision)
+                .someWithin(posAfterPhysics.collision)
             ) {
               mainPoint.y -= absX
             }
@@ -109,8 +109,8 @@ export class PlayerAction {
             )
             if (
               !this.player.staticItems
-                .for(posAfterPhysics.points)
-                .someWithin(posAfterPhysics.points)
+                .for(posAfterPhysics.collision)
+                .someWithin(posAfterPhysics.collision)
             ) {
               mainPoint.y += absX
             }
@@ -124,8 +124,8 @@ export class PlayerAction {
             )
             if (
               !this.player.staticItems
-                .for(posAfterPhysics.points)
-                .someWithin(posAfterPhysics.points)
+                .for(posAfterPhysics.collision)
+                .someWithin(posAfterPhysics.collision)
             ) {
               mainPoint.x -= absY
             }
@@ -135,8 +135,8 @@ export class PlayerAction {
             )
             if (
               !this.player.staticItems
-                .for(posAfterPhysics.points)
-                .someWithin(posAfterPhysics.points)
+                .for(posAfterPhysics.collision)
+                .someWithin(posAfterPhysics.collision)
             ) {
               mainPoint.x += absY
             }

@@ -32,6 +32,7 @@ import { Cache } from 'src/structures/cache/cache'
 import {
   GAME_DAY_SECONDS,
   MAX_ITEM_QUANTITY_IN_CRATE,
+  PLAYER_BODY_COLLISION_RADIUS,
   PLAYER_BODY_POINTS,
   TIMEOUT_BUILDING,
   TIMEOUT_UNPICK_WEAPON,
@@ -134,6 +135,10 @@ export class Player extends BasicElement<PlayerEvents> {
 
     const size = new Size(50, 50)
     return {
+      collision: <UniversalHitbox>{
+        radius: PLAYER_BODY_COLLISION_RADIUS,
+        point: combineClasses(this.point(), withPoint),
+      },
       points: rectToPolygon(startPoint, size),
       startPoint,
       corners: [
@@ -247,7 +252,11 @@ export class Player extends BasicElement<PlayerEvents> {
   }
 
   get points() {
-    return PLAYER_BODY_POINTS(this.point())
+    return PLAYER_BODY_POINTS(this.point().clone())
+  }
+
+  get collision() {
+    return { radius: PLAYER_BODY_COLLISION_RADIUS, point: this.point().clone() }
   }
 
   die() {
