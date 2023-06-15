@@ -96,11 +96,11 @@ const itemFor = (i: number, quantity: number = 999) => [
 ]
 
 export const START_ITEMS = () => [
-  itemFor(8, 3),
-  // itemFor(94),
-  // itemFor(95),
-  // itemFor(69),
-  // itemFor(92),
+  itemFor(8),
+  itemFor(67),
+  itemFor(75),
+  itemFor(90),
+  itemFor(91),
   // itemFor(93),
 ]
 
