@@ -113,6 +113,7 @@ export class Wss {
           return ws.close()
         }
         const message = binaryMessageToObject(data)
+        console.log(message.event)
         this.takeMessage(message, ws)
       })
 
