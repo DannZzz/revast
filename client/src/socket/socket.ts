@@ -22,6 +22,7 @@ type SC = {
 type CS = {
   [k in keyof ClientToServerEvents]: Parameters<ClientToServerEvents[k]>
 }
+const waitin: [WebSocket, any][] = []
 
 class WS {
   private socket: WebSocket
@@ -31,7 +32,9 @@ class WS {
   constructor(url: string) {
     this.socket = new WebSocket(url)
     this.socket.binaryType = "arraybuffer"
-
+    this.socket.onopen = () => {
+      if (!!waitin.length) waitin.forEach(([socket, data]) => socket.send(data))
+    }
     this.socket.onmessage = (ev) => {
       const eventObj: any = JSON.parse(
         creatingProcess(convertProcessFromArray(ev.data))
@@ -54,7 +57,6 @@ class WS {
     this.socket.close()
   }
 }
-const waitin: [WebSocket, any][] = []
 const l = 100
 function wsSend(socket: WebSocket, data: any) {
   // readyState - true, если есть подключение
@@ -62,7 +64,6 @@ function wsSend(socket: WebSocket, data: any) {
     waitin.push([socket, data])
     if (waitin.length > l) waitin.shift()
   } else {
-    if (!!waitin.length) waitin.forEach(([socket, data]) => socket.send(data))
     socket.send(data)
   }
 }
