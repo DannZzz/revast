@@ -117,13 +117,13 @@ export class GameServer implements GameProps {
     )
       return socket.close()
 
+    socket.inGame = true
     const newToken = Token()
     const login = newPlayerLogin(newToken.current, {
       playerId: this.notBusyPlayerId(),
       serverInfo: this.information,
       currentSocketId: socketId,
     })
-    socket.inGame = true
     const player = new Player({
       name: name.slice(0, PLAYER_NAME_MAX_SIZE),
       token: newToken,

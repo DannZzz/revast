@@ -90,6 +90,7 @@ export class Wss {
       ws.autodeleteTimeout = new Timeout(() => {
         if (!ws.inGame) {
           delete this.server.clientList[ws.id]
+          console.log('close cuz not in game', ws)
           ws.close()
         }
       }, 5000).run()
@@ -110,6 +111,7 @@ export class Wss {
       ws.on('message', (data) => {
         ws.messagesPer5s++
         if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
+          console.log('close cuz per 5')
           return ws.close()
         }
         const message = binaryMessageToObject(data)
