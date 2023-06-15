@@ -27,21 +27,29 @@ export class Toggle {
 
   set(key: string, val: boolean) {
     const converted = converter(key)
+
+    const send = () => {
+      socket.emit("toggles", [
+        NB.to(this.is("up")),
+        NB.to(this.is("down")),
+        NB.to(this.is("right")),
+        NB.to(this.is("left")),
+        NB.to(this.is("clicking")),
+      ])
+    }
+
     if (!converted) return
     if (val) {
       if (!this.keys.includes(converted)) {
         this.keys.push(converted)
+        send()
       }
     } else {
       const index = this.keys.indexOf(converted)
-      if (index !== -1) this.keys.remove(index)
+      if (index !== -1) {
+        this.keys.remove(index)
+        send()
+      }
     }
-    socket.emit("toggles", [
-      NB.to(this.is("up")),
-      NB.to(this.is("down")),
-      NB.to(this.is("right")),
-      NB.to(this.is("left")),
-      NB.to(this.is("clicking")),
-    ])
   }
 }

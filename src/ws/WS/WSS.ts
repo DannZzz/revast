@@ -109,7 +109,7 @@ export class Wss {
       // ws.binaryType = 'arraybuffer'
       ws.on('message', (data) => {
         ws.messagesPer5s++
-        if (ws.messagesPer5s >= MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
+        if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
           return ws.close()
         }
         const message = binaryMessageToObject(data)

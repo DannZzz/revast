@@ -21,7 +21,7 @@ onDiscordMessage(client)
 
 client.on('error', (e) => console.log('DISCORD_ERROR', e))
 
-export default function connectDiscordBot() {
+export default async function connectDiscordBot() {
   token
     ? client.login(token)
     : console.log('Creating discord bot was ignored ( no token )')

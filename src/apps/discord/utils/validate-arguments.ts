@@ -4,28 +4,44 @@ import { DJCommandLikeArguments } from '../commands/Command'
 export const validateArguments = (
   args: DJCommandLikeArguments[],
   queue: string[],
-): { success: boolean; args: string[] } => {
+): { success: boolean; args: string[]; acceptedArgs: string[] } => {
   let i = 0
   let _args = [...queue]
+  const acceptedArgs: string[] = []
   return {
     success: args.every((argArray) => {
-      return argArray.some((arg) => {
-        if (!_args[i]) return false
-        if (!_args[i].toLowerCase()) return false
+      const exists = argArray.args.some((arg) => {
+        if (!_args[i]?.toLowerCase()) return false
+        let u = i
         while (
-          _args[i].toLowerCase().length < arg.ignoreWordIfLengthSmallerThan
+          _args[u] &&
+          _args[u].toLowerCase().length < arg.ignoreWordIfLengthSmallerThan
         )
-          i++
-        let u = i + arg.ignoreNextCount
+          u++
+        if (!_args[u]) return false
+        u += arg.ignoreNextCount
+        if (!_args[u]) return false
         if (
-          levenshtein(arg.word, _args[u].toLowerCase(), arg.lshOptions) >
-          arg.validAmount
+          typeof arg.word === 'function'
+            ? !arg.word(_args[u]?.toLowerCase())
+            : levenshtein(arg.word, _args[u]?.toLowerCase(), arg.lshOptions) >
+              arg.validAmount
         )
           return false
+
+        acceptedArgs.push(
+          typeof arg.word === 'string' ? arg.word : _args[u]?.toLowerCase(),
+        )
         i = u + 1
         return true
       })
+      if (!exists && argArray.notRequired) {
+        acceptedArgs.push(null)
+        return true
+      }
+      return exists
     }),
     args: _args,
+    acceptedArgs,
   }
 }

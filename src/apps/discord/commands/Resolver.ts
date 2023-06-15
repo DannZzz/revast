@@ -6,6 +6,7 @@ import { ListenBossCollectors, listenBoss } from './collectors/listen-boss'
 import { MyName } from '../utils/my-name'
 import { openAiFind } from '../openai/OpenAi'
 import { validateArguments } from '../utils/validate-arguments'
+import { DJGameServerInteraction } from './collectors/game-server-interaction'
 
 export const DJCommandResolver = new Chest<number, DJCommand>()
 
@@ -39,6 +40,11 @@ export const resolveDJMessage = (
     data.stoped = true
     data.collector.stop()
     return
+  }
+
+  if (DJGameServerInteraction.isExpecting(msg.author.id)) {
+    const expected = DJGameServerInteraction.tryFor(msg.author.id, args)
+    if (expected) return
   }
 
   const commands = DJCommandResolver.values()

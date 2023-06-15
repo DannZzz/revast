@@ -4,12 +4,15 @@ import { LevenshteinOptions } from 'src/utils/levenshtein'
 interface DJCommandArgument {
   ignoreWordIfLengthSmallerThan: number
   lshOptions: LevenshteinOptions
-  word: string
+  word: string | ((arg: string) => boolean)
   ignoreNextCount: number
   validAmount: number
 }
 
-export type DJCommandLikeArguments = DJCommandArgument[]
+export type DJCommandLikeArguments = {
+  args: DJCommandArgument[]
+  notRequired?: boolean
+}
 
 export class DJCommand {
   arguments: DJCommandLikeArguments[]
