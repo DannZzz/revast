@@ -32,7 +32,7 @@ export const ONE_DAY_MS = 86400 * 1000
 
 export const PLAYER_BODY_ACUTAL_SIZE = new Size(50, 50)
 
-export const PLAYER_BODY_COLLISION_RADIUS = 40
+export const PLAYER_BODY_COLLISION_RADIUS = 21
 
 export const PLAYER_BODY_POINTS = (centerPoint: Point): UniversalHitbox => ({
   point: combineClasses(centerPoint, new Point(-25, -25)),
