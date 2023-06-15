@@ -36,6 +36,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
   readonly actionable: PlayerActionable
   timeout: PlayerTimeout
   chatStatus = true
+  mouseSentTime: number = 0
 
   constructor(props: ElementProps<PlayerProps>) {
     const { camera, dayInfo, game, timeout, ...basic } = props
@@ -89,7 +90,10 @@ export class Player extends BasicPlayer<PlayerEvents> {
   setAngle(angle: number) {
     this.angle = angle
     this.body.rotation(angle)
-    socket.emit("mouseAngle", [angle, this.theta])
+    if (this.mouseSentTime < Date.now()) {
+      this.mouseSentTime = Date.now() + 100
+      socket.emit("mouseAngle", [angle, this.theta])
+    }
   }
 
   update() {
