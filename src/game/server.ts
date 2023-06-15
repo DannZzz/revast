@@ -101,6 +101,7 @@ export class GameServer implements GameProps {
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {
         tokenData.currentSocketId = socketId
+        socket.inGame = true
         const player = this.players.get(tokenData.playerId)
         // console.log(player.cache.data)
         player.socketRegistering()
