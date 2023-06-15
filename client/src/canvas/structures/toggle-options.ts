@@ -20,6 +20,7 @@ type ToggleKey = "up" | "down" | "left" | "right" | "clicking"
 
 export class Toggle {
   keys: $Array<ToggleKey> = $([])
+  lastSent: string = ""
 
   is(key: ToggleKey) {
     return this.keys.includes(key)
@@ -29,13 +30,19 @@ export class Toggle {
     const converted = converter(key)
 
     const send = () => {
-      socket.emit("toggles", [
+      const enter = [
         NB.to(this.is("up")),
         NB.to(this.is("down")),
         NB.to(this.is("right")),
         NB.to(this.is("left")),
         NB.to(this.is("clicking")),
-      ])
+      ]
+
+      let str = enter.toString()
+      if (str !== this.lastSent) {
+        this.lastSent = str
+        socket.emit("toggles", enter as any)
+      }
     }
 
     if (!converted) return
