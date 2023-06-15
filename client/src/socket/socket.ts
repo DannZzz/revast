@@ -54,14 +54,15 @@ class WS {
     this.socket.close()
   }
 }
-
+const waitin: [WebSocket, any][] = []
+const l = 100
 function wsSend(socket: WebSocket, data: any) {
   // readyState - true, если есть подключение
   if (!socket.readyState) {
-    setTimeout(function () {
-      wsSend(socket, data)
-    }, 100)
+    waitin.push([socket, data])
+    if (waitin.length > l) waitin.shift()
   } else {
+    if (!!waitin.length) waitin.forEach(([socket, data]) => socket.send(data))
     socket.send(data)
   }
 }
