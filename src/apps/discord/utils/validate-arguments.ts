@@ -1,13 +1,20 @@
 import { levenshtein } from 'src/utils/levenshtein'
 import { DJCommandLikeArguments } from '../commands/Command'
+import { DJQuery } from '../commands/Query'
 
 export const validateArguments = (
   args: DJCommandLikeArguments[],
   queue: string[],
-): { success: boolean; args: string[]; acceptedArgs: string[] } => {
+): {
+  success: boolean
+  args: string[]
+  acceptedArgs: string[]
+  query: DJQuery
+} => {
   let i = 0
   let _args = [...queue]
   const acceptedArgs: string[] = []
+  const q = new DJQuery()
   return {
     success: args.every((argArray) => {
       const exists = argArray.args.some((arg) => {
@@ -29,9 +36,13 @@ export const validateArguments = (
         )
           return false
 
-        acceptedArgs.push(
-          typeof arg.word === 'string' ? arg.word : _args[u]?.toLowerCase(),
-        )
+        if (argArray.query) {
+          q.set(argArray.query, _args[u])
+        } else {
+          acceptedArgs.push(
+            typeof arg.word === 'string' ? arg.word : _args[u]?.toLowerCase(),
+          )
+        }
         i = u + 1
         return true
       })
@@ -43,5 +54,6 @@ export const validateArguments = (
     }),
     args: _args,
     acceptedArgs,
+    query: q,
   }
 }

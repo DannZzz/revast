@@ -35,8 +35,13 @@ import { correctScreenSize } from 'src/utils/correct-screen-size'
 
 export type TMap = typeof BasicMap
 
+export interface GameServerInformation {
+  name?: string
+  path?: string
+}
+
 export interface GameProps {
-  readonly information: { name: string }
+  readonly information: GameServerInformation
   readonly socketServer: Wss
   madeAt?: Date
   mapItems?: () => TMap
@@ -52,7 +57,7 @@ export class GameServer implements GameProps {
   madeAt: Date = new Date()
   map: GameMap
   readonly socketServer: Wss
-  readonly information: any = {}
+  readonly information: GameServerInformation = {}
   readonly mapSource: string
   readonly players = new Chest<number, Player>()
   readonly alivePlayers = new Chest<number, Player>()

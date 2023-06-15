@@ -1,5 +1,5 @@
 import { Chest } from 'anytool'
-import { DJCommand } from './Command'
+import { DJCommand, DJCommandExecuteData } from './Command'
 import { Client, Message } from 'discord.js'
 import { levenshtein } from 'src/utils/levenshtein'
 import { ListenBossCollectors, listenBoss } from './collectors/listen-boss'
@@ -7,6 +7,7 @@ import { MyName } from '../utils/my-name'
 import { openAiFind } from '../openai/OpenAi'
 import { validateArguments } from '../utils/validate-arguments'
 import { DJGameServerInteraction } from './collectors/game-server-interaction'
+import { DJQuery } from './Query'
 
 export const DJCommandResolver = new Chest<number, DJCommand>()
 
@@ -43,7 +44,7 @@ export const resolveDJMessage = (
   }
 
   if (DJGameServerInteraction.isExpecting(msg.author.id)) {
-    const expected = DJGameServerInteraction.tryFor(msg.author.id, args)
+    const expected = DJGameServerInteraction.tryFor(msg.author.id, msg, args)
     if (expected) return
   }
 
@@ -52,11 +53,13 @@ export const resolveDJMessage = (
     if (cmd.admin && !MyName.admins.includes(msg.author.id)) continue
     const validated = validateArguments(cmd.arguments, args)
     if (!validated.success) continue
-    cmd.execute.call(cmd, {
+    cmd.execute.call(cmd, <DJCommandExecuteData>{
       client,
       args: validated.args,
-      author: msg.author,
+      author: msg.author as any,
       msg,
+      acceptedArgs: validated.acceptedArgs,
+      query: validated.query,
     })
     return
   }

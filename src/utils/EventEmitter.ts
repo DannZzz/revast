@@ -1,4 +1,4 @@
-import { uuid } from "anytool"
+import { uuid } from 'anytool'
 
 class Listener<T extends Record<any, any[]>, K extends keyof T> {
   readonly id: string = uuid(50)
@@ -13,6 +13,10 @@ export class EventEmitter<T extends Record<any, any[]> = {}> {
 
   on<K extends keyof T>(event: K, cb: (...args: T[K]) => void) {
     this.listeners.push(new Listener(event, cb))
+  }
+
+  off(id: string) {
+    this.listeners = this.listeners.filter((listener) => listener.id !== id)
   }
 
   emit<K extends keyof T>(event: K, ...args: T[K]) {

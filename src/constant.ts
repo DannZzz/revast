@@ -106,7 +106,7 @@ export const START_ITEMS = () => [
 
 export const TEST_GAME_SERVER = (server: Wss) =>
   new GameServer({
-    information: { name: 'Europe' },
+    information: { name: 'Europe', path: server.server.path },
     socketServer: server,
     map: new GameMap({
       size: new Size(300, 300),

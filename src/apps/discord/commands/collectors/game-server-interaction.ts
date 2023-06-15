@@ -3,6 +3,7 @@ import GameServers from 'src/servers/game-servers'
 import { DJCommandLikeArguments } from '../Command'
 import { validateArguments } from '../../utils/validate-arguments'
 import exp from 'constants'
+import { Message } from 'discord.js'
 
 interface DJInteractionData {
   expects?: { args: DJCommandLikeArguments[]; after: DJInteractionDataCallback }
@@ -11,8 +12,8 @@ interface DJInteractionData {
 
 type DJInteractionDataCallback = (
   this: DJInteractionData,
-  args: string[],
-  acceptedArgs: string[],
+  msg: Message,
+  data: { args: string[]; acceptedArgs: string[] },
 ) => void
 
 export class DJGameServerInteraction {
@@ -36,13 +37,15 @@ export class DJGameServerInteraction {
     return this
   }
 
-  static tryFor(id: string, args: string[]) {
+  static tryFor(id: string, msg: Message, args: string[]) {
     const data = this.collectors.get(id)
     const expects = data.expects
     const validate = validateArguments(expects.args, args)
-    console.log(validate, args) //
     if (validate.success) {
-      expects.after.call(data, validate.args, validate.acceptedArgs)
+      expects.after.call(data, msg, {
+        args: validate.args,
+        acceptedArgs: validate.acceptedArgs,
+      })
       return true
     }
     return false
