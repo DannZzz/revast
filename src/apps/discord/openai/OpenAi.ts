@@ -16,9 +16,9 @@ export const openAiFind = async (prompt: string): Promise<string> => {
           role: 'user',
         },
       ],
-      max_tokens: 2000,
+      max_tokens: 2500,
     })
-    console.log(completion.data.choices.length, completion.data.choices)
+    // console.log(completion.data.choices.length, completion.data.choices)
     return completion.data.choices[0]?.message?.content
   } catch (e) {
     console.log('OPEN_AI ERROR', e)

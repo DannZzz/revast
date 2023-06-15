@@ -13,6 +13,12 @@ export class MyName {
 
   static find(str: string | string[]): string {
     const _names = Array.isArray(str) ? str : [str]
-    return _names.find((name) => this.names.includes(name))
+    return _names.find((name) => {
+      const cleared = name.replace(/[0-9._/\/\-\@$%^&*()?!]*$/, '')
+      return (
+        this.names.includes(cleared) ||
+        this.names.includes(cleared.slice(0, cleared.length - 1))
+      )
+    })
   }
 }

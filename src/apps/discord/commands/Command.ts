@@ -9,8 +9,10 @@ interface DJCommandArgument {
   validAmount: number
 }
 
+export type DJCommandLikeArguments = DJCommandArgument[]
+
 export class DJCommand {
-  arguments: DJCommandArgument[]
+  arguments: DJCommandLikeArguments[]
   admin?: boolean = false
   examples?: string[] = []
 

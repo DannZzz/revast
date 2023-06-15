@@ -11,16 +11,12 @@ export const onDiscordMessage = (client: Client) => {
     if (ListenBossCollectors.has(msg.author.id)) return
 
     if (!msg.content || msg.author.bot) return
-    let args = msg.content.split(/ +/g).map((s) => s.toLowerCase())
-    const nameInArgs = MyName.find(args)
-    if (!nameInArgs) return
-    args = args.slice(args.indexOf(nameInArgs) + 1)
-
-    if (args.length === 0 || args.length === 1) {
-      listenBoss(client, msg)
+    let args = msg.content.split(/ +/g)
+    const nameInArgs = MyName.find(args.map((s) => s.toLowerCase()))
+    const last = args.at(-1)
+    if ((!nameInArgs && !last.endsWith('??')) || last[last.length - 3] === '?')
       return
-    }
 
-    resolveDJMessage(client, msg, args)
+    listenBoss(client, msg, nameInArgs, args)
   })
 }
