@@ -25,6 +25,18 @@ export default new DJCommand({
     {
       args: [
         {
+          word: 'себе',
+          ignoreNextCount: 0,
+          ignoreWordIfLengthSmallerThan: 0,
+          lshOptions: { replaceCase: 1, remove: 0 },
+          validAmount: 1,
+        },
+      ],
+      notRequired: true,
+    },
+    {
+      args: [
+        {
           word: 'статус',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
