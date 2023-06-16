@@ -24,7 +24,7 @@ export default new DJCommand({
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 3,
+          validAmount: 2,
         },
       ],
     },
