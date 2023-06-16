@@ -151,10 +151,10 @@ export class Bio {
 
     const image = new Konva.Image({
       image: loadImage(this.url, (img) => {
-        image.image(img)
+        image.image(img).cache()
       }),
       ...this.data.size,
-    })
+    }).cache()
 
     bioGroup.add(image)
     bioGroup.listening(false)
