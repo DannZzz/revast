@@ -147,7 +147,7 @@ export class GameServer implements GameProps {
     this.alivePlayers.set(login.playerId, player)
 
     this.checkLoop()
-    player.moveTo(this.randomEmptyPoint(25))
+    player.moveTo(this.randomEmptyPoint(50))
   }
 
   to(socketId: string): Player {
@@ -180,8 +180,11 @@ export class GameServer implements GameProps {
         +$.randomNumber(forest.point.y, forest.point.y + forest.size.height),
       )
     let point = randomPoint()
-    const items = this.staticItems.for({ radius: forObjectRadius, point })
-    while (items.someWithin({ radius: forObjectRadius, point }, true)) {
+    while (
+      this.staticItems
+        .for({ radius: forObjectRadius, point })
+        .someWithin({ radius: forObjectRadius, point }, true)
+    ) {
       point = randomPoint()
     }
     return point

@@ -18,6 +18,7 @@ import { Cache } from 'src/structures/cache/cache'
 import { StaticSettableItem } from '../basic/static-item.basic'
 import { Bio } from '../basic/bio-item.basic'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
+import { MOB_GLOBAL_ATTACK_SPEED_EFFECT } from 'src/constant'
 
 export interface MobProps {
   point: Point
@@ -119,7 +120,7 @@ export class Mob extends BasicMob {
             clearTimeout(this.damageIntervalObj)
             this.readyToDamage(players)
           }
-        }, this.damageInterval * 1000)
+        }, this.damageInterval * 1000 * MOB_GLOBAL_ATTACK_SPEED_EFFECT)
       })
     }
   }

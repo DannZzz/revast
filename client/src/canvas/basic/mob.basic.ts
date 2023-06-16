@@ -14,6 +14,8 @@ export class BasicMob implements MobDto {
   imageNode: Konva.Image
   canHurt: boolean = true
 
+  destroyed = false
+
   constructor(data: MobDto) {
     Object.assign(this, data)
   }
@@ -33,6 +35,15 @@ export class BasicMob implements MobDto {
     })
 
     layer.add(this.imageNode)
+
+    const period = 2000
+    var anim = new Konva.Animation((frame) => {
+      var scale = 0.025 * Math.sin((frame.time * 2 * Math.PI) / period) + 1
+      this.imageNode.scale({ x: scale, y: scale })
+      if (this.destroyed) anim.stop()
+    })
+
+    anim.start()
   }
 
   update() {
@@ -54,6 +65,7 @@ export class BasicMob implements MobDto {
   }
 
   destroy() {
+    this.destroyed = true
     this.imageNode.destroy()
   }
 }
