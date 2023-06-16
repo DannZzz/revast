@@ -26,6 +26,7 @@ export class PlayerLoop {
 
   action() {
     this.player.actions.state.update()
+    this.player.bars.onAction()
     const socket = this.player.socket()
     if (
       (this.cache.has('lastSentPosition') &&

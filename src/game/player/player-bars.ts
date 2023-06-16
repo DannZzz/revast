@@ -54,7 +54,6 @@ export class PlayerBars {
         else this.healingChecking++
       }
       this.socketUpdate()
-      this.onAction()
     }, 5000)
   }
 

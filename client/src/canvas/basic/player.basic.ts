@@ -80,7 +80,7 @@ export class BasicPlayer<
       fill: "#cccccc",
       y: -25,
       fontSize: 20,
-    })
+    }).cache()
 
     const absolutePoint = combineClasses(
       this.point,
@@ -93,10 +93,12 @@ export class BasicPlayer<
       // ...absolutePoint,
     })
     Game.createMessageGroup(this.layer, this.messagesNode)
-    this.highlight = playerHighlight.clone({
-      ...absolutePoint,
-      id: `${id}-highlight`,
-    })
+    this.highlight = playerHighlight
+      .clone({
+        ...absolutePoint,
+        id: `${id}-highlight`,
+      })
+      .cache()
     Game.createHighlight(this.layer2, this.highlight)
 
     const bodyGroup = new Konva.Group({
@@ -110,28 +112,28 @@ export class BasicPlayer<
     this.bagNode = new Konva.Image({
       id: `${id}-bag`,
       image: this.items.bagUrl
-        ? loadImage(this.items.bagUrl, (img) => this.bagNode.image(img))
+        ? loadImage(this.items.bagUrl, (img) => this.bagNode.image(img).cache())
         : null,
       // x: -60,
       y: -40,
       width: 120,
       height: 120,
-    })
+    }).cache()
 
     this.wearingNode = new Konva.Image({
       image: null,
       ...this.size,
-    })
+    }).cache()
 
     const body = new Konva.Image({
       image: loadImage(this.skin.url, (image) => {
-        body.image(image)
+        body.image(image).cache()
       }),
       id: `${id}-body-image`,
       // filters: [],
       // red: 250,
       ...this.size,
-    })
+    }).cache()
 
     const rightHand = new Konva.Group({
       id: `${id}-body-hand-right`,
@@ -140,7 +142,7 @@ export class BasicPlayer<
     })
 
     const handBase = new Konva.Image({
-      image: loadImage(this.skin.handUrl, (img) => handBase.image(img)),
+      image: loadImage(this.skin.handUrl, (img) => handBase.image(img).cache()),
       width: 35,
       height: 35,
       offsetX: 17.5,
@@ -154,7 +156,7 @@ export class BasicPlayer<
       ...this.equipment.hands.right,
       ...this.equipment.size,
       visible: false,
-    })
+    }).cache()
 
     const leftHand = new Konva.Group({
       id: `${id}-body-hand-left`,
@@ -178,9 +180,9 @@ export class BasicPlayer<
       visible: false,
       scaleX: -1,
       offsetX: this.equipment.size.width,
-    })
+    }).cache()
 
-    rightHand.add(rightHandItem, handBase.clone())
+    rightHand.add(rightHandItem, handBase)
     rightHandItem.zIndex(-1)
     leftHand.add(leftHandItem, handBase.clone())
 
@@ -191,8 +193,6 @@ export class BasicPlayer<
       filters: [Konva.Filters.RGB],
       opacity: 0.7,
     })
-
-    this.items.settingMode.node.cache()
 
     bodyGroup.add(
       this.items.settingMode.node,
@@ -214,7 +214,7 @@ export class BasicPlayer<
       visible: false,
     })
     group.listening(false)
-    ;(this.layer.findOne("#game-players") as any).add(group, itemRange)
+    ;(this.layer.findOne("#game-players") as any).add(group)
   }
   registerEvents(): void {
     // throw new Error("Method not implemented.")
@@ -257,9 +257,9 @@ export class BasicPlayer<
     }
     if (this.items.bagUrl) {
       if (this.cache.get("bagUrl") !== this.items.bagUrl) {
-        this.bagNode.image(
-          loadImage(this.items.bagUrl, (img) => this.bagNode.image(img))
-        )
+        this.bagNode
+          .image(loadImage(this.items.bagUrl, (img) => this.bagNode.image(img)))
+          .cache()
         this.cache.data.bagUrl = this.items.bagUrl
       }
     }

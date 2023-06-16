@@ -51,6 +51,7 @@ export class Game {
   resize(size: Size) {
     this.layer.getStage().size(size)
     this.serverMessageNode.width(size.width)
+    this.layer2.findOne("#game-night").size(size).cache()
     socket.emit("screenSize", [size])
   }
 
@@ -82,13 +83,14 @@ export class Game {
     const gameBg = GameMap.draw(this.map, {
       id: "game-bg",
       perfectDrawEnabled: false,
+      listening: false,
     })
 
     const gameAttr = new Konva.Group({ id: "game-attr" })
 
     const night = new Konva.Rect({
       id: "game-night",
-      ...this.map.absoluteSize,
+      ...this.size,
       visible: false,
       fill: BG_FOREST_BIOM.night,
       listening: false,
@@ -124,11 +126,11 @@ export class Game {
       bioGroup,
       messages
     )
-    gameBg.zIndex(0)
 
     this.layer.add(mainGroup)
     this.layer2.add(night, highlights, alwaysTop)
     alwaysTop.zIndex(2)
+    night.cache()
 
     this.serverMessageNode = new KonvaText({
       text: "",
@@ -249,7 +251,6 @@ export class Game {
   }
 
   newPeriodOfDay(day: boolean) {
-    // const bgRect = this.layer.findOne("#game-bg") as Konva.Rect
     const nightRect = this.layer2.findOne("#game-night") as Konva.Rect
     if (day) {
       // bgRect.fill(BG_FOREST_BIOM.day)

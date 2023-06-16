@@ -112,7 +112,9 @@ export class StaticSettableItem
 
     this.emit("mode", this)
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
-    node.image(loadImage(this.mode.url, (img) => node.image(img)))
+    node
+      .image(loadImage(this.mode.url, (img) => node.image(img).cache()))
+      .cache()
     if (coverChanged) {
       this.node.moveTo(
         this.layer.findOne(Game.settableHoistId(this.mode.cover))
@@ -128,14 +130,16 @@ export class StaticSettableItem
     })
     const image = new Konva.Image({
       id: `${this.id}-image`,
-      image: loadImage(this.mode.url, (img) => image.setAttr("image", img)),
+      image: loadImage(this.mode.url, (img) =>
+        image.setAttr("image", img).cache()
+      ),
       ...this.size,
       offsetX: this.size.width / 2,
       offsetY: this.size.height / 2,
       x: this.size.width / 2,
       y: this.size.height / 2,
       rotation: this.rotation,
-    })
+    }).cache()
     itemGroup.add(image)
     if (this.type in StaticItemsAddons) {
       const also = StaticItemsAddons[this.type].alsoDraw?.(this)
@@ -197,8 +201,8 @@ export class StaticSettableItem
           stroke: "white",
         })
       }
+      this.highlightNode = highlightNode.cache()
       Game.createHighlight(this.layer2, highlightNode)
-      this.highlightNode = highlightNode
     }
   }
 

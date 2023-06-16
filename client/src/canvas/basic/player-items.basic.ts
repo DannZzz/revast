@@ -45,36 +45,47 @@ export class BasicPlayerItems {
         handLeft.size(equipmentSize)
         handLeft.setAttr(
           "image",
-          loadImage(equiped.url, (img) => handLeft.setAttr("image", img))
+          loadImage(equiped.url, (img) =>
+            handLeft.setAttr("image", img).cache()
+          )
         )
       }
+      handLeft.cache()
       handRight.visible(true)
       handRight.position(equiped.drawPosition)
-      handRight.setAttr(
-        "image",
-        loadImage(equiped.url, (img) => handRight.setAttr("image", img))
-      )
       handRight.size(equipmentSize)
+      handRight
+        .setAttr(
+          "image",
+          loadImage(equiped.url, (img) =>
+            handRight.setAttr("image", img).cache()
+          )
+        )
+        .cache()
       handRight.scaleX(equiped.flip ? -1 : 1)
       handRight.offsetX(equiped.flip ? equipmentSize.width : 0)
       handRight.rotation(
         this.player.equipment.hands.right.rotation + equiped.startRotationWith
       )
     } else {
-      handLeft.setAttr("image", null)
       handLeft.visible(false)
       handLeft.size(this.player.equipment.size)
-      handRight.setAttr("image", null)
+      handLeft.setAttr("image", null).cache()
       handRight.visible(false)
       handRight.size(this.player.equipment.size)
+      handRight.setAttr("image", null).cache()
     }
   }
 
   updateWearing() {
     if (this.weared) {
-      this.player.wearingNode.image(
-        loadImage(this.weared.url, (img) => this.player.wearingNode.image(img))
-      )
+      this.player.wearingNode
+        .image(
+          loadImage(this.weared.url, (img) =>
+            this.player.wearingNode.image(img).cache()
+          )
+        )
+        .cache()
       this.player.bagNode.visible(false)
       this.player.wearingNode.offset(
         new Point(-this.weared.drawPosition.x, -this.weared.drawPosition.y)

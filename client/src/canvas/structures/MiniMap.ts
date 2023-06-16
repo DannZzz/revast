@@ -48,10 +48,10 @@ export class MiniMap {
 
     const bg = new Konva.Image({
       ...this.containerSize,
-      image: loadImage(this.map.url, (img) => bg.image(img)),
+      image: loadImage(this.map.url, (img) => bg.image(img).cache()),
       stroke: "#252525",
       opacity: 0.7,
-    })
+    }).cache()
 
     const player = new Konva.Circle({
       radius: 3,
@@ -64,10 +64,12 @@ export class MiniMap {
     })
 
     const skullImg = new Konva.Image({
-      image: loadImage("images/skull.png", (img) => skullImg.image(img)),
+      image: loadImage("images/skull.png", (img) =>
+        skullImg.image(img).cache()
+      ),
       width: 30,
       height: 30,
-    })
+    }).cache()
     this.killsNode = new KonvaText({
       text: "0",
       fill: "#4b2819",

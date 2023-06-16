@@ -42,7 +42,7 @@ export class PlayerControllers {
     })
     const timerArrow = new Konva.Image({
       image: loadImage("images/day-night-arrow.png", (img) =>
-        timerArrow.image(img)
+        timerArrow.image(img).cache()
       ),
       width: 50,
       height: 16,
@@ -55,7 +55,7 @@ export class PlayerControllers {
           percentFrom(this.dayInfo.thisDay, this.dayInfo.oneDayDuration),
           360
         ) - 90,
-    })
+    }).cache()
     this.arrow = timerArrow
 
     timerGroup.add(timerBg, timerArrow)
@@ -63,14 +63,14 @@ export class PlayerControllers {
 
     this.autofood = new Konva.Image({
       image: loadImage("images/auto-food.png", (img) =>
-        this.autofood.image(img)
+        this.autofood.image(img).cache()
       ),
       height: 100,
       width: 100,
       x: 100,
       y: 100,
       visible: false,
-    })
+    }).cache()
     this.autofood.listening(false)
     this.player.bars.autofood.onChange((val) => {
       this.autofood.visible(val)

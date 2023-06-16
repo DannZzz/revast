@@ -62,7 +62,7 @@ export const TIMEOUT_BUILDING = 0.8
 export const MAX_SCREEN_SIZE = new Size(2540, 2000)
 
 export const MOB_GLOBAL_SPEED_EFFECT = -15
-export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 2
+export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 
 export const MOB_DIR_NAMES = ['mobs']
 
@@ -98,11 +98,11 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(67),
-  // itemFor(75),
-  // itemFor(90),
-  // itemFor(91),
-  // itemFor(93),
+  itemFor(67),
+  itemFor(75),
+  itemFor(90),
+  itemFor(91),
+  itemFor(93),
 ]
 
 export const TEST_GAME_SERVER = (server: Wss) =>

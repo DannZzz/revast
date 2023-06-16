@@ -133,19 +133,19 @@ export class Player extends BasicPlayer<PlayerEvents> {
 
       this.items.updateGridSettingMode()
 
-      this.layer
-        .findOne("#item-range")
-        .setAttr(
-          "points",
-          Converter.pointArrayToXYArray([
-            this.point,
-            getPointByTheta(
-              this.point,
-              this.theta,
-              this.items.equiped ? this.items.equiped.range : 30
-            ),
-          ])
-        )
+      //   this.layer
+      //     .findOne("#item-range")
+      //     .setAttr(
+      //       "points",
+      //       Converter.pointArrayToXYArray([
+      //         this.point,
+      //         getPointByTheta(
+      //           this.point,
+      //           this.theta,
+      //           this.items.equiped ? this.items.equiped.range : 30
+      //         ),
+      //       ])
+      //     )
     })
     this.events.on("keyboard.up", (evt) => {
       this.toggle.set(evt.code, false)
