@@ -31,9 +31,7 @@ export const listenBoss = (
   resolveDJMessage(client, msg, args)
   coll.on('collect', (_msg) => {
     if (!_msg.content || _msg.content?.startsWith('_')) return
-    const args = splitDiscordMessageContent(_msg.content).map((msg) =>
-      msg.toLowerCase(),
-    )
+    const args = splitDiscordMessageContent(_msg.content)
     coll.resetTimer()
     resolveDJMessage(client, _msg, args)
   })
