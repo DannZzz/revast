@@ -98,11 +98,11 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  itemFor(67),
-  itemFor(75),
-  itemFor(90),
-  itemFor(91),
-  itemFor(93),
+  // itemFor(67),
+  // itemFor(75),
+  // itemFor(90),
+  // itemFor(91),
+  // itemFor(93),
 ]
 
 export const TEST_GAME_SERVER = (server: Wss) =>
