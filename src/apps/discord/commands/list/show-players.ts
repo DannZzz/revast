@@ -4,7 +4,7 @@ import GameServers from 'src/servers/game-servers'
 import { DJGameServerInteraction } from '../collectors/game-server-interaction'
 import { GameServer } from 'src/game/server'
 import { isNumber } from 'src/utils/is-number-in-range'
-import { formatNumber } from 'anytool'
+import { Cooldown, formatNumber } from 'anytool'
 
 export default new DJCommand({
   arguments: [

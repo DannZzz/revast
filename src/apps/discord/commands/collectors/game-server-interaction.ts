@@ -46,6 +46,7 @@ export class DJGameServerInteraction {
         args: validate.args,
         acceptedArgs: validate.acceptedArgs,
       })
+      console.log(expects, this.collectors.get(id).expects)
       return true
     }
     return false

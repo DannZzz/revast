@@ -1,4 +1,4 @@
-import { Chest } from 'anytool'
+import { Chest, Cooldown } from 'anytool'
 import { DJCommand, DJCommandExecuteData } from './Command'
 import { Client, Message } from 'discord.js'
 import { levenshtein } from 'src/utils/levenshtein'
@@ -10,12 +10,14 @@ import { DJGameServerInteraction } from './collectors/game-server-interaction'
 import { DJQuery } from './Query'
 
 export const DJCommandResolver = new Chest<number, DJCommand>()
+const MessageCooldown = new Cooldown(2500)
 
 export const resolveDJMessage = (
   client: Client,
   msg: Message,
   args: string[],
 ) => {
+  if (MessageCooldown.isLimited(msg.author.id)) return console.log('limit')
   if (!args[0]) {
     return listenBoss(client, msg, null, args)
   }
@@ -24,7 +26,7 @@ export const resolveDJMessage = (
   let forCommands = [...args]
   if (name) {
     args.splice(args.indexOf(name), 1)
-    forCommands = forCommands.slice(args.indexOf(name))
+    forCommands = forCommands.slice(forCommands.indexOf(name) + 1)
     if (!args[0]) {
       return listenBoss(client, msg, name, args)
     }
@@ -50,9 +52,10 @@ export const resolveDJMessage = (
 
   const commands = DJCommandResolver.values()
   for (let cmd of commands) {
-    if (cmd.admin && !MyName.admins.includes(msg.author.id)) continue
-    const validated = validateArguments(cmd.arguments, args)
+    const validated = validateArguments(cmd.arguments, forCommands)
     if (!validated.success) continue
+    if (cmd.admin && !MyName.admins.includes(msg.author.id))
+      return msg.reply('Если Дэн скажет - сделаю!')
     cmd.execute.call(cmd, <DJCommandExecuteData>{
       client,
       args: validated.args,

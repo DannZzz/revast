@@ -10,9 +10,9 @@ export class DJQuery {
     return key in this.data
   }
 
-  get<T extends any>(key: string): T
-  get<T extends any>(key: string, ifNotExists: T): T
-  get<T extends any>(key: string, ifNotExists?: T): T {
+  get<T extends any = any>(key: string): T
+  get<T extends any = any>(key: string, ifNotExists: T): T
+  get<T extends any = any>(key: string, ifNotExists?: T): T {
     return key in this.data ? this.data[key] : ifNotExists
   }
 

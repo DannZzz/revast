@@ -2,6 +2,7 @@ import { Chest } from 'anytool'
 import { Client, Message, MessageCollector } from 'discord.js'
 import { resolveDJMessage } from '../Resolver'
 import { randomImListening } from '../../utils/random-answer'
+import { splitDiscordMessageContent } from '../../utils/split-message-content'
 
 interface ListenBossData {
   stoped: boolean
@@ -30,7 +31,9 @@ export const listenBoss = (
   resolveDJMessage(client, msg, args)
   coll.on('collect', (_msg) => {
     if (!_msg.content || _msg.content?.startsWith('_')) return
-    const args = _msg.content?.split(/ +/g).map((msg) => msg.toLowerCase())
+    const args = splitDiscordMessageContent(_msg.content).map((msg) =>
+      msg.toLowerCase(),
+    )
     coll.resetTimer()
     resolveDJMessage(client, _msg, args)
   })
