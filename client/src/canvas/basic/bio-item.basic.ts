@@ -121,7 +121,7 @@ export class Bio {
   }
 
   getAttacked(theta: number) {
-    const to = getPointByTheta(this.fixedPosition(), theta, 10)
+    const to = getPointByTheta(this.centerPoint, theta, 10)
 
     if (
       !this.attacked.tween ||

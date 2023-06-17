@@ -2,6 +2,8 @@ import { Bio } from "../basic/bio-item.basic"
 import { BasicDrop } from "../basic/drop.basic"
 import { StaticSettableItem } from "../basic/static-item.basic"
 
+export type StaticItemType = Bio | StaticSettableItem
+
 export class StaticItems {
   private _bio: Bio[] = []
   private _settable: StaticSettableItem[] = []

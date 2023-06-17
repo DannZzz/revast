@@ -20,6 +20,6 @@ export default createSettable(86, SpecialItemTypes.bridge)
   .data({
     ignoreCheckers: 'type',
     onThe: { water: true },
-    showHpRadius: 30,
+    // showHpRadius: 30,
   })
   .build()

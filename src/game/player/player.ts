@@ -112,7 +112,6 @@ export class Player extends BasicElement<PlayerEvents> {
     this.camera = new Camera(new Point(), cameraOptions)
     this.speed = new PlayerSpeed(this.gameServer, this)
     this.loop = new PlayerLoop(this)
-    this.socketRegistering()
   }
 
   moveToCenterOfScreen(size: Size) {
@@ -227,6 +226,7 @@ export class Player extends BasicElement<PlayerEvents> {
     }
     if (amount > 0) {
       this.bars.hp.value -= amount
+      this.bars.healingChecking = 0
       if (this.bars.hp.value <= 0 && from) {
         from.lbMember.add(percentOf(30, this.lbMember.xp))
         from.kills(from.kills() + 1)

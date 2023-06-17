@@ -454,9 +454,11 @@ export class PlayerItems extends BasicPlayerItems {
   private registerEvents() {
     socket.on("playerItems", ([items, crafts, space, bagUrl]) => {
       if (!this.bagUrl && bagUrl) {
-        this.player.bagNode.image(
-          loadImage(bagUrl, (img) => this.player.bagNode.image(img))
-        )
+        this.player.bagNode
+          .image(
+            loadImage(bagUrl, (img) => this.player.bagNode.image(img).cache())
+          )
+          .cache()
       }
 
       const currentItems = items.map((itemData) => ({

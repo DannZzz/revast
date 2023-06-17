@@ -55,9 +55,9 @@ export const ITEM_DIR_NAMES = [
   'hats',
 ]
 
-export const TIMEOUT_UNPICK_WEAPON = 6
-export const TIMEOUT_UNWEAR_HELMET = 3
-export const TIMEOUT_BUILDING = 0.8
+export const TIMEOUT_UNPICK_WEAPON = 10
+export const TIMEOUT_UNWEAR_HELMET = 5
+export const TIMEOUT_BUILDING = 1
 
 export const MAX_SCREEN_SIZE = new Size(2540, 2000)
 

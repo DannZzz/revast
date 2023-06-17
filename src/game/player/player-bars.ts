@@ -15,9 +15,9 @@ export class PlayerBars {
   readonly h2o: Bar = new Bar(100, 100)
   readonly o2: Bar = new Bar(100, 100)
 
-  private healingAfterCheck = 3
-  private healingChecking = 0
-  private healingPercent: number = 10
+  private healingAfterCheck = 2
+  healingChecking = 0
+  private healingPercent: number = 20
   private _interval: any
 
   constructor(private player: Player) {
@@ -76,7 +76,6 @@ export class PlayerBars {
     } else {
       if (this.h2o.value === 0) {
         this.player.damage(30, 'absolute')
-        this.healingChecking = 0
       } else {
         this.h2o.value += -3 + effect
       }
@@ -85,7 +84,6 @@ export class PlayerBars {
     if (inWater && !onBridge) {
       if (this.o2.value === 0) {
         this.player.damage(30, 'absolute')
-        this.healingChecking = 0
       } else {
         this.o2.value -= 30 + o2Effect
       }
@@ -153,7 +151,6 @@ export class PlayerBars {
       )
     } else if (this.temperature.value === 0) {
       this.player.damage(20, 'absolute')
-      this.healingChecking = 0
     }
 
     this.temperature.value += tempChange

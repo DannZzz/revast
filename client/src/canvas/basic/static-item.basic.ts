@@ -63,7 +63,7 @@ export class StaticSettableItem
     return this.modes[this.currentMode]
   }
 
-  private node: Group
+  node: Group
   private highlightNode: Shape
 
   get centerPoint() {
@@ -84,7 +84,7 @@ export class StaticSettableItem
   }
 
   getAttacked(theta: number, showHpAngle?: number) {
-    const to = getPointByTheta(this.fixedPosition(), theta, 10)
+    const to = getPointByTheta(this.centerPoint, theta, 10)
 
     if (
       !this.attacked.tween ||

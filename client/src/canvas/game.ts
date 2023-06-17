@@ -362,6 +362,13 @@ export class Game {
         if (!item) return
         staticItem.getAttacked(item[1], item[2])
       })
+      // const all = this.staticItems.all
+      // const _ = items.map((it) => ({
+      //   data: it,
+      //   node: all.find((si) => si.id === it[0]),
+      // }))
+      // const gr = new Group().add(..._.map((d) => d.node.node))
+      // animateTo(gr, { duration: 0.2, to: { points: [new Point(10, 0)] } })
     })
 
     socket.on("staticItemMode", ([itemId, mode]) => {

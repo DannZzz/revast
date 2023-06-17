@@ -157,7 +157,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
       if (
         this.currentMode.trigger === 'attack' &&
         this.currentMode.verify.call(this, by) &&
-        !alivePlayers.some((player) => this.withinStrict(player.points))
+        !alivePlayers.some((player) => this.withinStrict(player.collision))
       ) {
         this.currentModeIndex(this.currentMode.switchTo || 0)
       }
