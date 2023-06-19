@@ -34,7 +34,7 @@ export const PLAYER_BODY_POINTS = (centerPoint: Point): UniversalHitbox => ({
 
 export const XP_AFTER_EACH_DAY = 750
 
-export const GOD_MOD_ALL = true
+export const GOD_MOD_ALL = false
 
 export const ITEM_DIR_NAMES = [
   'farm',
@@ -81,7 +81,7 @@ export const MAP_GRID_RENDER_AREA_SIZE = 2000
 
 export const GRID_SET_RANGE = 100
 
-export const ADMIN_PASSWORDS = ['i want admin']
+export const ADMIN_PASSWORDS = ['i am admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
 const itemFor = (i: number, quantity: number = 999) => [
@@ -91,16 +91,16 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  itemFor(96),
-  itemFor(97),
-  itemFor(98),
-  itemFor(99),
-  itemFor(100),
-  itemFor(101),
-  itemFor(102),
-  itemFor(103),
-  itemFor(104),
-  itemFor(105),
-  itemFor(106),
-  itemFor(107),
+  // itemFor(96),
+  // itemFor(97),
+  // itemFor(98),
+  // itemFor(99),
+  // itemFor(100),
+  // itemFor(101),
+  // itemFor(102),
+  // itemFor(103),
+  // itemFor(104),
+  // itemFor(105),
+  // itemFor(106),
+  // itemFor(107),
 ]

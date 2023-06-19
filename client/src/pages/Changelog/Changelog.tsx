@@ -6,6 +6,38 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 20/6/2023 - Spiky")}
+          <div class="content">
+            <div class="group">
+              {cg_small_img("/api/images/wooden-spike.webp")}
+              {cg_small_img("/api/images/wooden-spike-door-closed.webp")}
+            </div>
+            <span>FINALLY SPIKES ARE HERE!</span>
+            <div class="group">
+              {cg_small_img("/api/images/stone-spike.webp")}
+              {cg_small_img("/api/images/stone-spike-door-closed.webp")}
+              {cg_small_img("/api/images/golden-spike.webp")}
+              {cg_small_img("/api/images/golden-spike-door-closed.webp")}
+              {cg_small_img("/api/images/diamond-spike.webp")}
+              {cg_small_img("/api/images/diamond-spike-door-closed.webp")}
+            </div>
+            <div class="group">
+              {cg_small_img("/api/images/amethyst-spike.webp")}
+              {cg_small_img("/api/images/amethyst-spike-door-closed.webp")}
+              {cg_small_img("/api/images/ruby-spike.webp")}
+              {cg_small_img("/api/images/ruby-spike-door-closed.webp")}
+            </div>
+            {cg_list("Added", ["Spikes and Spike Doors"])}
+            {cg_list("Changed", [
+              "Healing effect was buffed",
+              "Your body will show when you will get damage",
+              "Building Cooldown: 0.8s --> 1s",
+              "Beach is smaller",
+              "Player collisions with static objects were changed",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 12/6/2023 - Water and Oxygen")}
           <div class="content">
             {cg_big_img("/images/water-walk.png")}

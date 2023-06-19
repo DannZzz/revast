@@ -91,7 +91,7 @@ export const verifyItemOfTeam: SettableMode['verify'] = function (player) {
   return player.uniqueId === this.authorId
 }
 
-export const SpikeTouchDamageRadius = 55
+export const SpikeTouchDamageRadius = 70
 
 export const SpikeHpByResourceType = {
   wood: 250,

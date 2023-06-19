@@ -49,9 +49,9 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           priority: 2,
           digItemId: 83,
           name: 'beach',
-          size: new Size(10, 100),
+          size: new Size(4, 100),
           bgColor: '#fbefbc',
-          point: new Point(140, 100),
+          point: new Point(146, 100),
           effect: new BiomeEffect({
             temperatureDay: -3,
             temperatureNight: -20,

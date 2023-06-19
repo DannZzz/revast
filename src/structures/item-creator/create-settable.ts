@@ -76,7 +76,7 @@ class SettableCreator {
     this.extend.hp = door
       ? SpikeDoorHpByResourceType[resType]
       : SpikeHpByResourceType[resType]
-    this.size(125, 125).setMode(new Point(0, -125), {
+    this.size(157, 157).setMode(new Point(0, -157), {
       type: 'circle',
       radius: 45,
     })

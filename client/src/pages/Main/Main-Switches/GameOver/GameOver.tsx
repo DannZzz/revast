@@ -9,14 +9,12 @@ const GameOver: Component<{} & PlayerInformationDto> = (props) => {
 
   return (
     <div class="game-over">
-      <h1 class="">Unfortunetely you are a typical nab</h1>
+      <h1 class="">Ooops! Someone died hehe!</h1>
       <div class="stats">
         <span>XP: {props.xp}</span>
         <span>Days: {props.days}</span>
       </div>
-      <Button onClick={() => setPage("main")}>
-        Go Back
-      </Button>
+      <Button onClick={() => setPage("main")}>Go Back</Button>
     </div>
   )
 }
