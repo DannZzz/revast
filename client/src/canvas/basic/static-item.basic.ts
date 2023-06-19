@@ -14,7 +14,6 @@ import {
 import { StaticItemsAddons } from "../data/staticItemAddons"
 import { Shape } from "konva/lib/Shape"
 import { Game } from "../game"
-import { zIndexOf } from "../../constants"
 import { EventEmitter } from "../utils/EventEmitter"
 import { getPointByTheta } from "../animations/rotation"
 
@@ -125,8 +124,12 @@ export class StaticSettableItem
   draw() {
     const itemGroup = new Konva.Group({
       id: this.id,
-      x: this.point.x - this.size.width / 2,
-      y: this.point.y - this.size.height / 2,
+      x: this.point.x,
+      y: this.point.y,
+      offset: {
+        x: this.size.width / 2,
+        y: this.size.height / 2,
+      },
     })
     const image = new Konva.Image({
       id: `${this.id}-image`,

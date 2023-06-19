@@ -14,6 +14,11 @@ import {
   StaticSettableItem,
 } from 'src/game/basic/static-item.basic'
 import {
+  SpikeAttackDamage,
+  SpikeDoorHpByResourceType,
+  SpikeHpByResourceType,
+  SpikeTouchDamage,
+  SpikeTouchDamageRadius,
   WallDoorByResourceType,
   WallDoorCraftDuration,
 } from 'src/data/config-type'
@@ -23,10 +28,7 @@ import {
   BasicActionableStatic,
   ExtendedSettable,
 } from 'src/game/extended/settable/actionable.basic'
-import {
-  ActionableHolderProps,
-  ActionableItemHolder,
-} from 'src/game/extended/settable/actionable-holder'
+import { ActionableHolderProps } from 'src/game/extended/settable/actionable-holder'
 import { BasicSeed, ExtendedSeed } from 'src/game/extended/settable/seed.basic'
 
 class SettableCreator {
@@ -67,6 +69,32 @@ class SettableCreator {
     this.extend.craftable[0].duration = WallDoorCraftDuration[wallType]
     this.extend.craftable[0].givesXp = 100
     this.extend.showHpRadius = 45
+    return this
+  }
+
+  itIsSpike(resType: keyof typeof SpikeHpByResourceType, door: boolean) {
+    this.extend.hp = door
+      ? SpikeDoorHpByResourceType[resType]
+      : SpikeHpByResourceType[resType]
+    this.size(125, 125).setMode(new Point(0, -125), {
+      type: 'circle',
+      radius: 45,
+    })
+    if (!this.extend.craftable) this.extend.craftable = {}
+    if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
+    this.extend.craftable[0].duration = WallDoorCraftDuration[resType]
+    this.extend.craftable[0].givesXp = 200
+    this.extend.showHpRadius = 45
+    this.extend.damageOnAttack = {
+      all: false,
+      damage: SpikeAttackDamage[resType],
+    }
+    this.extend.damageOnTouch = {
+      all: false,
+      radius: SpikeTouchDamageRadius,
+      damage: SpikeTouchDamage[resType],
+      interval: 1,
+    }
     return this
   }
 

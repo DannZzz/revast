@@ -1,11 +1,6 @@
 import { Item, ItemProps, Settable, SpecialSettable } from './item.basic'
 import { uuid } from 'anytool'
-import {
-  circleCircle,
-  circlePolygon,
-  polygonCircle,
-  polygonPolygon,
-} from 'intersects'
+
 import { Point, Size, combineClasses } from 'src/global/global'
 import { GameServer, Players } from '../server'
 import { getPointByTheta, getAngle } from '../animations/rotation'
@@ -58,6 +53,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     readonly staticItems: StaticItemsHandler,
   ) {
     super()
+    if (this.data.damageOnTouch) this.timeouts.touch = {}
     this.tempHp = GetSet(data.hp)
     if (this.data.onDestroy) this.on('destroy', this.data.onDestroy)
     if (this.data.durationSeconds)
@@ -146,10 +142,18 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   }
 
   getAttacked(from: Point, by: Player): void {
+    if (this.data.damageOnAttack) {
+      if (
+        this.data.damageOnAttack.all ||
+        ![this.authorId].includes(by.uniqueId)
+      ) {
+        by.damage(this.data.damageOnAttack.damage, 'settable')
+      }
+    }
+
     const equiped = by.items.equiped
     if (equiped && equiped.item.data.damageBuilding) {
       this.hurt(equiped.item.data.damageBuilding)
-    } else {
     }
     if (this.destroyed) return
     const alivePlayers = this.players
@@ -162,6 +166,29 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
         this.currentModeIndex(this.currentMode.switchTo || 0)
       }
     }
+  }
+
+  getTouched(player: Player) {
+    if (!this.data.damageOnTouch) return
+    if (
+      !this.data.damageOnAttack.all &&
+      [this.authorId].includes(player.uniqueId)
+    )
+      return
+    const id = (p: Player) => `${p.uniqueId}-${p.id()}`
+    if (id(player) in this.timeouts.touch && this.timeouts.touch[id(player)])
+      return
+    this.timeouts.touch[id(player)] = 1
+    timer(this.data.damageOnTouch.interval * 1000).subscribe(() => {
+      delete this.timeouts.touch[id(player)]
+      if (
+        universalWithin(player.collision, {
+          radius: this.data.damageOnTouch.radius,
+          point: this.point.clone(),
+        })
+      )
+        player.damage(this.data.damageOnTouch.damage, 'settable')
+    })
   }
 
   validPlayersSockets() {

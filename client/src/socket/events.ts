@@ -220,6 +220,8 @@ export enum WalkEffect {
   water,
 }
 
+export type PlyaerBodyEffect = "attacked"
+
 export interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
@@ -260,7 +262,9 @@ export interface ServerToClientEvents {
   dynamicItems: (
     data: [players?: OtherPlayersDto, mobs?: MobDynamicDto]
   ) => void
-  playerBodyEffect: (data: [playerId: string, effectType: "attacked"]) => void
+  playerBodyEffect: (
+    data: [playerId: string, effectType: PlyaerBodyEffect]
+  ) => void
   setItemResponse: (data: [itemId: number, timeout: NumberBoolean]) => void
   leaderboard: (
     data: [

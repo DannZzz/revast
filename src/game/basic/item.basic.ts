@@ -119,6 +119,13 @@ export interface Settable {
     settable: StaticSettableItem,
     map: GameMap,
   ) => boolean
+  damageOnAttack?: { all: boolean; damage: number }
+  damageOnTouch?: {
+    all: boolean
+    radius: number
+    damage: number
+    interval: number
+  }
 }
 
 export type DayNight<T = number> = { [k in 'day' | 'night']: T }

@@ -3,7 +3,6 @@ import { Bio } from 'src/game/basic/bio-item.basic'
 import { StaticSettableItem } from 'src/game/basic/static-item.basic'
 import { Point } from 'src/global/global'
 import { percentOf, percentFrom } from './percentage'
-import { Player } from 'src/game/player/player'
 
 export const optimizeHandleAttackedItems = (
   items: Array<StaticSettableItem | Bio>,
@@ -29,7 +28,7 @@ export const optimizeHandleAttackedItems = (
         (item) =>
           <any>[
             item.id,
-            getAngle(from, item.centerPoint) + Math.PI,
+            getAngle(from, item.centerPoint),
             item instanceof StaticSettableItem &&
               item.data.showHpRadius &&
               percentOf(percentFrom(item.tempHp(), item.data.hp), 360),

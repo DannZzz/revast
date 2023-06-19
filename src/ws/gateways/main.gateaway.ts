@@ -16,7 +16,6 @@ import {
   MainServer,
   MainSocket,
 } from '../events/events'
-import { TEST_GAME_SERVER } from 'src/constant'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { NB } from 'src/utils/NumberBoolean'
 import GameServers from 'src/servers/game-servers'
@@ -24,6 +23,7 @@ import { WsRateLimit } from '../WsRateLimit'
 import { NumberBoolean } from 'src/game/types/any.types'
 import config from 'config'
 import { Wss } from '../WS/WSS'
+import { TEST_GAME_SERVER } from 'src/servers/test-server'
 
 // @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
 @WebSocketGateway({

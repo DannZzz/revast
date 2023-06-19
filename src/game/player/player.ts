@@ -208,9 +208,13 @@ export class Player extends BasicElement<PlayerEvents> {
     this.actions.actionablesUpdate()
   }
 
-  damage(amount: number, type: 'mob' | 'player' | 'absolute', from?: Player) {
+  damage(
+    amount: number,
+    type: 'mob' | 'player' | 'absolute' | 'settable',
+    from?: Player,
+  ) {
     if (this.settings.godMode()) return
-    if (type !== 'absolute') {
+    if (['mob', 'player'].includes(type)) {
       const deffense = {
         mob: 0,
         player: 0,
@@ -227,6 +231,19 @@ export class Player extends BasicElement<PlayerEvents> {
     if (amount > 0) {
       this.bars.hp.value -= amount
       this.bars.healingChecking = 0
+
+      if (type !== 'absolute')
+        this.gameServer.alivePlayers.forEach((otherPlayer) => {
+          if (
+            otherPlayer.online() &&
+            universalWithin(this.point(), otherPlayer.camera.viewRect())
+          ) {
+            otherPlayer
+              .socket()
+              .emit('playerBodyEffect', [this.id(), 'attacked'])
+          }
+        })
+
       if (this.bars.hp.value <= 0 && from) {
         from.lbMember.add(percentOf(30, this.lbMember.xp))
         from.kills(from.kills() + 1)

@@ -103,6 +103,11 @@ export class PlayerLoop {
         item instanceof ActionableSettableItem && item.actionable(this.player),
     )
 
+    // checkin settables with touch action
+    this.cache.data.staticSettables.forEach((item) =>
+      item.getTouched(this.player),
+    )
+
     // send other users
     const playersInView = this.player.gameServer.dynamicItems.filter(
       (item) =>

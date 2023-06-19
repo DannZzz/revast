@@ -23,20 +23,26 @@ const MenuCenter: Component<{}> = (props) => {
 
   function onPlay() {
     if (started() || loading()) return
+
+    const send = (token: string = "") => {
+      batch(() => {
+        startGame(
+          nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
+          server(),
+          token
+        )
+        setLoading(true)
+      })
+    }
+
     gc.ready(function () {
       gc.execute("6LfREZomAAAAAORz_JisAgiuSVK964J_2G2fFFxS", {
         action: "submit",
       }).then(function (token) {
-        batch(() => {
-          startGame(
-            nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,
-            server(),
-            token
-          )
-          setLoading(true)
-        })
+          send(token)
       })
     })
+    // send()
   }
 
   createEffect(

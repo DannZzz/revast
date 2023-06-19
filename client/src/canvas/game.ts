@@ -402,26 +402,12 @@ export class Game {
     socket.on("playerBodyEffect", ([playerId, effectType]) => {
       let node: Node
       if (playerId === this.player.id()) {
-        node = this.player.element(`#${this.player.id("body", "image")}`)
+        this.player.bodyEffect(effectType)
       } else {
         const player = this.otherPlayers.find(
           (player) => player.id() === playerId
         )
-        if (player) node = player.element(`#${player.id("body", "image")}`)
-      }
-      if (node) {
-        if (effectType === "attacked") {
-          node.cache()
-          node.filters([Konva.Filters.RGB])
-          node.red(100)
-          node.to({
-            red: 150,
-            duration: 0.1,
-            onFinish: () => {
-              node.to({ filters: [], red: 100, duration: 0.1 })
-            },
-          })
-        }
+        player?.bodyEffect(effectType)
       }
     })
 

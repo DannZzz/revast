@@ -45,7 +45,7 @@ interface PlayerItem<T extends ItemsByTypes> {
 
 export class PlayerItems {
   private _isCrafting: null | string = null
-  readonly specialItems = { bag: <number>null }
+  readonly specialItems = { bag: <number>44 }
   _items = new Chest<number, PlayerItem<ItemsByTypes>>(START_ITEMS() as any)
 
   readonly timeout: PlayerItemTimeout = {

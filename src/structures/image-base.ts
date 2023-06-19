@@ -147,6 +147,26 @@ export const Images = {
   PLOT: 'plot.webp',
   ICON_PLOT: 'plot-icon.webp',
 
+  // spikes
+  WOODEN_SPIKE: 'wooden-spike.webp',
+  WOODEN_SPIKE_DOOR: 'wooden-spike-door-closed.webp',
+  WOODEN_SPIKE_DOOR_OPEN: 'wooden-spike-door-open.webp',
+  STONE_SPIKE: 'stone-spike.webp',
+  STONE_SPIKE_DOOR: 'stone-spike-door-closed.webp',
+  STONE_SPIKE_DOOR_OPEN: 'stone-spike-door-open.webp',
+  GOLDEN_SPIKE: 'golden-spike.webp',
+  GOLDEN_SPIKE_DOOR: 'golden-spike-door-closed.webp',
+  GOLDEN_SPIKE_DOOR_OPEN: 'golden-spike-door-open.webp',
+  DIAMOND_SPIKE: 'diamond-spike.webp',
+  DIAMOND_SPIKE_DOOR: 'diamond-spike-door-closed.webp',
+  DIAMOND_SPIKE_DOOR_OPEN: 'diamond-spike-door-open.webp',
+  AMETHYST_SPIKE: 'amethyst-spike.webp',
+  AMETHYST_SPIKE_DOOR: 'amethyst-spike-door-closed.webp',
+  AMETHYST_SPIKE_DOOR_OPEN: 'amethyst-spike-door-open.webp',
+  RUBY_SPIKE: 'ruby-spike.webp',
+  RUBY_SPIKE_DOOR: 'ruby-spike-door-closed.webp',
+  RUBY_SPIKE_DOOR_OPEN: 'ruby-spike-door-open.webp',
+
   // mobs
   WOLF: 'wolf.webp',
   HURT_WOLF: 'hurt-wolf.webp',

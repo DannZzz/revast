@@ -6,6 +6,7 @@ export class DatabaseHandler {
     // config.util.getEnv('NODE_ENV') === 'development'
     if (data.xp <= 0 || config.util.getEnv('NODE_ENV') === 'development') return
     const created = new Highscore(data)
-    return created.save()
+
+    created.save().catch(console.log)
   }
 }

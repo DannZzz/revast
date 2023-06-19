@@ -90,3 +90,50 @@ export const HelmetsDefenseByResourceType = {
 export const verifyItemOfTeam: SettableMode['verify'] = function (player) {
   return player.uniqueId === this.authorId
 }
+
+export const SpikeTouchDamageRadius = 55
+
+export const SpikeHpByResourceType = {
+  wood: 250,
+  stone: 700,
+  gold: 1500,
+  diamond: 2300,
+  amethyst: 3000,
+  ruby: 4000,
+}
+
+export const SpikeDoorHpByResourceType = {
+  wood: 250,
+  stone: 800,
+  gold: 1700,
+  diamond: 2450,
+  amethyst: 3500,
+  ruby: 4300,
+}
+
+export const SpikeTouchDamage = {
+  wood: 10,
+  stone: 20,
+  gold: 30,
+  diamond: 35,
+  amethyst: 40,
+  ruby: 50,
+}
+
+export const SpikeAttackDamage = {
+  wood: 1,
+  stone: 2,
+  gold: 2,
+  diamond: 3,
+  amethyst: 3,
+  ruby: 4,
+}
+
+export const SpikeCraftDuration = {
+  wood: 10,
+  stone: 14,
+  gold: 16,
+  diamond: 18,
+  amethyst: 20,
+  ruby: 22,
+}

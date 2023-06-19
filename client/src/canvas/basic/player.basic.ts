@@ -14,6 +14,7 @@ import { Converter } from "../structures/Converter"
 import { getPointByTheta } from "../animations/rotation"
 import { PlayerMessages } from "../player/player-messages"
 import { playerHighlight } from "../data/cached-nodes"
+import { PlyaerBodyEffect } from "../../socket/events"
 
 export interface BasicPlayerProps {
   name: string
@@ -51,6 +52,7 @@ export class BasicPlayer<
   wearingNode: Konva.Image
   messagesNode: Konva.Group
   messages: PlayerMessages
+  private inBodyEffect = false
 
   constructor(props: ElementProps<BasicPlayerProps>) {
     const { name, skin, id, ...otherProps } = props
@@ -190,7 +192,6 @@ export class BasicPlayer<
       image: null,
       id: `${id}-set`,
       visible: false,
-      filters: [Konva.Filters.RGB],
       opacity: 0.7,
     })
 
@@ -219,6 +220,39 @@ export class BasicPlayer<
   registerEvents(): void {
     // throw new Error("Method not implemented.")
   }
+
+  bodyEffect(effectType: PlyaerBodyEffect) {
+    if (this.inBodyEffect) return
+    const node = this.element(`#${this.id("body", "image")}`)
+    if (!node) return
+    switch (effectType) {
+      case "attacked": {
+        this.inBodyEffect = true
+        node.cache()
+        node.filters([Konva.Filters.RGB])
+        node.red(100)
+        node.to({
+          red: 150,
+          duration: 0.1,
+          onFinish: () => {
+            node.to({
+              filters: [],
+              red: 100,
+              duration: 0.1,
+              onFinish: () => {
+                this.inBodyEffect = false
+              },
+            })
+          },
+        })
+        break
+      }
+
+      default:
+        break
+    }
+  }
+
   update(
     angle: boolean = false,
     equipment: boolean = false,

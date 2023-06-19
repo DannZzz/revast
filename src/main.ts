@@ -16,10 +16,10 @@ import helmet from 'helmet'
 
 async function bootstrap() {
   await Promise.all([
-    connectMongo(),
     loadItems(),
     loadMobs(),
     loadAdminCommands(),
+    connectMongo(),
     connectDiscordBot(),
   ])
 

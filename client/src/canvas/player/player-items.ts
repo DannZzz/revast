@@ -238,14 +238,13 @@ export class PlayerItems extends BasicPlayerItems {
       .setAttr(
         "image",
         loadImage(item.item.url, (img) =>
-          itemNode.setAttr("image", img).cache().green(150)
+          itemNode.setAttr("image", img).cache()
         )
       )
       .position(pos)
       .offset(offset)
       .size(item.item.data.size)
       .cache()
-      .green(150)
 
     this.updateGridSettingMode()
 
@@ -261,7 +260,7 @@ export class PlayerItems extends BasicPlayerItems {
     const itemNode = this.settingMode.node
     this.settingMode.id = null
     this.settingMode.grid = false
-    itemNode.rotation(0).visible(false).setAttr("image", null)
+    itemNode.rotation(0).visible(false).setAttr("image", null).cache()
   }
 
   drawItems() {
@@ -342,6 +341,7 @@ export class PlayerItems extends BasicPlayerItems {
 
     group.on("dragend", (e) => {
       const endPoint = new Point(e.evt.clientX, e.evt.clientY)
+      const startPos = this.getInventoryStartPos()
       const pX = endPoint.x - startPos.x
 
       const itemIndexByPositionX = (x: number) => {

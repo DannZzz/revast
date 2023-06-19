@@ -133,16 +133,6 @@ export class PlayerClick {
         const fullPlayer = alivePlayers.find((p) => p.id() === player.id)
         if (!fullPlayer || fullPlayer.died()) return
         fullPlayer.damage(damage, 'player', this.player)
-        alivePlayers.forEach((otherPlayer) => {
-          if (
-            otherPlayer.online() &&
-            universalWithin(player.point, otherPlayer.camera.viewRect())
-          ) {
-            otherPlayer
-              .socket()
-              .emit('playerBodyEffect', [player.id, 'attacked'])
-          }
-        })
       })
     }
 
