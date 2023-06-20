@@ -27,9 +27,13 @@
 
     .controllers {
       width: 100%;
-      @include flex($content: flex-end);
+      @include flex($content: space-between);
 
-      & > * {
+      .title {
+        flex: 1;
+      }
+
+      .controller {
         cursor: pointer;
       }
     }

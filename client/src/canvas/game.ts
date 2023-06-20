@@ -137,7 +137,7 @@ export class Game {
       opacity: 0,
       width: this.size.width,
       align: "center",
-      y: 35,
+      y: 60,
       listening: false,
       fill: "#ccc",
       fontSize: 30,

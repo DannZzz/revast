@@ -88,7 +88,10 @@ export const HelmetsDefenseByResourceType = {
 }
 
 export const verifyItemOfTeam: SettableMode['verify'] = function (player) {
-  return player.uniqueId === this.authorId
+  return player.clanMember
+    .team()
+    .map((member) => member.playerId)
+    .includes(this.authorId)
 }
 
 export const SpikeTouchDamageRadius = 70

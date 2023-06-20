@@ -222,6 +222,28 @@ export enum WalkEffect {
 
 export type PlyaerBodyEffect = "attacked"
 
+export interface ClanVisualInformationDto {
+  name: string
+  joinable: boolean
+  id: string
+  memberCount: string
+}
+
+export interface ClanInformationDto {
+  members: ClanMemberDto[]
+  ownerId: string
+  joinPrivacy: boolean
+  name: string
+  playerOwner: boolean
+}
+
+export interface ClanMemberDto {
+  name: string
+  id: string
+  kickable: boolean
+  owner: boolean
+}
+
 export interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
@@ -290,6 +312,13 @@ export interface ServerToClientEvents {
   walkEffect: (
     data: [effect: WalkEffect, x: number, y: number, angle: number]
   ) => void
+  clansInformation: (
+    data: [
+      visualClans?: ClanVisualInformationDto[],
+      currentClan?: ClanInformationDto
+    ]
+  ) => void
+  clanJoinApplication: (data: [memberName: string, memberId: string]) => void
 }
 
 export interface ClientToServerEvents {
@@ -316,6 +345,13 @@ export interface ClientToServerEvents {
     data: [settableId: string, itemId: number, x10: boolean]
   ): void
   requestActionableHolderTake(data: [settableId: string, i: number]): void
+  requestClansInformation(data: []): void
+  requestClanCreate(data: [name: string]): void
+  requestClanJoin(data: [clanId: string]): void
+  requestClanLeave(data: []): void
+  requestClanMemberKick(data: [memberId: string]): void
+  requestClanAcceptMember(data: [memberId: string]): void
+  requestClanTogglePrivacy(data: []): void
 }
 
 export type MainSocket = WebSocket

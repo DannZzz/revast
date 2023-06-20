@@ -145,7 +145,10 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     if (this.data.damageOnAttack) {
       if (
         this.data.damageOnAttack.all ||
-        ![this.authorId].includes(by.uniqueId)
+        !by.clanMember
+          .team()
+          .map((member) => member.playerId)
+          .includes(this.authorId)
       ) {
         by.damage(this.data.damageOnAttack.damage, 'settable')
       }
@@ -172,7 +175,10 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     if (!this.data.damageOnTouch) return
     if (
       !this.data.damageOnAttack.all &&
-      [this.authorId].includes(player.uniqueId)
+      player.clanMember
+        .team()
+        .map((member) => member.playerId)
+        .includes(this.authorId)
     )
       return
     const id = (p: Player) => `${p.uniqueId}-${p.id()}`

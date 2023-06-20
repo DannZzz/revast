@@ -54,6 +54,9 @@ export const TIMEOUT_BUILDING = 1
 
 export const MAX_SCREEN_SIZE = new Size(2540, 2000)
 
+export const CLAN_MAX_MEMBERS_SIZE = 9
+export const CLAN_MAX_NAME_SIZE = 20
+
 export const MOB_GLOBAL_SPEED_EFFECT = -15
 export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 

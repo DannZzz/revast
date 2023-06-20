@@ -8,7 +8,7 @@ import { Transition } from "solid-transition-group"
 const { clickOutside, clickInside } = directives
 
 const Modal = () => {
-  const { open, content, setOpen, buttons, store } = modalState
+  const { open, content, setOpen, buttons, store, title } = modalState
 
   function close() {
     setOpen(false)
@@ -21,11 +21,13 @@ const Modal = () => {
         <div class="modal-container">
           <div use:clickOutside={close} class="modal">
             <div class="controllers">
+              <h2 class="modal-title">{title() || ""}</h2>
+
               <img
                 onClick={close}
                 src="/images/close.png"
                 alt=""
-                class="close"
+                class="close controller"
               />
             </div>
             <div class="content">{content()}</div>

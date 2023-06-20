@@ -2,7 +2,7 @@ import { BSON } from 'bson'
 import { WsMessage } from './type'
 
 export const binaryMessageToObject = (data: any) =>
-  <WsMessage>JSON.parse(uintToString(data))
+  <WsMessage>JSON.parse(uintToString(data) || '{}')
 
 export const emitDataToBinary = (event: string, data: any) =>
   stringToUint(JSON.stringify({ event, data }))

@@ -1,5 +1,6 @@
 import {
   Component,
+  For,
   Show,
   createEffect,
   createSignal,
@@ -13,17 +14,24 @@ import { KonvaEventObject } from "konva/lib/Node"
 import { Point, Size } from "../../../../global/init"
 import gameState from "../../../../store/game-state"
 import { disconnectWS, socket } from "../../../../socket/socket"
-import { createStore } from "solid-js/store"
 import "./Canvas.scss"
-import Button from "../../../../components/Button/Button"
 import modalState from "../../../../components/Modal/modal-state"
+import {
+  ClanVisualInformationDto,
+  ClanInformationDto,
+} from "../../../../socket/events"
+import Button from "../../../../components/Button/Button"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
+  let clanName: HTMLInputElement
   const [dropItemId, setDropItemId] = createSignal<number>()
+  const [clans, setClans] = createSignal<{
+    visualClans?: ClanVisualInformationDto[]
+    currentClan?: ClanInformationDto
+  }>({})
   let chatInputRef: HTMLInputElement
-  const { showModal, closeModal } = modalState
-
+  const { showModal, closeModal, open: modalOpen } = modalState
   const [openChat, setOpenChat] = createSignal(false)
   const { gs, started, died, leaveGame, showGame } = gameState
 
@@ -38,6 +46,10 @@ const Canvas: Component<{}> = (props) => {
 
         socket.on("playerDied", ([playerInformationDto]) => {
           leaveGame(playerInformationDto)
+        })
+
+        socket.on("clansInformation", ([visualClans, currentClan]) => {
+          setClans({ visualClans, currentClan })
         })
       }
     })
@@ -85,7 +97,7 @@ const Canvas: Component<{}> = (props) => {
     document.onkeyup = (evt) =>
       started() && !openChat() && game.events.emit("keyboard.up", evt)
     document.onkeydown = (evt) => {
-      if (!started()) return
+      if (!started() || modalOpen()) return
       if (evt.code === "Enter") {
         setOpenChat(!openChat())
         if (openChat()) {
@@ -124,6 +136,125 @@ const Canvas: Component<{}> = (props) => {
     stage.on("mouseup", onMouseUp)
     stage.on("mousemove", onMouseMove)
   })
+
+  createEffect(
+    on(clans, ({ visualClans, currentClan }) => {
+      if (!visualClans && !currentClan) {
+        if ("waitingServer" in (game?.player?.clan || {}))
+          game.player.clan.waitingServer = false
+        return
+      }
+      if (!game?.player?.clan?.waitingServer) return
+      if (visualClans) {
+        showModal({
+          title: "SERVER CLANS",
+          content: (
+            <div class="clans">
+              <div class="clans-list">
+                {visualClans.length > 0 ? (
+                  <For each={visualClans}>
+                    {(clan) => (
+                      <div class="visual-clan">
+                        <div class="info">
+                          <span class="clan-title">{clan.name}</span>
+                          <span class="clan-member-count">
+                            {clan.memberCount}
+                          </span>
+                        </div>
+                        <Button
+                          onClick={() =>
+                            socket.emit("requestClanJoin", [clan.id])
+                          }
+                        >
+                          Join
+                        </Button>
+                      </div>
+                    )}
+                  </For>
+                ) : (
+                  <span>Ooops! There's no clan yet!</span>
+                )}
+              </div>
+              <input
+                ref={clanName}
+                placeholder="clan name.."
+                type="text"
+                class="clan-name"
+                maxLength={20}
+              />
+            </div>
+          ),
+          buttons: [
+            {
+              children: "Create Clan",
+              onClick: () =>
+                socket.emit("requestClanCreate", [clanName.value || ""]),
+            },
+          ],
+          onClose: () => setClans({}),
+        })
+      } else if (currentClan) {
+        showModal({
+          title: currentClan.name,
+          content: (
+            <div class="clans">
+              <div
+                class="privacy"
+                onChange={(e) => {
+                  socket.emit("requestClanTogglePrivacy", [])
+                }}
+              >
+                <input
+                  disabled={!currentClan.playerOwner}
+                  type="checkbox"
+                  checked={currentClan.joinPrivacy}
+                />
+                <span>Players can see clan</span>
+              </div>
+              <div class="clans-list">
+                <For each={currentClan.members}>
+                  {(member) => (
+                    <div class="visual-clan">
+                      <div class="info">
+                        <span class="member-flex">
+                          {member.id === currentClan.ownerId && (
+                            <img
+                              src="/images/clan-leader.png"
+                              width={20}
+                              height={20}
+                            />
+                          )}
+                          {member.name}
+                        </span>
+                      </div>
+                      <Show when={member.kickable}>
+                        <img
+                          class="kick-button"
+                          src="/images/close.png"
+                          onClick={() =>
+                            socket.emit("requestClanMemberKick", [member.id])
+                          }
+                        />
+                      </Show>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </div>
+          ),
+          onClose: () => setClans({}),
+          buttons: [
+            {
+              children: currentClan.playerOwner ? "Delete" : "Leave",
+              onClick: () => {
+                socket.emit("requestClanLeave", [])
+              },
+            },
+          ],
+        })
+      }
+    })
+  )
 
   createEffect(
     on(dropItemId, (id) => {

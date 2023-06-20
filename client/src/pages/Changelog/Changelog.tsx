@@ -6,6 +6,21 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 21/6/2023 - Clans Are Arrived")}
+          <div class="content">
+            {cg_big_img("/images/clan-icon.png")}
+            <span>Create your clan and have a fun with friends!</span>
+            {cg_list("Information", [
+              "Maximum 9 members can be in a clan (THE LEADER AND 8 MEMBERS)",
+              "Clan members can open doors(spike doors) created by another member",
+              "Clan members cannot damage each other, also their spikes have no damage",
+              "Clan Leaders can make their clan private by making clan invisible to others",
+              "Clan Leaders will get a notification when someone will try to join",
+              "Clan Leaders are able to kick their members",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 20/6/2023 - Spiky")}
           <div class="content">
             <div class="group">

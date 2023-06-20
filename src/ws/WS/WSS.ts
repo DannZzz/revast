@@ -14,6 +14,7 @@ import c from 'config'
 import { Timeout } from 'src/structures/timers/timeout'
 import { Interval } from 'src/structures/timers/interval'
 import { MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S } from 'src/constant'
+import { Player } from 'src/game/player/player'
 
 export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
@@ -55,16 +56,22 @@ export class Wss {
 
   takeMessage(message: WsMessage, socket: MainSocket) {
     this.listeners.forEach((lst) => {
-      if (lst.event === message.event) {
+      if (lst.event === message?.event) {
         // @ts-ignore
-        lst.cb(socket, ...message.data)
+        lst.cb(
+          { ws: socket, player: this.gameServer.to(socket.id) },
+          ...(Array.isArray(message?.data) ? message.data : []),
+        )
       }
     })
   }
 
   on<K extends keyof ClientToServerEvents>(
     event: K,
-    cb: (ws: MainSocket, ...data: Parameters<ClientToServerEvents[K]>) => void,
+    cb: (
+      config: { ws: MainSocket; player?: Player },
+      ...data: Parameters<ClientToServerEvents[K]>
+    ) => void,
   ) {
     this.listeners.push({ event, cb })
     return this

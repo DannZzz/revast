@@ -12,6 +12,7 @@ import { GameServer } from '../server'
 import { BasicDrop } from '../basic/drop.basic'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { AssetLink } from 'src/structures/Transformer'
+import { ClanMember } from 'src/structures/clans/ClanMember'
 
 export enum WalkEffect {
   water,
@@ -101,6 +102,7 @@ export interface PlayerProps {
   token: Token
   lbMember: LBMember
   uniqueId: number
+  clanMember: ClanMember
 }
 
 export type PlayerEvents = {}

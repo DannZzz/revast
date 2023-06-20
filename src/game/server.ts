@@ -32,6 +32,7 @@ import { BasicMath } from 'src/utils/math'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { Wss } from 'src/ws/WS/WSS'
 import { correctScreenSize } from 'src/utils/correct-screen-size'
+import { GameClans } from 'src/structures/clans/GameClans'
 
 export type TMap = typeof BasicMap
 
@@ -67,6 +68,7 @@ export class GameServer implements GameProps {
   _lastFrame: number = Date.now()
   private _FPSInterval = 30
   readonly leaderboard = new Leaderboard()
+  readonly clans = new GameClans(this)
   lastFrameDelta: number = 0
   readonly day: GameDay
   mobs: Mobs
@@ -131,8 +133,11 @@ export class GameServer implements GameProps {
       currentSocketId: socketId,
     })
     const player = new Player({
-      name: name.slice(0, PLAYER_NAME_MAX_SIZE),
+      name: name
+        .slice(0, PLAYER_NAME_MAX_SIZE)
+        .replace(/\W*(<script>)\W*/g, ''),
       token: newToken,
+      clanMember: this.clans.makeMember(login.playerId),
       uniqueId: login.playerId,
       point: new Point(),
       size: PLAYER_BODY_SIZE,

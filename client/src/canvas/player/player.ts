@@ -20,6 +20,7 @@ import { NB } from "../utils/NumberBoolean"
 import { PlayerTimeout } from "./player-timeout"
 import { PlayerJoinedDto } from "../../socket/events"
 import { PlayerActionable } from "./player-actionable"
+import { PlayerClan } from "./player-clan"
 
 export class Player extends BasicPlayer<PlayerEvents> {
   range: number
@@ -37,6 +38,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
   timeout: PlayerTimeout
   chatStatus = true
   mouseSentTime: number = 0
+  readonly clan: PlayerClan
 
   constructor(props: ElementProps<PlayerProps>) {
     const { camera, dayInfo, game, timeout, ...basic } = props
@@ -49,6 +51,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
     this.miniMap = new MiniMap(this.layer2, this.game().map, this)
     this.leaderboard = new PlayerLeaderboard(this.layer2, this.miniMap)
     this.controllers = new PlayerControllers(this, dayInfo)
+    this.clan = new PlayerClan(this)
     this.camera = camera
     this.timeout = new PlayerTimeout(this.layer, this.layer2, timeout)
     this.draw()
@@ -182,6 +185,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
       this.bars.resize()
       this.miniMap.resize()
       this.actionable.resize()
+      this.clan.resize()
     })
     socket.on("playerPosition", ([point, screen]) => {
       this.moveTo(point)

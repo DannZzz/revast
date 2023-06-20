@@ -54,12 +54,14 @@ export class BasicMob implements MobDto {
   hurt() {
     if (!this.canHurt) return
     this.canHurt = false
-    this.imageNode.image(
-      loadImage(this.hurtUrl, (img) => this.imageNode.image(img))
-    )
+    this.imageNode
+      .image(
+        loadImage(this.hurtUrl, (img) => this.imageNode.image(img).cache())
+      )
+      .cache()
     const t = setTimeout(() => {
       this.canHurt = true
-      this.imageNode.image(loadImage(this.url))
+      this.imageNode.image(loadImage(this.url)).cache()
       clearTimeout(t)
     }, 150)
   }

@@ -47,6 +47,8 @@ import { PlayerLoop } from './player-loop'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { DatabaseHandler } from 'src/db/handler'
 import { Emitable } from 'src/ws/WS/type'
+import { ClanMember } from 'src/structures/clans/ClanMember'
+import { PLayerClanActions } from './player-clan-actions'
 
 export class Player extends BasicElement<PlayerEvents> {
   skin: PlayerSkin = skinByName('repeat')
@@ -81,6 +83,8 @@ export class Player extends BasicElement<PlayerEvents> {
   readonly createdAt = new Date()
   readonly loop: PlayerLoop
   readonly kills = GetSet(0)
+  readonly clanMember: ClanMember
+  readonly clanActions: PLayerClanActions
 
   readonly socket: () => Emitable = () =>
     this.gameServer.socketServer.emitable(
@@ -96,6 +100,7 @@ export class Player extends BasicElement<PlayerEvents> {
       uniqueId,
       lbMember,
       token,
+      clanMember,
       ...basic
     } = props
     super(basic)
@@ -105,7 +110,9 @@ export class Player extends BasicElement<PlayerEvents> {
     this.name = name
     this.pointOnScreen
     this.lbMember = lbMember
+    this.clanMember = clanMember
     this.staticItems = gameServer.staticItems
+    this.clanActions = new PLayerClanActions(this)
     this.actions = new PlayerAction(this)
     this.items = new PlayerItems(this)
     this.bars = new PlayerBars(this)
@@ -214,6 +221,7 @@ export class Player extends BasicElement<PlayerEvents> {
     from?: Player,
   ) {
     if (this.settings.godMode()) return
+
     if (['mob', 'player'].includes(type)) {
       const deffense = {
         mob: 0,
@@ -229,8 +237,15 @@ export class Player extends BasicElement<PlayerEvents> {
       amount -= deffense[type]
     }
     if (amount > 0) {
-      this.bars.hp.value -= amount
-      this.bars.healingChecking = 0
+      if (
+        !from ||
+        !from.clanMember.clanId ||
+        !this.clanMember.clanId ||
+        from.clanMember.clanId !== this.clanMember.clanId
+      ) {
+        this.bars.hp.value -= amount
+        this.bars.healingChecking = 0
+      }
 
       if (type !== 'absolute')
         this.gameServer.alivePlayers.forEach((otherPlayer) => {
@@ -320,6 +335,9 @@ export class Player extends BasicElement<PlayerEvents> {
         })
       },
     })
+
+    this.clanActions.leave()
+
     this.staticItems.for(this.point()).addDrop(crate)
 
     this.socket()?.emit('playerDied', [

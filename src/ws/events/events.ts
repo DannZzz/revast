@@ -4,6 +4,9 @@ import { PlayerBarsEntity } from 'src/dto/player-bars.dto'
 import { ActionableHolderEntity } from 'src/entities/actionable-holder.entity'
 import { ActionableSettableDrawOptionsEntity } from 'src/entities/actionable-settable-draw-options.entity'
 import { BioEntity } from 'src/entities/bio.entity'
+import { ClanInformationEntity } from 'src/entities/clan-information.entity'
+import { ClanMemberEntity } from 'src/entities/clan-member.entity'
+import { ClanVisualInformationEntity } from 'src/entities/clan-visual-information.entity'
 import { CraftEntity } from 'src/entities/craft.entity'
 import { DropEntity } from 'src/entities/drop.entity'
 import { EquipmentEntity } from 'src/entities/equipment.entity'
@@ -94,6 +97,13 @@ export interface ServerToClientEvents {
   walkEffect: (
     data: [effect: WalkEffect, x: number, y: number, angle: number],
   ) => void
+  clansInformation: (
+    data: [
+      visualClans?: ClanVisualInformationEntity[],
+      currentClan?: ClanInformationEntity,
+    ],
+  ) => void
+  clanJoinApplication: (data: [memberName: string, memberId: string]) => void
 }
 
 export interface ClientToServerEvents {
@@ -112,6 +122,13 @@ export interface ClientToServerEvents {
     data: [settableId: string, itemId: number, x10: boolean],
   ): void
   requestActionableHolderTake(data: [settableId: string, i: number]): void
+  requestClansInformation(data: []): void
+  requestClanCreate(data: [name: string]): void
+  requestClanJoin(data: [clanId: string]): void
+  requestClanLeave(data: []): void
+  requestClanMemberKick(data: [memberId: string]): void
+  requestClanAcceptMember(data: [memberId: string]): void
+  requestClanTogglePrivacy(data: []): void
 }
 
 export type MainServer = WebSocket.Server & {
