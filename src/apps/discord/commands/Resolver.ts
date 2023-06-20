@@ -17,7 +17,7 @@ export const resolveDJMessage = (
   msg: Message,
   args: string[],
 ) => {
-  if (MessageCooldown.isLimited(msg.author.id)) return console.log('limit')
+  if (MessageCooldown.isLimited(msg.author.id)) return
   if (!args[0]) {
     return listenBoss(client, msg, null, args)
   }

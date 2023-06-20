@@ -81,7 +81,7 @@ export const MAP_GRID_RENDER_AREA_SIZE = 2000
 
 export const GRID_SET_RANGE = 100
 
-export const ADMIN_PASSWORDS = ['i am admin']
+export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
 const itemFor = (i: number, quantity: number = 999) => [
