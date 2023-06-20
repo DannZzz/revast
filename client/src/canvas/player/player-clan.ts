@@ -21,16 +21,14 @@ export class PlayerClan {
   draw() {
     const size = _window.size()
     const image: Konva.Image = new Konva.Image({
-      image: loadImage("/images/clan-icon.png", (img) =>
-        image.image(img).cache()
-      ),
+      image: loadImage("/images/clan-icon.png", (img) => image.image(img)),
       width: 70,
       offsetX: 35,
       offsetY: 35,
       height: 70,
       y: 30,
       x: size.width / 2,
-    }).cache()
+    })
     this.node = image
 
     this.applicationsNode = new Konva.Group({
@@ -39,20 +37,8 @@ export class PlayerClan {
     })
 
     Game.createAlwaysTop(this.player.layer2, image, this.applicationsNode)
-    this.node.on("mouseover", (evt) => {
-      tween.play()
-    })
-    this.node.on("mouseout", () => {
-      tween.reverse()
-    })
+
     this.node.on("click", () => this.openClans())
-    const tween = new Konva.Tween({
-      node: image,
-      easing: Konva.Easings.EaseOut,
-      scaleX: 1.1,
-      scaleY: 1.1,
-      duration: 0.3,
-    })
   }
 
   resize() {
