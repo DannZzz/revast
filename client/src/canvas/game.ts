@@ -254,10 +254,10 @@ export class Game {
     const nightRect = this.layer2.findOne("#game-night") as Konva.Rect
     if (day) {
       // bgRect.fill(BG_FOREST_BIOM.day)
-      nightRect.visible(false)
+      nightRect.to({ visible: false, duration: 3 })
     } else {
       // bgRect.fill(BG_FOREST_BIOM.night)
-      nightRect.visible(true)
+      nightRect.to({ visible: true, duration: 3 })
     }
   }
 
