@@ -36,7 +36,7 @@ export class PlayerClan {
       y: size.height / 2,
     })
 
-    this.node.on("click", () => {
+    this.node.listening(true).on("click", () => {
       console.log("c ,")
       this.openClans()
     })
