@@ -8,7 +8,7 @@ import { uuid } from "anytool"
 import { KonvaText } from "../structures/KonvaText"
 import { Size } from "../../global/init"
 
-export class PlayerClan {
+export class PlayerClans {
   waitingServer = false
   applications = new Map<string, any>()
   node: Konva.Image
@@ -36,7 +36,7 @@ export class PlayerClan {
       y: size.height / 2,
     })
 
-    this.node.listening(true).on("click", () => {
+    this.node.on("click", () => {
       console.log("c ,")
       this.openClans()
     })

@@ -140,11 +140,11 @@ const Canvas: Component<{}> = (props) => {
   createEffect(
     on(clans, ({ visualClans, currentClan }) => {
       if (!visualClans && !currentClan) {
-        if ("waitingServer" in (game?.player?.clan || {}))
-          game.player.clan.waitingServer = false
+        if ("waitingServer" in (game?.player?.clans || {}))
+          game.player.clans.waitingServer = false
         return
       }
-      if (!game?.player?.clan?.waitingServer) return
+      if (!game?.player?.clans?.waitingServer) return
       if (visualClans) {
         showModal({
           title: "SERVER CLANS",
