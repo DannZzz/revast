@@ -37,6 +37,7 @@ export class PlayerClan {
     })
 
     this.node.on("click", () => {
+      console.log("c ,")
       this.openClans()
     })
     Game.createAlwaysTop(this.player.layer2, this.node, this.applicationsNode)
