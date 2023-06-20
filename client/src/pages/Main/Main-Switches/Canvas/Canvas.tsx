@@ -97,13 +97,10 @@ const Canvas: Component<{}> = (props) => {
     document.onkeyup = (evt) =>
       started() && !openChat() && game.events.emit("keyboard.up", evt)
     document.onkeydown = (evt) => {
-      if (!started()) return
+      if (!started() || modalOpen()) return
       if (evt.code === "Tab") {
         game?.player?.clans.openClans()
-        return
-      }
-      if (modalOpen()) return
-      if (evt.code === "Enter") {
+      } else if (evt.code === "Enter") {
         setOpenChat(!openChat())
         if (openChat()) {
           chatInputRef?.focus()
