@@ -200,8 +200,9 @@ const Canvas: Component<{}> = (props) => {
             <div class="clans">
               <div
                 class="privacy"
-                onChange={(e) => {
-                  socket.emit("requestClanTogglePrivacy", [])
+                onClick={(e) => {
+                  currentClan.playerOwner &&
+                    socket.emit("requestClanTogglePrivacy", [])
                 }}
               >
                 <input
