@@ -20,9 +20,9 @@ export class PlayerClan {
 
   draw() {
     const size = _window.size()
-    const image: Konva.Image = new Konva.Image({
+    this.node = new Konva.Image({
       name: "no-click",
-      image: loadImage("/images/clan-icon.png", (img) => image.image(img)),
+      image: loadImage("/images/clan-icon.png", (img) => this.node.image(img)),
       width: 70,
       offsetX: 35,
       offsetY: 35,
@@ -30,18 +30,16 @@ export class PlayerClan {
       y: 30,
       x: size.width / 2,
     })
-    this.node = image
 
     this.applicationsNode = new Konva.Group({
       x: 10,
       y: size.height / 2,
     })
 
-    Game.createAlwaysTop(this.player.layer2, image, this.applicationsNode)
-
     this.node.on("click", () => {
       this.openClans()
     })
+    Game.createAlwaysTop(this.player.layer2, this.node, this.applicationsNode)
   }
 
   resize() {
