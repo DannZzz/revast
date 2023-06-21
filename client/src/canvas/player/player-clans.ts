@@ -36,11 +36,14 @@ export class PlayerClans {
       y: size.height / 2,
     })
 
+    Game.createAlwaysTop(this.player.layer2, this.node, this.applicationsNode)
+  }
+
+  registerListening() {
     this.node.on("click", () => {
       console.log("c ,")
       this.openClans()
     })
-    Game.createAlwaysTop(this.player.layer2, this.node, this.applicationsNode)
   }
 
   resize() {

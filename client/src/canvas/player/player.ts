@@ -55,6 +55,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
     this.camera = camera
     this.timeout = new PlayerTimeout(this.layer, this.layer2, timeout)
     this.draw()
+    this.clans.registerListening()
   }
 
   moveToCenterOfScreen(size: Size) {
