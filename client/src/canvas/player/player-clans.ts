@@ -11,6 +11,7 @@ import { Size } from "../../global/init"
 export class PlayerClans {
   waitingServer = false
   applications = new Map<string, any>()
+  lastOpen = 0
   node: Konva.Image
   applicationsNode: Konva.Group
   constructor(readonly player: Player) {
@@ -53,6 +54,8 @@ export class PlayerClans {
   }
 
   openClans() {
+    if (this.lastOpen > Date.now()) return
+    this.lastOpen = Date.now() + 2000
     this.waitingServer = true
     socket.emit("requestClansInformation", [])
   }
