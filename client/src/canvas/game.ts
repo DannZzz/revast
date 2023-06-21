@@ -137,7 +137,7 @@ export class Game {
       opacity: 0,
       width: this.size.width,
       align: "center",
-      y: 60,
+      y: 101,
       listening: false,
       fill: "#ccc",
       fontSize: 30,
@@ -420,7 +420,11 @@ export class Game {
       this.serverMessageNode.text(content)
       this.serverMessageNode.to({ opacity: 1, duration: 1 })
       this.serverMessageTimeout = setTimeout(() => {
-        this.serverMessageNode.to({ opacity: 0, duration: 1 })
+        this.serverMessageNode.to({
+          opacity: 0,
+          duration: 1,
+          onFinish: () => this.serverMessageNode.text(""),
+        })
 
         clearTimeout(this.serverMessageTimeout)
       }, 5000)
