@@ -6,6 +6,11 @@ const Menu: Component<{}> = (props) => {
   return (
     <div class="menu">
       <MenuCenter />
+      <div class="footer">
+        <a style={{ "z-index": 10000 }} href="/terms?nonav" target="_blank">
+          Terms of Service
+        </a>
+      </div>
     </div>
   )
 }

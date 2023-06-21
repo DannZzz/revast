@@ -6,6 +6,7 @@ const Main = lazy(() => import("./pages/Main/Main"))
 const Crafts = lazy(() => import("./pages/Crafts/Crafts"))
 const Leaderboard = lazy(() => import("./pages/Leaderboard/Leaderboard"))
 const Changelog = lazy(() => import("./pages/Changelog/Changelog"))
+const Tos = lazy(() => import("./pages/Tos/Tos"))
 
 const App: Component = () => {
   onMount(() => {
@@ -24,6 +25,7 @@ const App: Component = () => {
         <Route path="/crafts" component={Crafts} />
         <Route path="/changelog" component={Changelog} />
         <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/terms" component={Tos} />
       </Routes>
     </Router>
   )

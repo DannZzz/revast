@@ -12,6 +12,7 @@ export class PlayerControllers {
   private arrow: Konva.Image
   private controllersGroup: Konva.Group
   private autofood: Konva.Image
+  private lastSentCraftOpen = 0
 
   constructor(readonly player: Player, readonly dayInfo: DayInfo) {
     this.draw()
@@ -36,10 +37,12 @@ export class PlayerControllers {
 
     const timerGroup = new Konva.Group({ x: this.containerSize.width - 100 })
     const timerBg = new Konva.Image({
-      image: loadImage("images/day-night.png", (img) => timerBg.image(img)),
+      image: loadImage("images/day-night.png", (img) =>
+        timerBg.image(img).cache()
+      ),
       width: 100,
       height: 100,
-    })
+    }).cache()
     const timerArrow = new Konva.Image({
       image: loadImage("images/day-night-arrow.png", (img) =>
         timerArrow.image(img).cache()
@@ -75,7 +78,20 @@ export class PlayerControllers {
     this.player.bars.autofood.onChange((val) => {
       this.autofood.visible(val)
     })
-    this.controllersGroup.add(timerGroup, this.autofood)
+
+    const craftBook = new Konva.Image({
+      image: loadImage("/images/craft-book.png", (img) => {
+        craftBook.image(img).on("pointerclick", () => {
+          if (this.lastSentCraftOpen > Date.now()) return
+          this.lastSentCraftOpen = Date.now() + 1500
+          this.player.game().events.emit("craft-book")
+        })
+      }),
+      height: 100,
+      width: 100,
+    })
+
+    this.controllersGroup.add(timerGroup, this.autofood, craftBook)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
   }
 

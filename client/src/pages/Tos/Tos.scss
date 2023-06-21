@@ -1,0 +1,6 @@
+.terms {
+  padding: 10px;
+  * {
+    @include common-font;
+  }
+}

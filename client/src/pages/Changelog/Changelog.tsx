@@ -6,6 +6,13 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 21/6/2023 - Craft Easier!")}
+          <div class="content">
+            {cg_small_img("/images/craft-book.png")}
+            {cg_list("Added", ["InGame craft list (BOOK)", "Terms of Service"])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 21/6/2023 - Clans Are Arrived")}
           <div class="content">
             {cg_big_img("/images/clan-icon.png")}

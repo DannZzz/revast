@@ -8,7 +8,7 @@ import { Transition } from "solid-transition-group"
 const { clickOutside, clickInside } = directives
 
 const Modal = () => {
-  const { open, content, setOpen, buttons, store, title } = modalState
+  const { open, content, setOpen, buttons, store, title, opacity } = modalState
 
   function close() {
     setOpen(false)
@@ -18,7 +18,7 @@ const Modal = () => {
   return (
     <Transition name="modal-scale">
       <Show when={open()}>
-        <div class="modal-container">
+        <div class="modal-container" style={{ opacity: opacity() }}>
           <div use:clickOutside={close} class="modal">
             <div class="controllers">
               <h2 class="modal-title">{title() || ""}</h2>

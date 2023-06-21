@@ -2,15 +2,17 @@ import { Component, Show } from "solid-js"
 import "./Nav.scss"
 import gameState from "../../store/game-state"
 import { FaSolidUsers } from "solid-icons/fa"
-import { Link, useNavigate } from "@solidjs/router"
+import { Link, useNavigate, useParams, useSearchParams } from "@solidjs/router"
 
 const Nav: Component = () => {
   const { gamePage } = gameState
   const navigate = useNavigate()
-
+  const [searchParams, setSearchParams] = useSearchParams()
   function navTo(to: string) {
     navigate(to)
   }
+
+  if (searchParams.nonav !== undefined) return null
 
   return (
     <Show when={gamePage() !== "game"}>

@@ -75,5 +75,6 @@ export class ItemCompactEntity implements ItemProps {
   iconSource: string
   craftable?: Craftable
   flip?: boolean
+  @Expose()
   name: string
 }

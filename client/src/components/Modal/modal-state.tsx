@@ -12,6 +12,7 @@ const modalState = () => {
   const [open, setOpen] = createSignal(false)
 
   const [title, setTitle] = createSignal<string>()
+  const [opacity, setOpacity] = createSignal<number>()
   const [content, setContent] = createSignal<JSX.Element>(<span>Hello</span>)
   const [buttons, setButtons] = createSignal<ModalButton[]>([])
   const store = createMutable<ModalStore>({})
@@ -19,13 +20,15 @@ const modalState = () => {
   const showModal = (options: {
     content: JSX.Element
     buttons?: ModalButton[]
-    title?: JSX.Element | string
+    title?: string
+    opacity?: number
     onClose?: () => any
   }) => {
-    const { content, buttons = [], onClose, title } = options
+    const { content, buttons = [], onClose, title, opacity = 1 } = options
 
     batch(() => {
       setTitle(title)
+      setOpacity(opacity)
       setContent(content)
       setButtons(buttons)
       store.onClose = onClose
@@ -36,6 +39,7 @@ const modalState = () => {
   const closeModal = () => {
     batch(() => {
       setTitle()
+      setOpacity(1)
       setContent(<></>)
       setButtons([])
       store.onClose = null
@@ -46,6 +50,7 @@ const modalState = () => {
   return {
     title,
     store,
+    opacity,
     open,
     setOpen,
     content,

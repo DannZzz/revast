@@ -21,6 +21,7 @@ import {
   ClanInformationDto,
 } from "../../../../socket/events"
 import Button from "../../../../components/Button/Button"
+import CraftBook from "./CraftBook/CraftBook"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
@@ -86,6 +87,10 @@ const Canvas: Component<{}> = (props) => {
 
     game.events.on("loaded", showGame)
 
+    game.events.on("craft-book", () => {
+      showModal({ content: <CraftBook />, opacity: 0.7 })
+    })
+
     // events
     window.onresize = () => {
       game.events.emit(
@@ -97,9 +102,13 @@ const Canvas: Component<{}> = (props) => {
     document.onkeyup = (evt) =>
       started() && !openChat() && game.events.emit("keyboard.up", evt)
     document.onkeydown = (evt) => {
-      if (!started() || modalOpen()) return
+      if (!started()) return
       if (evt.code === "Tab") {
-        game?.player?.clans.openClans()
+        if (modalOpen()) {
+          closeModal()
+        } else {
+          game?.player?.clans.openClans()
+        }
       } else if (evt.code === "Enter") {
         setOpenChat(!openChat())
         if (openChat()) {
@@ -149,6 +158,7 @@ const Canvas: Component<{}> = (props) => {
       if (!game?.player?.clans?.waitingServer) return
       if (visualClans) {
         showModal({
+          opacity: 0.7,
           title: "SERVER CLANS",
           content: (
             <div class="clans">
@@ -197,6 +207,7 @@ const Canvas: Component<{}> = (props) => {
         })
       } else if (currentClan) {
         showModal({
+          opacity: 0.7,
           title: currentClan.name,
           content: (
             <div class="clans">
@@ -263,6 +274,7 @@ const Canvas: Component<{}> = (props) => {
     on(dropItemId, (id) => {
       if (!id) return closeModal()
       showModal({
+        opacity: 0.7,
         content: (
           <span class="drop-item-description">
             Do you want to drop the item?

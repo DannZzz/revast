@@ -13,6 +13,7 @@ export interface Craft {
 export interface CompactItem {
   id: number
   iconUrl: string
+  name: string
 }
 
 export interface Highscore {
