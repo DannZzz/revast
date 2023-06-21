@@ -85,11 +85,11 @@ class SettableCreator {
     this.extend.craftable[0].duration = WallDoorCraftDuration[resType]
     this.extend.craftable[0].givesXp = 200
     this.extend.showHpRadius = 45
-    this.extend.damageOnAttack = {
+    this.extend.modes[0].damageOnAttack = {
       all: false,
       damage: SpikeAttackDamage[resType],
     }
-    this.extend.damageOnTouch = {
+    this.extend.modes[0].damageOnTouch = {
       all: false,
       radius: SpikeTouchDamageRadius,
       damage: SpikeTouchDamage[resType],

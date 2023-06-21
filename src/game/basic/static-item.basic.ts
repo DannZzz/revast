@@ -53,7 +53,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     readonly staticItems: StaticItemsHandler,
   ) {
     super()
-    if (this.data.damageOnTouch) this.timeouts.touch = {}
+    if (this.currentMode.damageOnTouch) this.timeouts.touch = {}
     this.tempHp = GetSet(data.hp)
     if (this.data.onDestroy) this.on('destroy', this.data.onDestroy)
     if (this.data.durationSeconds)
@@ -142,15 +142,15 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   }
 
   getAttacked(from: Point, by: Player): void {
-    if (this.data.damageOnAttack) {
+    if (this.currentMode.damageOnAttack) {
       if (
-        this.data.damageOnAttack.all ||
+        this.currentMode.damageOnAttack.all ||
         !by.clanMember
           .team()
           .map((member) => member.playerId)
           .includes(this.authorId)
       ) {
-        by.damage(this.data.damageOnAttack.damage, 'settable')
+        by.damage(this.currentMode.damageOnAttack.damage, 'settable')
       }
     }
 
@@ -172,9 +172,9 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   }
 
   getTouched(player: Player) {
-    if (!this.data.damageOnTouch) return
+    if (!this.currentMode.damageOnTouch) return
     if (
-      !this.data.damageOnAttack.all &&
+      !this.currentMode.damageOnAttack.all &&
       player.clanMember
         .team()
         .map((member) => member.playerId)
@@ -185,15 +185,15 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     if (id(player) in this.timeouts.touch && this.timeouts.touch[id(player)])
       return
     this.timeouts.touch[id(player)] = 1
-    timer(this.data.damageOnTouch.interval * 1000).subscribe(() => {
+    timer(this.currentMode.damageOnTouch.interval * 1000).subscribe(() => {
       delete this.timeouts.touch[id(player)]
       if (
         universalWithin(player.collision, {
-          radius: this.data.damageOnTouch.radius,
+          radius: this.currentMode.damageOnTouch.radius,
           point: this.point.clone(),
         })
       )
-        player.damage(this.data.damageOnTouch.damage, 'settable')
+        player.damage(this.currentMode.damageOnTouch.damage, 'settable')
     })
   }
 

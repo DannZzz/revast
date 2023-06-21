@@ -85,6 +85,13 @@ export class SettableMode {
   cover: number
   switchTo?: number
   onStart?: (this: StaticSettableItem) => void
+  damageOnAttack?: { all: boolean; damage: number }
+  damageOnTouch?: {
+    all: boolean
+    radius: number
+    damage: number
+    interval: number
+  }
   constructor(data: Settable) {
     Object.assign(this, data)
   }
@@ -119,13 +126,6 @@ export interface Settable {
     settable: StaticSettableItem,
     map: GameMap,
   ) => boolean
-  damageOnAttack?: { all: boolean; damage: number }
-  damageOnTouch?: {
-    all: boolean
-    radius: number
-    damage: number
-    interval: number
-  }
 }
 
 export type DayNight<T = number> = { [k in 'day' | 'night']: T }
