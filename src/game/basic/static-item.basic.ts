@@ -187,6 +187,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     this.timeouts.touch[id(player)] = 1
     timer(this.currentMode.damageOnTouch.interval * 1000).subscribe(() => {
       delete this.timeouts.touch[id(player)]
+      if (!this.currentMode.damageOnTouch) return
       if (
         universalWithin(player.collision, {
           radius: this.currentMode.damageOnTouch.radius,
