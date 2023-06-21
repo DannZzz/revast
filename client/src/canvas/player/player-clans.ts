@@ -41,7 +41,7 @@ export class PlayerClans {
   }
 
   registerListening() {
-    this.node.on("click", () => {
+    this.node.on("pointerclick", () => {
       console.log("c ,")
       this.openClans()
     })

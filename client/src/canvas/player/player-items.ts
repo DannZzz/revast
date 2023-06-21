@@ -287,13 +287,13 @@ export class PlayerItems extends BasicPlayerItems {
           }
         },
       })
-      itemGroup.on("pointerenter", () => {
+      itemGroup.on("mouseenter", () => {
         document.body.style.cursor = "pointer"
       })
-      itemGroup.on("pointerleave", () => {
+      itemGroup.on("mouseleave", () => {
         document.body.style.cursor = "default"
       })
-      itemGroup.on("click", (e) => {
+      itemGroup.on("pointerclick", (e) => {
         if (e.evt.button === 0) this.click(i)
         else if (e.evt.button === 2) this.dropItemRequest(i)
       })
