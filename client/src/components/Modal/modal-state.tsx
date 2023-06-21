@@ -12,7 +12,7 @@ const modalState = () => {
   const [open, setOpen] = createSignal(false)
 
   const [title, setTitle] = createSignal<string>()
-  const [opacity, setOpacity] = createSignal<number>()
+  const [opacity, setOpacity] = createSignal<number>(1)
   const [content, setContent] = createSignal<JSX.Element>(<span>Hello</span>)
   const [buttons, setButtons] = createSignal<ModalButton[]>([])
   const store = createMutable<ModalStore>({})

@@ -18,7 +18,7 @@ export default createItem(95, 'hat')
     state: { workbench: true, fire: true },
     required: {
       23: 30,
-      10: 49,
+      49: 10,
       50: 1,
       87: 1,
     },

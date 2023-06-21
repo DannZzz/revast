@@ -9,7 +9,11 @@ $btn-bg-color: rgba(
   $color: #000000,
   $alpha: 0.8,
 );
-$dark-gradient: linear-gradient(to bottom, #252525, #313131);
+$dark-gradient: linear-gradient(
+  to bottom,
+  rgba(37, 37, 37, 1),
+  rgba(49, 49, 49, 1)
+);
 $shadow1: rgba(31, 26, 18, 0.5);
 $shadow2: rgba(37, 35, 31, 0.5);
 

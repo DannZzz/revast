@@ -93,10 +93,13 @@ export class PlayerControllers {
 
     this.controllersGroup.add(timerGroup, this.autofood, craftGroup)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
-    craftGroup.on("pointerclick", () => {
+    craftGroup.on("pointerclick", (e) => {
       if (this.lastSentCraftOpen > Date.now()) return
-      this.lastSentCraftOpen = Date.now() + 1500
-      this.player.game().events.emit("craft-book")
+      this.lastSentCraftOpen = Date.now() + 2000
+      const t = setTimeout(() => {
+        this.player.game().events.emit("craft-book")
+        clearTimeout(t)
+      }, 150)
     })
   }
 

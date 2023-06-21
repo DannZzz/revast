@@ -1,6 +1,7 @@
-import { Component, lazy, onMount } from "solid-js"
+import { Component, Suspense, lazy, onMount } from "solid-js"
 import { Route, Router, Routes } from "@solidjs/router"
 import Merge from "./components/Merge/Merge"
+import { Transition } from "solid-transition-group"
 
 const Main = lazy(() => import("./pages/Main/Main"))
 const Crafts = lazy(() => import("./pages/Crafts/Crafts"))
@@ -19,14 +20,32 @@ const App: Component = () => {
 
   return (
     <Router>
-      <Merge />
-      <Routes>
-        <Route path="/" component={Main} />
-        <Route path="/crafts" component={Crafts} />
-        <Route path="/changelog" component={Changelog} />
-        <Route path="/leaderboard" component={Leaderboard} />
-        <Route path="/terms" component={Tos} />
-      </Routes>
+      <Suspense
+        fallback={
+          <div
+            class="fallback-bg"
+            style={{
+              background: "#133a2b",
+              width: "100vw",
+              height: "100vh",
+              display: "flex",
+              "align-items": "center",
+              "justify-content": "center",
+            }}
+          >
+            <img src="images/loading1.png" width={300} height={300} />
+          </div>
+        }
+      >
+        <Merge />
+        <Routes>
+          <Route path="/" component={Main} />
+          <Route path="/crafts" component={Crafts} />
+          <Route path="/changelog" component={Changelog} />
+          <Route path="/leaderboard" component={Leaderboard} />
+          <Route path="/terms" component={Tos} />
+        </Routes>
+      </Suspense>
     </Router>
   )
 }

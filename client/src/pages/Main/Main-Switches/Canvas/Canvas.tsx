@@ -3,6 +3,7 @@ import {
   For,
   Show,
   createEffect,
+  createResource,
   createSignal,
   on,
   onCleanup,
@@ -22,10 +23,14 @@ import {
 } from "../../../../socket/events"
 import Button from "../../../../components/Button/Button"
 import CraftBook from "./CraftBook/CraftBook"
+import { getCompactItems, getCrafts } from "../../../../api/requests"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
   let clanName: HTMLInputElement
+  const [compactItems] = createResource(getCompactItems, {})
+  const [crafts] = createResource(getCrafts)
+  const [craftBookOpen, setCraftBookOpen] = createSignal(false)
   const [dropItemId, setDropItemId] = createSignal<number>()
   const [clans, setClans] = createSignal<{
     visualClans?: ClanVisualInformationDto[]
@@ -66,6 +71,20 @@ const Canvas: Component<{}> = (props) => {
     })
   )
 
+  createEffect(
+    on(craftBookOpen, (cbOpen) => {
+      if (cbOpen) {
+        showModal({
+          content: <CraftBook compactItems={compactItems} crafts={crafts} />,
+          opacity: 0.7,
+          onClose: () => {
+            setCraftBookOpen(false)
+          },
+        })
+      }
+    })
+  )
+
   onCleanup(() => {
     disconnectWS()
   })
@@ -88,7 +107,7 @@ const Canvas: Component<{}> = (props) => {
     game.events.on("loaded", showGame)
 
     game.events.on("craft-book", () => {
-      showModal({ content: <CraftBook />, opacity: 0.7 })
+      setCraftBookOpen(true)
     })
 
     // events
@@ -272,7 +291,10 @@ const Canvas: Component<{}> = (props) => {
 
   createEffect(
     on(dropItemId, (id) => {
-      if (!id) return closeModal()
+      if (!id) {
+        console.log("drop close")
+        return closeModal()
+      }
       showModal({
         opacity: 0.7,
         content: (

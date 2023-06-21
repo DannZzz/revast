@@ -18,8 +18,14 @@ const Modal = () => {
   return (
     <Transition name="modal-scale">
       <Show when={open()}>
-        <div class="modal-container" style={{ opacity: opacity() }}>
-          <div use:clickOutside={close} class="modal">
+        <div class="modal-container">
+          <div
+            use:clickOutside={close}
+            class="modal"
+            style={{
+              "background-image": `linear-gradient(to bottom, rgba(37, 37, 37, ${opacity()}), rgba(49, 49, 49, ${opacity()}))`,
+            }}
+          >
             <div class="controllers">
               <h2 class="modal-title">{title() || ""}</h2>
 
