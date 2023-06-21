@@ -81,18 +81,23 @@ export class PlayerControllers {
 
     const craftBook = new Konva.Image({
       image: loadImage("/images/craft-book.png", (img) => {
-        craftBook.image(img).on("pointerclick", () => {
-          if (this.lastSentCraftOpen > Date.now()) return
-          this.lastSentCraftOpen = Date.now() + 1500
-          this.player.game().events.emit("craft-book")
-        })
+        craftBook.image(img).cache()
       }),
       height: 100,
       width: 100,
+    }).cache()
+    const craftGroup = new Konva.Group({
+      name: "no-click",
     })
+    craftGroup.add(craftBook)
 
-    this.controllersGroup.add(timerGroup, this.autofood, craftBook)
+    this.controllersGroup.add(timerGroup, this.autofood, craftGroup)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
+    craftGroup.on("pointerclick", () => {
+      if (this.lastSentCraftOpen > Date.now()) return
+      this.lastSentCraftOpen = Date.now() + 1500
+      this.player.game().events.emit("craft-book")
+    })
   }
 
   resize() {
