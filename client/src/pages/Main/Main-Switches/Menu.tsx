@@ -6,6 +6,13 @@ const Menu: Component<{}> = (props) => {
   return (
     <div class="menu">
       <MenuCenter />
+      <a
+        href="https://discord.gg/anevqcFqjS"
+        target="_blank"
+        class="social discord"
+      >
+        <img src="images/social-discord.png" />
+      </a>
       <div class="footer">
         <a style={{ "z-index": 10000 }} href="/terms?nonav" target="_blank">
           Terms of Service
