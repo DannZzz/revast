@@ -70,7 +70,7 @@ export class PlayerControllers {
     timerGroup.listening(false)
 
     this.autofood = new Konva.Image({
-      image: loadImage("images/auto-food.png", (img) =>
+      image: loadImage("images/auto-feed.png", (img) =>
         this.autofood.image(img).cache()
       ),
       height: iconSize.height,
