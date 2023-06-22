@@ -14,7 +14,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
     information: { name: 'Europe', path: server.server.path },
     socketServer: server,
     map: new GameMap({
-      size: new Size(300, 300),
+      size: new Size(250, 250),
       tileSize: new Size(100, 100),
       mapSource: 'map1-mini.webp',
       biomes: [
@@ -22,7 +22,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           type: Biome.winter,
           digItemId: 82,
           name: 'winter',
-          size: new Size(150, 100),
+          size: new Size(150, 75),
           bgColor: '#f8f6f1',
           point: new Point(0, 0),
           effect: new BiomeEffect({
@@ -38,7 +38,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           name: 'forest',
           size: new Size(150, 100),
           bgColor: '#133a2b',
-          point: new Point(0, 100),
+          point: new Point(0, 75),
           effect: new BiomeEffect({
             temperatureDay: -3,
             temperatureNight: -20,
@@ -51,7 +51,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           name: 'beach',
           size: new Size(4, 100),
           bgColor: '#fbefbc',
-          point: new Point(146, 100),
+          point: new Point(146, 75),
           effect: new BiomeEffect({
             temperatureDay: -3,
             temperatureNight: -20,
@@ -61,9 +61,9 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           type: Biome.desert,
           digItemId: 83,
           name: 'desert',
-          size: new Size(150, 100),
+          size: new Size(150, 75),
           bgColor: '#d1c69b',
-          point: new Point(0, 200),
+          point: new Point(0, 175),
           effect: new BiomeEffect({
             speed: -20,
             temperatureDay: 0,
@@ -74,7 +74,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
         new BiomeOptions({
           type: Biome.water,
           name: 'ocean',
-          size: new Size(150, 300),
+          size: new Size(100, 250),
           bgColor: '#0b6a84',
           point: new Point(150, 0),
           effect: new BiomeEffect({
@@ -95,7 +95,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           priority: 2,
           bgColor: '#545055',
           size: new Size(67, 31),
-          point: new Point(3, 266),
+          point: new Point(1, 218),
           effect: new BiomeEffect({
             speed: -20,
             temperatureDay: 0,
@@ -123,7 +123,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           priority: 2,
           size: new Size(30, 32),
           bgColor: '#0b6a84',
-          point: new Point(60, 134),
+          point: new Point(60, 109),
           effect: new BiomeEffect({
             speed: -80,
             temperatureDay: -5,

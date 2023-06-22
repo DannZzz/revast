@@ -47,14 +47,14 @@ export class PlayerBars {
         this.healingChecking = 0.5
       }
 
-      this.hungry.value -= percentOf(4, this.hungry.max)
+      this.hungry.value -= percentOf(3, this.hungry.max)
 
       if (this.hp.value < this.hp.max) {
         if (this.healingChecking === 0) this.healingChecking += 0.5
         else this.healingChecking++
       }
       this.socketUpdate()
-    }, 5000)
+    }, 8000)
   }
 
   private vastingAndO2() {
@@ -77,7 +77,7 @@ export class PlayerBars {
       if (this.h2o.value === 0) {
         this.player.damage(30, 'absolute')
       } else {
-        this.h2o.value += -3 + effect
+        this.h2o.value += -2 + effect
       }
     }
 

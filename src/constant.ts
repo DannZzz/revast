@@ -80,7 +80,7 @@ export const PLAYER_DECREASE_SPEED_CLICK = 30
 
 export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 
-export const MAP_GRID_RENDER_AREA_SIZE = 2000
+export const MAP_GRID_RENDER_AREA_SIZE = 1500
 
 export const GRID_SET_RANGE = 100
 
