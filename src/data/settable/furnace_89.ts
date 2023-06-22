@@ -2,7 +2,6 @@ import { pointCircle } from 'intersects'
 import { ExtendedSettable } from 'src/game/extended/settable/actionable.basic'
 import { Point, Size } from 'src/global/global'
 import { Converter } from 'src/structures/Converter'
-import { Images } from 'src/structures/image-base'
 import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(89, 'furnace')

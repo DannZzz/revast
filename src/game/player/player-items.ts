@@ -317,6 +317,7 @@ export class PlayerItems {
     const t = setTimeout(
       () => {
         this.isCrafting = null
+        this.player.socket().emit('playerCraft', [false, craftId])
         if (item.data.specialName === 'bag') {
           this.specialItems[item.data.specialName] = item.id
           this.update()
@@ -324,7 +325,6 @@ export class PlayerItems {
           this.addItem(craftData.itemId, 1)
         }
         this.player.lbMember.add(craftData.craftable.givesXp)
-        this.player.socket().emit('playerCraft', [false, craftId])
         clearTimeout(t)
       },
       this.player.settings.instaCraft()

@@ -114,9 +114,9 @@ export class PlayerItems extends BasicPlayerItems {
     }
 
     if (this.itemsAreCraftableRN) {
-      const node = this.layer.findOne(`#crafts`)
       opacityAll(1)
       if (this.craftsChanged) return
+      const node = this.layer.findOne(`#crafts`)
       if (node) node.destroy()
     }
 
@@ -518,6 +518,8 @@ export class PlayerItems extends BasicPlayerItems {
     socket.on("playerCraft", ([status, itemId, isBook]) => {
       if (status) {
         this.craftItem(itemId, isBook)
+      } else {
+        this.isCrafting = null
       }
     })
   }

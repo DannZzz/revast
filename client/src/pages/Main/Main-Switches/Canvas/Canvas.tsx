@@ -292,7 +292,6 @@ const Canvas: Component<{}> = (props) => {
   createEffect(
     on(dropItemId, (id) => {
       if (!id) {
-        console.log("drop close")
         return closeModal()
       }
       showModal({
