@@ -39,7 +39,7 @@ const MenuCenter: Component<{}> = (props) => {
       gc.execute("6LfREZomAAAAAORz_JisAgiuSVK964J_2G2fFFxS", {
         action: "submit",
       }).then(function (token) {
-          send(token)
+        send(token)
       })
     })
     // send()
@@ -58,7 +58,7 @@ const MenuCenter: Component<{}> = (props) => {
       <div
         class="nickname"
         style={{
-          "background-image": "url(images/nickname-banner.png)",
+          "background-image": "url(images/nick-banner.png)",
         }}
       >
         <input
