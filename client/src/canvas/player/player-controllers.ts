@@ -42,22 +42,23 @@ export class PlayerControllers {
       x: iconSize.width + this.gap,
     })
     const timerBg = new Konva.Image({
-      image: loadImage("images/day-night.png", (img) =>
-        timerBg.image(img).cache()
-      ),
+      image: loadImage("images/clock.png", (img) => timerBg.image(img).cache()),
       width: iconSize.width,
       height: iconSize.height,
     }).cache()
     const timerArrow = new Konva.Image({
-      image: loadImage("images/day-night-arrow.png", (img) =>
+      image: loadImage("images/clock-arrow.png", (img) =>
         timerArrow.image(img).cache()
       ),
-      width: 31,
-      height: 13,
+      width: iconSize.width,
+      height: iconSize.height,
       x: iconSize.width / 2,
       y: iconSize.height / 2,
       // offsetX: 25,
-      offsetY: 8,
+      offset: {
+        x: iconSize.width / 2,
+        y: iconSize.height / 2,
+      },
       rotation:
         percentOf(
           percentFrom(this.dayInfo.thisDay, this.dayInfo.oneDayDuration),
