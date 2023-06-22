@@ -1,16 +1,13 @@
 import { Component } from "solid-js"
 import MenuCenter from "./Menu/MenuCenter"
 import "./Menu.scss"
+import { DISCORD_SERVER_LINK } from "../../../constants"
 
 const Menu: Component<{}> = (props) => {
   return (
     <div class="menu">
       <MenuCenter />
-      <a
-        href="https://discord.gg/anevqcFqjS"
-        target="_blank"
-        class="social discord"
-      >
+      <a href={DISCORD_SERVER_LINK} target="_blank" class="social discord">
         <img src="images/social-discord.png" />
       </a>
       <div class="footer">

@@ -1,6 +1,6 @@
 // export const SERVER_API = `http://34.140.94.14:5000`
 
-import Konva from "konva"
+export const DISCORD_SERVER_LINK = "https://discord.gg/anevqcFqjS"
 
 export const SERVER_ASSET = (fileName: string) => `/api/images/${fileName}`
 
