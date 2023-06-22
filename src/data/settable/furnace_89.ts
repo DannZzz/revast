@@ -23,6 +23,7 @@ export default createSettable(89, 'furnace')
     drawOffset: new Point(0, 5),
     noBackground: true,
   })
+  .highlight({ type: 'circle', data: { radius: 230 } })
   .actionable({
     reactRadius: 100,
     draw: {
