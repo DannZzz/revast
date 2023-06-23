@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsObject, IsString, ValidateNested } from 'class-validator'
+import { PlayerSkinName } from 'src/game/types/player.types'
 import { Size } from 'src/global/global'
 
 export class JoinPlayerDto {
@@ -16,4 +17,6 @@ export class JoinPlayerDto {
 
   @IsString()
   recaptcha_token: string
+
+  skin: number
 }

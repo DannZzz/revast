@@ -28,6 +28,7 @@ export interface PlayerSkinDto {
   name: PlayerSkinName
   url: string
   handUrl: string
+  index: number
 }
 
 export interface JoinPlayerDto {
@@ -35,6 +36,7 @@ export interface JoinPlayerDto {
   screen: Size
   token: string
   recaptcha_token: string
+  skin: number
 }
 
 export class PlayerJoinedDto {

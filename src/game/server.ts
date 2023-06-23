@@ -102,7 +102,7 @@ export class GameServer implements GameProps {
   joinPlayer(
     details: Omit<JoinPlayerDto, 'recaptcha_token'> & { socket: MainSocket },
   ) {
-    const { socket, name, screen, token } = details
+    const { socket, name, screen, token, skin } = details
     const socketId = socket.id
     if (token && TokenChest.has(token)) {
       const tokenData = TokenChest.get(token)
@@ -133,6 +133,7 @@ export class GameServer implements GameProps {
       currentSocketId: socketId,
     })
     const player = new Player({
+      skin: skin,
       name: name
         .slice(0, PLAYER_NAME_MAX_SIZE)
         .replace(/\W*(<script>)\W*/g, ''),

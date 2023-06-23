@@ -1,7 +1,13 @@
 export const Images = {
   // skins
-  BASIC_SKIN: 'skin-repeat.webp',
-  BASIC_SKIN_HAND: 'skin-repeat-hand.webp',
+  SKIN1: 'skin1.webp',
+  SKIN1_HAND: 'skin1-hand.webp',
+  SKIN2: 'skin2.webp',
+  SKIN2_HAND: 'skin2-hand.webp',
+  SKIN3: 'skin3.webp',
+  SKIN3_HAND: 'skin3-hand.webp',
+  SKIN4: 'skin4.webp',
+  SKIN4_HAND: 'skin4-hand.webp',
 
   // weapons
   // swords

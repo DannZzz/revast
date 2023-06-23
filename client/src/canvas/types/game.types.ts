@@ -12,6 +12,7 @@ export interface JoinPlayer {
   name: string
   token: string
   recaptcha_token: string
+  skin: number
 }
 
 export type GameEvents = {

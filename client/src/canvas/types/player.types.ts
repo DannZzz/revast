@@ -3,12 +3,13 @@ import { Item } from "../basic/item.basic"
 import { Game } from "../game"
 import { Camera } from "../structures/Camera"
 
-export type PlayerSkinName = "basic"
+export type PlayerSkinName = string
 
 export class PlayerSkin {
   name: PlayerSkinName
   handUrl: string
   url: string
+  index: number
 
   constructor(data: PlayerSkin) {
     Object.assign(this, data)

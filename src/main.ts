@@ -5,7 +5,7 @@ import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
 import { loadItems } from './before/loadItems'
 import { loadMobs } from './before/loadMobs'
-import { PORT } from './constant'
+import { PORT, isDevelopment } from './constant'
 import { loadAdminCommands } from './before/loadAdminCoomands'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import config from 'config'
@@ -27,6 +27,7 @@ async function bootstrap() {
 
   app.useWebSocketAdapter(new WsAdapter(app))
   app.useGlobalPipes(new ValidationPipe())
+
   app.use(
     helmet({
       contentSecurityPolicy: false,

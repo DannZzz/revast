@@ -9,11 +9,13 @@ export interface GameState {
   recaptcha_token: string
   loaded: boolean
   nickname: string
+  skin: number
   server: ServerInformation
 }
 
 const initialState: GameState = {
   token: () => localStorage.getItem("_"),
+  skin: +localStorage.getItem("skin"),
   recaptcha_token: null,
   loaded: false,
   nickname: localStorage.getItem("nickname"),
@@ -51,6 +53,11 @@ const createGameState = () => {
     })
   }
 
+  const setSkin = (skin: number) => {
+    setState("skin", skin)
+    localStorage.setItem("skin", "" + skin)
+  }
+
   const showGame = () => {
     batch(() => {
       setLoading(false)
@@ -83,6 +90,7 @@ const createGameState = () => {
     loading,
     setLoading,
     showGame,
+    setSkin,
   }
 }
 

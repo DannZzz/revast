@@ -18,10 +18,11 @@ export enum WalkEffect {
   water,
 }
 
-export type PlayerSkinName = 'repeat'
+export type PlayerSkinName = 'Repeat' | 'Snake' | 'Skeleton' | 'Shadow'
 
 export class PlayerSkin {
   name: PlayerSkinName
+  index: number
   handFile: string
   file: string
 
@@ -103,6 +104,7 @@ export interface PlayerProps {
   lbMember: LBMember
   uniqueId: number
   clanMember: ClanMember
+  skin: number
 }
 
 export type PlayerEvents = {}

@@ -51,7 +51,7 @@ import { ClanMember } from 'src/structures/clans/ClanMember'
 import { PLayerClanActions } from './player-clan-actions'
 
 export class Player extends BasicElement<PlayerEvents> {
-  skin: PlayerSkin = skinByName('repeat')
+  readonly skin: PlayerSkin
   range = 40
   readonly equipment = {
     size: new Size(120, 120),
@@ -101,10 +101,12 @@ export class Player extends BasicElement<PlayerEvents> {
       lbMember,
       token,
       clanMember,
+      skin,
       ...basic
     } = props
     super(basic)
     this.gameServer = gameServer
+    this.skin = skinByName(skin)
     this.token = token
     this.uniqueId = uniqueId
     this.name = name

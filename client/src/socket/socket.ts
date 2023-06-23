@@ -50,7 +50,12 @@ class WS {
   }
 
   emit<K extends keyof CS>(event: K, ...data: CS[K]): void {
-    wsSend(this.socket, killingProcess(JSON.stringify({ event, data })))
+    const noWait = <Array<keyof ClientToServerEvents>>["mouseAngle"]
+    wsSend(
+      this.socket,
+      killingProcess(JSON.stringify({ event, data })),
+      noWait.includes(event)
+    )
   }
 
   close() {
@@ -58,9 +63,10 @@ class WS {
   }
 }
 const l = 100
-function wsSend(socket: WebSocket, data: any) {
+function wsSend(socket: WebSocket, data: any, noWait: boolean = false) {
   // readyState - true, если есть подключение
   if (!socket.readyState) {
+    if (noWait) return
     waitin.push([socket, data])
     if (waitin.length > l) waitin.shift()
   } else {

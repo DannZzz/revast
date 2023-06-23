@@ -5,6 +5,8 @@ import { UniversalHitbox } from './utils/universal-within'
 
 export const PORT = config.get('PORT')
 
+export const isDevelopment = () => process.env.NODE_ENV === 'development'
+
 export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   combine: string = '',
   ws?: boolean,

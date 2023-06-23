@@ -1,5 +1,6 @@
 import axios from "axios"
 import { CompactItem, Craft, Highscore, ServerInformation } from "./type"
+import { PlayerSkinDto } from "../socket/events"
 
 export const getServers = async (): Promise<ServerInformation[]> => {
   try {
@@ -49,6 +50,16 @@ export const getHighscores = async (
     return res.data
   } catch (e) {
     console.log(e)
+    return []
+  }
+}
+
+export const getSkins = async (): Promise<PlayerSkinDto[]> => {
+  try {
+    const res = await axios.get(`/api/items/skins`)
+    return res.data
+  } catch (error) {
+    console.log(error)
     return []
   }
 }

@@ -45,6 +45,7 @@ const Canvas: Component<{}> = (props) => {
     on(started, (started) => {
       if (started) {
         game.joinPlayer({
+          skin: gs.skin,
           name: gs.nickname,
           token: gs.token(),
           recaptcha_token: gs.recaptcha_token,

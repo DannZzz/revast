@@ -26,4 +26,6 @@ export class PlayerSkinEntity implements PlayerSkin {
   constructor(data: Partial<PlayerSkinEntity>) {
     Object.assign(this, data)
   }
+
+  index: number
 }

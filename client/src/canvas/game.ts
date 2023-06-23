@@ -64,6 +64,7 @@ export class Game {
       this.updateLoop()
       socket.emit("joinServer", [
         {
+          skin: playerData.skin,
           recaptcha_token: playerData.recaptcha_token,
           name: playerData.name,
           screen: this.size,
@@ -491,7 +492,7 @@ export class Game {
   }
 
   static createHighlight(layer2: Layer, ...shapes: any[]) {
-    shapes.forEach((shape) => shape?.listening(false))
+    shapes.forEach((shape) => shape?.listening(false).cache())
     ;(layer2.findOne("#highlights") as Group).add(...shapes)
   }
   static createAbsoluteHighlight(layer2: Layer, ...shapes: any[]) {

@@ -42,7 +42,6 @@ export class BasicPlayer<
   }
   actions: PlayerAction
   items: BasicPlayerItems
-  highlight: Konva.Circle
   readonly cache = new Cache<BasicPlayerCache>(() => ({}))
   handsPosition: {
     left: Point
@@ -95,13 +94,6 @@ export class BasicPlayer<
       // ...absolutePoint,
     })
     Game.createMessageGroup(this.layer, this.messagesNode)
-    this.highlight = playerHighlight
-      .clone({
-        ...absolutePoint,
-        id: `${id}-highlight`,
-      })
-      .cache()
-    Game.createHighlight(this.layer2, this.highlight)
 
     const bodyGroup = new Konva.Group({
       id: `${id}-body`,
@@ -266,7 +258,6 @@ export class BasicPlayer<
           new Point(-(this.size.width / 2), -(this.size.height / 2))
         )
       )
-      this.highlight.position(this.point)
       this.messagesNode.position(this.point)
       this.body?.position(new Point(this.size.width / 2, this.size.height / 2))
     }

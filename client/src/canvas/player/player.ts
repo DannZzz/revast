@@ -115,7 +115,6 @@ export class Player extends BasicPlayer<PlayerEvents> {
         )
       )
       this.miniMap.update(this.point)
-      this.highlight.position(this.point)
       this.messagesNode.position(this.point)
       this.body.position(new Point(this.size.width / 2, this.size.height / 2))
       this.cache.data.point = new Point(this.point)
