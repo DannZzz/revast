@@ -251,7 +251,7 @@ export class Mob extends BasicMob {
         const distance = getDistance(this.target.point(), this.centerPoint())
         if (distance < speed(attackTactic.speed)) {
           this.moveTo(this.target.point())
-          this.theta = getAngle(this.centerPoint(), this.target.point())
+          // this.theta = getAngle(this.centerPoint(), this.target.point())
           return
         }
         if (distance > this.radius.react) {

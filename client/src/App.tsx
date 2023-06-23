@@ -18,34 +18,32 @@ const App: Component = () => {
     )
   })
 
+  //   fallback={
+  //     <div
+  //       class="fallback-bg"
+  //       style={{
+  //         background: "#133a2b",
+  //         width: "100vw",
+  //         height: "100vh",
+  //         display: "flex",
+  //         "align-items": "center",
+  //         "justify-content": "center",
+  //       }}
+  //     >
+  //       <img src="images/loading1.png" width={300} height={300} />
+  //     </div>
+  //   }
+  // >
   return (
     <Router>
-      <Suspense
-        fallback={
-          <div
-            class="fallback-bg"
-            style={{
-              background: "#133a2b",
-              width: "100vw",
-              height: "100vh",
-              display: "flex",
-              "align-items": "center",
-              "justify-content": "center",
-            }}
-          >
-            <img src="images/loading1.png" width={300} height={300} />
-          </div>
-        }
-      >
-        <Merge />
-        <Routes>
-          <Route path="/" component={Main} />
-          <Route path="/crafts" component={Crafts} />
-          <Route path="/changelog" component={Changelog} />
-          <Route path="/leaderboard" component={Leaderboard} />
-          <Route path="/terms" component={Tos} />
-        </Routes>
-      </Suspense>
+      <Merge />
+      <Routes>
+        <Route path="/" component={Main} />
+        <Route path="/crafts" component={Crafts} />
+        <Route path="/changelog" component={Changelog} />
+        <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/terms" component={Tos} />
+      </Routes>
     </Router>
   )
 }
