@@ -17,13 +17,19 @@ export class StaticItemsHandler {
   areas: Area[] = []
   map: GameMap
 
-  for(hitbox: UniversalHitbox) {
-    let areas = this.areas.filter((area) =>
-      universalWithin(hitbox, {
-        point: area.position,
-        size: new Size(MAP_GRID_RENDER_AREA_SIZE, MAP_GRID_RENDER_AREA_SIZE),
-      }),
-    )
+  for(hitbox: UniversalHitbox | 'all') {
+    let areas =
+      hitbox === 'all'
+        ? this.areas
+        : this.areas.filter((area) =>
+            universalWithin(hitbox, {
+              point: area.position,
+              size: new Size(
+                MAP_GRID_RENDER_AREA_SIZE,
+                MAP_GRID_RENDER_AREA_SIZE,
+              ),
+            }),
+          )
 
     const q = areas.map((area) => area.items)
 

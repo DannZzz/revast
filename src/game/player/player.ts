@@ -351,7 +351,7 @@ export class Player extends BasicElement<PlayerEvents> {
       ),
     ])
     this.lbMember.delete()
-    this.staticItems.for(this.point()).playerDied(this.uniqueId)
+    this.staticItems.for('all').playerDied(this.uniqueId)
     this.died(true)
     this.gameServer.players.delete(this.uniqueId)
     this.gameServer.alivePlayers.delete(this.uniqueId)
