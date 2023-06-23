@@ -6,6 +6,18 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 23/6/2023 - Skins!")}
+          <div class="content">
+            <div class="group">
+              {cg_small_img("/api/images/skin1.webp")}
+              {cg_small_img("/api/images/skin3.webp")}
+              {cg_small_img("/api/images/skin4.webp")}
+            </div>
+            {cg_list("Added", ["New Skins"])}
+            {cg_list("Fixed", ["Visual bug while crafting"])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 21/6/2023 - Craft Easier!")}
           <div class="content">
             {cg_small_img("/images/craft-book.png")}
