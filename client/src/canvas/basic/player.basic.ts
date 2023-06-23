@@ -191,8 +191,8 @@ export class BasicPlayer<
       this.items.settingMode.node,
       rightHand,
       leftHand,
-      body,
       this.bagNode,
+      body,
       this.wearingNode
     )
 
