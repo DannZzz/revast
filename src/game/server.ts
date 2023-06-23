@@ -66,7 +66,7 @@ export class GameServer implements GameProps {
   private _gameLoopInterval: any
   private _gameFPS = 60
   _lastFrame: number = Date.now()
-  private _FPSInterval = 30
+  private _FPSInterval = 1000 / this._gameFPS
   readonly leaderboard = new Leaderboard()
   readonly clans = new GameClans(this)
   lastFrameDelta: number = 0
