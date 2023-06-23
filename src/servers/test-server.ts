@@ -16,7 +16,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
     map: new GameMap({
       size: new Size(250, 250),
       tileSize: new Size(100, 100),
-      mapSource: 'map1-mini.webp',
+      mapSource: 'map1-mini.png',
       biomes: [
         new BiomeOptions({
           type: Biome.winter,

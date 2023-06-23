@@ -1,3 +1,4 @@
+import { ResourceTypes } from 'src/game/basic/bio-item.basic'
 import { SettableMode } from 'src/game/basic/item.basic'
 import { Point, Size } from 'src/global/global'
 
@@ -78,7 +79,9 @@ export const WallDoorCraftDuration = {
   ruby: 14,
 }
 
-export const HelmetsDefenseByResourceType = {
+export const HelmetsDefenseByResourceType: {
+  [k in ResourceTypes]?: [player: number, mob: number]
+} = {
   stone: [2, 8],
   gold: [3, 16],
   diamond: [5, 20],

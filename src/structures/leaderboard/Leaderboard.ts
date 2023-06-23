@@ -1,5 +1,6 @@
 import { uuid } from 'anytool'
 import Chest from 'anytool/dist/Chest'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export type LBKey = number | string
 
@@ -35,6 +36,7 @@ class LeaderboardMember {
   constructor(readonly key: LBKey, private lb: () => Leaderboard) {}
 
   add(amount: number) {
+    if (!isNumber(amount)) return
     this._xp = Math.round(this._xp + amount)
     this.lb().listeners.forEach((listener) => listener(this.key, this._xp))
   }

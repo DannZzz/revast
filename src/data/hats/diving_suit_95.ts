@@ -1,6 +1,7 @@
 import createItem from 'src/structures/item-creator/create-item'
+import { HelmetsDefenseByResourceType } from '../config-type'
 
-export default createItem(95, 'hat')
+export default createItem(95, 'helmet')
   .sources('DIVING_SUIT', 'DIVING_SUIT')
   .name('Diving Suit')
   .wearable()
@@ -23,4 +24,5 @@ export default createItem(95, 'hat')
       87: 1,
     },
   })
+  .defense(...HelmetsDefenseByResourceType.gold)
   .build()

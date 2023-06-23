@@ -1,4 +1,5 @@
 import createItem from 'src/structures/item-creator/create-item'
+import { HelmetsDefenseByResourceType } from '../config-type'
 
 export default createItem(87, 'hat')
   .sources('DIVING_MASK', 'DIVING_MASK')
@@ -22,4 +23,5 @@ export default createItem(87, 'hat')
       42: 10,
     },
   })
+  .defense(...HelmetsDefenseByResourceType.stone)
   .build()

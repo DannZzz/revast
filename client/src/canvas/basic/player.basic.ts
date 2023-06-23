@@ -283,7 +283,11 @@ export class BasicPlayer<
     if (this.items.bagUrl) {
       if (this.cache.get("bagUrl") !== this.items.bagUrl) {
         this.bagNode
-          .image(loadImage(this.items.bagUrl, (img) => this.bagNode.image(img)))
+          .image(
+            loadImage(this.items.bagUrl, (img) =>
+              this.bagNode.image(img).cache()
+            )
+          )
           .cache()
         this.cache.data.bagUrl = this.items.bagUrl
       }
