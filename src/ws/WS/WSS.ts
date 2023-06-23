@@ -49,7 +49,7 @@ export class Wss {
         socket?.send(bin)
       },
       id: socket?.id,
-      close: () => socket?.close(),
+      close: () => socket?.close(null, 'player died'),
     }
     return emitable
   }
@@ -91,13 +91,13 @@ export class Wss {
         process.env.NODE_ENV === 'production' &&
         (!origin || !allowedOrigins.includes(origin))
       ) {
-        return ws.close()
+        return ws.close(null, 'blocked origin')
       }
 
       ws.autodeleteTimeout = new Timeout(() => {
         if (!ws.inGame) {
           delete this.server.clientList[ws.id]
-          ws.close()
+          ws.close(null, 'unused socket')
         }
       }, 5000).run()
 
@@ -117,13 +117,14 @@ export class Wss {
       ws.on('message', (data) => {
         ws.messagesPer5s++
         if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
-          return ws.close()
+          return ws.close(null, 'spam')
         }
         const message = binaryMessageToObject(data)
         this.takeMessage(message, ws)
       })
 
-      ws.on('close', () => {
+      ws.on('close', (code, reason) => {
+        // console.log(code, binaryMessageToObject(reason))
         this.gameServer.to(ws.id)?.disconnect()
         delete this.server.clientList[ws.id]
         if (this.server.clients.size === 0) this.messagesPer5sInterval.stop()
