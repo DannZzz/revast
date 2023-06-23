@@ -29,6 +29,6 @@ export const PlayerSkins: PlayerSkin[] = [
 ]
 
 export const skinByName = (index: number): PlayerSkin => {
-  return PlayerSkins.find((s) => s.index === index) || skinByName(3)
+  return PlayerSkins.find((s) => s.index === index) || skinByName(1)
 }
 //
