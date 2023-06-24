@@ -99,7 +99,7 @@ const Canvas: Component<{}> = (props) => {
       height: window.innerHeight,
     })
 
-    const layer1 = new Konva.Layer()
+    const layer1 = new Konva.Layer({ listening: false })
     const layer2 = new Konva.Layer()
     stage.add(layer1, layer2)
     // init game

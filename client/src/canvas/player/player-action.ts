@@ -2,6 +2,7 @@ import { Point, combineClasses } from "../../global/init"
 import { socket } from "../../socket/socket"
 import { animate2to, animateTo } from "../animations/to"
 import { BasicPlayer } from "../basic/player.basic"
+import animationAsTween from "../utils/animationAsTween"
 import type { Player } from "./player"
 import { PlayerClick } from "./player-click"
 
@@ -12,7 +13,12 @@ export class PlayerAction {
   }
 
   clicking() {
-    if (!this.click.canClick || this.click.clickStatus === "pending") return
+    if (
+      !this.click.canClick ||
+      this.click.clickStatus === "pending" ||
+      !this.click.clickDuration
+    )
+      return
     const hands = {
       right: this.player.element(`#${this.player.id("body", "hand", "right")}`),
       left: this.player.element(`#${this.player.id("body", "hand", "left")}`),
@@ -23,7 +29,53 @@ export class PlayerAction {
     })
     // check is empty hand
     this.click.clickStatus = "pending"
+
     // ...
+
+    // animationAsTween(
+    //   [
+    //     {
+    //       node: hands["right"],
+    //       properties: {
+    //         ...combineClasses(
+    //           new Point(25, 40),
+    //           this.player.handsPosition["right"]
+    //         ),
+    //         rotation: -65,
+    //       },
+    //     },
+    //     {
+    //       node: hands.left,
+    //       properties: {
+    //         y: this.player.handsPosition["left"].y - 20,
+    //       },
+    //     },
+    //   ],
+    //   this.click.clickDuration
+    // ).then(() => {
+    //   animationAsTween(
+    //     [
+    //       {
+    //         node: hands["right"],
+    //         properties: {
+    //           ...this.player.handsPosition["right"],
+    //           rotation: 0,
+    //         },
+    //       },
+    //       {
+    //         node: hands.left,
+    //         properties: {
+    //           y: this.player.handsPosition["left"].y,
+    //         },
+    //       },
+    //     ],
+    //     this.click.clickDuration
+    //   ).then(() => {
+    //     this.click.clickStatus = "pending"
+    //     console.log(hands.right.getAttr("x"), hands.right.x())
+    //   })
+    // })
+
     animate2to(
       [
         hands["right"],

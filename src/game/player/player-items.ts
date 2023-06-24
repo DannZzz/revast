@@ -264,7 +264,7 @@ export class PlayerItems {
       authorId: this.player.id(),
       data: { id, quantity },
       duration: 15,
-      hp: 70,
+      hp: 30,
       size: new Size(75, 75),
       hitboxRadius: 30,
       source: Images.DROP_BOX,

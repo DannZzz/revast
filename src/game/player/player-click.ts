@@ -18,7 +18,7 @@ export class PlayerClick {
   count = 0
   requestedToClick = GetSet(false)
   private readonly _toggleOnClicks = 3
-  readonly handClickDuration = 0.3
+  readonly handClickDuration = 0.25
 
   constructor(private player: Player) {}
 
@@ -119,7 +119,7 @@ export class PlayerClick {
     }
 
     const range = equiped ? equiped.item.data.range : this.player.range
-    const damage = equiped ? equiped.item.data.damage : 3
+    const damage = equiped ? equiped.item.data.damage : 5
     const attackedArea = attackedPoint(range)
     const alivePlayers = this.player.gameServer.alivePlayers
 
