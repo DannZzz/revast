@@ -23,7 +23,7 @@ export class PlayerActionable {
   holderIds: number[] = []
 
   currentlyShowing: string
-  readonly addButtonSize = new Size(20, 20)
+  readonly addButtonSize = new Size(25, 25)
 
   draw() {
     this.actionableGroup = new Konva.Group()
@@ -99,10 +99,12 @@ export class PlayerActionable {
         itemSize.width / 2 -
         buttonSize.width / 2 +
         i * (itemSize.width + buttonSize.width / 2)
-      const y = 10 - buttonSize.height * 2
+      const y = 15 - buttonSize.height * 2
       const node: Konva.Image = new Konva.Image({
         name: "no-click",
-        image: loadImage("/images/add-game-btn.png", (img) => node.image(img)),
+        image: loadImage("/images/add-game-btn.png", (img) =>
+          node.image(img).cache()
+        ),
         ...buttonSize,
         x,
         y,
@@ -123,6 +125,7 @@ export class PlayerActionable {
             ])
         }
       })
+      node.cache()
       return node
     }
     this.showAddButtonsFor()

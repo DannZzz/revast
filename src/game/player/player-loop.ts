@@ -37,8 +37,8 @@ export class PlayerLoop {
         ))
     ) {
       socket.emit('playerPosition', [
-        this.player.point().round(),
-        this.player.camera.point().round(),
+        this.player.point(),
+        this.player.camera.point(),
       ])
     }
     this.cache.data.lastSentPosition = this.player.point().clone()

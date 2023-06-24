@@ -16,6 +16,7 @@ export interface Eatable {
   toWater: number
   resourceType?: ResourceTypes
   giveAfterEat?: number
+  custom?: (player: Player) => void
 }
 
 export interface Resource {

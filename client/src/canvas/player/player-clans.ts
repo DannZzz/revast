@@ -12,7 +12,7 @@ export class PlayerClans {
   waitingServer = false
   applications = new Map<string, any>()
   lastOpen = 0
-  node: Konva.Group
+  node: Konva.Image
   applicationsNode: Konva.Group
   constructor(readonly player: Player) {
     this.draw()
@@ -21,29 +21,27 @@ export class PlayerClans {
 
   draw() {
     const size = _window.size()
-    const group = new Konva.Group({
-      name: "no-click",
-      y: 30,
-      x: size.width / 2,
-    })
     const image = new Konva.Image({
-      image: loadImage("/images/clan-icon.png", (img) => image.image(img)),
+      image: loadImage("/images/clan-icon.png", (img) =>
+        image.image(img).cache()
+      ),
       width: 70,
       offsetX: 35,
       offsetY: 35,
       height: 70,
-    })
+      name: "no-click",
+      y: 30,
+      x: size.width / 2,
+    }).cache()
 
     const appsGroup = new Konva.Group({
       x: 10,
       y: size.height / 2,
     })
-    group.add(image)
-    Game.createAlwaysTop(this.player.layer2, appsGroup, group)
-    this.node = group
+    Game.createAlwaysTop(this.player.layer2, appsGroup, image)
+    this.node = image
     this.applicationsNode = appsGroup
-    group.on("pointerclick", () => {
-      console.log("c ,")
+    image.on("pointerclick", () => {
       this.openClans()
     })
   }

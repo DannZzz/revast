@@ -39,7 +39,7 @@ export class BasicMob implements MobDto {
     const period = 2000
     var anim = new Konva.Animation((frame) => {
       var scale = 0.025 * Math.sin((frame.time * 2 * Math.PI) / period) + 1
-      this.imageNode.scale({ x: scale, y: scale })
+      this.imageNode.scaleX(scale).scaleY(scale)
       if (this.destroyed) anim.stop()
     })
 

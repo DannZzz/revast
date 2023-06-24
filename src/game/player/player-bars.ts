@@ -6,7 +6,13 @@ import { GOD_MOD_ALL } from 'src/constant'
 import { Eatable, Item, WearableEffect } from '../basic/item.basic'
 import { Biome } from 'src/structures/GameMap'
 
-export type PlayerBar = 'hp' | 'hungry' | 'temperature' | 'h2o' | 'o2'
+export type PlayerBar =
+  | 'hp'
+  | 'hungry'
+  | 'temperature'
+  | 'h2o'
+  | 'o2'
+  | 'bandage-effect'
 
 export class PlayerBars {
   readonly hp: Bar = new Bar(200, 200)
@@ -14,10 +20,12 @@ export class PlayerBars {
   readonly temperature: Bar = new Bar(100, 100)
   readonly h2o: Bar = new Bar(100, 100)
   readonly o2: Bar = new Bar(100, 100)
+  readonly bandageEffect = new Bar(25, 0)
+  readonly bandageEffectPower = 25
 
   private healingAfterCheck = 2
   healingChecking = 0
-  private healingPercent: number = 20
+  private healingPercent: number = 30
   private _interval: any
 
   constructor(private player: Player) {
@@ -43,7 +51,12 @@ export class PlayerBars {
 
       // try to heal
       if (this.healingChecking >= this.healingAfterCheck) {
-        this.hp.value += percentOf(this.healingPercent, this.hungry.max)
+        let percent = this.healingPercent
+        if (this.bandageEffect.value > 0) {
+          percent += this.bandageEffectPower
+          this.bandageEffect.value--
+        }
+        this.hp.value += percentOf(percent, this.hungry.max)
         this.healingChecking = 0.5
       }
 
@@ -219,6 +232,11 @@ export class PlayerBars {
         bar: 'o2',
         max: this.o2.max,
         current: this.o2.value,
+      }),
+      new PlayerBarsEntity({
+        bar: 'bandage-effect',
+        max: this.bandageEffect.max,
+        current: this.bandageEffect.value,
       }),
     ])
   }

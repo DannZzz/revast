@@ -26,6 +26,12 @@ export const PlayerSkins: PlayerSkin[] = [
     file: Images.SKIN4,
     handFile: Images.SKIN4_HAND,
   }),
+  new PlayerSkin({
+    name: 'Oorod',
+    index: 5,
+    file: Images.SKIN5,
+    handFile: Images.SKIN5_HAND,
+  }),
 ]
 
 export const skinByName = (index: number): PlayerSkin => {

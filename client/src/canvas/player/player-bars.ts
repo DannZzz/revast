@@ -7,9 +7,8 @@ import { percentFrom, percentOf } from "../utils/percentage"
 import { Bar } from "../structures/Bar"
 import { Shape } from "konva/lib/Shape"
 import { animateTo } from "../animations/to"
-import { PlayerBarsDto } from "../../socket/events"
+import { PlayerBar, PlayerBarsDto } from "../../socket/events"
 import { socket } from "../../socket/socket"
-import { Group } from "konva/lib/Group"
 import { Game } from "../game"
 import { GetSet } from "../structures/GetSet"
 
@@ -18,8 +17,6 @@ interface BarNode {
   percent: Shape
   animation: boolean
 }
-
-export type PlayerBar = "hp" | "hungry" | "temperature" | "h2o" | "o2"
 
 export type PlayerBarNodes = { [k in PlayerBar]: BarNode }
 
@@ -46,6 +43,7 @@ export class PlayerBars {
   private o2BarHeight: number = 15
   private o2BarGroup: Konva.Group
   private o2BarWidth: number = this.barCount * this.barWidth * 1.2
+  readonly bandageEffect = GetSet(0)
 
   constructor(private player: Player) {
     this.socketRegistering()
@@ -54,7 +52,9 @@ export class PlayerBars {
   change(bars: PlayerBarsDto[]) {
     let firstTime = false
     bars.forEach((bar) => {
-      if (!this[bar.bar]) {
+      if (bar.bar === "bandage-effect") {
+        this.bandageEffect(bar.current)
+      } else if (!this[bar.bar]) {
         this[bar.bar] = new Bar(bar.max, bar.current)
         firstTime = true
       } else {

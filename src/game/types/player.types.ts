@@ -18,7 +18,12 @@ export enum WalkEffect {
   water,
 }
 
-export type PlayerSkinName = 'Repeat' | 'Snake' | 'Skeleton' | 'Shadow'
+export type PlayerSkinName =
+  | 'Repeat'
+  | 'Snake'
+  | 'Skeleton'
+  | 'Shadow'
+  | 'Oorod'
 
 export class PlayerSkin {
   name: PlayerSkinName

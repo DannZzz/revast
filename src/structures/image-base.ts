@@ -8,6 +8,8 @@ export const Images = {
   SKIN3_HAND: 'skin3-hand.png',
   SKIN4: 'skin4.png',
   SKIN4_HAND: 'skin4-hand.png',
+  SKIN5: 'skin5.png',
+  SKIN5_HAND: 'skin5-hand.png',
 
   // weapons
   // swords
@@ -122,6 +124,7 @@ export const Images = {
   FISH: 'fish.png',
   COOKED_FISH: 'cooked-fish.png',
   WATER_BOTTLE: 'water-bottle.png',
+  BANDAGE: 'bandage.png',
 
   // settable
   WORKBENCH: 'workbench.png',

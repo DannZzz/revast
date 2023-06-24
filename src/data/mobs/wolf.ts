@@ -11,7 +11,7 @@ export default createMob(MobNames.wolf)
   .speed(120)
   .sources('WOLF', 'HURT_WOLF')
   .drop({
-    32: 1,
+    32: 2,
     30: 3,
   })
   .idleTactic({

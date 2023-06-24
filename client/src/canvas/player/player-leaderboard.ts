@@ -129,6 +129,7 @@ export class PlayerLeaderboard {
 
         this.topGroup.add(itemGroup)
       })
+      this.topGroup.cache()
       this.minimap.updateKills(kills)
     })
   }

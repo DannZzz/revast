@@ -6,6 +6,7 @@ import { SERVER_ASSET } from "../../constants"
 import { Game } from "../game"
 import { percentFrom, percentOf } from "../utils/percentage"
 import { DayInfo } from "../../socket/events"
+import { KonvaText } from "../structures/KonvaText"
 
 export class PlayerControllers {
   readonly containerSize = new Size(140, 115)
@@ -82,6 +83,37 @@ export class PlayerControllers {
     this.player.bars.autofood.onChange((val) => {
       this.autofood.visible(val)
     })
+    const currentBandages = this.player.bars.bandageEffect()
+    const bandageEffectGroup = new Konva.Group({
+      y: iconSize.height + this.gap,
+      listening: false,
+      opacity: currentBandages > 0 ? 1 : 0,
+    })
+    const bandageEffectIcon = new Konva.Image({
+      image: loadImage("/images/bandage-activated.png", (img) => {
+        bandageEffectIcon.image(img)
+        bandageEffectGroup.cache()
+      }),
+      ...iconSize,
+    })
+    const bandageEffectCount = new KonvaText({
+      text: `${currentBandages}`,
+      fill: "#eee",
+      fontSize: 20,
+      // lineHeight: 35,
+      width: iconSize.width,
+      y: iconSize.height - 20,
+      align: "right",
+    })
+    bandageEffectGroup.add(bandageEffectIcon, bandageEffectCount)
+    bandageEffectGroup.cache()
+    this.player.bars.bandageEffect.onChange((value) => {
+      if (value === 0) bandageEffectGroup.opacity(0)
+      else {
+        bandageEffectCount.text(`${value}`)
+        bandageEffectGroup.opacity(1).cache()
+      }
+    })
 
     const craftBook = new Konva.Image({
       image: loadImage("/images/craft-book.png", (img) => {
@@ -97,7 +129,12 @@ export class PlayerControllers {
     })
     craftGroup.add(craftBook)
 
-    this.controllersGroup.add(timerGroup, this.autofood, craftGroup)
+    this.controllersGroup.add(
+      timerGroup,
+      this.autofood,
+      craftGroup,
+      bandageEffectGroup
+    )
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
     craftGroup.on("pointerclick", (e) => {
       if (this.lastSentCraftOpen > Date.now()) return

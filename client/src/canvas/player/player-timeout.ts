@@ -71,7 +71,7 @@ export class PlayerTimeout {
       })
 
       const img = new Konva.Image({
-        image: loadImage(imgPath, (image) => img.image(image)),
+        image: loadImage(imgPath, (image) => img.image(image).cache()),
         width: this.radius,
         height: this.radius,
         offset: {
@@ -80,7 +80,7 @@ export class PlayerTimeout {
         },
         x: this.size / 2,
         y: this.size / 2,
-      })
+      }).cache()
       node.group.add(img, node.arc)
       mainGroup.add(node.group)
     }

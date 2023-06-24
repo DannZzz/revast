@@ -103,6 +103,6 @@ export class MiniMap {
   updateKills(kills: number) {
     if (kills === this.kills) return
     this.kills = kills
-    this.killsNode.text(`${this.kills}`)
+    this.killsNode.text(`${this.kills}`).cache()
   }
 }

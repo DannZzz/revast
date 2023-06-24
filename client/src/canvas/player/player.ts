@@ -108,6 +108,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
       cacheCamerPoint?.x !== this.camera.point.value.x ||
       cacheCamerPoint?.y !== this.camera.point.value.y
     ) {
+      this.camera.update() //
       this.element().position(
         combineClasses(
           this.point,
@@ -116,9 +117,8 @@ export class Player extends BasicPlayer<PlayerEvents> {
       )
       this.miniMap.update(this.point)
       this.messagesNode.position(this.point)
-      this.body.position(new Point(this.size.width / 2, this.size.height / 2))
       this.cache.data.point = new Point(this.point)
-      this.camera.update()
+      this.cache.data.screen = this.camera.point.value
     }
     this.actions.clicking()
   }
@@ -187,8 +187,8 @@ export class Player extends BasicPlayer<PlayerEvents> {
       this.clans.resize()
     })
     socket.on("playerPosition", ([point, screen]) => {
-      this.moveTo(point)
       this.camera.point.value = screen
+      this.moveTo(point)
     })
     socket.on("clicking", ([clicking, clickDuration]) => {
       this.actions.click.canClick = clicking

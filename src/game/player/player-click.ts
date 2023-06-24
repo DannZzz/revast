@@ -18,7 +18,7 @@ export class PlayerClick {
   count = 0
   requestedToClick = GetSet(false)
   private readonly _toggleOnClicks = 3
-  readonly handClickDuration = 0.25
+  readonly handClickDuration = 0.3
 
   constructor(private player: Player) {}
 

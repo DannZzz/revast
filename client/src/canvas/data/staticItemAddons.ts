@@ -115,7 +115,7 @@ export const StaticItemsAddons: {
       const period = 2000
       var anim = new Konva.Animation((frame) => {
         var scale = 0.025 * Math.sin((frame.time * 2 * Math.PI) / period) + 1
-        fireGroup.scale({ x: scale, y: scale })
+        fireGroup.scaleX(scale).scaleY(scale)
         if (props.destroyed) anim.stop()
       })
 

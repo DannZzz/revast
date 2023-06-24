@@ -6,12 +6,25 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 25/6/2023 - Regeneration!")}
+          <div class="content">
+            <div class="group">
+              {cg_small_img("/api/images/bandage.png")}
+              {cg_small_img("/images/bandage-activated.png")}
+            </div>
+            <span>Use bandages to buff your health Regeneration!</span>
+            <span>NEW SKIN (TEMPORARY)</span>
+            {cg_small_img("/api/images/skin5.png")}
+            {cg_list("Changed", ["Killing a wolf gives 1 more fur (now 2)"])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 23/6/2023 - Skins!")}
           <div class="content">
             <div class="group">
-              {cg_small_img("/api/images/skin1.webp")}
-              {cg_small_img("/api/images/skin3.webp")}
-              {cg_small_img("/api/images/skin4.webp")}
+              {cg_small_img("/api/images/skin1.png")}
+              {cg_small_img("/api/images/skin3.png")}
+              {cg_small_img("/api/images/skin4.png")}
             </div>
             {cg_list("Added", ["New Skins"])}
             {cg_list("Fixed", ["Visual bug while crafting"])}
@@ -43,23 +56,23 @@ const Changelog = () => {
           {cg_title("- 20/6/2023 - Spiky")}
           <div class="content">
             <div class="group">
-              {cg_small_img("/api/images/wooden-spike.webp")}
-              {cg_small_img("/api/images/wooden-spike-door-closed.webp")}
+              {cg_small_img("/api/images/wooden-spike.png")}
+              {cg_small_img("/api/images/wooden-spike-door-closed.png")}
             </div>
             <span>FINALLY SPIKES ARE HERE!</span>
             <div class="group">
-              {cg_small_img("/api/images/stone-spike.webp")}
-              {cg_small_img("/api/images/stone-spike-door-closed.webp")}
-              {cg_small_img("/api/images/golden-spike.webp")}
-              {cg_small_img("/api/images/golden-spike-door-closed.webp")}
-              {cg_small_img("/api/images/diamond-spike.webp")}
-              {cg_small_img("/api/images/diamond-spike-door-closed.webp")}
+              {cg_small_img("/api/images/stone-spike.png")}
+              {cg_small_img("/api/images/stone-spike-door-closed.png")}
+              {cg_small_img("/api/images/golden-spike.png")}
+              {cg_small_img("/api/images/golden-spike-door-closed.png")}
+              {cg_small_img("/api/images/diamond-spike.png")}
+              {cg_small_img("/api/images/diamond-spike-door-closed.png")}
             </div>
             <div class="group">
-              {cg_small_img("/api/images/amethyst-spike.webp")}
-              {cg_small_img("/api/images/amethyst-spike-door-closed.webp")}
-              {cg_small_img("/api/images/ruby-spike.webp")}
-              {cg_small_img("/api/images/ruby-spike-door-closed.webp")}
+              {cg_small_img("/api/images/amethyst-spike.png")}
+              {cg_small_img("/api/images/amethyst-spike-door-closed.png")}
+              {cg_small_img("/api/images/ruby-spike.png")}
+              {cg_small_img("/api/images/ruby-spike-door-closed.png")}
             </div>
             {cg_list("Added", ["Spikes and Spike Doors"])}
             {cg_list("Changed", [
@@ -76,8 +89,8 @@ const Changelog = () => {
           <div class="content">
             {cg_big_img("/images/water-walk.png")}
             <div class="group">
-              {cg_small_img("/api/images/diving-suit.webp")}
-              {cg_small_img("/api/images/hat.webp")}
+              {cg_small_img("/api/images/diving-suit.png")}
+              {cg_small_img("/api/images/hat.png")}
             </div>
             {cg_list("Added", [
               "Diving Suit (NEXT LEVEL OF DIVING MASK)",
@@ -98,10 +111,10 @@ const Changelog = () => {
           {cg_title("- 10/6/2023 - Welcome to the World of Farm")}
           <div class="content">
             <div class="group">
-              {cg_small_img("/api/images/plot.webp")}
-              {cg_small_img("/api/images/berry-seeds.webp")}
-              {cg_small_img("/api/images/watering-can.webp")}
-              {cg_small_img("/api/images/full-watering-can-icon.webp")}
+              {cg_small_img("/api/images/plot.png")}
+              {cg_small_img("/api/images/berry-seeds.png")}
+              {cg_small_img("/api/images/watering-can.png")}
+              {cg_small_img("/api/images/full-watering-can-icon.png")}
             </div>
             {cg_list("Added", [
               "Plots, berry seeds and watering can (NOW YOU CAN BE A REAL FARMER!)",

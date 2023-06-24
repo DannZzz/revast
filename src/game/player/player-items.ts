@@ -418,6 +418,7 @@ export class PlayerItems {
     items[items.findIndex((it) => it.item.id == item.id)].quantity--
     this.player.bars.hungry.value += item.data.toFood || 0
     this.player.bars.h2o.value += item.data.toWater || 0
+    item.data.custom?.(this.player)
     this.player.bars.socketUpdate()
     this.player.damage(-item.data.toHealth || 0, 'absolute')
     this._items = this.filterItems(items)

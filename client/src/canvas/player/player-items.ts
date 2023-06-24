@@ -66,6 +66,7 @@ export class PlayerItems extends BasicPlayerItems {
 
   craftItem(id: string, book: boolean) {
     const node = this.player.element(`#craft-${id}`)
+    node.getParent().clearCache()
     let duration = this.itemsAreCraftableRN.find(
       (item) => item.id === id
     ).craftDuration
@@ -152,6 +153,7 @@ export class PlayerItems extends BasicPlayerItems {
       const icon = new Konva.Image({
         image: loadImage(item.iconUrl, (image) => {
           icon.image(image)
+          itemGroup.cache()
         }),
         id: `${this.player.id("craft", `${i}`, "icon")}`,
         ...this.itemIconSize,
@@ -159,6 +161,7 @@ export class PlayerItems extends BasicPlayerItems {
         y: (this.itemSize.height - this.itemIconSize.height) / 2,
       })
       itemGroup.add(containerRect, icon)
+      itemGroup.cache()
       craftsGroup.add(itemGroup)
       if ((i + 1) % rows === 0 && i + 1 >= rows)
         x += this.itemSize.width + this.gap
@@ -307,6 +310,7 @@ export class PlayerItems extends BasicPlayerItems {
         image: indexedItem?.item.iconUrl
           ? loadImage(indexedItem?.item.iconUrl, (image) => {
               icon.image(image)
+              itemGroup.cache()
             })
           : null,
         id: `${this.player.id("inventory", `${i}`, "icon")}`,
@@ -333,9 +337,8 @@ export class PlayerItems extends BasicPlayerItems {
         fill: "white",
         visible: !!indexedItem,
       })
-      itemGroup.add(containerRect, indexOfItem, icon, quantity)
-      indexOfItem.zIndex(2)
-      quantity.zIndex(2)
+      itemGroup.add(containerRect, icon, indexOfItem, quantity)
+      itemGroup.cache()
       group.add(itemGroup)
     }
 
@@ -404,6 +407,8 @@ export class PlayerItems extends BasicPlayerItems {
         this.player
           .element(`#${this.player.id("inventory", `${i}`, "icon")}`)
           .setAttr("image", null)
+
+        node.cache()
         return
       }
 
@@ -430,10 +435,13 @@ export class PlayerItems extends BasicPlayerItems {
       )
       itemIconNode.setAttr(
         "image",
-        loadImage(playerItem.item.iconUrl, (img) =>
+        loadImage(playerItem.item.iconUrl, (img) => {
           itemIconNode.setAttr("image", img)
-        )
+          node.cache()
+        })
       )
+
+      node.cache()
     }
   }
 

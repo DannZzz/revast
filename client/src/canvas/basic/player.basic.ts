@@ -83,11 +83,6 @@ export class BasicPlayer<
       fontSize: 20,
     }).cache()
 
-    const absolutePoint = combineClasses(
-      this.point,
-      new Point(this.size.width / 2, this.size.height / 2)
-    )
-
     this.messagesNode = new Konva.Group({
       offsetX: 150,
       offsetY: 100,
@@ -259,7 +254,7 @@ export class BasicPlayer<
         )
       )
       this.messagesNode.position(this.point)
-      this.body?.position(new Point(this.size.width / 2, this.size.height / 2))
+      // this.body?.position(new Point(this.size.width / 2, this.size.height / 2))
     }
     if (angle) {
       if (this.cache.get("angle") !== this.angle) {

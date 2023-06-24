@@ -1,7 +1,13 @@
 import { PlayerSkinName } from "../canvas/types/player.types"
 import { StaticItemAddonName } from "../canvas/data/staticItemAddons"
 
-export type PlayerBar = "hp" | "hungry"
+export type PlayerBar =
+  | "hp"
+  | "hungry"
+  | "temperature"
+  | "h2o"
+  | "o2"
+  | "bandage-effect"
 
 export type NumberBoolean = 0 | 1
 
