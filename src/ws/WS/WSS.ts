@@ -15,6 +15,7 @@ import { Timeout } from 'src/structures/timers/timeout'
 import { Interval } from 'src/structures/timers/interval'
 import { MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S } from 'src/constant'
 import { Player } from 'src/game/player/player'
+import CollectedIps from 'src/utils/collected-ips'
 
 export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
@@ -49,7 +50,8 @@ export class Wss {
         socket?.send(bin)
       },
       id: socket?.id,
-      close: () => socket?.close(null, 'player died'),
+      ip: socket?.ip,
+      close: () => socket?.close(1000, 'player died'),
     }
     return emitable
   }
@@ -79,27 +81,32 @@ export class Wss {
 
   private init() {
     this.server.on('connection', (ws: MainSocket, req) => {
-      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+      let ip = req.socket.remoteAddress
+      // let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
       // . . .
+      ws.ip = ip
       let userAgent = req.headers['user-agent']
       let origin = req.headers['origin']
       // . . .
-      // console.log(origin, ip)
-
       const allowedOrigins = [config.get('WEB')]
       if (
         process.env.NODE_ENV === 'production' &&
         (!origin || !allowedOrigins.includes(origin))
       ) {
-        return ws.close(null, 'blocked origin')
+        return ws.close(1000, 'blocked origin')
+      }
+
+      // checking ip
+      if (!CollectedIps.has(ip)) {
+        ws.close(1000, 'error')
       }
 
       ws.autodeleteTimeout = new Timeout(() => {
         if (!ws.inGame) {
           delete this.server.clientList[ws.id]
-          ws.close(null, 'unused socket')
+          ws.close(1000, 'unused socket')
         }
-      }, 5000).run()
+      }, 8000).run()
 
       this.messagesPer5sInterval.run()
       ws.messagesPer5s = 0
@@ -117,7 +124,7 @@ export class Wss {
       ws.on('message', (data) => {
         ws.messagesPer5s++
         if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
-          return ws.close(null, 'spam')
+          return ws.close(1000, 'spam')
         }
         const message = binaryMessageToObject(data)
         this.takeMessage(message, ws)

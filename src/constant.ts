@@ -19,7 +19,7 @@ export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   return `${origin}${combine}`
 }
 
-export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 250
+export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 300
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
@@ -49,6 +49,8 @@ export const ITEM_DIR_NAMES = [
   'helmets',
   'hats',
 ]
+
+export const HOLD_USER_API_SECONDS = 3600 * 2
 
 export const TIMEOUT_UNPICK_WEAPON = 10
 export const TIMEOUT_UNWEAR_HELMET = 5

@@ -30,6 +30,19 @@ class WS {
   listeners: Listener<SC, keyof SC>[] = []
 
   constructor(url: string) {
+    if (
+      String(WebSocket) != `function WebSocket() { [native code] }` ||
+      WebSocket.toString() != `function WebSocket() { [native code] }` ||
+      WebSocket.toLocaleString() != `function WebSocket() { [native code] }` ||
+      String(WebSocket.prototype.send) != `function send() { [native code] }` ||
+      WebSocket.prototype.send.toString() !=
+        `function send() { [native code] }` ||
+      WebSocket.prototype.send.toLocaleString() !=
+        `function send() { [native code] }`
+    ) {
+      alert("Please, disable scripts..")
+      location.href = location.href
+    }
     this.socket = new WebSocket(url)
     this.socket.binaryType = "arraybuffer"
     this.socket.onopen = () => {
@@ -65,6 +78,20 @@ class WS {
 const l = 100
 function wsSend(socket: WebSocket, data: any, noWait: boolean = false) {
   // readyState - true, если есть подключение
+  if (
+    String(WebSocket) != `function WebSocket() { [native code] }` ||
+    WebSocket.toString() != `function WebSocket() { [native code] }` ||
+    WebSocket.toLocaleString() != `function WebSocket() { [native code] }` ||
+    String(WebSocket.prototype.send) != `function send() { [native code] }` ||
+    WebSocket.prototype.send.toString() !=
+      `function send() { [native code] }` ||
+    WebSocket.prototype.send.toLocaleString() !=
+      `function send() { [native code] }`
+  ) {
+    alert("Please, disable scripts..")
+    location.href = location.href
+    return
+  }
   if (!socket.readyState) {
     if (noWait) return
     waitin.push([socket, data])

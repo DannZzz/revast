@@ -16,6 +16,7 @@ import { ClanMember } from 'src/structures/clans/ClanMember'
 
 export enum WalkEffect {
   water,
+  footprints,
 }
 
 export type PlayerSkinName =
@@ -24,6 +25,9 @@ export type PlayerSkinName =
   | 'Skeleton'
   | 'Shadow'
   | 'Oorod'
+  | 'Purple Wolf'
+  | 'Mini Red'
+  | 'Yellow Bitten'
 
 export class PlayerSkin {
   name: PlayerSkinName

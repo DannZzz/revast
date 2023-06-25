@@ -52,6 +52,7 @@ export class BasicPlayer<
   messagesNode: Konva.Group
   messages: PlayerMessages
   private inBodyEffect = false
+  footPrint = false
 
   constructor(props: ElementProps<BasicPlayerProps>) {
     const { name, skin, id, ...otherProps } = props

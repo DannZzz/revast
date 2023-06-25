@@ -226,6 +226,7 @@ export interface ActionableSettableDrawOptionsDto {
 
 export enum WalkEffect {
   water,
+  footprints,
 }
 
 export type PlyaerBodyEffect = "attacked"
@@ -318,7 +319,13 @@ export interface ServerToClientEvents {
   ) => void
   removeActionable: (data: [settableId: string]) => void
   walkEffect: (
-    data: [effect: WalkEffect, x: number, y: number, angle: number]
+    data: [
+      effect: WalkEffect,
+      x: number,
+      y: number,
+      angle: number,
+      playerId: string
+    ]
   ) => void
   clansInformation: (
     data: [

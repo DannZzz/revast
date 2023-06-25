@@ -33,6 +33,7 @@ import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { Wss } from 'src/ws/WS/WSS'
 import { correctScreenSize } from 'src/utils/correct-screen-size'
 import { GameClans } from 'src/structures/clans/GameClans'
+import CollectedIps from 'src/utils/collected-ips'
 
 export type TMap = typeof BasicMap
 
@@ -104,6 +105,9 @@ export class GameServer implements GameProps {
   ) {
     const { socket, name, screen, token, skin } = details
     const socketId = socket.id
+
+    CollectedIps.set(socket.ip, { createdAt: Date.now(), inGame: true })
+
     if (token && TokenChest.has(token)) {
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {

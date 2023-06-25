@@ -9,6 +9,7 @@ import { GetSet } from 'src/structures/GetSet'
 import { WalkEffect } from '../types/player.types'
 import { Converter } from 'src/structures/Converter'
 import { WALK_EFFECT_SEND_INTERVAL } from 'src/constant'
+import { Biome } from 'src/structures/GameMap'
 
 export class PlayerAction {
   clicks = 0
@@ -200,9 +201,30 @@ export class PlayerAction {
             WalkEffect.water,
             ...Converter.pointToXYArray(this.player.point()),
             this.player.angle(),
+            this.player.id(),
           ]),
       )
 
+      return
+    }
+    const biome = this.player.gameServer.map.biomeOf(this.player.point())[0]
+    if (
+      this.walking() &&
+      !states.onBridge() &&
+      [Biome.beach, Biome.cave, Biome.desert, Biome.winter].includes(biome)
+    ) {
+      this.walkEffectCd = Date.now() + (1000 * WALK_EFFECT_SEND_INTERVAL) / 4
+
+      players.forEach((player) => {
+        player
+          .socket()
+          .emit('walkEffect', [
+            WalkEffect.footprints,
+            ...Converter.pointToXYArray(this.player.point()),
+            this.player.angle(),
+            this.player.id(),
+          ])
+      })
       return
     }
   }

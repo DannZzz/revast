@@ -95,7 +95,13 @@ export interface ServerToClientEvents {
   ) => void
   removeActionable: (data: [settableId: string]) => void
   walkEffect: (
-    data: [effect: WalkEffect, x: number, y: number, angle: number],
+    data: [
+      effect: WalkEffect,
+      x: number,
+      y: number,
+      angle: number,
+      playerId: string,
+    ],
   ) => void
   clansInformation: (
     data: [
@@ -139,6 +145,7 @@ export type MainSocket = WebSocket.WebSocket & {
   inGame: boolean
   autodeleteTimeout: Timeout
   messagesPer5s: number
+  ip: string
 }
 
 export type EventHandler<

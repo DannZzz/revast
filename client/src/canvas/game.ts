@@ -431,8 +431,19 @@ export class Game {
       }, 5000)
     })
 
-    socket.on("walkEffect", ([effect, x, y, angle]) => {
-      GameAttr.walkEffect(this.layer, effect, new Point(x, y), angle)
+    socket.on("walkEffect", ([effect, x, y, angle, playerId]) => {
+      const player: BasicPlayer =
+        playerId === this.player.id()
+          ? this.player
+          : this.otherPlayers.find((p) => p.id() == playerId)
+      if (!player) return
+      GameAttr.walkEffect(
+        this.layer,
+        effect,
+        new Point(x, y),
+        angle,
+        (player.footPrint = !player.footPrint)
+      )
     })
   }
 

@@ -10,6 +10,12 @@ export const Images = {
   SKIN4_HAND: 'skin4-hand.png',
   SKIN5: 'skin5.png',
   SKIN5_HAND: 'skin5-hand.png',
+  SKIN6: 'skin6.png',
+  SKIN6_HAND: 'skin6-hand.png',
+  SKIN7: 'skin7.png',
+  SKIN7_HAND: 'skin7-hand.png',
+  SKIN8: 'skin8.png',
+  SKIN8_HAND: 'skin8-hand.png',
 
   // weapons
   // swords

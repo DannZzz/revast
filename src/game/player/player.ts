@@ -49,6 +49,7 @@ import { DatabaseHandler } from 'src/db/handler'
 import { Emitable } from 'src/ws/WS/type'
 import { ClanMember } from 'src/structures/clans/ClanMember'
 import { PLayerClanActions } from './player-clan-actions'
+import CollectedIps from 'src/utils/collected-ips'
 
 export class Player extends BasicElement<PlayerEvents> {
   readonly skin: PlayerSkin
@@ -358,6 +359,7 @@ export class Player extends BasicElement<PlayerEvents> {
     TokenChest.delete(this.token.current)
     this.socket().close()
     this.gameServer.checkLoop()
+    CollectedIps.set(this.socket().ip, { createdAt: Date.now() })
   }
 
   makeMessage(content: string) {

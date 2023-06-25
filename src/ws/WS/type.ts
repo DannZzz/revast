@@ -15,4 +15,5 @@ export interface Emitable {
   ) => void
   id?: string
   close: () => void
+  ip?: string
 }

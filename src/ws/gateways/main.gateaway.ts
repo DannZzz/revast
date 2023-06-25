@@ -28,6 +28,7 @@ import { TEST_GAME_SERVER } from 'src/servers/test-server'
 // @WebSocketGateway({ namespace: 'ws/main', cors: { origin: '*' } })
 @WebSocketGateway({
   path: '/ws/main',
+  maxPayload: 500 * 1024,
   cors: {
     origin: (origin, cb) => {
       const allowedOrigins = [config.get('WEB')]
