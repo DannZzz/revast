@@ -251,8 +251,8 @@ const Tos = () => {
       </p>
       <h1>Contact Us</h1>
       <p>
-        We use some content from the Internet, for example: arts. If you have
-        any questions about these Terms and Conditions, You can contact us:
+        We use some content from the Internet, for example arts. If you have any
+        questions about these Terms and Conditions, You can contact us:
       </p>
       <ul>
         <li>By email: aeolzgames@gmail.com</li>
