@@ -255,7 +255,7 @@ const Tos = () => {
         any questions about these Terms and Conditions, You can contact us:
       </p>
       <ul>
-        <li>By email: aoelzgames@gmail.com</li>
+        <li>By email: aeolzgames@gmail.com</li>
       </ul>
     </div>
   )
