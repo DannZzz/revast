@@ -50,7 +50,7 @@ export const ITEM_DIR_NAMES = [
   'hats',
 ]
 
-export const HOLD_USER_API_SECONDS = 3600 * 2
+export const HOLD_USER_API_SECONDS = 3600 * 3
 
 export const TIMEOUT_UNPICK_WEAPON = 10
 export const TIMEOUT_UNWEAR_HELMET = 5
@@ -73,6 +73,7 @@ export const PLAYER_NAME_MAX_SIZE = 18
 export const PLAYER_ITEMS_SPACE = 10
 export const BAG_SPACE = 10
 
+export const SERVER_MESSAGE_MAX_LENGTH = 160
 export const MESSAGE_MAX_LENGTH = 160
 export const MESSAGE_DURATION = 8
 

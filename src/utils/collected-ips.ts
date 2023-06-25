@@ -14,7 +14,7 @@ setInterval(() => {
     )
       CollectedIps.delete(key)
   })
-  console.log('after deleting', CollectedIps)
+  // console.log('after deleting', CollectedIps)
 }, 60 * 1000)
 
 export default CollectedIps

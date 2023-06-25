@@ -25,10 +25,10 @@ export class ItemsController {
   @Get('/skins')
   @UseInterceptors(ClassSerializerInterceptor)
   getSkins(@Ip() ip: string) {
-    console.log('skin', ip)
+    // console.log('skin', ip)
     if (CollectedIps.has(ip)) {
       CollectedIps.get(ip).createdAt = Date.now()
-    } else {
+    } else if (typeof ip === 'string') {
       CollectedIps.set(ip, { createdAt: Date.now() })
     }
     return PlayerSkins.map((skin) => new PlayerSkinEntity(skin))

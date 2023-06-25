@@ -34,6 +34,7 @@ import {
   MAX_ITEM_QUANTITY_IN_CRATE,
   PLAYER_BODY_COLLISION_RADIUS,
   PLAYER_BODY_POINTS,
+  SERVER_MESSAGE_MAX_LENGTH,
   TIMEOUT_BUILDING,
   TIMEOUT_UNPICK_WEAPON,
   TIMEOUT_UNWEAR_HELMET,
@@ -271,7 +272,9 @@ export class Player extends BasicElement<PlayerEvents> {
   }
 
   serverMessage(content: string) {
-    this.socket().emit('serverMessage', [content])
+    this.socket().emit('serverMessage', [
+      content?.slice(0, SERVER_MESSAGE_MAX_LENGTH),
+    ])
   }
 
   disconnect() {
