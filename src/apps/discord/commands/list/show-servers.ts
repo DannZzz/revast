@@ -31,7 +31,7 @@ export default new DJCommand({
   ],
 
   execute({ msg, author }) {
-    msg.reply('Нашел список серверов, какую выберите??')
+    msg.reply('Нашел список серверов??')
     const embed = new EmbedBuilder()
       .setDescription(
         DJGameServerInteraction.servers()

@@ -16,7 +16,7 @@ export const openAiFind = async (prompt: string): Promise<string> => {
           role: 'user',
         },
       ],
-      max_tokens: 2500,
+      max_tokens: 2000,
     })
     // console.log(completion.data.choices.length, completion.data.choices)
     return completion.data.choices[0]?.message?.content
