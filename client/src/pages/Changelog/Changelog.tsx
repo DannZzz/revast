@@ -6,6 +6,16 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 25/6/2023 - Skins And Footprints!")}
+          <div class="content">
+            <div class="group">
+              {cg_small_img("/api/images/skin6.png")}
+              {cg_small_img("/api/images/skin7.png")}
+              {cg_small_img("/api/images/skin8.png")}
+            </div>
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 25/6/2023 - Regeneration!")}
           <div class="content">
             <div class="group">
