@@ -105,6 +105,7 @@ export class ActionableSettableItem extends StaticSettableItem {
   }
 
   hold(id: number, quantity: number, player: Player) {
+    if (player.items.isCrafting) return
     let q = quantity
     if (!player.items.has(id)) return
     const item = player.items._items.get(id)
@@ -122,6 +123,7 @@ export class ActionableSettableItem extends StaticSettableItem {
   }
 
   take(i: number, player: Player) {
+    if (player.items.isCrafting) return
     const holder = this.holders[i]
 
     if (!holder || !holder.takeable) return

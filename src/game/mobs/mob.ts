@@ -128,22 +128,36 @@ export class Mob extends BasicMob {
 
   hurt(damage: number, player: Player) {
     this.hp -= damage
-    if (this.hp <= 0) {
+    if (this.hp <= 0 && !this.died) {
       this.died = true
       this.readyToDamage([])
       if (this.drop) {
         $(this.drop).$forEach((quantity, id) => {
-          player.items.addItem(+id, quantity)
+          player.items?.addItem(+id, quantity)
         })
       }
-      player.lbMember.add(this.givesXP)
-      player.gameServer.mobs.all.delete(this.id)
+      player.lbMember?.add(this.givesXP)
+      player.gameServer?.mobs.all.delete(this.id)
     }
+  }
+
+  canIGo(point: Point, map: GameMap) {
+    return (
+      boxPoint(
+        ...Converter.pointToXYArray(this.spawn.startPoint),
+        this.spawn.size.width,
+        this.spawn.size.height,
+        ...Converter.pointToXYArray(this.centerPoint(point)),
+      ) &&
+      (this.biome !== Biome.water ||
+        map.biomeOf(this.centerPoint(point))[0] === Biome.water)
+    )
   }
 
   action(players: Player[], map: GameMap, delta: number) {
     if (this.died) {
       this.hurt(0, {} as any)
+      return
     }
 
     const attackTactic = this.moveTactic.otherTactics.find(
@@ -203,14 +217,7 @@ export class Mob extends BasicMob {
         const itemWithin = this.staticItems
           .for(nextPoint)
           .itemWithin(this.universalCollisionHitbox)
-        if (
-          !boxPoint(
-            ...Converter.pointToXYArray(this.spawn.startPoint),
-            this.spawn.size.width,
-            this.spawn.size.height,
-            ...Converter.pointToXYArray(this.centerPoint(nextPoint)),
-          )
-        ) {
+        if (!this.canIGo(nextPoint, map)) {
           this.targetPoint = null
           this.readyToDamage([])
 
@@ -272,7 +279,9 @@ export class Mob extends BasicMob {
       for (let player of players) {
         if (!player) continue
         if (
-          getDistance(player.point(), this.centerPoint()) <= this.radius.react
+          getDistance(player.point(), this.centerPoint()) <=
+            this.radius.react &&
+          this.canIGo(player.point(), map)
         ) {
           this.target = player
           this.waitUntil = null

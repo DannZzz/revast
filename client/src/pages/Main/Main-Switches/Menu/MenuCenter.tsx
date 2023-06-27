@@ -25,6 +25,7 @@ const MenuCenter: Component<{}> = (props) => {
     if (started() || loading()) return
 
     const send = (token: string = "") => {
+      if (started() || loading()) return
       batch(() => {
         startGame(
           nicknameInputRef.value || `unnamed#${$.randomNumber(1, 100)}`,

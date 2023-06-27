@@ -11,6 +11,7 @@ import { GetSet } from 'src/structures/GetSet'
 import { pointsOfRotatedRectangle } from 'src/utils/points-of-rotated-rectangle'
 import { universalWithin } from 'src/utils/universal-within'
 import { optimizeHandleAttackedItems } from 'src/utils/optimize-handle-attacked-items'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export class PlayerClick {
   hand: 'right' | 'left' = 'right'
@@ -85,10 +86,17 @@ export class PlayerClick {
           ? item.withinStrict(points)
           : item.within(points),
       )
+      let resget = 0
       touchedObjects.forEach((item) => {
         item.getAttacked(new Point(x, y), this.player)
-        if (Bio.is(item)) item.getResources(this.player, resGetting)
+        if (Bio.is(item)) {
+          let res = item.getResources(this.player, resGetting)
+          if (isNumber(res)) {
+            resget = res
+          }
+        }
       })
+      if (resget === -1) this.player.serverMessage('The resource is empty!')
 
       optimizeHandleAttackedItems(touchedObjects, new Point(x, y))
     }
@@ -108,7 +116,7 @@ export class PlayerClick {
           equiped.item.data.range / 2,
         )
         const digItemId = this.player.gameServer.map.find(
-          this.player.gameServer.map.biomeOf(point),
+          this.player.gameServer.map.areaOf(point),
         ).digItemId
         if (!isNaN(digItemId)) {
           this.player.items.addItem(digItemId, equiped.item.data.digPower)

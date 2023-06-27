@@ -1,0 +1,23 @@
+.changelog-preview {
+  position: absolute;
+  right: 0;
+  top: 200px;
+  padding: 15px;
+  color: $text2-color;
+  @include flex($dir: column);
+  gap: 15px;
+  @include window-bg-colored;
+  transition: all 0.2s;
+  cursor: pointer;
+
+  @include active-transform;
+
+  .title {
+    font-size: larger;
+    letter-spacing: 0.5px;
+  }
+
+  .preview {
+    width: 350px;
+  }
+}

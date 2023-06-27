@@ -24,5 +24,5 @@ export default createItem(95, 'helmet')
       87: 1,
     },
   })
-  .defense(...HelmetsDefenseByResourceType.gold)
+  .defense(4, 20)
   .build()

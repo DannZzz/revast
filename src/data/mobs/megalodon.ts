@@ -3,7 +3,7 @@ import { createMob } from 'src/structures/item-creator/create-mob'
 import { MobNames } from '../mobs'
 
 export default createMob(MobNames.megalodon)
-  .givesXP(150)
+  .givesXP(5000)
   .hp(5000)
   .damage(60, 1)
   .radius(300, 100)

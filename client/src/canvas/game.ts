@@ -24,6 +24,7 @@ import { BasicMob } from "./basic/mob.basic"
 import { BasicDrop } from "./basic/drop.basic"
 import { KonvaText } from "./structures/KonvaText"
 import { GameAttr } from "./game-attr"
+import { BasicMisc } from "./basic/misc.basic"
 
 export class Game {
   layer: Layer
@@ -39,6 +40,7 @@ export class Game {
   private playerQueue: JoinPlayer[] = []
   private serverMessageNode: Konva.Text
   private serverMessageTimeout: any
+  private resizeCd: any
 
   init(props: GameProps) {
     this.layer = props.layer
@@ -49,10 +51,14 @@ export class Game {
   }
 
   resize(size: Size) {
-    this.layer.getStage().size(size)
-    this.serverMessageNode.width(size.width)
-    this.layer2.findOne("#game-night").size(size).cache()
-    socket.emit("screenSize", [size])
+    clearTimeout(this.resizeCd)
+    this.resizeCd = setTimeout(() => {
+      this.layer.getStage()?.size(size)
+      this.serverMessageNode?.width(size.width)
+      this.layer2?.findOne("#game-night").size(size).cache()
+      socket?.emit("screenSize", [size])
+      if (this.player) this.player.events.emit("screen.resize", size)
+    }, 2000)
   }
 
   joinPlayer(playerData: JoinPlayer) {
@@ -92,11 +98,12 @@ export class Game {
     const night = new Konva.Rect({
       id: "game-night",
       ...this.size,
-      visible: false,
+      opacity: 0,
       fill: BG_FOREST_BIOM.night,
       listening: false,
       perfectDrawEnabled: false,
     })
+    const miscsGroup1 = new Konva.Group({ id: "game-misc-1" })
     const itemsGroup = new Konva.Group({ id: "game-settable" })
     const itemsGroup1 = new Konva.Group({ id: "game-settable+1" })
     const itemsGroup_1 = new Konva.Group({ id: "game-settable-1" })
@@ -113,6 +120,7 @@ export class Game {
     const alwaysTop = new Konva.Group({ id: "always-top" })
     mainGroup.add(
       gameBg,
+      miscsGroup1,
       gameAttr,
       itemsGroup_6,
       itemsGroup_5,
@@ -180,6 +188,17 @@ export class Game {
       return false
     })
     this.staticItems.addDrop(...drops)
+  }
+
+  drawMiscs(miscs: BasicMisc[], toRemoveIds: string[]) {
+    miscs.forEach((misc) => misc.take(this.layer, this.layer2).draw())
+    this.staticItems.miscs = this.staticItems.miscs.filter((misc) => {
+      const res = !toRemoveIds.includes(misc.id)
+      if (res) return true
+      misc.destroy()
+      return false
+    })
+    this.staticItems.addMisc(...miscs)
   }
 
   drawOtherPlayers(players: VisualPlayerData[], toRemoveIds: string[]) {
@@ -255,10 +274,10 @@ export class Game {
     const nightRect = this.layer2.findOne("#game-night") as Konva.Rect
     if (day) {
       // bgRect.fill(BG_FOREST_BIOM.day)
-      nightRect.to({ visible: false, duration: 3 })
+      nightRect.to({ opacity: 0, duration: 3 })
     } else {
       // bgRect.fill(BG_FOREST_BIOM.night)
-      nightRect.to({ visible: true, duration: 3 })
+      nightRect.to({ opacity: 1, duration: 3 })
     }
   }
 
@@ -292,8 +311,6 @@ export class Game {
     })
     this.events.on("screen.resize", (size) => {
       this.resize(size)
-
-      if (this.player) this.player.events.emit("screen.resize", size)
     })
     this.events.on("dropItem.response", (itemId, all) => {
       this.player?.items.dropItem(itemId, all)
@@ -334,6 +351,13 @@ export class Game {
     socket.on("staticBios", ([bios, toRemoveIds]) => {
       this.drawStaticBios(
         bios.map((bio) => new Bio(bio)),
+        toRemoveIds
+      )
+    })
+
+    socket.on("miscs", ([miscs, toRemoveIds]) => {
+      this.drawMiscs(
+        miscs.map((misc) => new BasicMisc(misc)),
         toRemoveIds
       )
     })
@@ -414,6 +438,7 @@ export class Game {
 
     socket.on("day", ([nb]) => {
       this.newPeriodOfDay(NB.from(nb))
+      this.player?.controllers.arrow.rotation(NB.from(nb) ? -90 : 90)
     })
 
     socket.on("serverMessage", ([content]) => {

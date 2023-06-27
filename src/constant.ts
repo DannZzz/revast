@@ -50,6 +50,8 @@ export const ITEM_DIR_NAMES = [
   'hats',
 ]
 
+export const BIOS_DIR_NAMES = ['bios', 'bio']
+
 export const HOLD_USER_API_SECONDS = 3600 * 3
 
 export const TIMEOUT_UNPICK_WEAPON = 10
@@ -88,6 +90,8 @@ export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 export const MAP_GRID_RENDER_AREA_SIZE = 1500
 
 export const GRID_SET_RANGE = 100
+
+export const MAX_TREASURES_ISLAND = 5
 
 export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'

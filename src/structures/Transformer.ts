@@ -4,6 +4,7 @@ import {
   instanceToPlain,
 } from 'class-transformer'
 import { SERVER_API } from 'src/constant'
+import { Images } from './image-base'
 
 export class Transformer {
   static toPlain(
@@ -23,6 +24,8 @@ export class Transformer {
 
 export function AssetLink() {
   return Transform(({ value }) =>
-    typeof value === 'string' ? SERVER_API(`/api/images/${value}`) : value,
+    typeof value === 'string'
+      ? SERVER_API(`/api/images/${value in Images ? Images[value] : value}`)
+      : value,
   )
 }

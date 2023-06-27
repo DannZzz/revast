@@ -172,7 +172,7 @@ export class Bio {
     return true
   }
 
-  getResources(player: Player, getting: ResourceGetting) {
+  getResources(player: Player, getting: ResourceGetting): number {
     const getThisRes = Items.find(
       (it) => it.isResource() && it.data.resourceType === this.type,
     )
@@ -186,9 +186,11 @@ export class Bio {
       this.resources(this.resources() - gets)
       validAmount = gets
     }
+    if (validAmount === 0) return -1
     this.checkResources()
     player.lbMember.add(this.data.givesXp * validAmount)
     player.items.addItem(getThisRes.id, validAmount)
+    return 1
   }
 
   within(hitbox: UniversalHitbox) {

@@ -13,10 +13,12 @@ import { connectMongo } from './db/connect'
 import { WsAdapter } from '@nestjs/platform-ws'
 import connectDiscordBot from './apps/discord/discord-bot'
 import helmet from 'helmet'
+import { loadBios } from './before/loadBios'
 
 async function bootstrap() {
   await Promise.all([
     loadItems(),
+    loadBios(),
     loadMobs(),
     loadAdminCommands(),
     connectMongo(),

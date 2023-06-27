@@ -10,7 +10,7 @@ import { KonvaText } from "../structures/KonvaText"
 
 export class PlayerControllers {
   readonly containerSize = new Size(140, 115)
-  private arrow: Konva.Image
+  arrow: Konva.Image
   private controllersGroup: Konva.Group
   private autofood: Konva.Image
   private lastSentCraftOpen = 0

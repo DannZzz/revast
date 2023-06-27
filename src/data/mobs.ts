@@ -53,6 +53,9 @@ export class Mobs {
             mobBasic.radius.collision,
             conf.spawn.startPoint,
             conf.spawn.size,
+            (point) =>
+              conf.biome !== Biome.water ||
+              game.map.biomeOf(point)[0] === Biome.water,
           ),
           staticItems: game.staticItems,
           theta: 0,
@@ -91,6 +94,9 @@ export class Mobs {
             mobBasic.radius.collision,
             conf.spawn.startPoint,
             conf.spawn.size,
+            (point) =>
+              conf.biome !== Biome.water ||
+              this.game.map.biomeOf(point)[0] === Biome.water,
           ),
           staticItems: this.game.staticItems,
           theta: 0,

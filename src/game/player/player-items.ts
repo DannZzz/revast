@@ -102,7 +102,7 @@ export class PlayerItems {
     if (!craftingId) return this.hasEmptySpace()
     const item = Items.get(id)
     const craftData = Craft.data.get(craftingId)
-    if (!item || !item.craftable || !craftData) return false
+    if (!item || !craftData) return false
     if (item.data.notAddable) return true
     let clone = this.items
     const craft = $(craftData.craftable)
@@ -204,9 +204,9 @@ export class PlayerItems {
       // checking water
       if (
         !settable.data.onThe.water &&
-        this.player.gameServer.map
-          .biomeOf(settable.centerPoint)
-          .includes(Biome.water) &&
+        this.player.gameServer.map.find(
+          this.player.gameServer.map.areaOf(settable.centerPoint),
+        ).type === Biome.water &&
         !staticItems.someWithin(point, {
           strict: true,
           type: SpecialItemTypes.bridge,

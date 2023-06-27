@@ -16,6 +16,8 @@ export const Images = {
   SKIN7_HAND: 'skin7-hand.png',
   SKIN8: 'skin8.png',
   SKIN8_HAND: 'skin8-hand.png',
+  SKIN9: 'skin9.png',
+  SKIN9_HAND: 'skin9-hand.png',
 
   // weapons
   // swords
@@ -123,6 +125,9 @@ export const Images = {
   ICON_RUBY: 'ruby-icon.png',
   EMERALD_1: 'emerald1.png',
   ICON_EMERALD: 'emerald-icon.png',
+  PALM_0: 'palm0.png',
+  PALM_1: 'palm1.png',
+  PALM_2: 'palm2.png',
 
   // food
   MEAT: 'meat.png',
@@ -211,6 +216,8 @@ export const Images = {
   BOOK_ICON: 'book-icon.png',
   BAG: 'bag.png',
   DROP_BOX: 'drop-box.png',
+  BARREL: 'barrel.png',
+  HURT_BARREL: 'hurt-barrel.png',
   HURT_DROP_BOX: 'hurt-drop-box.png',
   CRATE: 'crate.png',
   HURT_CRATE: 'hurt-crate.png',
@@ -253,6 +260,28 @@ export const Images = {
   DEHYDRATED_BERRY_BUSH: 'dehydrated-berry-bush.png',
   PRE_BERRY_BUSH: 'pre-berry-bush.png',
   BERRY_SEEDS: 'berry-seeds.png',
+
+  // miscs
+  LAKE: 'lake.png',
+  LAKE_BOTTOM: 'lake-bottom.png',
+  LAKE_LEFT: 'lake-left.png',
+  LAKE_LEFT_BOTTOM: 'lake-left-bottom.png',
+  LAKE_LEFT_TOP: 'lake-left-top.png',
+  LAKE_RIGHT: 'lake-right.png',
+  LAKE_RIGHT_BOTTOM: 'lake-right-bottom.png',
+  LAKE_RIGHT_TOP: 'lake-right-top.png',
+  LAKE_TOP: 'lake-top.png',
+  HERB_1: 'herb1.png',
+  HERB_2: 'herb2.png',
+  HERB_3: 'herb3.png',
+  HERB_4: 'herb4.png',
+  HERB_5: 'herb5.png',
+  HERB_6: 'herb6.png',
+  HERB_7: 'herb7.png',
+  HERB_8: 'herb8.png',
+  ISLAND_0: 'island0.png',
+  ISLAND_1: 'island1.png',
+  ISLAND_2: 'island2.png',
 } as const
 
 export type Images = typeof Images

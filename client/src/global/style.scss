@@ -185,3 +185,7 @@ $breakpoint-med: 1175px;
     filter: drop-shadow(0 2px 10px rgb(39, 39, 39));
   }
 }
+
+.rainbow {
+  @include rainbow-text;
+}

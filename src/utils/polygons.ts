@@ -65,3 +65,14 @@ export const rectToPolygon = (point: Point, size: Size) => {
     new Point(point.x, point.y + size.height),
   ]
 }
+
+export const getRandomPointInRectangle = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+) => {
+  const randomX = Math.random() * (x2 - x1) + x1
+  const randomY = Math.random() * (y2 - y1) + y1
+  return new Point(randomX, randomY)
+}

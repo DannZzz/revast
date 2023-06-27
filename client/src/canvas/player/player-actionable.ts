@@ -13,6 +13,7 @@ export class PlayerActionable {
   actionabledHoldersGroup: Konva.Group
   actionableIconNode: Konva.Image
   rightMargin = 50
+  readonly itemIconSize = new Size(50, 50)
   constructor(private layer2: Konva.Layer, private items: PlayerItems) {
     this.draw()
     this.items.space.onChange(() => this.drawButtons())
@@ -186,7 +187,7 @@ export class PlayerActionable {
       }
     })
 
-    const size = this.items.itemIconSize
+    const size = this.itemIconSize
     const icon = new Konva.Image({
       image: loadImage(holder.iconUrl, (img) => icon.image(img)),
       ...size,
@@ -204,7 +205,7 @@ export class PlayerActionable {
       text: `x${holder.quantity}`,
       width: size.width,
       align: "center",
-      fontSize: 15,
+      fontSize: 18,
       fill: "#ccc",
       y: size.height - 5,
     })

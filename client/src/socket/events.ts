@@ -253,6 +253,13 @@ export interface ClanMemberDto {
   owner: boolean
 }
 
+export interface MiscDto {
+  point: Point
+  url: string
+  size: Size
+  id: string
+}
+
 export interface ServerToClientEvents {
   staticBios: (
     data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
@@ -281,6 +288,7 @@ export interface ServerToClientEvents {
     data: Array<[id: string, theta: number, showHpAngle?: number]>
   ) => void
   staticItemMode: (data: [settableId: string, mode: number]) => void
+  miscs: (data: [toAdd: MiscDto[], toRemoveIds: string[]]) => void
   drops: (data: [toAdd: DropDto[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (

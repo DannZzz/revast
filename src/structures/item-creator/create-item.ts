@@ -37,6 +37,7 @@ class ItemCreator {
   }
 
   setItemResourceType(resource: ResourceTypes) {
+    this.extend.resType = resource
     if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
     this.extend.craftable[0].givesXp = CraftGivingXP[resource]
     this.extend.craftable[0].duration = CraftDuration[resource]

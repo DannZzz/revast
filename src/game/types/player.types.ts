@@ -13,6 +13,7 @@ import { BasicDrop } from '../basic/drop.basic'
 import { WearingEntity } from 'src/entities/wearing.entity'
 import { AssetLink } from 'src/structures/Transformer'
 import { ClanMember } from 'src/structures/clans/ClanMember'
+import { Misc } from '../basic/misc.basic'
 
 export enum WalkEffect {
   water,
@@ -28,6 +29,7 @@ export type PlayerSkinName =
   | 'Purple Wolf'
   | 'Mini Red'
   | 'Yellow Bitten'
+  | 'Vinselgon'
 
 export class PlayerSkin {
   name: PlayerSkinName
@@ -90,7 +92,7 @@ export interface PlayerCache {
   otherPlayers?: VisualPlayerData[]
   mobs?: Mob[]
   drops: BasicDrop[]
-  lastSentDay: number
+  miscs: Misc[]
 }
 
 export const PlayerCacheInit: () => PlayerCache = () => {
@@ -101,7 +103,7 @@ export const PlayerCacheInit: () => PlayerCache = () => {
     otherPlayers: [],
     biome: ['forest'],
     drops: [],
-    lastSentDay: 0,
+    miscs: [],
   }
 }
 

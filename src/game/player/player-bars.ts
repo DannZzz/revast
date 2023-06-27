@@ -5,6 +5,7 @@ import { Player } from './player'
 import { GOD_MOD_ALL } from 'src/constant'
 import { Eatable, Item, WearableEffect } from '../basic/item.basic'
 import { Biome } from 'src/structures/GameMap'
+import { boxPoint } from 'intersects'
 
 export type PlayerBar =
   | 'hp'
@@ -67,7 +68,7 @@ export class PlayerBars {
         else this.healingChecking++
       }
       this.socketUpdate()
-    }, 8000)
+    }, 6000)
   }
 
   private vastingAndO2() {
@@ -106,9 +107,8 @@ export class PlayerBars {
   }
 
   private actualTemperatureChanges() {
-    const currentAreas = this.player.cache.get('biome')
     const biome = this.player.gameServer.map.find(
-      this.player.gameServer.map.biomeOf(this.player.point()),
+      this.player.gameServer.map.areaOf(this.player.point()),
     )
 
     const effect =
@@ -117,7 +117,6 @@ export class PlayerBars {
           ? 'onBridgeEffect'
           : 'effect'
       ]
-
     const wearingEffect = this.player.items.weared?.item.data?.effect
     let inWater = new WearableEffect({}).inWaterTempLoss
     if (
@@ -174,7 +173,7 @@ export class PlayerBars {
   }
 
   onAction() {
-    if (!this.player.settings.autofood()) return
+    if (!this.player.settings.autofood() || this.player.items.isCrafting) return
     let changed = false
 
     const eatFor = (key: 'toFood' | 'toWater') => {

@@ -8,6 +8,8 @@ export default createSettable(89, 'furnace')
   .sources('FURNACE', 'FURNACE_ENABLED')
   .name('Furnace')
   .craftable({
+    givesXp: 300,
+    duration: 10,
     state: { workbench: true },
     required: {
       19: 15,
@@ -26,7 +28,7 @@ export default createSettable(89, 'furnace')
     reactRadius: 100,
     draw: {
       backgroundSource: 'FURNACE',
-      size: new Size(120, 120),
+      size: new Size(150, 150),
     },
   })
   .onInit((settable) => {

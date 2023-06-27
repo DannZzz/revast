@@ -23,7 +23,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           digItemId: 82,
           name: 'winter',
           size: new Size(150, 75),
-          bgColor: '#f8f6f1',
+          bgColor: '#f7faf9',
           point: new Point(0, 0),
           effect: new BiomeEffect({
             temperatureDay: -20,
@@ -105,7 +105,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
         }),
         new BiomeOptions({
           type: Biome.cave,
-          digItemId: 81,
+          digItemId: 82,
           priority: 2,
           name: 'winter-cave',
           bgColor: '#545055',
@@ -121,8 +121,9 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           type: Biome.water,
           name: 'lake1',
           priority: 2,
+          notDrawAble: true,
           size: new Size(30, 32),
-          bgColor: '#0b6a84',
+          // bgColor: '#0b6a84',
           point: new Point(60, 109),
           effect: new BiomeEffect({
             speed: -80,
@@ -220,7 +221,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
             area: 'desert',
             biome: Biome.desert,
             canOut: false,
-            maxCount: 30,
+            maxCount: 20,
             reAddEachSeconds: 10,
             spawn: { startPoint: desertCave.point, size: desertCave.size },
           },

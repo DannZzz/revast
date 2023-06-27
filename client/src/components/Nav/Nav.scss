@@ -43,10 +43,6 @@
         border-radius: 5px;
         color: $text2-color;
 
-        .rainbow {
-          @include rainbow-text;
-        }
-
         &:hover {
           background: $text2-color;
           color: $text-color;

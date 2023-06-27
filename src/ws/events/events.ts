@@ -12,6 +12,7 @@ import { DropEntity } from 'src/entities/drop.entity'
 import { EquipmentEntity } from 'src/entities/equipment.entity'
 import { ItemEntity } from 'src/entities/item.entity'
 import { LeaderboardMemberEntity } from 'src/entities/leaderboard-member.entity'
+import { MiscEntity } from 'src/entities/misc.entity'
 import { MobDynamicEntity } from 'src/entities/mob-dynamic.entity'
 import { OtherPlayersEntity } from 'src/entities/other-players.entity'
 import { PlayerInformationEntity } from 'src/entities/player-information.entity'
@@ -59,6 +60,7 @@ export interface ServerToClientEvents {
     data: Array<[id: string, theta: number, showHpAngle?: number]>,
   ) => void
   staticItemMode: (data: [settableId: string, modeIndex: number]) => void
+  miscs: (data: [toAdd: MiscEntity[], toRemoveIds: string[]]) => void
   drops: (data: [toAdd: DropEntity[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (

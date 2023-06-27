@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="resources" tilewidth="446" tileheight="446" tilecount="12" columns="0" objectalignment="center">
+<tileset version="1.10" tiledversion="1.10.1" name="resources" tilewidth="446" tileheight="450" tilecount="15" columns="0" objectalignment="center">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="170" height="170" source="tileset-images/berry-bush.png"/>
@@ -36,6 +36,15 @@
  </tile>
  <tile id="11">
   <image width="300" height="300" source="tileset-images/winter-tree.png"/>
+ </tile>
+ <tile id="12">
+  <image width="297" height="300" source="tileset-images/palm0.png"/>
+ </tile>
+ <tile id="13">
+  <image width="372" height="375" source="tileset-images/palm1.png"/>
+ </tile>
+ <tile id="14">
+  <image width="446" height="450" source="tileset-images/palm2.png"/>
  </tile>
  <wangsets>
   <wangset name="Безымянный набор" type="corner" tile="-1">

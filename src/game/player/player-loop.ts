@@ -17,6 +17,7 @@ import { Items } from 'src/data/items'
 import { Player } from './player'
 import { universalWithin } from 'src/utils/universal-within'
 import { ActionableSettableItem } from '../extended/settable/actionable.settable'
+import { MiscEntity } from 'src/entities/misc.entity'
 
 export class PlayerLoop {
   readonly cache: Cache<PlayerCache>
@@ -48,6 +49,28 @@ export class PlayerLoop {
 
     const viewRect = this.player.camera.viewRect()
     const staticItems = this.player.staticItems.for(viewRect)
+
+    // miscs
+    const miscsInView = staticItems.miscs.filter((misc) =>
+      universalWithin(viewRect, misc.universalHitbox),
+    )
+    const miscIds = miscsInView.map((bio) => bio.id)
+    const cacheMiscIds = this.cache.get('miscs', true)
+    if (!$(cacheMiscIds).same(miscIds)) {
+      const toRemoveIds = cacheMiscIds.filter(
+        (miscId) => !miscIds.includes(miscId),
+      )
+      const toAdd = miscsInView.filter(
+        (misc) => !cacheMiscIds.includes(misc.id),
+      )
+      socket.emit('miscs', [
+        toAdd.map(
+          (misc) => Transformer.toPlain(new MiscEntity(misc)) as MiscEntity,
+        ),
+        toRemoveIds,
+      ])
+      this.cache.data.miscs = miscsInView
+    }
 
     // bios
     const itemsInView = staticItems.bio.filter((bio) => bio.within(viewRect))
@@ -167,19 +190,19 @@ export class PlayerLoop {
     )
     const cachedMobs = this.cache.get('mobs')
     const mobInViewIds = mobsInView.map((mob) => mob.id)
-    if (mobsInView.size !== cachedMobs.length || mobsInView.size !== 0) {
-      const toRemoveIds = cachedMobs
-        .filter((mob) => !mobInViewIds.includes(mob.id))
-        .map((mob) => mob.id)
-      const mobsEntity = Transformer.toPlain(
-        new MobDynamicEntity({
-          mobs: mobsInView.map((mob) => new MobEntity(mob)),
-          toRemoveIds,
-        }),
-      )
-      dynamicItems.push(mobsEntity)
-      this.cache.data.mobs = [...mobsInView.values()]
-    }
+
+    const toRemoveIds = cachedMobs
+      .filter((mob) => !mobInViewIds.includes(mob.id))
+      .map((mob) => mob.id)
+    const mobsEntity = Transformer.toPlain(
+      new MobDynamicEntity({
+        mobs: mobsInView.map((mob) => new MobEntity(mob)),
+        toRemoveIds,
+      }),
+    )
+    dynamicItems.push(mobsEntity)
+    this.cache.data.mobs = [...mobsInView.values()]
+
     // mobsInView.forEach(mob => console.log(mob.id, mob.point))
     if (dynamicItems.some((i) => i))
       socket.emit('dynamicItems', dynamicItems as any)

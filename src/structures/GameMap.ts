@@ -27,24 +27,29 @@ export type MapAreaName =
   | 'forest'
   | 'ocean'
   | 'lake1'
+  | `island${number}`
 
+@Exclude()
 export class BiomeOptions {
-  @Exclude()
-  name: MapAreaName
-  @Exclude()
-  type: Biome
-  @Exclude()
-  priority?: number = 1
-  size: Size
-  point: Point
-  bgColor: string
+  @Expose()
+  size?: Size
+  @Expose()
+  point?: Point
+  @Expose()
+  points?: Point[]
+  @Expose()
+  bgColor?: string
+  @Expose()
   borderColor?: string
-  @Exclude()
+
+  notDrawAble?: boolean
   effect: BiomeEffect
-  @Exclude()
   digItemId?: number
-  @Exclude()
   onBridgeEffect?: BiomeEffect
+  absoluteSize?: boolean
+  name: MapAreaName
+  type: Biome
+  priority?: number = 1
 
   constructor(data: BiomeOptions) {
     Object.assign(this, data)
@@ -77,7 +82,7 @@ export interface GameMapOptions {
 
 export class GameMap implements GameMapOptions {
   biomes: Biomes
-  private absoluteBiomes: Biomes
+  absoluteBiomes: Biomes
   tileSize: Size
   size: Size
   mapSource: string
@@ -85,20 +90,45 @@ export class GameMap implements GameMapOptions {
   constructor(data: GameMapOptions) {
     Object.assign(this, data)
 
+    this.loadAbsoluteBiomes()
+  }
+
+  private loadAbsoluteBiomes() {
     this.absoluteBiomes = this.biomes.map(
       (biome) =>
         new BiomeOptions({
           ...biome,
-          point: new Point(
-            this.tileSize.width * biome.point.x,
-            this.tileSize.height * biome.point.y,
-          ),
-          size: new Size(
-            this.tileSize.width * biome.size.width,
-            this.tileSize.height * biome.size.height,
-          ),
+          ...(biome.points
+            ? biome.absoluteSize
+              ? biome.points
+              : {
+                  points: biome.points.map(
+                    (point) =>
+                      new Point(
+                        this.tileSize.width * point.x,
+                        this.tileSize.height * point.y,
+                      ),
+                  ),
+                }
+            : biome.absoluteSize
+            ? { point: biome.point, size: biome.size }
+            : {
+                point: new Point(
+                  this.tileSize.width * biome.point.x,
+                  this.tileSize.height * biome.point.y,
+                ),
+                size: new Size(
+                  this.tileSize.width * biome.size.width,
+                  this.tileSize.height * biome.size.height,
+                ),
+              }),
         }),
     )
+  }
+
+  addBiome(...biomes: BiomeOptions[]) {
+    this.biomes.push(...biomes)
+    this.loadAbsoluteBiomes()
   }
 
   find(areas: MapAreaName[]): BiomeOptions
@@ -131,7 +161,12 @@ export class GameMap implements GameMapOptions {
   areaOf(hitbox: UniversalHitbox): MapAreaName[] {
     const biomes: BiomeOptions[] = []
     for (let data of this.absoluteBiomes) {
-      if (universalWithin(hitbox, { point: data.point, size: data.size }))
+      if (
+        universalWithin(
+          hitbox,
+          data.points ? data.points : { point: data.point, size: data.size },
+        )
+      )
         biomes.push(data)
     }
     return biomes.sort((a, b) => b.priority - a.priority).map((b) => b.name)
@@ -140,7 +175,12 @@ export class GameMap implements GameMapOptions {
   biomeOf(hitbox: Point, a?: boolean): Biome[] {
     const biomes: BiomeOptions[] = []
     for (let data of this.absoluteBiomes) {
-      if (universalWithin(hitbox, { point: data.point, size: data.size })) {
+      if (
+        universalWithin(
+          hitbox,
+          data.points ? data.points : { point: data.point, size: data.size },
+        )
+      ) {
         biomes.push(data)
       }
     }

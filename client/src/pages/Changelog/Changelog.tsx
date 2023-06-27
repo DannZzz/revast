@@ -6,6 +6,26 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 27/6/2023 - Islands And Treasures")}
+          <div class="content">
+            {cg_big_img("/images/islands-preview.png")}
+            <span>EXPLORE THE ISLANDS AND FIND LOST TREASURES</span>
+            <div class="group">
+              {cg_small_img("/api/images/skin9.png")}
+              {cg_small_img("/api/images/golden-double-sword-icon.png")}
+            </div>
+            {cg_list("Added", [
+              "New Skin",
+              "New Double Sword (CAN BE FOUND ON THE ISLANDS)",
+            ])}
+            {cg_list("Fixed", [
+              "Winter cave",
+              "Furnace and Chest craft durations",
+              "Mobs visual bugs",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 25/6/2023 - Skins And Footprints!")}
           <div class="content">
             <div class="group">
@@ -129,7 +149,7 @@ const Changelog = () => {
             {cg_list("Added", [
               "Plots, berry seeds and watering can (NOW YOU CAN BE A REAL FARMER!)",
             ])}
-            {cg_list("Fixed", ["Craft visualation losing"])}
+            {cg_list("Fixed", ["Craft visualization losing"])}
           </div>
         </div>
       </div>

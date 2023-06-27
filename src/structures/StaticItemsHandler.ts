@@ -7,6 +7,7 @@ import { StaticSettableItem } from 'src/game/basic/static-item.basic'
 import { SettableCheckers } from 'src/game/basic/item.basic'
 import { Point, Size } from 'src/global/global'
 import { MAP_GRID_RENDER_AREA_SIZE } from 'src/constant'
+import { Misc } from 'src/game/basic/misc.basic'
 
 export interface Area {
   position: Point
@@ -63,6 +64,15 @@ class Handler {
     }, [])
   }
 
+  get miscs(): Misc[] {
+    return this.itemsGroup.reduce((aggr, group) => {
+      aggr.push(
+        ...group.miscs.filter((item) => !aggr.find((it) => it.id === item.id)),
+      )
+      return aggr
+    }, [])
+  }
+
   get settable(): StaticSettableItem[] {
     return this.itemsGroup.reduce((aggr, group) => {
       aggr.push(
@@ -86,6 +96,13 @@ class Handler {
   addDrop(...drops: BasicDrop[]) {
     this.itemsGroup.forEach((group) => {
       group.addDrop(...drops)
+    })
+    return this
+  }
+
+  addMisc(...miscs: Misc[]) {
+    this.itemsGroup.forEach((group) => {
+      group.addMisc(...miscs)
     })
     return this
   }

@@ -12,7 +12,7 @@ export default createSettable(8, 'campfire')
   .setMode(new Point(0, -120), { type: 'rect', ...new Size(100, 100) })
   .craftable({
     givesXp: 30,
-    duration: 8,
+    duration: 6,
     required: {
       3: 30,
       5: 10,

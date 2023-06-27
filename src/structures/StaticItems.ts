@@ -4,6 +4,7 @@ import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { BasicDrop } from 'src/game/basic/drop.basic'
 import { UniversalHitbox } from 'src/utils/universal-within'
 import { SettableCheckers } from 'src/game/basic/item.basic'
+import { Misc } from 'src/game/basic/misc.basic'
 
 export interface CheckingOptions {
   strict?: boolean
@@ -17,9 +18,15 @@ export class StaticItems {
   bio: Bio[] = []
   settable: StaticSettableItem[] = []
   drops: BasicDrop[] = []
+  miscs: Misc[] = []
 
   addDrop(...drops: BasicDrop[]) {
     this.drops.push(...drops)
+    return this
+  }
+
+  addMisc(...miscs: Misc[]) {
+    this.miscs.push(...miscs)
     return this
   }
 

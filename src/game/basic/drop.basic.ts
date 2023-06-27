@@ -12,22 +12,25 @@ export interface BasicDropProps<T> {
   point: Point
   hitboxRadius: number
   take: (player: Player, data: T) => void
-  duration: number
+  duration?: number
   onEnd: (drop: BasicDrop<T>) => void
-  authorId: string
+  authorId?: string
   size: Size
+  type?: string
 }
 
 export class BasicDrop<T = any> implements BasicDropProps<T> {
   constructor(props: BasicDropProps<T>) {
     Object.assign(this, props)
     this._hp = props.hp
-    timer(props.duration * 1000).subscribe(() => {
-      this._hp = 0
-      this.onEnd(this)
-    })
+    if (props.duration)
+      timer(props.duration * 1000).subscribe(() => {
+        this._hp = 0
+        this.onEnd(this)
+      })
   }
   size: Size
+  type?: string
   hurtSource: string
   readonly id = `drop-${uuid(40)}`
   point: Point
@@ -37,7 +40,7 @@ export class BasicDrop<T = any> implements BasicDropProps<T> {
   hp: number
   private _hp: number
   take: (player: Player, data: T) => void
-  duration: number
+  duration?: number
   onEnd: (drop: BasicDrop<T>) => void
   authorId: string
 

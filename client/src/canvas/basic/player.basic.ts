@@ -79,9 +79,11 @@ export class BasicPlayer<
       width: 300,
       wrap: "none",
       offsetX: 150 - this.size.width / 2,
-      fill: "#cccccc",
+      fill: "white",
       y: -25,
       fontSize: 20,
+      strokeWidth: 1,
+      stroke: "black",
     }).cache()
 
     this.messagesNode = new Konva.Group({

@@ -36,6 +36,7 @@ export class MapEntity implements Partial<GameMap> {
 
   constructor(data: GameMap) {
     Object.assign(this, data)
+    this.biomes = this.biomes.filter((biome) => !biome.notDrawAble)
   }
 
   @Exclude()

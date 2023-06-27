@@ -34,6 +34,8 @@ import { Wss } from 'src/ws/WS/WSS'
 import { correctScreenSize } from 'src/utils/correct-screen-size'
 import { GameClans } from 'src/structures/clans/GameClans'
 import CollectedIps from 'src/utils/collected-ips'
+import { miscByMapId } from 'src/data/miscs'
+import { TreasuresHunt } from 'src/structures/treasures-hunt'
 
 export type TMap = typeof BasicMap
 
@@ -46,6 +48,7 @@ export interface GameProps {
   readonly information: GameServerInformation
   readonly socketServer: Wss
   madeAt?: Date
+  maxTreasures?: number
   mapItems?: () => TMap
   map: GameMap
   initMobs: (game: GameServer) => Mobs
@@ -58,6 +61,7 @@ export class GameServer implements GameProps {
   mapItems: () => TMap = () => BasicMap
   madeAt: Date = new Date()
   map: GameMap
+  maxTreasures?: number = 20
   readonly socketServer: Wss
   readonly information: GameServerInformation = {}
   readonly mapSource: string
@@ -72,14 +76,30 @@ export class GameServer implements GameProps {
   readonly clans = new GameClans(this)
   lastFrameDelta: number = 0
   readonly day: GameDay
+  readonly treasures = new TreasuresHunt(this)
   mobs: Mobs
 
   constructor(options: GameProps) {
     Object.assign(this, options)
     //
     this.staticItems.init(this.map)
-    this.mapItems().layers[0].data.forEach((mapId, i) => {
-      if (mapId) {
+    this.mapItems()
+      .layers.find((layer) => layer.name === 'miscs')
+      .data.forEach((mapId, i) => {
+        if (!mapId) return
+        // console.log(mapId)
+        const misc = miscByMapId(
+          mapId,
+          BasicMath.xy(i, this.map.size, this.map.tileSize),
+          this,
+        )
+        if (!misc) return
+        this.staticItems.for(misc.universalHitbox).addMisc(misc)
+      })
+    this.mapItems()
+      .layers.find((layer) => layer.name !== 'miscs')
+      .data.forEach((mapId, i) => {
+        if (!mapId) return
         // console.log(mapId)
         const bio = bioItemByMapId(
           mapId,
@@ -88,8 +108,7 @@ export class GameServer implements GameProps {
         if (!bio) return
         bio.players = this.alivePlayers
         this.staticItems.for(bio.universalHitbox).addBios(bio)
-      }
-    })
+      })
     this.day = new GameDay(this.madeAt)
     this.updateLeaderboard()
     this.updateDayAndNight()
@@ -175,11 +194,17 @@ export class GameServer implements GameProps {
   }
 
   randomEmptyPoint(forObjectRadius: number): Point
-  randomEmptyPoint(forObjectRadius: number, point: Point, size: Size): Point
+  randomEmptyPoint(
+    forObjectRadius: number,
+    point: Point,
+    size: Size,
+    check?: (point: Point) => boolean,
+  ): Point
   randomEmptyPoint(
     forObjectRadius: number,
     startPoint?: Point,
     size?: Size,
+    check?: (point: Point) => boolean,
   ): Point {
     const forest =
       startPoint && size
@@ -192,6 +217,7 @@ export class GameServer implements GameProps {
       )
     let point = randomPoint()
     while (
+      (typeof check === 'function' ? !check(point) : false) ||
       this.staticItems
         .for({ radius: forObjectRadius, point })
         .someWithin({ radius: forObjectRadius, point }, true)
@@ -287,14 +313,17 @@ export class GameServer implements GameProps {
     })
 
     interval(500).subscribe(() => {
+      // treasures
+      this.treasures.everySecond()
+
       this.alivePlayers.forEach((player) => {
         const days = Math.floor(
           (Date.now() - (player.createdAt.getTime() || Date.now())) /
             1000 /
             GAME_DAY_SECONDS,
         )
-        if (player.cache.get('lastSentDay') !== days) {
-          player.cache.data.lastSentDay = days
+        if (player.lastSentDays !== days) {
+          player.lastSentDays = days
           player.lbMember.add(XP_AFTER_EACH_DAY)
           if (player.online()) {
             player

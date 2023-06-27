@@ -78,6 +78,7 @@ export class Player extends BasicElement<PlayerEvents> {
   readonly bars: PlayerBars
   readonly camera: Camera
   cache: Cache<PlayerCache> = new Cache(PlayerCacheInit)
+  lastSentDays: number = 0
   readonly died = GetSet(false)
   readonly token: Token
   readonly lbMember: LBMember
