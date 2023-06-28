@@ -125,14 +125,18 @@ export class GameServer implements GameProps {
     const { socket, name, screen, token, skin } = details
     const socketId = socket.id
 
-    CollectedIps.set(socket.ip, { createdAt: Date.now(), inGame: true })
+    const ipdata = CollectedIps.get(socket.ip)
+    ipdata.inGame = true
+    ipdata.createdAt = Date.now()
 
     if (token && TokenChest.has(token)) {
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {
+        const player = this.players.get(tokenData.playerId)
+        player.socket().close()
         tokenData.currentSocketId = socketId
         socket.inGame = true
-        const player = this.players.get(tokenData.playerId)
+
         // console.log(player.cache.data)
         player.socketRegistering()
         this.checkLoop()

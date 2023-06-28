@@ -97,10 +97,17 @@ export class Wss {
       }
 
       // checking ip
-      if (!CollectedIps.has(ip)) {
+      if (
+        !CollectedIps.has(ip) ||
+        CollectedIps.get(ip).connections >= 4 ||
+        CollectedIps.get(ip).lastConnection > Date.now()
+      ) {
         ws.close(1000, 'error')
+        return
       }
 
+      CollectedIps.get(ip).lastConnection = Date.now() + 2000
+      CollectedIps.get(ip).connections++
       ws.autodeleteTimeout = new Timeout(() => {
         if (!ws.inGame) {
           delete this.server.clientList[ws.id]
@@ -121,20 +128,36 @@ export class Wss {
       ws.inGame = false
       this.server.clientList[ws.id] = ws
       // ws.binaryType = 'arraybuffer'
-      ws.on('message', (data) => {
+
+      ws.on('close', (code, reason) => {
+        // console.log(code, binaryMessageToObject(reason))
+        CollectedIps.get(ip).connections--
+        this.gameServer.to(ws.id)?.disconnect()
+        delete this.server.clientList[ws.id]
+        if (this.server.clients.size === 0) this.messagesPer5sInterval.stop()
+      })
+
+      ws.on('message', (d) => {
         ws.messagesPer5s++
         if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
           return ws.close(1000, 'spam')
         }
-        const message = binaryMessageToObject(data)
-        this.takeMessage(message, ws)
-      })
+        let message: WsMessage<string, {}> | false = binaryMessageToObject(d)
+        if (!message) {
+          ws.close()
+          return
+        }
+        if (
+          typeof message !== 'object' ||
+          Array.isArray(message) ||
+          !('event' in message) ||
+          !('data' in message)
+        )
+          return ws.close()
+        const { event, data } = message
+        if (event !== 'joinServer' && !ws.requestToJoin) return
 
-      ws.on('close', (code, reason) => {
-        // console.log(code, binaryMessageToObject(reason))
-        this.gameServer.to(ws.id)?.disconnect()
-        delete this.server.clientList[ws.id]
-        if (this.server.clients.size === 0) this.messagesPer5sInterval.stop()
+        this.takeMessage({ event, data }, ws)
       })
     })
   }

@@ -148,6 +148,7 @@ export type MainSocket = WebSocket.WebSocket & {
   autodeleteTimeout: Timeout
   messagesPer5s: number
   ip: string
+  requestToJoin: boolean
 }
 
 export type EventHandler<

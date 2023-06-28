@@ -8,7 +8,7 @@ export default createMob(MobNames.wolf)
   .damage(30, 1)
   .radius(300, 70)
   .size(150, 150)
-  .speed(120)
+  .speed(105)
   .sources('WOLF', 'HURT_WOLF')
   .drop({
     32: 2,

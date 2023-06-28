@@ -8,7 +8,7 @@ export default createMob(MobNames.spider)
   .damage(30, 1)
   .radius(300, 70)
   .size(150, 150)
-  .speed(130)
+  .speed(115)
   .sources('SPIDER', 'HURT_SPIDER')
   .drop({
     42: 4,

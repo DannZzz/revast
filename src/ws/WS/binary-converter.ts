@@ -1,8 +1,11 @@
 import { BSON } from 'bson'
 import { WsMessage } from './type'
 
-export const binaryMessageToObject = (data: any) =>
-  <WsMessage>JSON.parse(uintToString(data) || '{}')
+export const binaryMessageToObject = (data: any) => {
+  const convert = uintToString(data)
+  if (!convert) return false
+  return <WsMessage>JSON.parse(convert)
+}
 
 export const emitDataToBinary = (event: string, data: any) =>
   stringToUint(JSON.stringify({ event, data }))
@@ -18,7 +21,12 @@ function stringToUint(str: string) {
 }
 
 function uintToString(uintArray) {
-  var encodedString = String.fromCharCode.apply(null, uintArray),
-    decodedString = decodeURIComponent(escape(atob(encodedString)))
-  return decodedString
+  try {
+    var encodedString = String.fromCharCode.apply(null, uintArray),
+      decodedString = decodeURIComponent(escape(atob(encodedString)))
+    return decodedString
+  } catch (e) {
+    console.log(e.message)
+    return false
+  }
 }

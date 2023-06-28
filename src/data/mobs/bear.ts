@@ -8,7 +8,7 @@ export default createMob(MobNames.bear)
   .damage(40, 1)
   .radius(300, 90)
   .size(200, 200)
-  .speed(125)
+  .speed(110)
   .sources('BEAR', 'HURT_BEAR')
   .drop({
     48: 3,

@@ -63,7 +63,7 @@ export const MAX_SCREEN_SIZE = new Size(2540, 2000)
 export const CLAN_MAX_MEMBERS_SIZE = 9
 export const CLAN_MAX_NAME_SIZE = 20
 
-export const MOB_GLOBAL_SPEED_EFFECT = -15
+export const MOB_GLOBAL_SPEED_EFFECT = 25
 export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 
 export const MOB_DIR_NAMES = ['mobs']
@@ -81,7 +81,7 @@ export const MESSAGE_DURATION = 8
 
 export const GAME_DAY_SECONDS = 600
 
-export const BASIC_PLAYER_SPEED = 180
+export const BASIC_PLAYER_SPEED = 180 + 25
 export const PLAYER_DECREASE_SPEED_WEAPON = 45
 export const PLAYER_DECREASE_SPEED_CLICK = 30
 

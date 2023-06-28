@@ -29,7 +29,11 @@ export class ItemsController {
     if (CollectedIps.has(ip)) {
       CollectedIps.get(ip).createdAt = Date.now()
     } else if (typeof ip === 'string') {
-      CollectedIps.set(ip, { createdAt: Date.now() })
+      CollectedIps.set(ip, {
+        createdAt: Date.now(),
+        connections: 0,
+        lastConnection: 0,
+      })
     }
     return PlayerSkins.map((skin) => new PlayerSkinEntity(skin))
   }
