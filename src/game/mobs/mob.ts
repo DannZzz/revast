@@ -220,12 +220,11 @@ export class Mob extends BasicMob {
           calcSpeed,
         )
         if (
+          this.target &&
           getDistance(nextPoint, this.target.point()) <
-          speed(attackTactic.speed)
+            speed(attackTactic.speed)
         ) {
-          this.moveTo(this.target.point())
-          // this.theta = getAngle(this.centerPoint(), this.target.point())
-          return
+          nextPoint = this.target.point()
         }
 
         const itemWithin = this.staticItems
@@ -250,10 +249,12 @@ export class Mob extends BasicMob {
           useTactic({
             tactic: this.moveTactic.idleTactic,
             theta:
-              getAngle(
-                this.centerPoint(nextPoint),
-                itemWithin.centerPoint || itemWithin.point,
-              ) + Math.PI,
+              nextPoint === this.target?.point()
+                ? theta
+                : getAngle(
+                    this.centerPoint(nextPoint),
+                    itemWithin.centerPoint || itemWithin.point,
+                  ) + Math.PI,
             _interval: attackTactic.interval,
             _speed: attackTactic.speed,
             noCheck: true,
