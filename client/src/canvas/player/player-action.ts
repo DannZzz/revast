@@ -114,6 +114,9 @@ export class PlayerAction {
         },
       ],
       (animate) => {
+        ;["right", "left"].forEach((hand) => {
+          hands[hand].position(this.player.handsPosition[hand])
+        })
         const equiped = this.player.items.equiped
 
         this.click.clickCount++
