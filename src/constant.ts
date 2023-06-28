@@ -68,6 +68,8 @@ export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 
 export const MOB_DIR_NAMES = ['mobs']
 
+export const POINT_MACHINE_XP_PER_5_SECONDS = 75
+
 export const WALK_EFFECT_SEND_INTERVAL = 1
 
 export const PLAYER_NAME_MAX_SIZE = 18

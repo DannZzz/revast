@@ -98,6 +98,7 @@ export class Mob extends BasicMob {
       timer(1700).subscribe(() => {
         clearInterval(this.damageIntervalObj)
         this.damageIntervalObj = setInterval(() => {
+          if (this.died) return clearInterval(this.damageIntervalObj)
           // hurting player
           let attacked = false
           players.forEach((player) => {

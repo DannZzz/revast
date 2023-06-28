@@ -48,6 +48,16 @@ class SettableCreator {
     return this
   }
 
+  max(val: number) {
+    this.extend.max = val
+    return this
+  }
+
+  loop(val: (settable: StaticSettableItem) => void) {
+    this.extend.loop = val
+    return this
+  }
+
   name(val: string) {
     this.extend.name = val
     return this

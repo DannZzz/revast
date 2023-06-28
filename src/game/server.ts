@@ -112,6 +112,7 @@ export class GameServer implements GameProps {
     this.day = new GameDay(this.madeAt)
     this.updateLeaderboard()
     this.updateDayAndNight()
+    this.loop()
     this.mobs = this.initMobs(this)
   }
 
@@ -223,8 +224,8 @@ export class GameServer implements GameProps {
     while (
       (typeof check === 'function' ? !check(point) : false) ||
       this.staticItems
-        .for({ radius: forObjectRadius, point })
-        .someWithin({ radius: forObjectRadius, point }, true)
+        .for({ radius: forObjectRadius + 100, point })
+        .someWithin({ radius: forObjectRadius + 100, point }, true)
     ) {
       point = randomPoint()
     }
@@ -307,6 +308,16 @@ export class GameServer implements GameProps {
     interval(1000).subscribe(updateFunction)
   }
 
+  loop() {
+    interval(1000).subscribe(() => {
+      if (this.alivePlayers.size === 0) return
+      this.treasures.everySecond()
+      this.staticItems
+        .for('all')
+        .settable.forEach((settable) => settable.data?.loop?.(settable))
+    })
+  }
+
   updateDayAndNight() {
     interval((GAME_DAY_SECONDS / 2) * 1000).subscribe(() => {
       this.alivePlayers.forEach(
@@ -317,9 +328,6 @@ export class GameServer implements GameProps {
     })
 
     interval(500).subscribe(() => {
-      // treasures
-      this.treasures.everySecond()
-
       this.alivePlayers.forEach((player) => {
         const days = Math.floor(
           (Date.now() - (player.createdAt.getTime() || Date.now())) /

@@ -26,7 +26,6 @@ function uintToString(uintArray) {
       decodedString = decodeURIComponent(escape(atob(encodedString)))
     return decodedString
   } catch (e) {
-    console.log(e.message)
     return false
   }
 }

@@ -40,7 +40,10 @@ const CraftBook: Component<{
                 classList={{ selected: selectedItem()?.id === +craft.id }}
                 class="craft-item"
               >
-                <img src={item(compactItems, +craft.id).iconUrl} />
+                <img
+                  crossorigin="anonymous"
+                  src={item(compactItems, +craft.id).iconUrl}
+                />
               </div>
             )}
           </For>
@@ -58,6 +61,7 @@ const CraftBook: Component<{
                   {([id, quantity]) => (
                     <div class="recept-item">
                       <img
+                        crossorigin="anonymous"
                         class="recept-item-icon"
                         src={item(compactItems, +id).iconUrl}
                         alt=""

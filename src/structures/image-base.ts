@@ -166,6 +166,9 @@ export const Images = {
   FURNACE_ENABLED: 'furnace-enabled.png',
   PLOT: 'plot.png',
   ICON_PLOT: 'plot-icon.png',
+  POINT_MACHINE: 'point-machine.png',
+  POINT_MACHINE_HOLE: 'point-machine-hole.png',
+  POINT_MACHINE_GROUND: 'point-machine-ground.png',
 
   // spikes
   WOODEN_SPIKE: 'wooden-spike.png',

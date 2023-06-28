@@ -7,8 +7,8 @@ export default function registerListeners(this: Wss) {
   this.on('joinServer', async ({ ws, player }, [joinPlayerDto]) => {
     if (ws.inGame) return
     const { recaptcha_token, ...props } = joinPlayerDto
-    const verifyCaptcha = await verifyUserRecaptcha(recaptcha_token)
     ws.requestToJoin = true
+    const verifyCaptcha = await verifyUserRecaptcha(recaptcha_token)
     if (verifyCaptcha) this.gameServer.joinPlayer({ ...props, socket: ws })
   })
     .on('toggles', ({ ws, player }, toggles) => {

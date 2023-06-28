@@ -98,10 +98,13 @@ export class Wss {
 
       // checking ip
       if (
+        !ip ||
+        (process.env.NODE_ENV === 'production' ? ip?.length <= 5 : false) ||
         !CollectedIps.has(ip) ||
         CollectedIps.get(ip).connections >= 4 ||
         CollectedIps.get(ip).lastConnection > Date.now()
       ) {
+        console.log('throw ip', ip, CollectedIps.get(ip))
         ws.close(1000, 'error')
         return
       }

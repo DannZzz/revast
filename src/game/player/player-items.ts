@@ -35,6 +35,7 @@ import { CraftEntity } from 'src/entities/craft.entity'
 import { SpecialItemTypes } from 'src/data/config-type'
 import { PlayerItemTimeout } from '../types/player.types'
 import { NB } from 'src/utils/NumberBoolean'
+import { isNumber } from 'class-validator'
 
 interface PlayerItem<T extends ItemsByTypes> {
   item: Item<T>
@@ -142,7 +143,13 @@ export class PlayerItems {
     if (this.timeout.building > Date.now() || this.isCrafting) return -1
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
-
+    if (!('hp' in item.data)) return -1
+    if (isNumber(item.data.max)) {
+      const items = this.player.staticItems
+        .for('all')
+        .settable.filter((item) => item.data.id === itemId)
+      if (items.length >= item.data.max) return -1
+    }
     let point: Point, theta: number, angle: number
 
     if (item.data.setMode.grid) {

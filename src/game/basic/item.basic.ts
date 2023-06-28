@@ -104,6 +104,7 @@ export interface Settable {
   hp: number
   showHpRadius?: number
   ignoreCheckers?: SettableCheckers
+  max?: number
   setMode: {
     grid?: boolean
     offset: Point
@@ -120,6 +121,7 @@ export interface Settable {
     water: boolean
   }
   currentMode: number
+  loop?: (settable: StaticSettableItem) => void
   modes?: SettableMode[]
   onDestroy?: (settable: StaticSettableItem) => void
   customSettingFilter?: (

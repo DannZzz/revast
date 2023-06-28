@@ -11,6 +11,7 @@ export type StaticItemAddonName =
   | "berry"
   | "campfire"
   | "furnace"
+  | "point-machine"
   | "berry-seed"
 
 const size = new Size(20, 20)
@@ -86,6 +87,62 @@ export const StaticItemsAddons: {
       })
     },
   },
+  "point-machine": {
+    drawSeparately(item) {
+      const center = item.point
+      const size = item.size
+      const ground = new Konva.Image({
+        image: loadImage("/images/point-machine-ground.png", (img) =>
+          ground.image(img).cache()
+        ),
+        ...center,
+        offset: new Point(size.width / 2, size.height / 2),
+        ...size,
+      }).cache()
+      Game.groupAdd(item.layer, Game.settableHoistId(0), ground)
+
+      const period = 2000
+      var anim = new Konva.Animation((frame) => {
+        var scale = 0.025 * Math.sin((frame.time * 2 * Math.PI) / period) + 1
+        ground.scaleX(scale).scaleY(scale)
+        if (item.destroyed) anim.stop()
+      }).start()
+
+      item.on("destroy", () => {
+        ground.destroy()
+      })
+    },
+    alsoDraw(item: StaticSettableItem) {
+      const size = item.size
+
+      const hole = new Konva.Image({
+        image: loadImage("/images/point-machine-hole.png", (img) =>
+          hole.image(img).cache()
+        ),
+
+        offset: new Point(size.width / 2, size.height / 2),
+        ...new Point(size.width / 2, size.height / 2),
+        ...size,
+      }).cache()
+
+      var angularSpeed = 90
+      var anim = new Konva.Animation(function (frame) {
+        var angleDiff = (frame.timeDiff * angularSpeed) / 1000
+        hole.rotate(angleDiff)
+        if (item.destroyed) return anim.stop()
+      })
+
+      anim.start()
+
+      item.on("destroy", () => {
+        hole.destroy()
+      })
+
+      return {
+        items: hole,
+      }
+    },
+  },
   campfire: {
     alsoDraw: (props: StaticSettableItem) => {
       const center = new Point(props.size.width / 2, props.size.height / 2)
@@ -110,7 +167,7 @@ export const StaticItemsAddons: {
         fill: "rgba(255,255,0,.8)",
       })
       const circle3 = new Konva.Circle({ radius: 20, fill: "#EA8033aa" })
-      fireGroup.add(circle1, circle2, circle3)
+      fireGroup.add(circle1, circle2, circle3).cache()
 
       const period = 2000
       var anim = new Konva.Animation((frame) => {
@@ -126,6 +183,7 @@ export const StaticItemsAddons: {
         afterDraw: () => {
           circle.zIndex(-10)
           smallCircle.zIndex(-9)
+          fireGroup.cache()
         },
       }
     },
