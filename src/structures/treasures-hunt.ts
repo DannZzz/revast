@@ -26,6 +26,7 @@ export class TreasuresHunt {
   items = Items.filter(
     (item) =>
       !item.isEatable() &&
+      !item.isResource() &&
       !['emerald', 'ruby'].includes(item.data.resType) &&
       !exceptIds.includes(item.data.id),
   )
@@ -59,7 +60,7 @@ export class TreasuresHunt {
     const newDrop = new BasicDrop({
       authorId: `system-treasure`,
       point,
-      data: this.items.random(),
+      data: this.randomItem(),
       hp: 200,
       hurtSource: 'HURT_BARREL',
       onEnd: (drop) => {
@@ -76,5 +77,22 @@ export class TreasuresHunt {
     })
     this.gs.staticItems.for(point).addDrop(newDrop)
     randomPlace.ids.push(newDrop.id)
+  }
+
+  randomItem() {
+    let i = this.items.random()
+    let n = $.randomNumber(0, 100)
+    if (n > 10) {
+      while (i.data.resType) i = this.items.random()
+      return i
+    }
+    const amethyst = this.items.filter(
+      (item) => item.data.resType === 'amethyst',
+    )
+    const diamond = this.items.filter((item) => item.data.resType === 'diamond')
+    const gold = this.items.filter((item) => item.data.resType === 'gold')
+    if (n <= 10 && n > 5) return gold.random()
+    if (n <= 5 && n > 2) return diamond.random()
+    return amethyst.random()
   }
 }

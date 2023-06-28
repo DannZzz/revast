@@ -78,7 +78,7 @@ export class PlayerBars {
       this.player.items.weared?.item.data?.effect?.oxygenLoss || 0
     const effect =
       this.player.gameServer.map.find(
-        this.player.gameServer.map.biomeOf(this.player.point()),
+        this.player.gameServer.map.areaOf(this.player.point()),
       )?.[
         this.player.actions.state.actualStates.onBridge()
           ? 'onBridgeEffect'

@@ -10,14 +10,13 @@ import { DJGameServerInteraction } from './collectors/game-server-interaction'
 import { DJQuery } from './Query'
 
 export const DJCommandResolver = new Chest<number, DJCommand>()
-const MessageCooldown = new Cooldown(2500)
+const MessageCooldown = new Cooldown(5000)
 
 export const resolveDJMessage = (
   client: Client,
   msg: Message,
   args: string[],
 ) => {
-  if (MessageCooldown.isLimited(msg.author.id)) return
   if (!args[0]) {
     return listenBoss(client, msg, null, args)
   }
@@ -66,6 +65,8 @@ export const resolveDJMessage = (
     })
     return
   }
+  if (MessageCooldown.isLimited(msg.author.id)) return
+
   msg.channel.sendTyping()
   openAiFind(args.join(' ')).then((response) => {
     msg.reply({
