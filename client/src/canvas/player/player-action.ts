@@ -114,11 +114,7 @@ export class PlayerAction {
         },
       ],
       (animate) => {
-        ;["right", "left"].forEach((hand) => {
-          hands[hand].position(this.player.handsPosition[hand])
-        })
         const equiped = this.player.items.equiped
-
         this.click.clickCount++
         if (this.click.clickCount >= this.click.toggleClicksEach) {
           this.click.clickCount = 0
@@ -173,6 +169,9 @@ export class PlayerAction {
           animate(this.click.handClick === "right" ? "first" : "second")
         } else {
           this.click.clickStatus = "idle"
+          ;["right", "left"].forEach((hand) => {
+            hands[hand].position(this.player.handsPosition[hand])
+          })
         }
       }
     )

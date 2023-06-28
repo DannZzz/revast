@@ -212,12 +212,22 @@ export class Mob extends BasicMob {
               ? map.find(map.areaOf(this.point))?.effect.speed || 0
               : 0),
         )
-        const nextPoint = getPointByTheta(
+
+        let nextPoint = getPointByTheta(
           this.point,
           this.theta,
 
           calcSpeed,
         )
+        if (
+          getDistance(nextPoint, this.target.point()) <
+          speed(attackTactic.speed)
+        ) {
+          this.moveTo(this.target.point())
+          // this.theta = getAngle(this.centerPoint(), this.target.point())
+          return
+        }
+
         const itemWithin = this.staticItems
           .for(nextPoint)
           .itemWithin(this.universalCollisionHitbox)
@@ -260,11 +270,7 @@ export class Mob extends BasicMob {
         this.target = null
       } else {
         const distance = getDistance(this.target.point(), this.centerPoint())
-        if (distance < speed(attackTactic.speed)) {
-          this.moveTo(this.target.point())
-          // this.theta = getAngle(this.centerPoint(), this.target.point())
-          return
-        }
+
         if (distance > this.radius.react) {
           this.target = null
         } else {
