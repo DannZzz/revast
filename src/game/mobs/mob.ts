@@ -277,7 +277,10 @@ export class Mob extends BasicMob {
         } else {
           useTactic({
             tactic: attackTactic,
-            theta: getAngle(this.centerPoint(), this.target.point()),
+            theta:
+              distance < speed(attackTactic.speed)
+                ? this.theta
+                : getAngle(this.centerPoint(), this.target.point()),
           })
         }
       }
