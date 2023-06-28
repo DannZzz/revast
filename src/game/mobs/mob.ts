@@ -250,7 +250,7 @@ export class Mob extends BasicMob {
             tactic: this.moveTactic.idleTactic,
             theta:
               nextPoint === this.target?.point()
-                ? theta
+                ? this.theta
                 : getAngle(
                     this.centerPoint(nextPoint),
                     itemWithin.centerPoint || itemWithin.point,
