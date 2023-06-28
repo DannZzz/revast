@@ -4,6 +4,7 @@ import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(109, 'point-machine')
   .hp(1750)
+  .name('Point Machine')
   .size(192, 192)
   .setMode(new Point(0, -192), {
     type: 'circle',
