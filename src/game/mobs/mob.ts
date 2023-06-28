@@ -172,6 +172,10 @@ export class Mob extends BasicMob {
       _speed?: number
       noCheck?: boolean
     }) => {
+      if (this.died) {
+        this.hurt(0, {} as any)
+        return
+      }
       const {
         tactic,
         theta,
