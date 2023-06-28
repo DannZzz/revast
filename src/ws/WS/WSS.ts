@@ -138,6 +138,7 @@ export class Wss {
       })
 
       ws.on('message', (d) => {
+        if (typeof d === 'string') return
         ws.messagesPer5s++
         if (ws.messagesPer5s > MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S) {
           return ws.close(1000, 'spam')

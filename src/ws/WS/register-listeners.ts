@@ -6,9 +6,9 @@ import { verifyUserRecaptcha } from 'src/utils/verfify-recaptcha'
 export default function registerListeners(this: Wss) {
   this.on('joinServer', async ({ ws, player }, [joinPlayerDto]) => {
     if (ws.inGame) return
-    ws.requestToJoin = true
     const { recaptcha_token, ...props } = joinPlayerDto
     const verifyCaptcha = await verifyUserRecaptcha(recaptcha_token)
+    ws.requestToJoin = true
     if (verifyCaptcha) this.gameServer.joinPlayer({ ...props, socket: ws })
   })
     .on('toggles', ({ ws, player }, toggles) => {
