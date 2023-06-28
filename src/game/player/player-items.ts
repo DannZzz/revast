@@ -147,7 +147,10 @@ export class PlayerItems {
     if (isNumber(item.data.max)) {
       const items = this.player.staticItems
         .for('all')
-        .settable.filter((item) => item.data.id === itemId)
+        .settable.filter(
+          (item) =>
+            item.data.id === itemId && item.authorId === this.player.uniqueId,
+        )
       if (items.length >= item.data.max) return -1
     }
     let point: Point, theta: number, angle: number
