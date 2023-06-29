@@ -6,7 +6,7 @@ export default createSettable(109, 'point-machine')
   .hp(1750)
   .name('Point Machine')
   .size(192, 192)
-  .setMode(new Point(0, -192), {
+  .setMode(new Point(0, -96), {
     type: 'circle',
     radius: 45,
   })
@@ -15,6 +15,9 @@ export default createSettable(109, 'point-machine')
     duration: 20,
     state: { workbench: true },
     required: { 23: 350, 52: 1 },
+  })
+  .data({
+    showHpRadius: 40,
   })
   .max(1)
   .loop((settable) => {

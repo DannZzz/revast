@@ -14,7 +14,7 @@ export interface TreasureHuntPlace {
 
 const Treasure = 'treasure'
 
-const exceptIds: number[] = [95, 44, 93]
+const exceptIds: number[] = [95, 44, 93, 109]
 
 export class TreasuresHunt {
   /**
@@ -27,7 +27,7 @@ export class TreasuresHunt {
     (item) =>
       !item.isEatable() &&
       !item.isResource() &&
-      !['emerald', 'ruby'].includes(item.data.resType) &&
+      !['emerald', 'ruby'].includes(item.data.luckType) &&
       !exceptIds.includes(item.data.id),
   )
 
@@ -83,14 +83,16 @@ export class TreasuresHunt {
     let i = this.items.random()
     let n = $.randomNumber(0, 100)
     if (n > 10) {
-      while (i.data.resType) i = this.items.random()
+      while (i.data.luckType) i = this.items.random()
       return i
     }
     const amethyst = this.items.filter(
-      (item) => item.data.resType === 'amethyst',
+      (item) => item.data.luckType === 'amethyst',
     )
-    const diamond = this.items.filter((item) => item.data.resType === 'diamond')
-    const gold = this.items.filter((item) => item.data.resType === 'gold')
+    const diamond = this.items.filter(
+      (item) => item.data.luckType === 'diamond',
+    )
+    const gold = this.items.filter((item) => item.data.luckType === 'gold')
     if (n <= 10 && n > 5) return gold.random()
     if (n <= 5 && n > 2) return diamond.random()
     return amethyst.random()

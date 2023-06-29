@@ -6,6 +6,19 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 29/6/2023 - Hat And Changes")}
+          <div class="content">
+            <span>NEW HAT!</span>
+            {cg_small_img("/api/images/cap-scarf.png")}
+            {cg_list("Changed", [
+              "Distance of the setting Point Machine",
+              "Range of the Wrench",
+              "Point Machine gives more score!",
+              "Lake in the forest",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 29/6/2023 - What's AFK?")}
           <div class="content">
             {cg_big_img("/images/point-machine-preview.png")}

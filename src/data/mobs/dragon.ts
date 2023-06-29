@@ -4,7 +4,7 @@ import { MobNames } from '../mobs'
 
 export default createMob(MobNames.dragon)
   .givesXP(5000)
-  .hp(5000)
+  .hp(3000)
   .damage(65, 1)
   .radius(300, 100)
   .size(300, 300)

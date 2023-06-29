@@ -7,6 +7,7 @@ export default createItem(1, 'weapon')
   .setVariant('sword')
   .name('Golden Double Sword')
   .data({
+    luckType: 'amethyst',
     damage: 25,
     twoHandMode: {
       noActive: { handNode: { point: new Point(null, -10) } },

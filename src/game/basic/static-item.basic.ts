@@ -56,10 +56,6 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
     if (this.currentMode.damageOnTouch) this.timeouts.touch = {}
     this.tempHp = GetSet(data.hp)
     if (this.data.onDestroy) this.on('destroy', this.data.onDestroy)
-    if (this.data.durationSeconds)
-      timer(this.data.durationSeconds * 1000).subscribe(() => {
-        this.destroy()
-      })
 
     this.currentModeIndex.onChange((val) => {
       this.validPlayersSockets().forEach((player) => {
@@ -93,6 +89,8 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
         ),
       )
     }
+    if (this.data.durationSeconds)
+      this.timeouts.destroyAt = Date.now() + this.data.durationSeconds * 1000
   }
 
   get centerPoint() {

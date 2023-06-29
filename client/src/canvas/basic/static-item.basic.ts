@@ -91,7 +91,7 @@ export class StaticSettableItem
     ) {
       this.attacked.tween = new Konva.Tween({
         node: this.node,
-        duration: 0.2,
+        duration: 0.15,
         ...to,
         onFinish: () => this.attacked.tween.reverse(),
       })

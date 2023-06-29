@@ -8,6 +8,7 @@ import {
   BiomeEffect,
 } from 'src/structures/GameMap'
 import { Wss } from 'src/ws/WS/WSS'
+import { generateLake } from './game-servers'
 
 export const TEST_GAME_SERVER = (server: Wss) =>
   new GameServer({
@@ -117,25 +118,10 @@ export const TEST_GAME_SERVER = (server: Wss) =>
             speed: -30,
           }),
         }),
-        new BiomeOptions({
-          type: Biome.water,
-          name: 'lake1',
-          priority: 2,
-          notDrawAble: true,
-          size: new Size(30, 32),
-          // bgColor: '#0b6a84',
-          point: new Point(60, 109),
-          effect: new BiomeEffect({
-            speed: -80,
-            temperatureDay: -5,
-            temperatureNight: -25,
-          }),
-          onBridgeEffect: new BiomeEffect({
-            temperatureDay: -3,
-            temperatureNight: -20,
-            speed: 0,
-          }),
-        }),
+        generateLake(1, new Point(61, 110), new Size(28, 9)),
+        generateLake(2, new Point(61, 131), new Size(28, 9)),
+        generateLake(3, new Point(61, 119), new Size(8, 12)),
+        generateLake(4, new Point(81, 119), new Size(8, 12)),
       ],
     }),
     initMobs: (game) => {

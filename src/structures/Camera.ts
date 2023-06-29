@@ -20,7 +20,7 @@ export class Camera {
     this.map(sizes.map)
   } //
 
-  viewRect(more: number = 400): UniversalHitbox {
+  viewRect(more: number = 300): UniversalHitbox {
     const { x, y } = this.point()
     const { width: mapW, height: mapH } = this.map()
     const { width: screenW, height: screenH } = this.size()

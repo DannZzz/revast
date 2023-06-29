@@ -172,6 +172,22 @@ export const MiscItems = new Chest<number, BasicMisc>(
         })
       },
     }),
+    misc({
+      source: 'LAKE_LEFT_BOTTOM_MINI',
+      size: new Size(210, 210),
+    }),
+    misc({
+      source: 'LAKE_LEFT_TOP_MINI',
+      size: new Size(210, 210),
+    }),
+    misc({
+      source: 'LAKE_RIGHT_BOTTOM_MINI',
+      size: new Size(210, 210),
+    }),
+    misc({
+      source: 'LAKE_RIGHT_TOP_MINI',
+      size: new Size(210, 210),
+    }),
   ].map((msc) => [msc.props.mapId, msc]),
 )
 

@@ -134,13 +134,12 @@ export class BasicPlayer<
     })
 
     const handBase = new Konva.Image({
-      image: loadImage(this.skin.handUrl, (img) => handBase.image(img).cache()),
+      image: loadImage(this.skin.handUrl, (img) => handBase.image(img)),
       width: 35,
       height: 35,
       offsetX: 17.5,
       offsetY: 17.5,
     })
-    handBase.cache() //
 
     const rightHandItem = new Konva.Image({
       id: `${id}-equiped-right`,

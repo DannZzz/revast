@@ -183,7 +183,7 @@ type BasicItemPropsDefault = {
   notAddable?: boolean
   maxAmount?: number
   name: string
-  resType?: ResourceTypes
+  luckType?: ResourceTypes
 }
 
 export type ItemProps<T extends object = {}> = T & BasicItemPropsDefault

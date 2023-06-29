@@ -34,7 +34,7 @@ export class Command<T extends string = any> {
   try(player: Player, cmdName: string, args: string[]): boolean {
     if (![this.name, ...this.aliases].includes(cmdName)) return false
     // checking args
-    const makeMsg = (c: string) => player.socket().emit('serverMessage', [c])
+    const makeMsg = (c: string) => player.socket?.().emit('serverMessage', [c])
     if (this.args.length !== 0) {
       if (args.length < this.args.filter((arg) => arg.required).length) {
         makeMsg('Missing arguments!')

@@ -22,7 +22,7 @@ const berryPng = new Konva.Image({
   }),
   ...size,
   offset: new Point(size.width / 2, size.height / 2),
-})
+}).cache()
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -93,12 +93,12 @@ export const StaticItemsAddons: {
       const size = item.size
       const ground = new Konva.Image({
         image: loadImage("/images/point-machine-ground.png", (img) =>
-          ground.image(img).cache()
+          ground.image(img)
         ),
         ...center,
         offset: new Point(size.width / 2, size.height / 2),
         ...size,
-      }).cache()
+      })
       Game.groupAdd(item.layer, Game.settableHoistId(0), ground)
 
       const period = 2000
@@ -117,13 +117,13 @@ export const StaticItemsAddons: {
 
       const hole = new Konva.Image({
         image: loadImage("/images/point-machine-hole.png", (img) =>
-          hole.image(img).cache()
+          hole.image(img)
         ),
 
         offset: new Point(size.width / 2, size.height / 2),
         ...new Point(size.width / 2, size.height / 2),
         ...size,
-      }).cache()
+      })
 
       var angularSpeed = 90
       var anim = new Konva.Animation(function (frame) {
@@ -167,7 +167,7 @@ export const StaticItemsAddons: {
         fill: "rgba(255,255,0,.8)",
       })
       const circle3 = new Konva.Circle({ radius: 20, fill: "#EA8033aa" })
-      fireGroup.add(circle1, circle2, circle3).cache()
+      fireGroup.add(circle1, circle2, circle3)
 
       const period = 2000
       var anim = new Konva.Animation((frame) => {
@@ -183,7 +183,6 @@ export const StaticItemsAddons: {
         afterDraw: () => {
           circle.zIndex(-10)
           smallCircle.zIndex(-9)
-          fireGroup.cache()
         },
       }
     },
@@ -225,7 +224,9 @@ export const StaticItemsAddons: {
         const circleGroup = berryPng.clone({
           ...point,
         })
-        circleGroup.visible(i + 1 <= props.seedResource.resources)
+        circleGroup
+          .opacity(i + 1 <= props.seedResource.resources ? 1 : 0)
+          .cache()
         props.alsoSavedNodes[i] = circleGroup
         return circleGroup
       }
@@ -255,7 +256,7 @@ export const StaticItemsAddons: {
       currentResources: number
     ) => {
       $.$ArrayLength(bio.seedResource.maxResources, (i) => {
-        bio.alsoSavedNodes[i]?.visible(i + 1 <= currentResources)
+        bio.alsoSavedNodes[i]?.opacity(i + 1 <= currentResources ? 1 : 0)
       })
     },
   },

@@ -30,6 +30,7 @@ import {
 } from 'src/game/extended/settable/actionable.basic'
 import { ActionableHolderProps } from 'src/game/extended/settable/actionable-holder'
 import { BasicSeed, ExtendedSeed } from 'src/game/extended/settable/seed.basic'
+import { ResourceTypes } from 'src/game/basic/bio-item.basic'
 
 class SettableCreator {
   readonly extend = <any>{
@@ -68,8 +69,13 @@ class SettableCreator {
     return this
   }
 
+  luck(type: ResourceTypes) {
+    this.extend.luckType = type
+    return this
+  }
+
   itIsWall(wallType: keyof typeof WallDoorByResourceType) {
-    this.extend.resType = wallType
+    this.luck(wallType)
     this.extend.hp = WallDoorByResourceType[wallType]
     this.size(125, 125).setMode(new Point(0, -125), {
       type: 'circle',
@@ -84,7 +90,7 @@ class SettableCreator {
   }
 
   itIsSpike(resType: keyof typeof SpikeHpByResourceType, door: boolean) {
-    this.extend.resType = resType
+    this.luck(resType)
     this.extend.hp = door
       ? SpikeDoorHpByResourceType[resType]
       : SpikeHpByResourceType[resType]

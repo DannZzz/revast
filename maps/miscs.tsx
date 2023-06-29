@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="miscs" tilewidth="970" tileheight="775" tilecount="20" columns="0">
+<tileset version="1.10" tiledversion="1.10.1" name="miscs" tilewidth="970" tileheight="775" tilecount="24" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="210" height="210" source="tileset-images/lake.png"/>
@@ -60,5 +60,17 @@
  </tile>
  <tile id="19">
   <image width="856" height="693" source="tileset-images/island2.png"/>
+ </tile>
+ <tile id="20">
+  <image width="210" height="210" source="tileset-images/lake-left-bottom-mini.png"/>
+ </tile>
+ <tile id="21">
+  <image width="210" height="210" source="tileset-images/lake-left-top-mini.png"/>
+ </tile>
+ <tile id="22">
+  <image width="210" height="210" source="tileset-images/lake-right-bottom-mini.png"/>
+ </tile>
+ <tile id="23">
+  <image width="210" height="210" source="tileset-images/lake-right-top-mini.png"/>
  </tile>
 </tileset>

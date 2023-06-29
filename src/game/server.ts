@@ -36,6 +36,7 @@ import { GameClans } from 'src/structures/clans/GameClans'
 import CollectedIps from 'src/utils/collected-ips'
 import { miscByMapId } from 'src/data/miscs'
 import { TreasuresHunt } from 'src/structures/treasures-hunt'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export type TMap = typeof BasicMap
 
@@ -134,7 +135,9 @@ export class GameServer implements GameProps {
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {
         const player = this.players.get(tokenData.playerId)
-        player.socket().close()
+        const aPlayer = this.alivePlayers.get(tokenData.playerId)
+        player.socket?.()?.close()
+        aPlayer.socket?.()?.close()
         tokenData.currentSocketId = socketId
         socket.inGame = true
 
@@ -312,9 +315,14 @@ export class GameServer implements GameProps {
     interval(1000).subscribe(() => {
       if (this.alivePlayers.size === 0) return
       this.treasures.everySecond()
-      this.staticItems
-        .for('all')
-        .settable.forEach((settable) => settable.data?.loop?.(settable))
+      this.staticItems.for('all').settable.forEach((settable) => {
+        if (
+          isNumber(settable.timeouts.destroyAt) &&
+          settable.timeouts.destroyAt < Date.now()
+        )
+          return settable.destroy()
+        settable.data?.loop?.(settable)
+      })
     })
   }
 

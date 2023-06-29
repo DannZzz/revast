@@ -325,7 +325,7 @@ export class Player extends BasicElement<PlayerEvents> {
             : playerItem.quantity,
         id: playerItem.item.id,
       })),
-      duration: 120,
+      duration: 360,
       hp: 250,
       hitboxRadius: 30,
       point: this.point().clone(),

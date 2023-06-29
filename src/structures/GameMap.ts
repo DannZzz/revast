@@ -26,7 +26,7 @@ export type MapAreaName =
   | 'beach'
   | 'forest'
   | 'ocean'
-  | 'lake1'
+  | `lake${number}`
   | `island${number}`
 
 @Exclude()

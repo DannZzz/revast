@@ -37,7 +37,7 @@ class ItemCreator {
   }
 
   setItemResourceType(resource: ResourceTypes) {
-    this.extend.resType = resource
+    this.extend.luckType = resource
     if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
     this.extend.craftable[0].givesXp = CraftGivingXP[resource]
     this.extend.craftable[0].duration = CraftDuration[resource]
@@ -95,6 +95,11 @@ class ItemCreator {
 
   data(val: Partial<ItemProps<ItemsByTypes>>) {
     this._data = val
+    return this
+  }
+
+  luck(type: ResourceTypes) {
+    this.extend.luckType = type
     return this
   }
 

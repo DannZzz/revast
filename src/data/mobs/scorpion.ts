@@ -4,7 +4,7 @@ import { MobNames } from '../mobs'
 
 export default createMob(MobNames.scorpion)
   .givesXP(5000)
-  .hp(5000)
+  .hp(3000)
   .damage(65, 1)
   .radius(300, 90)
   .size(250, 250)

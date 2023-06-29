@@ -16,7 +16,7 @@ export default createItem(69, 'tool', SpecialItemTypes.repair)
   })
   .data({
     drawPosition: new Point(75, 75),
-    range: 100,
+    range: 115,
     damage: 1,
     damageBuilding: -80,
     size: new Size(150, 150),

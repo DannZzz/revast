@@ -255,6 +255,7 @@ export const Images = {
   DIVING_MASK: 'diving-mask.png',
   DIVING_SUIT: 'diving-suit.png',
   HAT: 'hat.png',
+  CAP_SCARF: 'cap-scarf.png',
 
   // farm
   WATERING_CAN: 'watering-can.png',
@@ -274,6 +275,10 @@ export const Images = {
   LAKE_RIGHT_BOTTOM: 'lake-right-bottom.png',
   LAKE_RIGHT_TOP: 'lake-right-top.png',
   LAKE_TOP: 'lake-top.png',
+  LAKE_LEFT_BOTTOM_MINI: 'lake-left-bottom-mini.png',
+  LAKE_LEFT_TOP_MINI: 'lake-left-top-mini.png',
+  LAKE_RIGHT_BOTTOM_MINI: 'lake-right-bottom-mini.png',
+  LAKE_RIGHT_TOP_MINI: 'lake-right-top-mini.png',
   HERB_1: 'herb1.png',
   HERB_2: 'herb2.png',
   HERB_3: 'herb3.png',

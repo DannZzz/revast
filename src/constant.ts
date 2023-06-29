@@ -19,7 +19,7 @@ export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   return `${origin}${combine}`
 }
 
-export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 800
+export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 600
 
 export const PLAYER_BODY_SIZE = new Size(120, 116)
 
@@ -68,7 +68,7 @@ export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 
 export const MOB_DIR_NAMES = ['mobs']
 
-export const POINT_MACHINE_XP_PER_5_SECONDS = 75
+export const POINT_MACHINE_XP_PER_5_SECONDS = 100
 
 export const WALK_EFFECT_SEND_INTERVAL = 1
 
@@ -89,7 +89,7 @@ export const PLAYER_DECREASE_SPEED_CLICK = 30
 
 export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 
-export const MAP_GRID_RENDER_AREA_SIZE = 1500
+export const MAP_GRID_RENDER_AREA_SIZE = 2000
 
 export const GRID_SET_RANGE = 100
 
