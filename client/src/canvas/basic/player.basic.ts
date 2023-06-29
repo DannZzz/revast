@@ -82,7 +82,7 @@ export class BasicPlayer<
       fill: "white",
       y: -25,
       fontSize: 20,
-      strokeWidth: 1,
+      strokeWidth: 0.5,
       stroke: "black",
     }).cache()
 
