@@ -19,6 +19,7 @@ export class GameMap {
         ...aP(biome.point),
         ...aS(biome.size),
         fill: biome.bgColor,
+        stroke: biome.bgColor,
       })
       group.add(rect)
     })
