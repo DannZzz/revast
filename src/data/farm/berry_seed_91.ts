@@ -31,7 +31,8 @@ export default createSettable(91, 'berry-seed')
       source: 'DEHYDRATED_BERRY_BUSH',
     },
   )
-  .duration(5 * GAME_DAY_SECONDS)
+  .noAttackedAnimation()
+  .duration(6 * GAME_DAY_SECONDS)
   .seed({
     configureMode: {
       dehydrated: 2,

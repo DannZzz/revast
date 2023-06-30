@@ -2,6 +2,7 @@ import { NB } from 'src/utils/NumberBoolean'
 import { Wss } from './WSS'
 import { isNumber } from 'src/utils/is-number-in-range'
 import { verifyUserRecaptcha } from 'src/utils/verfify-recaptcha'
+import CameraViewQuery from 'src/structures/camera-view-query'
 
 export default function registerListeners(this: Wss) {
   this.on('joinServer', async ({ ws, player }, [joinPlayerDto]) => {

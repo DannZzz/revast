@@ -7,6 +7,7 @@ import { ServersController } from './rest-modules/servers/servers.controller'
 import { ItemsController } from './rest-modules/items/items.controller'
 import { UsersModule } from './rest-modules/users/users.module'
 import { CacheModule } from '@nestjs/cache-manager'
+import { PlayersController } from './rest-modules/servers/players/players.controller';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { CacheModule } from '@nestjs/cache-manager'
     //   limit: 5,
     // }),
   ],
-  controllers: [CraftsController, ServersController, ItemsController],
+  controllers: [CraftsController, ServersController, ItemsController, PlayersController],
   providers: [
     // {
     //   provide: APP_GUARD,

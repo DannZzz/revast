@@ -6,6 +6,25 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title("- 30/6/2023 - Pitchfork and Peasant")}
+          <div class="content">
+            {cg_big_img("/images/peasant-preview.png")}
+            <div class="group">
+              {cg_small_img("/api/images/bear-peasant.png")}
+              {cg_small_img("/api/images/pitchfork-icon.png")}
+            </div>
+            {cg_list("Added", [
+              "New hat Peasant(PROTECTS FROM COLD AND INCREASES THE SPEED OF THE GROWING PLANTS)",
+              "New tool Pitchfork(GET DOUBLE HARVEST FROM PLANTS)",
+            ])}
+            {cg_list("Changed", [
+              "Night filter",
+              "Player attack speed",
+              "We also removed the animation of some items from the player's attack",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 29/6/2023 - Hat And Changes")}
           <div class="content">
             <span>NEW HAT!</span>

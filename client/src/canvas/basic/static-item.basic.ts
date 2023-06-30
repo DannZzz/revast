@@ -154,6 +154,11 @@ export class StaticSettableItem
       }
 
       StaticItemsAddons[this.type].drawSeparately?.(this)
+      if (this.seedResource?.resources)
+        StaticItemsAddons[this.type]?.drawByResourceChange?.(
+          this,
+          this.seedResource.resources
+        )
     }
 
     if (this.showHp) {

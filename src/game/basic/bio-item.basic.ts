@@ -69,6 +69,7 @@ export interface BioItemProps {
   source: string
   id?: string
   rechargeAmount: number
+  noAttackedAnimation?: boolean
   onResourcesChangeDrawEvent?: boolean
 }
 

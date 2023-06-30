@@ -94,15 +94,15 @@ export const Images = {
 
   // shovels
   STONE_SHOVEL: 'stone-shovel.png',
-  ICON_STONE_SHOVEL: 'stone-shovel.png',
+  ICON_STONE_SHOVEL: 'stone-shovel-icon.png',
   GOLDEN_SHOVEL: 'golden-shovel.png',
-  ICON_GOLDEN_SHOVEL: 'golden-shovel.png',
+  ICON_GOLDEN_SHOVEL: 'golden-shovel-icon.png',
   DIAMOND_SHOVEL: 'diamond-shovel.png',
-  ICON_DIAMOND_SHOVEL: 'diamond-shovel.png',
+  ICON_DIAMOND_SHOVEL: 'diamond-shovel-icon.png',
   AMETHYST_SHOVEL: 'amethyst-shovel.png',
-  ICON_AMETHYST_SHOVEL: 'amethyst-shovel.png',
+  ICON_AMETHYST_SHOVEL: 'amethyst-shovel-icon.png',
   RUBY_SHOVEL: 'ruby-shovel.png',
-  ICON_RUBY_SHOVEL: 'ruby-shovel.png',
+  ICON_RUBY_SHOVEL: 'ruby-shovel-icon.png',
 
   // bio
   TREE_1: 'tree-1.png',
@@ -264,6 +264,9 @@ export const Images = {
   DEHYDRATED_BERRY_BUSH: 'dehydrated-berry-bush.png',
   PRE_BERRY_BUSH: 'pre-berry-bush.png',
   BERRY_SEEDS: 'berry-seeds.png',
+  PITCHFORK: 'pitchfork.png',
+  ICON_PITCHFORK: 'pitchfork-icon.png',
+  PEASANT: 'bear-peasant.png',
 
   // miscs
   LAKE: 'lake.png',

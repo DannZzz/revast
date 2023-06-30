@@ -11,6 +11,7 @@ import { SpecialItemTypes } from 'src/data/config-type'
 import { Timeout } from 'src/structures/timers/timeout'
 import { Interval } from 'src/structures/timers/interval'
 import { Timer } from 'src/structures/timers/timer'
+import { FARM_ITEM_BUFF } from 'src/constant'
 
 export class SeedSettableItem extends StaticSettableItem {
   data: ItemProps<ExtendedSeed>
@@ -44,8 +45,16 @@ export class SeedSettableItem extends StaticSettableItem {
     if (inPlot) {
       super.preDraw(inPlot.point.clone(), 0, 0)
       this.inPlot(true)
-      this.growthTime(this.growthTime() / 2)
-      this.resourceInterval(this.resourceInterval() / 2)
+      this.growthTime(this.growthTime() / FARM_ITEM_BUFF)
+      this.resourceInterval(this.resourceInterval() / FARM_ITEM_BUFF)
+    }
+
+    if (
+      this.players.get(this.authorId).items?.weared?.item.data.specialName ===
+      SpecialItemTypes.peasant
+    ) {
+      this.growthTime(this.growthTime() / FARM_ITEM_BUFF)
+      this.resourceInterval(this.resourceInterval() / FARM_ITEM_BUFF)
     }
 
     this.resource.onChange((val) => {
@@ -142,7 +151,13 @@ export class SeedSettableItem extends StaticSettableItem {
     } else {
       if (this.resource() > 0) {
         if (by.items.addable(this.data.resourceId)) {
-          by.items.addItem(this.data.resourceId, 1)
+          by.items.addItem(
+            this.data.resourceId,
+            by.items.equiped?.item.data.specialName ===
+              SpecialItemTypes.pitchfork
+              ? 2
+              : 1,
+          )
           this.resource(this.resource() - 1)
         }
       }

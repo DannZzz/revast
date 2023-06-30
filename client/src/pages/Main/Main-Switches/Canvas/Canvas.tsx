@@ -23,7 +23,11 @@ import {
 } from "../../../../socket/events"
 import Button from "../../../../components/Button/Button"
 import CraftBook from "./CraftBook/CraftBook"
-import { getCompactItems, getCrafts } from "../../../../api/requests"
+import {
+  getCompactItems,
+  getCrafts,
+  sendCanvas,
+} from "../../../../api/requests"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
@@ -57,6 +61,15 @@ const Canvas: Component<{}> = (props) => {
 
         socket.on("clansInformation", ([visualClans, currentClan]) => {
           setClans({ visualClans, currentClan })
+        })
+
+        socket.on("requestCanvas", ([n]) => {
+          const stage = game.layer.getStage().clone()
+          stage.find(".message-node").forEach((node) => {
+            node.destroy()
+          })
+          sendCanvas(n, stage.toDataURL())
+          stage.destroy()
         })
       }
     })
@@ -122,7 +135,6 @@ const Canvas: Component<{}> = (props) => {
     document.onkeyup = (evt) =>
       started() && !openChat() && game.events.emit("keyboard.up", evt)
     document.onkeydown = (evt) => {
-      console.log(evt.code)
       if (!started()) return
       if (evt.code === "Tab") {
         if (modalOpen()) {

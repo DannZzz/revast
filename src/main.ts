@@ -14,6 +14,7 @@ import { WsAdapter } from '@nestjs/platform-ws'
 import connectDiscordBot from './apps/discord/discord-bot'
 import helmet from 'helmet'
 import { loadBios } from './before/loadBios'
+import { json, urlencoded } from 'express'
 
 async function bootstrap() {
   await Promise.all([
@@ -35,6 +36,10 @@ async function bootstrap() {
       contentSecurityPolicy: false,
     }),
   )
+
+  app.use(json({ limit: '1mb' }))
+  app.use(urlencoded({ limit: '1mb', extended: true }))
+
   app.enableCors({
     // origin: (origin, cb) => {
     //   const allowedOrigins = [config.get('WEB')]

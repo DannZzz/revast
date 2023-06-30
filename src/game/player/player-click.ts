@@ -19,7 +19,7 @@ export class PlayerClick {
   count = 0
   requestedToClick = GetSet(false)
   private readonly _toggleOnClicks = 3
-  readonly handClickDuration = 0.3
+  readonly handClickDuration = 0.25
 
   constructor(private player: Player) {}
 
@@ -59,7 +59,7 @@ export class PlayerClick {
     const attackedPoint = (range: number) =>
       pointsOfRotatedRectangle(
         getPointByTheta(new Point(x, y), theta, range / 2),
-        new Size(range, 60),
+        new Size(range, 70),
         this.player.angle(),
       )
 

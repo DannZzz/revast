@@ -51,6 +51,8 @@ import { Emitable } from 'src/ws/WS/type'
 import { ClanMember } from 'src/structures/clans/ClanMember'
 import { PLayerClanActions } from './player-clan-actions'
 import CollectedIps from 'src/utils/collected-ips'
+import CameraViewQuery from 'src/structures/camera-view-query'
+import { uuid } from 'anytool'
 
 export class Player extends BasicElement<PlayerEvents> {
   readonly skin: PlayerSkin
@@ -83,7 +85,7 @@ export class Player extends BasicElement<PlayerEvents> {
   readonly token: Token
   readonly lbMember: LBMember
   readonly uniqueId: number
-  readonly createdAt = new Date()
+  createdAt = new Date()
   readonly loop: PlayerLoop
   readonly kills = GetSet(0)
   readonly clanMember: ClanMember
@@ -298,15 +300,19 @@ export class Player extends BasicElement<PlayerEvents> {
     return { radius: PLAYER_BODY_COLLISION_RADIUS, point: this.point().clone() }
   }
 
-  die() {
-    if (this.died()) return
-    this.bars.stop()
-    // survived days
-    const days = Math.floor(
+  get days() {
+    return Math.floor(
       (Date.now() - (this.createdAt.getTime() || Date.now())) /
         1000 /
         GAME_DAY_SECONDS,
     )
+  }
+
+  die() {
+    if (this.died()) return
+    this.bars.stop()
+    // survived days
+    const days = this.days
     // registering in db
     DatabaseHandler.registerHighscore({
       beta: this.settings.beta(),
@@ -364,6 +370,12 @@ export class Player extends BasicElement<PlayerEvents> {
     this.socket().close()
     this.gameServer.checkLoop()
     CollectedIps.set(this.socket().ip, { createdAt: Date.now() })
+  }
+
+  requestView(cb: (dataUrl: string) => void) {
+    const id = `view-${uuid(5)}`
+    CameraViewQuery.set(id, cb)
+    this.socket().emit('requestCanvas', [id])
   }
 
   makeMessage(content: string) {

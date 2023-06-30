@@ -21,7 +21,9 @@ export const optimizeHandleAttackedItems = (
       ...player.cache.get('staticBios', true),
       ...player.cache.get('staticSettables', true),
     ]
-    const touched = items.filter((item) => ids.includes(item.id))
+    const touched = items.filter(
+      (item) => ids.includes(item.id) && !item.data.noAttackedAnimation,
+    )
     player.socket().emit(
       'staticItemAttacked',
       touched.map(

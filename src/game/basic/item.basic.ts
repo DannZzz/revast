@@ -103,6 +103,7 @@ export type SettableCheckers = 'all' | 'type'
 export interface Settable {
   hp: number
   showHpRadius?: number
+  noAttackedAnimation?: boolean
   ignoreCheckers?: SettableCheckers
   max?: number
   setMode: {

@@ -11,7 +11,7 @@ const ChangelogPreview = () => {
       <span class="title rainbow">CHANGELOG</span>
       <img
         crossorigin="anonymous"
-        src="/images/point-machine-preview.png"
+        src="/images/peasant-preview.png"
         alt=""
         class="preview"
       />

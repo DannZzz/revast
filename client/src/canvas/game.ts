@@ -159,7 +159,11 @@ export class Game {
       this.nightNode = node
       Game.createAlwaysTop(this.layer2, this.nightNode)
       this.nightNode.moveToBottom()
-      this.nightNode.to({ duration: 3, opacity: 1 })
+      this.nightNode.to({
+        duration: 3,
+        opacity: 1,
+        onFinish: () => this.nightNode.cache(),
+      })
     }
   }
 
@@ -545,11 +549,11 @@ export class Game {
 
   static createHighlight(layer2: Layer, ...shapes: any[]) {
     shapes.forEach((shape) => shape?.listening(false).cache())
-    ;(layer2.findOne("#highlights") as Group).add(...shapes)
+    // ;(layer2.findOne("#highlights") as Group).add(...shapes)
   }
   static createAbsoluteHighlight(layer2: Layer, ...shapes: any[]) {
     shapes.forEach((shape) => shape?.listening(false))
-    layer2.add(...shapes)
+    // layer2.add(...shapes)
   }
   static createAlwaysTop(layer2: Layer, ...shapes: any[]) {
     ;(layer2.findOne("#always-top") as Group).add(...shapes)

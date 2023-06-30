@@ -83,6 +83,8 @@ export const MESSAGE_DURATION = 8
 
 export const GAME_DAY_SECONDS = 600
 
+export const FARM_ITEM_BUFF = 1.6
+
 export const BASIC_PLAYER_SPEED = 180 + 25
 export const PLAYER_DECREASE_SPEED_WEAPON = 45
 export const PLAYER_DECREASE_SPEED_CLICK = 30

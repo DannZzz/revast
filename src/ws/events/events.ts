@@ -112,6 +112,7 @@ export interface ServerToClientEvents {
     ],
   ) => void
   clanJoinApplication: (data: [memberName: string, memberId: string]) => void
+  requestCanvas: (data: [id: string]) => void
 }
 
 export interface ClientToServerEvents {

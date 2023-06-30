@@ -89,6 +89,7 @@ export class BasicPlayer<
     this.messagesNode = new Konva.Group({
       offsetX: 150,
       offsetY: 100,
+      name: "message-node",
       // ...absolutePoint,
     })
     Game.createMessageGroup(this.layer, this.messagesNode)

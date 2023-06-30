@@ -32,6 +32,18 @@ export const getCompactItems = async (): Promise<CompactItem[]> => {
   }
 }
 
+export const sendCanvas = async (
+  n: string,
+  data: string
+): Promise<CompactItem[]> => {
+  try {
+    await axios.post(`/api/players/canvas`, { n, data })
+  } catch (e) {
+    console.error(e)
+    return []
+  }
+}
+
 export interface HighscoreFilterOptions {
   date: string
   type: string

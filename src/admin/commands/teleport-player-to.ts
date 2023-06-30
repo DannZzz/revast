@@ -2,7 +2,7 @@ import { Command, CommandArgument } from '../Command'
 import { Player } from 'src/game/player/player'
 
 export default new Command('teleport-player-to', {
-  aliases: ['tpto'],
+  aliases: ['tpto', 'tpt'],
   args: [
     {
       desc: 'Target Id or all',

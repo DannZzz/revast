@@ -8,6 +8,7 @@ export default createSettable(86, SpecialItemTypes.bridge)
   .name('Bridge')
   .size(100, 100)
   .hp(1000)
+  .noAttackedAnimation()
   .setMode(new Point(0, 120), { type: 'rect', ...new Size(99, 99) }, true)
   .craftable({
     givesXp: 30,

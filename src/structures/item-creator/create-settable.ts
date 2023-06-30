@@ -74,6 +74,11 @@ class SettableCreator {
     return this
   }
 
+  noAttackedAnimation() {
+    this.extend.noAttackedAnimation = true
+    return this
+  }
+
   itIsWall(wallType: keyof typeof WallDoorByResourceType) {
     this.luck(wallType)
     this.extend.hp = WallDoorByResourceType[wallType]

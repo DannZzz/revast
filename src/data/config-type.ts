@@ -7,6 +7,8 @@ export enum SpecialItemTypes {
   repair = 'repair',
   plot = 'plot',
   watering_can = 'watering_can',
+  pitchfork = 'pitchfork',
+  peasant = 'peasant',
 }
 
 export type EquipableItemVariant =
@@ -16,6 +18,7 @@ export type EquipableItemVariant =
   | 'sword'
   | 'hammer'
   | 'shovel'
+  | 'pitchfork'
 
 export const DrawPosByType = {
   axe: new Point(-3, 92),
@@ -24,6 +27,7 @@ export const DrawPosByType = {
   sword: new Point(60, 100),
   hammer: new Point(75, 100),
   shovel: new Point(60, 80),
+  pitchfork: new Point(150, 220),
 }
 
 export const RangeByType = {
@@ -33,6 +37,7 @@ export const RangeByType = {
   spear: 170,
   hammer: 110,
   shovel: 90,
+  pitchfork: 250,
 }
 
 export const CraftDuration = {
