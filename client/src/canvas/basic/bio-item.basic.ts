@@ -155,17 +155,20 @@ export class Bio {
       }),
       ...this.data.size,
     }).cache()
-
+    this.node = bioGroup
     bioGroup.add(image)
     bioGroup.listening(false)
     if (this.type in StaticItemsAddons) {
-      const also = StaticItemsAddons[this.type]?.alsoDraw(this)
+      const also = StaticItemsAddons[this.type]?.alsoDraw?.(this)
       if (also) {
         bioGroup.add(...(Array.isArray(also.items) ? also.items : [also.items]))
         also?.afterDraw?.()
       }
+      StaticItemsAddons[this.type]?.drawByResourceChange?.(
+        this,
+        this.data.currentResources
+      )
     }
-    this.node = bioGroup
     layer.add(bioGroup)
   }
 

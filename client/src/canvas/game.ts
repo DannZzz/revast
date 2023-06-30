@@ -41,6 +41,7 @@ export class Game {
   private serverMessageNode: Konva.Text
   private serverMessageTimeout: any
   private resizeCd: any
+  private nightNode: Konva.Rect
 
   init(props: GameProps) {
     this.layer = props.layer
@@ -54,7 +55,6 @@ export class Game {
     clearTimeout(this.resizeCd)
     this.resizeCd = setTimeout(() => {
       this.layer.getStage()?.size(size)
-      this.serverMessageNode?.width(size.width)
       this.layer2?.findOne("#game-night").size(size).cache()
       socket?.emit("screenSize", [size])
       if (this.player) this.player.events.emit("screen.resize", size)
@@ -94,15 +94,6 @@ export class Game {
     })
 
     const gameAttr = new Konva.Group({ id: "game-attr" })
-
-    const night = new Konva.Rect({
-      id: "game-night",
-      ...this.size,
-      opacity: 0,
-      fill: BG_FOREST_BIOM.night,
-      listening: false,
-      perfectDrawEnabled: false,
-    })
     const miscsGroup1 = new Konva.Group({ id: "game-misc-1" })
     const itemsGroup = new Konva.Group({ id: "game-settable" })
     const itemsGroup1 = new Konva.Group({ id: "game-settable+1" })
@@ -137,12 +128,46 @@ export class Game {
     )
 
     this.layer.add(mainGroup)
-    this.layer2.add(night, highlights, alwaysTop)
+    this.layer2.add(highlights, alwaysTop)
     alwaysTop.zIndex(2)
-    night.cache()
+  }
 
+  dayNight(day: boolean) {
+    const node = new Konva.Rect({
+      id: "game-night",
+      ...this.size,
+      opacity: 0,
+      fill: BG_FOREST_BIOM.night,
+      listening: false,
+    })
+
+    if (day) {
+      if (this.nightNode) {
+        this.nightNode.to({
+          opacity: 0,
+          duration: 3,
+          onFinish: () => {
+            this.nightNode.destroy()
+            this.nightNode = null
+          },
+        })
+      } else {
+        this.nightNode = null
+      }
+    } else {
+      if (this.nightNode) this.nightNode?.destroy()
+      this.nightNode = node
+      Game.createAlwaysTop(this.layer2, this.nightNode)
+      this.nightNode.moveToBottom()
+      this.nightNode.to({ duration: 3, opacity: 1 })
+    }
+  }
+
+  showServerMessage(txt: string) {
+    clearTimeout(this.serverMessageTimeout)
+    this.serverMessageNode?.destroy?.()
     this.serverMessageNode = new KonvaText({
-      text: "",
+      text: txt,
       opacity: 0,
       width: this.size.width,
       align: "center",
@@ -151,7 +176,20 @@ export class Game {
       fill: "#ccc",
       fontSize: 30,
     })
+
     Game.createAlwaysTop(this.layer2, this.serverMessageNode)
+    this.serverMessageNode.to({ opacity: 1, duration: 1 })
+    this.serverMessageTimeout = setTimeout(() => {
+      this.serverMessageNode.to({
+        opacity: 0,
+        duration: 1,
+        onFinish: () => {
+          this.serverMessageNode.destroy()
+          this.serverMessageNode = null
+        },
+      })
+      clearTimeout(this.serverMessageTimeout)
+    }, 5000)
   }
 
   drawStaticBios(bios: Bio[], toRemoveIds: string[]) {
@@ -270,17 +308,6 @@ export class Game {
     })
   }
 
-  newPeriodOfDay(day: boolean) {
-    const nightRect = this.layer2.findOne("#game-night") as Konva.Rect
-    if (day) {
-      // bgRect.fill(BG_FOREST_BIOM.day)
-      nightRect.to({ opacity: 0, duration: 3 })
-    } else {
-      // bgRect.fill(BG_FOREST_BIOM.night)
-      nightRect.to({ opacity: 1, duration: 3 })
-    }
-  }
-
   private registerEvents() {
     this.events.on("player.mouse-move", (point) => {
       if (!this.player) return
@@ -342,7 +369,7 @@ export class Game {
       // player.moveToCenterOfScreen(this.size)
       this.player = player
       this.player.point = new Point(data.player.point.x, data.player.point.y)
-      this.newPeriodOfDay(NB.from(data.dayInfo.isDay))
+      this.dayNight(NB.from(data.dayInfo.isDay))
       localStorage.setItem("_", data.token)
 
       this.events.emit("loaded")
@@ -437,23 +464,12 @@ export class Game {
     })
 
     socket.on("day", ([nb]) => {
-      this.newPeriodOfDay(NB.from(nb))
+      this.dayNight(NB.from(nb))
       this.player?.controllers.arrow.rotation(NB.from(nb) ? -90 : 90)
     })
 
     socket.on("serverMessage", ([content]) => {
-      clearTimeout(this.serverMessageTimeout)
-      this.serverMessageNode.text(content)
-      this.serverMessageNode.to({ opacity: 1, duration: 1 })
-      this.serverMessageTimeout = setTimeout(() => {
-        this.serverMessageNode.to({
-          opacity: 0,
-          duration: 1,
-          onFinish: () => this.serverMessageNode.text(""),
-        })
-
-        clearTimeout(this.serverMessageTimeout)
-      }, 5000)
+      this.showServerMessage(content)
     })
 
     socket.on("walkEffect", ([effect, x, y, angle, playerId]) => {

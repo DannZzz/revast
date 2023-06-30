@@ -132,8 +132,10 @@ export class GameServer implements GameProps {
     ipdata.createdAt = Date.now()
 
     if (token && TokenChest.has(token)) {
+      console.log('found token')
       const tokenData = TokenChest.get(token)
       if (this.alivePlayers.has(tokenData.playerId)) {
+        console.log('token in players found')
         const player = this.players.get(tokenData.playerId)
         const aPlayer = this.alivePlayers.get(tokenData.playerId)
         player.socket?.()?.close()

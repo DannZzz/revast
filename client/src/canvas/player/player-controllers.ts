@@ -77,11 +77,15 @@ export class PlayerControllers {
       ),
       height: iconSize.height,
       width: iconSize.width,
-      visible: false,
+      listening: false,
     }).cache()
-    this.autofood.listening(false)
+
     this.player.bars.autofood.onChange((val) => {
-      this.autofood.visible(val)
+      if (val) {
+        this.controllersGroup.add(this.autofood)
+      } else {
+        this.autofood.destroy()
+      }
     })
     const currentBandages = this.player.bars.bandageEffect()
     const bandageEffectGroup = new Konva.Group({
@@ -108,10 +112,11 @@ export class PlayerControllers {
     bandageEffectGroup.add(bandageEffectIcon, bandageEffectCount)
     bandageEffectGroup.cache()
     this.player.bars.bandageEffect.onChange((value) => {
-      if (value === 0) bandageEffectGroup.opacity(0)
+      if (value === 0) bandageEffectGroup.destroy()
       else {
         bandageEffectCount.text(`${value}`)
         bandageEffectGroup.opacity(1).cache()
+        this.controllersGroup.add(bandageEffectGroup)
       }
     })
 
@@ -129,12 +134,7 @@ export class PlayerControllers {
     })
     craftGroup.add(craftBook)
 
-    this.controllersGroup.add(
-      timerGroup,
-      this.autofood,
-      craftGroup,
-      bandageEffectGroup
-    )
+    this.controllersGroup.add(timerGroup, craftGroup)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
     craftGroup.on("pointerclick", (e) => {
       if (this.lastSentCraftOpen > Date.now()) return

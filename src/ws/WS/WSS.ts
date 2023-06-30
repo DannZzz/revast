@@ -134,6 +134,7 @@ export class Wss {
 
       ws.on('close', (code, reason) => {
         // console.log(code, binaryMessageToObject(reason))
+        console.log('closed', ip)
         CollectedIps.get(ip).connections--
         this.gameServer.to(ws.id)?.disconnect()
         delete this.server.clientList[ws.id]
@@ -148,6 +149,7 @@ export class Wss {
         }
         let message: WsMessage<string, {}> | false = binaryMessageToObject(d)
         if (!message) {
+          console.log('invalid message, closing')
           ws.close()
           return
         }
@@ -159,7 +161,8 @@ export class Wss {
         )
           return ws.close()
         const { event, data } = message
-        if (event !== 'joinServer' && !ws.requestToJoin) return
+        if (event !== 'joinServer' && !ws.requestToJoin)
+          return console.log('not join server no request')
 
         this.takeMessage({ event, data }, ws)
       })

@@ -38,52 +38,49 @@ export const StaticItemsAddons: {
   }
 } = {
   berry: {
-    alsoDraw: (props: Bio) => {
-      const groupOfBerries = new Konva.Group({
-        x: 35,
-        y: 40,
-      })
+    drawByResourceChange: (bio: Bio, currentResources: number) => {
+      const groupPos = new Point(35, 40)
 
       const createCircle = (point: Point, i: number) => {
         const circleGroup = berryPng.clone({
           ...point,
         })
-        circleGroup.visible(i + 1 <= props.data.currentResources)
-        props.alsoSavedNodes[i] = circleGroup
         return circleGroup
       }
-
-      $.$ArrayLength(props.data.maxResources, (i) => {
+      const getPoint = (i: number) => {
         switch (i) {
           case 0: {
-            groupOfBerries.add(createCircle(new Point(20, 30), i))
-            break
+            return new Point(20, 30)
           }
           case 1:
-            groupOfBerries.add(createCircle(new Point(90, 30), i))
-            break
+            return new Point(90, 30)
           case 2:
-            groupOfBerries.add(createCircle(new Point(55, 40), i))
-            break
+            return new Point(55, 40)
           case 3:
-            groupOfBerries.add(createCircle(new Point(50, 70), i))
-            break
+            return new Point(50, 70)
           case 4:
-            groupOfBerries.add(createCircle(new Point(90, 60), i))
-            break
+            return new Point(90, 60)
           case 5:
-            groupOfBerries.add(createCircle(new Point(15, 65), i))
-            break
+            return new Point(15, 65)
           default:
+            return new Point(0, 0)
             break
         }
-      })
+      }
 
-      return { items: groupOfBerries }
-    },
-    drawByResourceChange: (bio: Bio, currentResources: number) => {
       $.$ArrayLength(bio.data.maxResources, (i) => {
-        bio.alsoSavedNodes[i]?.visible(i + 1 <= currentResources)
+        const show = i + 1 <= currentResources
+        if (!show) {
+          bio.alsoSavedNodes[i]?.destroy()
+          bio.alsoSavedNodes[i] = null
+          return
+        }
+        if (bio.alsoSavedNodes[i]) return
+        bio.alsoSavedNodes[i] = createCircle(
+          combineClasses(groupPos, getPoint(i)),
+          i
+        )
+        bio.node.add(bio.alsoSavedNodes[i])
       })
     },
   },
@@ -214,49 +211,49 @@ export const StaticItemsAddons: {
     },
   },
   "berry-seed": {
-    alsoDraw: (props: StaticSettableItem) => {
-      const groupOfBerries = new Konva.Group({
-        x: 15,
-        y: 10,
-      })
-
-      const createCircle = (point: Point, i: number) => {
-        const circleGroup = berryPng.clone({
-          ...point,
-        })
-        circleGroup
-          .opacity(i + 1 <= props.seedResource.resources ? 1 : 0)
-          .cache()
-        props.alsoSavedNodes[i] = circleGroup
-        return circleGroup
-      }
-
-      $.$ArrayLength(props.seedResource.maxResources, (i) => {
-        switch (i) {
-          case 0: {
-            groupOfBerries.add(createCircle(new Point(20, 30), i))
-            break
-          }
-          case 1:
-            groupOfBerries.add(createCircle(new Point(50, 40), i))
-            break
-          case 2:
-            groupOfBerries.add(createCircle(new Point(20, 60), i))
-            break
-
-          default:
-            break
-        }
-      })
-
-      return { items: groupOfBerries }
-    },
     drawByResourceChange: (
       bio: StaticSettableItem,
       currentResources: number
     ) => {
+      const groupPos = new Point(15, 10)
+
+      const createCircle = (point: Point) => {
+        const circleGroup = berryPng.clone({
+          ...point,
+        })
+        return circleGroup
+      }
+
+      const getPoint = (i: number) => {
+        switch (i) {
+          case 0:
+            return new Point(20, 30)
+
+          case 1:
+            return new Point(50, 40)
+
+          case 2:
+            return new Point(20, 60)
+
+          default:
+            return new Point(0, 0)
+        }
+      }
+
       $.$ArrayLength(bio.seedResource.maxResources, (i) => {
-        bio.alsoSavedNodes[i]?.opacity(i + 1 <= currentResources ? 1 : 0)
+        const show = i + 1 <= currentResources
+
+        if (!show) {
+          bio.alsoSavedNodes[i]?.destroy()
+          bio.alsoSavedNodes[i] = null
+          return
+        }
+        if (bio.alsoSavedNodes[i]) return
+
+        bio.alsoSavedNodes[i] = createCircle(
+          combineClasses(groupPos, getPoint(i))
+        )
+        bio.node.add(bio.alsoSavedNodes[i])
       })
     },
   },
