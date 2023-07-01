@@ -55,10 +55,10 @@ export class Game {
     clearTimeout(this.resizeCd)
     this.resizeCd = setTimeout(() => {
       this.layer.getStage()?.size(size)
-      this.layer2?.findOne("#game-night").size(size).cache()
+      this.layer2?.findOne("#game-night")?.size(size).cache()
       socket?.emit("screenSize", [size])
       if (this.player) this.player.events.emit("screen.resize", size)
-    }, 2000)
+    }, 1000)
   }
 
   joinPlayer(playerData: JoinPlayer) {

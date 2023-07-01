@@ -9,7 +9,7 @@ export default createSettable(105)
     state: { workbench: true },
     required: {
       5: 40,
-      20: 60,
+      20: 80,
       64: 1,
     },
   })

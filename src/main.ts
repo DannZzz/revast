@@ -15,6 +15,7 @@ import connectDiscordBot from './apps/discord/discord-bot'
 import helmet from 'helmet'
 import { loadBios } from './before/loadBios'
 import { json, urlencoded } from 'express'
+import * as requestIp from 'request-ip'
 
 async function bootstrap() {
   await Promise.all([
@@ -36,6 +37,7 @@ async function bootstrap() {
       contentSecurityPolicy: false,
     }),
   )
+  app.use(requestIp.mw())
 
   app.use(json({ limit: '1mb' }))
   app.use(urlencoded({ limit: '1mb', extended: true }))

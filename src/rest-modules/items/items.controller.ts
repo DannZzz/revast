@@ -13,6 +13,7 @@ import { Items } from 'src/data/items'
 import { PlayerSkins } from 'src/data/skins'
 import { PlayerSkinEntity } from 'src/entities/player-skin.entity'
 import CollectedIps from 'src/utils/collected-ips'
+import { IpAddress } from '../decorators/request-ip'
 
 @Controller('api/items')
 export class ItemsController {
@@ -24,7 +25,7 @@ export class ItemsController {
 
   @Get('/skins')
   @UseInterceptors(ClassSerializerInterceptor)
-  getSkins(@Ip() ip: string) {
+  getSkins(@IpAddress() ip: string) {
     console.log('from skin ip', ip)
     if (CollectedIps.has(ip)) {
       CollectedIps.get(ip).createdAt = Date.now()

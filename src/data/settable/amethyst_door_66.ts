@@ -9,7 +9,7 @@ export default createSettable(66)
   .craftable({
     state: { workbench: true },
     required: {
-      21: 30,
+      21: 18,
       64: 1,
     },
   })

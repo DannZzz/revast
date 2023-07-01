@@ -1,7 +1,7 @@
 import { BasicMob, MobMoveStatus, MoveTactic } from 'src/game/basic/mob.basic'
 import { Images } from '../image-base'
 import { Size } from 'src/global/global'
-import { MobNames } from 'src/data/mobs'
+import { DefaultMobAttackTacticSpeed, MobNames } from 'src/data/mobs'
 import { MOB_GLOBAL_SPEED_EFFECT } from 'src/constant'
 
 class MobCreator {
@@ -57,6 +57,15 @@ class MobCreator {
 
   idleTactic(idle: Omit<BasicMob['moveTactic']['idleTactic'], 'speed'>) {
     this.extend.moveTactic.idleTactic = { speed: this._speed, ...idle }
+    return this
+  }
+
+  defaultAttackTactic() {
+    this.extend.moveTactic.otherTactics.push({
+      type: MobMoveStatus.ATTACK,
+      speed: this._speed,
+      ...DefaultMobAttackTacticSpeed,
+    })
     return this
   }
 

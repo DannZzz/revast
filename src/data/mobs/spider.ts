@@ -17,9 +17,5 @@ export default createMob(MobNames.spider)
     duration: 0.5,
     interval: () => $.randomNumber(1500, 3000) / 1000,
   })
-  .tactic({
-    type: MobMoveStatus.ATTACK,
-    duration: 0,
-    interval: 0,
-  })
+  .defaultAttackTactic()
   .build()

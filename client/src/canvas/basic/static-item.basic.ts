@@ -143,7 +143,11 @@ export class StaticSettableItem
       y: this.size.height / 2,
       rotation: this.rotation,
     }).cache()
+
     itemGroup.add(image)
+
+    this.node = itemGroup
+
     if (this.type in StaticItemsAddons) {
       const also = StaticItemsAddons[this.type].alsoDraw?.(this)
       if (also) {
@@ -180,7 +184,6 @@ export class StaticSettableItem
       itemGroup
     )
 
-    this.node = itemGroup
     this.emit("mode", this)
 
     if (this.highlight) {
