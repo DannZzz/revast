@@ -229,8 +229,8 @@ export class GameServer implements GameProps {
     while (
       (typeof check === 'function' ? !check(point) : false) ||
       this.staticItems
-        .for({ radius: forObjectRadius + 100, point })
-        .someWithin({ radius: forObjectRadius + 100, point }, true)
+        .for({ radius: forObjectRadius * 2, point })
+        .someWithin({ radius: forObjectRadius * 2, point }, true)
     ) {
       point = randomPoint()
     }

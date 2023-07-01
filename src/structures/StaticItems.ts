@@ -114,7 +114,7 @@ export function filterStaticItems(
         return item.within(hitbox) && can
       }
     } else {
-      return 'ignoreCheckers' in item ? false : item.within(hitbox) && can
+      return ('ignoreCheckers' in item ? false : item.within(hitbox)) && can
     }
   }
 }
