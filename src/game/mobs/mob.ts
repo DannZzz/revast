@@ -274,7 +274,7 @@ export class Mob extends BasicMob {
       }
     }
 
-    this.target = players
+    const inRadius = players
       .filter((player) => {
         return (
           getDistance(player.point(), this.centerPoint()) <=
@@ -286,6 +286,12 @@ export class Mob extends BasicMob {
           getDistance(a.point(), this.centerPoint()) -
           getDistance(b.point(), this.centerPoint()),
       )[0]
+
+    if (inRadius !== this.target && this.target?.id() !== inRadius?.id()) {
+      this.waitUntil = null
+      this.readyToDamage(players)
+    }
+    this.target = inRadius
 
     if (this.target && !this.target.died()) {
       if (this.target.settings.invisibility()) {
