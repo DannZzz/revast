@@ -214,12 +214,21 @@ export class Mob extends BasicMob {
               ? map.find(map.areaOf(this.point))?.effect.speed || 0
               : 0),
         )
-        const nextPoint = getPointByTheta(
+        let nextPoint = getPointByTheta(
           this.point,
           this.theta,
 
           calcSpeed,
         )
+
+        if (
+          this.target &&
+          getDistance(nextPoint, this.target.point()) <
+            speed(attackTactic.speed / 2)
+        ) {
+          nextPoint = this.target.point()
+        }
+
         const itemWithin = this.staticItems
           .for({
             radius: this.radius.collision,
@@ -248,10 +257,12 @@ export class Mob extends BasicMob {
           useTactic({
             tactic: this.moveTactic.idleTactic,
             theta:
-              getAngle(
-                this.centerPoint(nextPoint),
-                itemWithin.centerPoint || itemWithin.point,
-              ) + Math.PI,
+              nextPoint === this.target?.point()
+                ? this.theta
+                : getAngle(
+                    this.centerPoint(nextPoint),
+                    itemWithin.centerPoint || itemWithin.point,
+                  ) + Math.PI,
             _interval: attackTactic.interval,
             _speed: attackTactic.speed,
             noCheck: true,
@@ -262,6 +273,19 @@ export class Mob extends BasicMob {
         this.moveTo(nextPoint)
       }
     }
+
+    this.target = players
+      .filter((player) => {
+        return (
+          getDistance(player.point(), this.centerPoint()) <=
+            this.radius.react && this.canIGo(player.point(), map)
+        )
+      })
+      .sort(
+        (a, b) =>
+          getDistance(a.point(), this.centerPoint()) -
+          getDistance(b.point(), this.centerPoint()),
+      )[0]
 
     if (this.target && !this.target.died()) {
       if (this.target.settings.invisibility()) {
@@ -287,19 +311,19 @@ export class Mob extends BasicMob {
         theta: $.randomNumber(0, Math.PI * 2),
       })
 
-      for (let player of players) {
-        if (!player) continue
-        if (
-          getDistance(player.point(), this.centerPoint()) <=
-            this.radius.react &&
-          this.canIGo(player.point(), map)
-        ) {
-          this.target = player
-          this.waitUntil = null
-          this.readyToDamage(players)
-          break
-        }
-      }
+      // for (let player of players) {
+      //   if (!player) continue
+      //   if (
+      //     getDistance(player.point(), this.centerPoint()) <=
+      //       this.radius.react &&
+      //     this.canIGo(player.point(), map)
+      //   ) {
+      //     this.target = player
+      //     this.waitUntil = null
+      //     this.readyToDamage(players)
+      //     break
+      //   }
+      // }
     }
   }
 }
