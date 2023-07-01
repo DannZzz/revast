@@ -231,7 +231,7 @@ export class GameServer implements GameProps {
       (typeof check === 'function' ? !check(point) : false) ||
       this.staticItems
         .for({ radius: forObjectRadius * 2, point })
-        .all.filter((item) =>
+        .all.some((item) =>
           universalWithin(item.universalHitbox, {
             radius: forObjectRadius * 2,
             point,
