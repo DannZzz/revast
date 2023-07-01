@@ -103,11 +103,15 @@ export class Mob extends BasicMob {
           let attacked = false
           players.forEach((player) => {
             if (
-              circlePoint(
-                ...Converter.pointToXYArray(this.centerPoint()),
-                this.radius.attack,
-                ...Converter.pointToXYArray(player.point()),
-              )
+              // circlePoint(
+              //   ...Converter.pointToXYArray(this.centerPoint()),
+              //   this.radius.attack,
+              //   ...Converter.pointToXYArray(player.point()),
+              // )
+              player.within({
+                radius: this.radius.attack,
+                point: this.centerPoint(),
+              })
             ) {
               attacked = true
               player.damage(this.damage, 'mob')
@@ -214,17 +218,12 @@ export class Mob extends BasicMob {
               ? map.find(map.areaOf(this.point))?.effect.speed || 0
               : 0),
         )
-        let nextPoint = getPointByTheta(
-          this.point,
-          this.theta,
-
-          calcSpeed,
-        )
+        let nextPoint = getPointByTheta(this.point, this.theta, calcSpeed)
 
         if (
           this.target &&
           getDistance(nextPoint, this.target.point()) <
-            getDistance(nextPoint, this.point)
+            speed(attackTactic.speed)
         ) {
           nextPoint = this.target.point()
         }
@@ -257,12 +256,10 @@ export class Mob extends BasicMob {
           useTactic({
             tactic: this.moveTactic.idleTactic,
             theta:
-              nextPoint === this.target?.point()
-                ? this.theta
-                : getAngle(
-                    this.centerPoint(nextPoint),
-                    itemWithin.centerPoint || itemWithin.point,
-                  ) + Math.PI,
+              getAngle(
+                this.centerPoint(nextPoint),
+                itemWithin.centerPoint || itemWithin.point,
+              ) + Math.PI,
             _interval: attackTactic.interval,
             _speed: attackTactic.speed,
             noCheck: true,
