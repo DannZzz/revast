@@ -103,15 +103,11 @@ export class Mob extends BasicMob {
           let attacked = false
           players.forEach((player) => {
             if (
-              // circlePoint(
-              //   ...Converter.pointToXYArray(this.centerPoint()),
-              //   this.radius.attack,
-              //   ...Converter.pointToXYArray(player.point()),
-              // )
-              player.within({
-                radius: this.radius.attack,
-                point: this.centerPoint(),
-              })
+              circlePoint(
+                ...Converter.pointToXYArray(this.centerPoint()),
+                this.radius.attack,
+                ...Converter.pointToXYArray(player.point()),
+              )
             ) {
               attacked = true
               player.damage(this.damage, 'mob')
@@ -226,6 +222,8 @@ export class Mob extends BasicMob {
             speed(attackTactic.speed)
         ) {
           nextPoint = this.target.point()
+          this.moveTo(nextPoint)
+          return
         }
 
         const itemWithin = this.staticItems
