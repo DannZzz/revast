@@ -225,7 +225,10 @@ export class Mob extends BasicMob {
             radius: this.radius.collision,
             point: nextPoint,
           })
-          .itemWithin(this.universalCollisionHitbox)
+          .itemWithin({
+            radius: this.radius.collision,
+            point: nextPoint,
+          })
         if (!this.canIGo(nextPoint, map)) {
           this.targetPoint = null
           this.readyToDamage([])
