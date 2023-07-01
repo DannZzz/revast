@@ -27,16 +27,18 @@ export class ItemsController {
     let ip = Array.isArray(req.headers['x-forwarded-for'])
       ? req.headers['x-forwarded-for'][0]
       : req.headers['x-forwarded-for']
-    ip = ip.split(', ')[0]
+    ip = ip?.split?.(', ')?.[0]
     console.log('from skin ip', ip)
-    if (CollectedIps.has(ip)) {
-      CollectedIps.get(ip).createdAt = Date.now()
-    } else if (typeof ip === 'string') {
-      CollectedIps.set(ip, {
-        createdAt: Date.now(),
-        connections: 0,
-        lastConnection: 0,
-      })
+    if (ip) {
+      if (CollectedIps.has(ip)) {
+        CollectedIps.get(ip).createdAt = Date.now()
+      } else if (typeof ip === 'string') {
+        CollectedIps.set(ip, {
+          createdAt: Date.now(),
+          connections: 0,
+          lastConnection: 0,
+        })
+      }
     }
     return PlayerSkins.map((skin) => new PlayerSkinEntity(skin))
   }

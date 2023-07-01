@@ -87,7 +87,10 @@ export class Wss {
         : req.headers['x-forwarded-for']
       ip = ip.split(', ')[0]
       // . . .
-
+      if (!ip) {
+        console.log('no ip, closing')
+        return ws.close()
+      }
       ws.ip = ip
       let userAgent = req.headers['user-agent']
       let origin = req.headers['origin']
