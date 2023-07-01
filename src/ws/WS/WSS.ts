@@ -81,14 +81,13 @@ export class Wss {
 
   private init() {
     this.server.on('connection', (ws: MainSocket, req) => {
-      let ip = req.socket.remoteAddress
-      // let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+      // let ip = req.socket.remoteAddress
+      let ip = Array.isArray(req.headers['x-forwarded-for'])
+        ? req.headers['x-forwarded-for'][0]
+        : req.headers['x-forwarded-for']
+      ip = ip.split(', ')[0]
       // . . .
-      console.log(
-        'ws ips, headers: ',
-        req.headers['x-forwarded-for'],
-        req.socket.remoteAddress,
-      )
+
       ws.ip = ip
       let userAgent = req.headers['user-agent']
       let origin = req.headers['origin']
