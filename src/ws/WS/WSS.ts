@@ -84,6 +84,11 @@ export class Wss {
       let ip = req.socket.remoteAddress
       // let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
       // . . .
+      console.log(
+        'ws ips, headers: ',
+        req.headers['x-forwarded-for'],
+        req.socket.remoteAddress,
+      )
       ws.ip = ip
       let userAgent = req.headers['user-agent']
       let origin = req.headers['origin']
