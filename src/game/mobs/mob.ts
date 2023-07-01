@@ -224,7 +224,7 @@ export class Mob extends BasicMob {
         if (
           this.target &&
           getDistance(nextPoint, this.target.point()) <
-            speed(attackTactic.speed)
+            getDistance(nextPoint, this.point)
         ) {
           nextPoint = this.target.point()
         }
