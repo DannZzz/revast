@@ -128,9 +128,9 @@ export class Mob extends BasicMob {
   }
 
   hurt(damage: number, player: Player) {
+    if (damage < 0) damage = -damage
     this.hp -= damage
     if (this.hp <= 0 && !this.died) {
-      this.died = true
       this.readyToDamage([])
       if (this.drop) {
         $(this.drop).$forEach((quantity, id) => {
@@ -140,6 +140,7 @@ export class Mob extends BasicMob {
       player.lbMember?.add(this.givesXP)
       player.gameServer?.mobs.all.delete(this.id)
     }
+    this.died = true
   }
 
   canIGo(point: Point, map: GameMap) {
