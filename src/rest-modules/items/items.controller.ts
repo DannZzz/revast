@@ -8,6 +8,7 @@ import {
   ClassSerializerInterceptor,
   Ip,
 } from '@nestjs/common'
+import { Request } from 'express'
 import { Items } from 'src/data/items'
 import { PlayerSkins } from 'src/data/skins'
 import { PlayerSkinEntity } from 'src/entities/player-skin.entity'
