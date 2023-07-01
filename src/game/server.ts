@@ -37,6 +37,7 @@ import CollectedIps from 'src/utils/collected-ips'
 import { miscByMapId } from 'src/data/miscs'
 import { TreasuresHunt } from 'src/structures/treasures-hunt'
 import { isNumber } from 'src/utils/is-number-in-range'
+import { universalWithin } from 'src/utils/universal-within'
 
 export type TMap = typeof BasicMap
 
@@ -230,7 +231,12 @@ export class GameServer implements GameProps {
       (typeof check === 'function' ? !check(point) : false) ||
       this.staticItems
         .for({ radius: forObjectRadius * 2, point })
-        .someWithin({ radius: forObjectRadius * 2, point }, true)
+        .all.filter((item) =>
+          universalWithin(item.universalHitbox, {
+            radius: forObjectRadius * 2,
+            point,
+          }),
+        )
     ) {
       point = randomPoint()
     }

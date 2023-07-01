@@ -221,7 +221,10 @@ export class Mob extends BasicMob {
           calcSpeed,
         )
         const itemWithin = this.staticItems
-          .for(nextPoint)
+          .for({
+            radius: this.radius.collision,
+            point: nextPoint,
+          })
           .itemWithin(this.universalCollisionHitbox)
         if (!this.canIGo(nextPoint, map)) {
           this.targetPoint = null
@@ -262,20 +265,16 @@ export class Mob extends BasicMob {
         this.target = null
       } else {
         const distance = getDistance(this.target.point(), this.centerPoint())
-        if (
-          distance < speed(attackTactic.speed) &&
-          this.canIGo(this.target.point(), map)
-        ) {
-          this.moveTo(this.target.point())
-          // this.theta = getAngle(this.centerPoint(), this.target.point())
-          return
-        }
+
         if (distance > this.radius.react) {
           this.target = null
         } else {
           useTactic({
             tactic: attackTactic,
-            theta: getAngle(this.centerPoint(), this.target.point()),
+            theta:
+              distance < speed(attackTactic.speed)
+                ? this.theta
+                : getAngle(this.centerPoint(), this.target.point()),
           })
         }
       }
