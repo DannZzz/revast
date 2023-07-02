@@ -16,6 +16,7 @@ import { Interval } from 'src/structures/timers/interval'
 import { MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S } from 'src/constant'
 import { Player } from 'src/game/player/player'
 import CollectedIps from 'src/utils/collected-ips'
+import { shortenText } from 'anytool'
 
 export class Wss {
   listeners: Array<{ event: string; cb: Function }> = []
@@ -87,6 +88,9 @@ export class Wss {
         : req.headers['x-forwarded-for']
       ip = process.env.NODE_ENV === 'production' ? ip?.split(', ')[0] : 'test'
       // . . .
+
+      console.log('ws connect request', shortenText(ip || '', 10))
+
       if (!ip) {
         console.log('no ip, closing')
         return ws.close()

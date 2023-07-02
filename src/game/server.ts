@@ -71,7 +71,7 @@ export class GameServer implements GameProps {
   readonly alivePlayers = new Chest<number, Player>()
   readonly staticItems: StaticItemsHandler = new StaticItemsHandler()
   private _gameLoopInterval: any
-  private _gameFPS = 120
+  private _gameFPS = 30
   _lastFrame: number = Date.now()
   private _FPSInterval = 1000 / this._gameFPS
   readonly leaderboard = new Leaderboard()
