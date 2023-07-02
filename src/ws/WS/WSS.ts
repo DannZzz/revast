@@ -85,7 +85,7 @@ export class Wss {
       let ip = Array.isArray(req.headers['x-forwarded-for'])
         ? req.headers['x-forwarded-for'][0]
         : req.headers['x-forwarded-for']
-      ip = ip.split(', ')[0]
+      ip = process.env.NODE_ENV === 'production' ? ip?.split(', ')[0] : 'test'
       // . . .
       if (!ip) {
         console.log('no ip, closing')
@@ -105,13 +105,11 @@ export class Wss {
 
       // checking ip
       if (
-        !ip ||
         (process.env.NODE_ENV === 'production' ? ip?.length <= 5 : false) ||
         !CollectedIps.has(ip) ||
         CollectedIps.get(ip).connections >= 4 ||
         CollectedIps.get(ip).lastConnection > Date.now()
       ) {
-        console.log('throw ip', ip, CollectedIps.get(ip))
         ws.close(1000, 'error')
         return
       }
@@ -137,11 +135,8 @@ export class Wss {
       })()}`
       ws.inGame = false
       this.server.clientList[ws.id] = ws
-      // ws.binaryType = 'arraybuffer'
 
       ws.on('close', (code, reason) => {
-        // console.log(code, binaryMessageToObject(reason))
-        console.log('closed', ip)
         CollectedIps.get(ip).connections--
         this.gameServer.to(ws.id)?.disconnect()
         delete this.server.clientList[ws.id]

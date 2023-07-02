@@ -28,8 +28,7 @@ export class ItemsController {
     let ip = Array.isArray(req.headers['x-forwarded-for'])
       ? req.headers['x-forwarded-for'][0]
       : req.headers['x-forwarded-for']
-    ip = ip?.split?.(', ')?.[0]
-    console.log('from skin ip', ip)
+    ip = process.env.NODE_ENV === 'production' ? ip?.split?.(', ')?.[0] : 'test'
     if (ip) {
       if (CollectedIps.has(ip)) {
         CollectedIps.get(ip).createdAt = Date.now()

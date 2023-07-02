@@ -19,6 +19,7 @@ import { StaticSettableItem } from '../basic/static-item.basic'
 import { Bio } from '../basic/bio-item.basic'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { MOB_GLOBAL_ATTACK_SPEED_EFFECT } from 'src/constant'
+import { isSameVector } from 'src/utils/same-vector'
 
 export interface MobProps {
   point: Point
@@ -90,41 +91,23 @@ export class Mob extends BasicMob {
     )
   }
 
-  readyToDamage(players: Player[]) {
-    if (!this.target || this.died) {
-      clearInterval(this.damageIntervalObj)
-    } else {
-      let max = 0
-      timer(1700).subscribe(() => {
-        clearInterval(this.damageIntervalObj)
-        this.damageIntervalObj = setInterval(() => {
-          if (this.died) return clearInterval(this.damageIntervalObj)
-          // hurting player
-          let attacked = false
-          players.forEach((player) => {
-            if (
-              circlePoint(
-                ...Converter.pointToXYArray(this.centerPoint()),
-                this.radius.attack,
-                ...Converter.pointToXYArray(player.point()),
-              )
-            ) {
-              attacked = true
-              player.damage(this.damage, 'mob')
-            }
-          })
-          if (!attacked) {
-            max++
-          } else {
-            max = 0
-          }
-          if (max === 3) {
-            clearTimeout(this.damageIntervalObj)
-            this.readyToDamage(players)
-          }
-        }, this.damageInterval * 1000 * MOB_GLOBAL_ATTACK_SPEED_EFFECT)
-      })
-    }
+  doDamage(players: Player[]) {
+    if (this.died) return
+
+    if (this.damageIntervalObj > Date.now()) return
+    // hurting player
+    players.forEach((player) => {
+      if (
+        circlePoint(
+          ...Converter.pointToXYArray(this.centerPoint()),
+          this.radius.attack,
+          ...Converter.pointToXYArray(player.point()),
+        )
+      ) {
+        player.damage(this.damage, 'mob')
+      }
+    })
+    this.damageIntervalObj = Date.now() + this.damageInterval * 1000
   }
 
   hurt(damage: number, player: Player) {
@@ -188,22 +171,26 @@ export class Mob extends BasicMob {
       if (!this.nextStopTime || Date.now() >= this.nextStopTime) {
         if (this.waitUntil >= Date.now()) {
           this.targetPoint = null
-          this.readyToDamage([])
         } else {
           this.theta = theta
           const interval =
             typeof _interval === 'number' ? _interval : _interval()
-          const targetPoint = getPointByTheta(
-            this.point,
-            this.theta,
-            tactic.duration * speed(_speed),
-          )
+          const targetPoint =
+            this.target?.point() === this.point
+              ? this.point
+              : getPointByTheta(
+                  this.point,
+                  this.theta,
+                  tactic.duration * speed(_speed),
+                )
           this.targetPoint = targetPoint
           this.nextStopTime = Date.now() + tactic.duration * 1000
           this.waitUntil = Date.now() + interval * 1000
         }
+        this.doDamage(players)
       }
       if (this.targetPoint) {
+        if (isSameVector(this.point, this.targetPoint)) return
         const calcSpeed = speed(
           BasicMath.pythagorean(
             _speed,
@@ -215,13 +202,13 @@ export class Mob extends BasicMob {
               : 0),
         )
         let nextPoint = getPointByTheta(this.point, this.theta, calcSpeed)
-
         if (
           this.target &&
           getDistance(nextPoint, this.target.point()) <
             speed(attackTactic.speed)
         ) {
           nextPoint = this.target.point()
+          this.targetPoint = nextPoint
           this.moveTo(nextPoint)
           return
         }
@@ -237,9 +224,6 @@ export class Mob extends BasicMob {
           })
         if (!this.canIGo(nextPoint, map)) {
           this.targetPoint = null
-          this.readyToDamage([])
-
-          // this.target = null
 
           useTactic({
             tactic: this.moveTactic.idleTactic,
@@ -250,7 +234,6 @@ export class Mob extends BasicMob {
         } else if (itemWithin && !noCheck) {
           this.targetPoint = null
           this.target = null
-          this.readyToDamage([])
           useTactic({
             tactic: this.moveTactic.idleTactic,
             theta:
@@ -284,7 +267,6 @@ export class Mob extends BasicMob {
 
     if (inRadius !== this.target && this.target?.id() !== inRadius?.id()) {
       this.waitUntil = null
-      this.readyToDamage(players)
     }
     this.target = inRadius
 
@@ -306,7 +288,7 @@ export class Mob extends BasicMob {
           })
         }
       }
-    } else {
+    } else if (!this.target) {
       useTactic({
         tactic: this.moveTactic.idleTactic,
         theta: $.randomNumber(0, Math.PI * 2),
