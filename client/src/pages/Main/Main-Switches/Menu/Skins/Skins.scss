@@ -40,14 +40,14 @@
         width: 146px;
         height: 146px;
         @include flex;
-        background: url(images/skin-bg.png);
+        background: url(/images/skin-bg.png);
 
         &-img {
           width: 138px;
         }
 
         &.selected {
-          background: url(images/skin-selected-bg.png);
+          background: url(/images/skin-selected-bg.png);
         }
       }
     }
