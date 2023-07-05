@@ -1,19 +1,70 @@
 .menu {
-  @include flex;
-  padding-bottom: 380px;
+  @include flex($items: flex-start);
+  // padding-bottom: 380px;
   width: 100%;
   height: 100%;
   position: relative;
 
   .footer {
     position: absolute;
+    width: 450px;
     bottom: 5px;
-    *,
-    *:visited,
-    *:link,
-    *:active,
-    *:hover {
-      color: $text2-color;
+    // *,
+    // *:visited,
+    // *:link,
+    // *:active,
+    // *:hover {
+    //   color: $text2-color;
+    // }
+
+    @include flex;
+    gap: 5px;
+
+    .action-button {
+      width: 110px;
+      height: 110px;
+
+      @include active-transform;
+      @include no-select;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &.lb {
+        background: url(/images/leaderboard-button.png);
+
+        &:hover {
+          background: url(/images/leaderboard-button-h.png);
+        }
+      }
+
+      &.discord {
+        background: url(/images/discord-button.png);
+
+        &:hover {
+          background: url(/images/discord-button-h.png);
+        }
+      }
+
+      &.skin {
+        background: url(/images/skin-button.png);
+        @include flex;
+
+        &:hover {
+          background: url(/images/skin-button-h.png);
+        }
+
+        img {
+          width: 78px;
+        }
+      }
+
+      &.info {
+        background: url(/images/info-button.png);
+
+        &:hover {
+          background: url(/images/info-button-h.png);
+        }
+      }
     }
   }
 

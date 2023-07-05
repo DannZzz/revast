@@ -5,7 +5,7 @@ export default createItem(6)
   .name('Berry')
   .data({
     resourceType: 'berry',
-    toFood: 20,
+    toFood: 10,
     toHealth: 0,
     toWater: 0,
   })

@@ -20,6 +20,7 @@
   @include no-select;
 
   .modal {
+    margin-bottom: 100px;
     padding: 20px;
     @include window-bg-colored;
     @include flex($dir: column);

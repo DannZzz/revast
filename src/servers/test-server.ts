@@ -9,11 +9,61 @@ import {
 } from 'src/structures/GameMap'
 import { Wss } from 'src/ws/WS/WSS'
 import { generateLake } from './game-servers'
+import { RandomOnMap } from 'src/structures/random-on-map'
+import { BasicDrop } from 'src/game/basic/drop.basic'
 
 export const TEST_GAME_SERVER = (server: Wss) =>
   new GameServer({
     information: { name: 'Europe', path: server.server.path },
     socketServer: server,
+    marketConfig: {
+      maxAmount: 25,
+      items: [
+        { from: { id: 6, quantity: 1 }, to: { id: 3, quantity: 3 } },
+        { from: { id: 116, quantity: 1 }, to: { id: 5, quantity: 4 } },
+        { from: { id: 116, quantity: 1 }, to: { id: 19, quantity: 3 } },
+        { from: { id: 116, quantity: 4 }, to: { id: 20, quantity: 1 } },
+        { from: { id: 116, quantity: 8 }, to: { id: 21, quantity: 1 } },
+      ],
+    },
+    initRandomOnMaps: (gs) => [
+      new RandomOnMap(
+        gs,
+        function () {
+          const forest = this.map.absoluteBiome('forest')
+          const point = this.randomEmptyPoint(
+            200,
+            forest.point,
+            forest.size,
+            (point) => {
+              return this.map.find(this.map.areaOf(point)).type !== Biome.water
+            },
+          )
+          this.staticItems.for({ point, radius: 35 }).addDrop(
+            new BasicDrop({
+              data: 114,
+              authorId: 'game-server',
+              hitboxRadius: 25,
+              oneClick: true,
+              hurtSource: null,
+              point,
+              size: new Size(50, 50),
+              source: 'WHEAT_SEEDS',
+              type: 'wheat-seed',
+              take: (player, data) => {
+                player.items.addable(data) && player.items.addItem(data, 1)
+              },
+              onEnd: (drop) => {
+                this.staticItems.for({ point, radius: 35 }).removeDrop(drop.id)
+              },
+            }),
+          )
+        },
+        'wheat-seed',
+        20,
+        25,
+      ),
+    ],
     map: new GameMap({
       size: new Size(250, 250),
       tileSize: new Size(100, 100),
@@ -95,8 +145,8 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           name: 'desert-cave',
           priority: 2,
           bgColor: '#545055',
-          size: new Size(67, 31),
-          point: new Point(1, 218),
+          size: new Size(68, 32),
+          point: new Point(0, 218),
           effect: new BiomeEffect({
             speed: -20,
             temperatureDay: 0,
@@ -110,8 +160,8 @@ export const TEST_GAME_SERVER = (server: Wss) =>
           priority: 2,
           name: 'winter-cave',
           bgColor: '#545055',
-          size: new Size(37, 21),
-          point: new Point(61, 1),
+          size: new Size(37, 22),
+          point: new Point(61, 0),
           effect: new BiomeEffect({
             temperatureDay: -20,
             temperatureNight: -40,

@@ -20,5 +20,5 @@ export default createItem(43, 'tool', 'book')
     damage: 1,
     size: new Size(120, 120),
   })
-  .sources('BOOK', 'BOOK_ICON')
+  .sources('BOOK', 'ICON_BOOK')
   .build()

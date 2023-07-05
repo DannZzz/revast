@@ -5,7 +5,6 @@ import { Transition } from "solid-transition-group"
 import "./Main.scss"
 import gameState from "../../store/game-state"
 import Canvas from "./Main-Switches/Canvas/Canvas"
-import Nav from "../../components/Nav/Nav"
 import { Loader } from "./Loader/Loader"
 
 const Main: Component = () => {

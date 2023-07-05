@@ -60,6 +60,8 @@ export class VisualPlayerData {
   name: string
   point: Point
 
+  icons: number[] = []
+
   @Type(() => PlayerSkinEntity)
   skin: PlayerSkinEntity
 

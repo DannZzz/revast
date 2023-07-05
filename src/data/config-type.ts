@@ -23,7 +23,7 @@ export type EquipableItemVariant =
 export const DrawPosByType = {
   axe: new Point(-3, 92),
   pickaxe: new Point(0, 95),
-  spear: new Point(100, 160),
+  spear: new Point(15, 185),
   sword: new Point(60, 100),
   hammer: new Point(75, 100),
   shovel: new Point(60, 80),
@@ -34,7 +34,7 @@ export const RangeByType = {
   axe: 100,
   pickaxe: 100,
   sword: 105,
-  spear: 170,
+  spear: 180,
   hammer: 110,
   shovel: 90,
   pitchfork: 250,
@@ -61,7 +61,7 @@ export const CraftGivingXP = {
 }
 
 export const EquipmentItemSize = {
-  spears: new Size(200, 200),
+  spears: new Size(30, 210),
   hammers: new Size(150, 150),
   others: new Size(120, 120),
 }

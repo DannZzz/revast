@@ -6,7 +6,7 @@ import { socket } from "../../socket/socket"
 import { loadImage } from "../structures/fetchImages"
 import { KonvaText } from "../structures/KonvaText"
 import { ActionableHolderDto } from "../../socket/events"
-import { Point, Size } from "../../global/init"
+import { Point, Size, combineClasses } from "../../global/init"
 
 export class PlayerActionable {
   actionableGroup: Konva.Group
@@ -148,7 +148,15 @@ export class PlayerActionable {
             x: drawOptions.size.width / 2,
             y: drawOptions.size.height / 2,
           })
-        this.actionableGroup.offsetX(this.rightMargin)
+        this.actionableGroup.offset(
+          combineClasses(
+            drawOptions.offset
+              ? new Point(drawOptions.offset)
+              : new Point(0, 0),
+            new Point(this.rightMargin, 0)
+          )
+        )
+
         this.actionabledHoldersGroup.destroyChildren()
 
         this.currentlyShowing = settableId
@@ -206,7 +214,9 @@ export class PlayerActionable {
       width: size.width,
       align: "center",
       fontSize: 18,
-      fill: "#ccc",
+      stroke: "black",
+      strokeWidth: 0.5,
+      fill: "white",
       y: size.height - 5,
     })
 

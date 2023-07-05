@@ -53,6 +53,8 @@ import { PLayerClanActions } from './player-clan-actions'
 import CollectedIps from 'src/utils/collected-ips'
 import CameraViewQuery from 'src/structures/camera-view-query'
 import { uuid } from 'anytool'
+import { NB } from 'src/utils/NumberBoolean'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export class Player extends BasicElement<PlayerEvents> {
   readonly skin: PlayerSkin
@@ -214,6 +216,7 @@ export class Player extends BasicElement<PlayerEvents> {
             helmet: TIMEOUT_UNWEAR_HELMET,
             building: TIMEOUT_BUILDING,
           },
+          icons: [this.clanMember.clanId ? 0 : null].filter(n => isNumber(n)),
         }),
       ),
     ])
@@ -272,6 +275,14 @@ export class Player extends BasicElement<PlayerEvents> {
       }
       this.bars.socketUpdate()
     }
+  }
+
+  sendIcons() {
+    const icons = <number[]>[]
+
+    if (this.clanMember.clanId) icons.push(0)
+    
+    this.socket().emit('icons', icons)
   }
 
   serverMessage(content: string) {

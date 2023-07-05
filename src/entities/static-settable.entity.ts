@@ -6,6 +6,7 @@ import { StaticSettableItem } from '../game/basic/static-item.basic'
 import { GetSet } from 'src/structures/GetSet'
 import { percentFrom, percentOf } from 'src/utils/percentage'
 import { SeedSettableItem } from 'src/game/extended/settable/seed.settable'
+import { NB } from 'src/utils/NumberBoolean'
 
 @Exclude()
 export class StaticSettableEntity implements Partial<StaticSettableItem> {
@@ -46,6 +47,11 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
   seedResource?: {
     resources: number
     maxResources: number
+  }
+
+  @Expose()
+  get noAttackedAnimation() {
+    return NB.to(this.data.noAttackedAnimation)
   }
 
   @Type(() => SettableMode)

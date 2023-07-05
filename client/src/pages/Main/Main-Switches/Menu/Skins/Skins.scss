@@ -1,46 +1,61 @@
-.skin {
-  position: absolute;
-  left: 0;
-  top: 200px;
-  padding: 15px;
-  color: $text2-color;
-  @include flex($dir: column);
-  gap: 15px;
-  @include window-bg-colored;
-  transition: all 0.2s;
-  cursor: pointer;
-
-  @include active-transform;
-
-  .title {
-    font-size: larger;
-    letter-spacing: 0.5px;
-  }
-
-  .current-skin {
-    width: 120px;
-  }
-}
-
-.skins {
-  width: 500px;
-  height: 300px;
-
-  overflow-y: scroll;
-  @include scroll-bar(#252525);
-  @include flex($wrap: wrap);
+.skins-container {
+  @include flex($items: flex-start);
   gap: 10px;
+  @include no-select;
 
-  .skin-option {
-    cursor: pointer;
+  .selected-skin {
+    width: 295px;
+    height: 295px;
+    background: url("/images/selected-skin.png");
+    @include flex;
+
+    img {
+      width: 192px;
+    }
+  }
+
+  .skins {
+    width: 600px;
+    height: 500px;
+    @include flex($dir: column);
+    gap: 10px;
     padding: 10px;
-    border-radius: 5px;
-    &-img {
-      width: 100px;
+    background: rgba($color: #000000, $alpha: 0.3);
+    border-radius: 15px;
+
+    .title {
+      width: 137px;
+      height: 39px;
     }
 
-    &.selected {
-      background: $bg-effect-color;
+    .list {
+      overflow-y: scroll;
+      @include scroll-bar(#252525);
+      @include flex($wrap: wrap);
+      gap: 10px;
+
+      .skin-option {
+        cursor: pointer;
+        border-radius: 5px;
+        width: 146px;
+        height: 146px;
+        @include flex;
+        background: url(images/skin-bg.png);
+
+        &-img {
+          width: 138px;
+        }
+
+        &.selected {
+          background: url(images/skin-selected-bg.png);
+        }
+      }
     }
+  }
+
+  .out-button {
+    cursor: pointer;
+    width: 75px;
+    height: 75px;
   }
 }

@@ -13,6 +13,7 @@ export type StaticItemAddonName =
   | "furnace"
   | "point-machine"
   | "berry-seed"
+  | "windmill"
 
 const size = new Size(20, 20)
 const berryPng = new Konva.Image({
@@ -37,6 +38,49 @@ export const StaticItemsAddons: {
     drawSeparately?: (item: StaticSettableItem) => void
   }
 } = {
+  windmill: {
+    alsoDraw: (item: StaticSettableItem) => {
+      const size = item.size
+      const group = new Konva.Group({
+        offset: new Point(size.width / 2, size.height / 2),
+        ...new Point(size.width / 2, size.height / 2),
+      })
+      const center = new Konva.Image({
+        image: loadImage("/images/windmill-center.png", (img) =>
+          center.image(img)
+        ),
+        ...size,
+      })
+      const wheel = new Konva.Image({
+        image: loadImage("/images/windmill-circle.png", (img) =>
+          wheel.image(img)
+        ),
+        offset: new Point(size.width / 2, size.height / 2),
+        ...new Point(size.width / 2, size.height / 2),
+        ...size,
+      })
+      group.add(wheel, center)
+
+      var angularSpeed = 50
+      var anim: Konva.Animation = new Konva.Animation(function (frame) {
+        var angleDiff = (frame.timeDiff * angularSpeed) / 1000
+        wheel.rotate(angleDiff)
+        if (item.destroyed) anim.stop()
+      })
+      item.currentMode === 1 && anim.start()
+      item.on("mode", (item) => {
+        item.currentMode === 1 ? anim.start() : anim.stop()
+      })
+
+      item.on("destroy", () => {
+        group.destroy()
+      })
+
+      return {
+        items: group,
+      }
+    },
+  },
   berry: {
     drawByResourceChange: (bio: Bio, currentResources: number) => {
       const groupPos = new Point(35, 40)

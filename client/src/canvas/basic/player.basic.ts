@@ -15,11 +15,14 @@ import { getPointByTheta } from "../animations/rotation"
 import { PlayerMessages } from "../player/player-messages"
 import { playerHighlight } from "../data/cached-nodes"
 import { PlyaerBodyEffect } from "../../socket/events"
+import { equal } from "anytool"
+import GameIcons from "../data/icons"
 
 export interface BasicPlayerProps {
   name: string
   skin: PlayerSkin
   id: string
+  icons: number[]
 }
 
 export interface BasicPlayerCache {
@@ -53,11 +56,16 @@ export class BasicPlayer<
   messages: PlayerMessages
   private inBodyEffect = false
   footPrint = false
+  icons: number[] = []
+  nameNodes: { group: Konva.Group; text: Konva.Text; icons: Konva.Group } = <
+    any
+  >{}
 
   constructor(props: ElementProps<BasicPlayerProps>) {
-    const { name, skin, id, ...otherProps } = props
+    const { name, skin, id, icons, ...otherProps } = props
     super(otherProps)
     this.skin = skin
+    this.icons = icons || []
     this.name = name
     this._id = id
     this.actions = new PlayerAction(this)
@@ -69,22 +77,58 @@ export class BasicPlayer<
     return this.element(`#${this.id("body")}`)
   }
 
+  takeIcons(icons: number[], force: boolean = false) {
+    if (
+      !force &&
+      icons.length === this.icons.length &&
+      icons.every((ic) => this.icons.includes(ic))
+    )
+      return
+    this.icons = icons
+    const width = this.icons.length * 40
+    const x = (300 - this.nameNodes.text.width()) / 2 - width
+    this.nameNodes.icons.destroyChildren()
+    this.nameNodes.icons.x(x)
+    this.icons.forEach((icon, i) => {
+      const iconNode = new Konva.Image({
+        image: loadImage(GameIcons[icon], (img) => iconNode.image(img).cache()),
+        x: i * 40,
+        width: 30,
+        height: 30,
+        offset: {
+          x: 0,
+          y: 5,
+        },
+      }).cache()
+      this.nameNodes.icons.add(iconNode)
+    })
+  }
+
   draw(): void {
     const id = this.id()
     const group = new Konva.Group({ id })
     group.position(this.point)
+    const nameGroup = new Konva.Group({
+      offsetX: 150 - this.size.width / 2,
+      y: -25,
+    })
+
     const name = new KonvaText({
       text: this.name,
       align: "center",
-      width: 300,
+      // width: 0,
       wrap: "none",
-      offsetX: 150 - this.size.width / 2,
       fill: "white",
-      y: -25,
       fontSize: 20,
       strokeWidth: 0.5,
       stroke: "black",
     }).cache()
+    name.offsetX(-(150 - name.width() / 2))
+    const iconsGroup = new Konva.Group()
+    nameGroup.add(iconsGroup, name)
+    this.nameNodes.group = nameGroup
+    this.nameNodes.text = name
+    this.nameNodes.icons = iconsGroup
 
     this.messagesNode = new Konva.Group({
       offsetX: 150,
@@ -194,7 +238,7 @@ export class BasicPlayer<
       this.wearingNode
     )
 
-    group.add(bodyGroup, name)
+    group.add(bodyGroup, nameGroup)
     const itemRange = new Konva.Line({
       id: "item-range",
       points: Converter.pointArrayToXYArray([
@@ -206,6 +250,7 @@ export class BasicPlayer<
     })
     group.listening(false)
     ;(this.layer.findOne("#game-players") as any).add(group)
+    this.takeIcons(this.icons, true)
   }
   registerEvents(): void {
     // throw new Error("Method not implemented.")

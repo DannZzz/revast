@@ -1,7 +1,7 @@
 import createItem from 'src/structures/item-creator/create-item'
 
 export default createItem(94, 'hat')
-  .sources('HAT', 'HAT')
+  .sources('HAT', 'ICON_HAT')
   .name('Hat')
   .wearable()
   .wearableEffect({

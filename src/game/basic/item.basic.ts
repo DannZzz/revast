@@ -84,6 +84,8 @@ export class SettableMode {
   source?: ImageSource
   @Expose()
   cover: number
+  @Expose()
+  size?: Size
   switchTo?: number
   onStart?: (this: StaticSettableItem) => void
   damageOnAttack?: { all: boolean; damage: number }
@@ -130,6 +132,7 @@ export interface Settable {
     settable: StaticSettableItem,
     map: GameMap,
   ) => boolean
+  onDraw?: (this: StaticSettableItem) => void
 }
 
 export type DayNight<T = number> = { [k in 'day' | 'night']: T }

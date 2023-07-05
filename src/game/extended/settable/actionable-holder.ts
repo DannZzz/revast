@@ -6,6 +6,7 @@ export interface ActionableHolderProps {
   takeable: boolean
   drawOffset: Point
   noBackground: boolean
+  max?: number
 }
 
 export type HolderData = { id: number; quantity: number }
@@ -16,6 +17,7 @@ export class ActionableItemHolder implements ActionableHolderProps {
   takeable: boolean
   drawOffset: Point
   noBackground: boolean
+  max?: number = Infinity
 
   id() {
     return this.data().id
@@ -39,11 +41,18 @@ export class ActionableItemHolder implements ActionableHolderProps {
   }
 
   add(itemId: number, quantity: number) {
+    if ((this.data().quantity || 0) + quantity > this.max) {
+      quantity = this.max - this.data().quantity || 0
+    }
     this.data({ id: itemId, quantity: (this.data().quantity || 0) + quantity })
   }
 
   init(defaultData: HolderData) {
     this.data(defaultData)
+  }
+
+  full() {
+    return this.quantity() >= this.max
   }
 
   filterHolder(cb: (data: HolderData) => boolean) {

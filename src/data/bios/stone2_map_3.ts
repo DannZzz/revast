@@ -12,7 +12,7 @@ export default new BasicBioItem({
   source: Images.STONE_1,
   givesXp: 2,
   resources: 40,
-  validPosition: new CirclePosition(80),
-  size: new Size(216, 275),
+  validPosition: new CirclePosition(90),
+  size: new Size(213, 209),
   rechargeAmount: 4,
 })

@@ -343,7 +343,7 @@ export class PlayerItems {
     )
   }
 
-  private filterItems(
+  filterItems(
     items: PlayerItem<ItemsByTypes>[] | Chest<number, PlayerItem<ItemsByTypes>>,
   ): Chest<number, PlayerItem<ItemsByTypes>> {
     const chest = new Chest<number, PlayerItem<ItemsByTypes>>()

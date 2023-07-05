@@ -8,11 +8,11 @@ import { Transition } from "solid-transition-group"
 const { clickOutside, clickInside } = directives
 
 const Modal = () => {
-  const { open, content, setOpen, buttons, store, title, opacity } = modalState
+  const { open, setOpen, modal } = modalState
 
   function close() {
     setOpen(false)
-    store.onClose?.()
+    modal().onClose?.()
   }
 
   return (
@@ -20,25 +20,35 @@ const Modal = () => {
       <Show when={open()}>
         <div class="modal-container">
           <div
-            use:clickOutside={close}
+            use:clickOutside={!modal().noCloseOutside && close}
             class="modal"
-            style={{
-              "background-image": `linear-gradient(to bottom, rgba(37, 37, 37, ${opacity()}), rgba(49, 49, 49, ${opacity()}))`,
-            }}
+            style={
+              modal().containerStyle
+                ? modal().containerStyle
+                : {
+                    "background-image": `linear-gradient(to bottom, rgba(37, 37, 37, ${
+                      modal().opacity
+                    }), rgba(49, 49, 49, ${modal().opacity}))`,
+                  }
+            }
           >
             <div class="controllers">
-              <h2 class="modal-title">{title() || ""}</h2>
+              <Show when={!!modal().title}>
+                <h2 class="modal-title">{modal().title}</h2>
+              </Show>
 
-              <img
-                onClick={close}
-                src="/images/close.png"
-                alt=""
-                class="close controller"
-              />
+              <Show when={!modal().noCloseButton}>
+                <img
+                  onClick={close}
+                  src="/images/close.png"
+                  alt=""
+                  class="close controller"
+                />
+              </Show>
             </div>
-            <div class="content">{content()}</div>
+            <div class="content">{modal().content}</div>
             <div class="buttons">
-              <For each={buttons()}>
+              <For each={modal().buttons}>
                 {(buttonProps) => <Button {...buttonProps} />}
               </For>
             </div>

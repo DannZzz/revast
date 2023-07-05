@@ -8,10 +8,10 @@ const ChangelogPreview = () => {
   }
   return (
     <div onClick={() => navTo("/changelog")} class="changelog-preview">
-      <span class="title rainbow">CHANGELOG</span>
+      {/* <span class="title rainbow">CHANGELOG</span> */}
       <img
         crossorigin="anonymous"
-        src="/images/peasant-preview.png"
+        src="/images/bread-farm-preview.png"
         alt=""
         class="preview"
       />

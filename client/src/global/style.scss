@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fredoka&display=swap");
 
 $text-color: #252525;
 $text2-color: #e2e2e2;
@@ -18,15 +18,12 @@ $shadow1: rgba(31, 26, 18, 0.5);
 $shadow2: rgba(37, 35, 31, 0.5);
 
 @mixin main-font {
-  font-family: "Righteous", cursive;
+  font-family: "Fredoka", cursive;
+  font-weight: 600;
 }
 
 @mixin common-font {
   font-family: "Inter", sans-serif;
-}
-
-@mixin second-font {
-  font-family: "Chocolate_Cyr-Lat", cursive;
 }
 
 @mixin flex($items: center, $content: center, $dir: row, $wrap: nowrap) {
@@ -188,4 +185,10 @@ $breakpoint-med: 1175px;
 
 .rainbow {
   @include rainbow-text;
+}
+
+@mixin text-stroke($color: #000, $size: 1px) {
+  text-shadow: -#{$size} -#{$size} 0 $color, 0 -#{$size} 0 $color,
+    #{$size} -#{$size} 0 $color, #{$size} 0 0 $color, #{$size} #{$size} 0 $color,
+    0 #{$size} 0 $color, -#{$size} #{$size} 0 $color, -#{$size} 0 0 $color;
 }

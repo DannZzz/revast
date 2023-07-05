@@ -3,7 +3,7 @@ import createSettable from 'src/structures/item-creator/create-settable'
 export default createSettable(99)
   .itIsSpike('diamond', false)
   .name('Diamond Spike')
-  .sources('DIAMOND_SPIKE', 'DIAMOND_SPIKE')
+  .sources('DIAMOND_SPIKE', 'ICON_DIAMOND_SPIKE')
   .craftable({
     state: { workbench: true },
     required: {

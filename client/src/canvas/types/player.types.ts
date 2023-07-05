@@ -22,6 +22,7 @@ export interface PlayerProps {
   camera: Camera
   dayInfo: DayInfo
   id: string
+  icons: number[]
   game: () => Game
   timeout: PlayerJoinedDto["timeout"]
 }

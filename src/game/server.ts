@@ -38,6 +38,8 @@ import { miscByMapId } from 'src/data/miscs'
 import { TreasuresHunt } from 'src/structures/treasures-hunt'
 import { isNumber } from 'src/utils/is-number-in-range'
 import { universalWithin } from 'src/utils/universal-within'
+import { RandomOnMap } from 'src/structures/random-on-map'
+import { Market, MarketItem } from 'src/structures/Market'
 
 export type TMap = typeof BasicMap
 
@@ -52,8 +54,10 @@ export interface GameProps {
   madeAt?: Date
   maxTreasures?: number
   mapItems?: () => TMap
+  initRandomOnMaps?: (game: GameServer) => RandomOnMap[]
   map: GameMap
   initMobs: (game: GameServer) => Mobs
+  marketConfig: { items: MarketItem[]; maxAmount: number }
 }
 
 export type Players = Chest<number, Player>
@@ -64,6 +68,8 @@ export class GameServer implements GameProps {
   madeAt: Date = new Date()
   map: GameMap
   maxTreasures?: number = 20
+  randomOnMaps: RandomOnMap[] = []
+  initRandomOnMaps?: (game: GameServer) => RandomOnMap[]
   readonly socketServer: Wss
   readonly information: GameServerInformation = {}
   readonly mapSource: string
@@ -71,7 +77,7 @@ export class GameServer implements GameProps {
   readonly alivePlayers = new Chest<number, Player>()
   readonly staticItems: StaticItemsHandler = new StaticItemsHandler()
   private _gameLoopInterval: any
-  private _gameFPS = 30
+  private _gameFPS = 60
   _lastFrame: number = Date.now()
   private _FPSInterval = 1000 / this._gameFPS
   readonly leaderboard = new Leaderboard()
@@ -80,6 +86,8 @@ export class GameServer implements GameProps {
   readonly day: GameDay
   readonly treasures = new TreasuresHunt(this)
   mobs: Mobs
+  marketConfig: { items: MarketItem[]; maxAmount: number }
+  market: Market
 
   constructor(options: GameProps) {
     Object.assign(this, options)
@@ -112,10 +120,15 @@ export class GameServer implements GameProps {
         this.staticItems.for(bio.universalHitbox).addBios(bio)
       })
     this.day = new GameDay(this.madeAt)
+    this.market = new Market(
+      this.marketConfig.items,
+      this.marketConfig.maxAmount,
+    )
     this.updateLeaderboard()
     this.updateDayAndNight()
     this.loop()
     this.mobs = this.initMobs(this)
+    this.randomOnMaps = this.initRandomOnMaps(this)
   }
 
   get uptime(): Uptime {
@@ -323,6 +336,7 @@ export class GameServer implements GameProps {
     interval(1000).subscribe(() => {
       if (this.alivePlayers.size === 0) return
       this.treasures.everySecond()
+      this.randomOnMaps?.forEach((rom) => rom?.everySecond?.())
       this.staticItems.for('all').settable.forEach((settable) => {
         if (
           isNumber(settable.timeouts.destroyAt) &&

@@ -1,5 +1,5 @@
 import { Layer } from "konva/lib/Layer"
-import { Point } from "../../global/init"
+import { Point, combineClasses } from "../../global/init"
 import { Item, ItemProps, Settable } from "./item.basic"
 import Konva from "konva"
 import { Group } from "konva/lib/Group"
@@ -7,6 +7,7 @@ import { loadImage } from "../structures/fetchImages"
 import {
   Highlight,
   HighlightType,
+  NumberBoolean,
   SetMode,
   SettableModeDto,
   StaticSettableDto,
@@ -37,6 +38,7 @@ export class StaticSettableItem
     super()
     Object.assign(this, data)
   }
+  noAttackedAnimation: NumberBoolean
   currentMode: number
   modes: SettableModeDto[]
   iconUrl: string
@@ -83,6 +85,7 @@ export class StaticSettableItem
   }
 
   getAttacked(theta: number, showHpAngle?: number) {
+    if (this.noAttackedAnimation) return
     const to = getPointByTheta(this.centerPoint, theta, 10)
 
     if (
@@ -111,6 +114,11 @@ export class StaticSettableItem
 
     this.emit("mode", this)
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
+
+    const size = this.mode.size || this.size
+
+    node.size(size).offset(new Point(size.width / 2, size.height / 2))
+
     node
       .image(loadImage(this.mode.url, (img) => node.image(img).cache()))
       .cache()
@@ -131,14 +139,17 @@ export class StaticSettableItem
         y: this.size.height / 2,
       },
     })
+
+    const size = this.mode.size || this.size
+
     const image = new Konva.Image({
       id: `${this.id}-image`,
       image: loadImage(this.mode.url, (img) =>
         image.setAttr("image", img).cache()
       ),
-      ...this.size,
-      offsetX: this.size.width / 2,
-      offsetY: this.size.height / 2,
+      ...size,
+      offsetX: size.width / 2,
+      offsetY: size.height / 2,
       x: this.size.width / 2,
       y: this.size.height / 2,
       rotation: this.rotation,

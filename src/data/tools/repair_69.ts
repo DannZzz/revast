@@ -4,7 +4,7 @@ import { SpecialItemTypes } from '../config-type'
 
 export default createItem(69, 'tool', SpecialItemTypes.repair)
   .equipableDefault()
-  .sources('REPAIR', 'REPAIR_ICON')
+  .sources('REPAIR', 'ICON_REPAIR')
   .name('Repair')
   .craftable({
     duration: 8,

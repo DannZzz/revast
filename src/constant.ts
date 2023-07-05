@@ -2,6 +2,7 @@ import { itemById } from './data/items'
 import { Point, Size, combineClasses } from './global/global'
 import config from 'config'
 import { UniversalHitbox } from './utils/universal-within'
+import { Tick } from './structures/Tick'
 
 export const PORT = config.get('PORT')
 
@@ -18,6 +19,8 @@ export const SERVER_API: (combine?: string, ws?: boolean) => string = (
     }`
   return `${origin}${combine}`
 }
+
+export const createGameTick = () => new Tick(5)
 
 export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 600
 
@@ -83,7 +86,7 @@ export const MESSAGE_DURATION = 8
 
 export const GAME_DAY_SECONDS = 600
 
-export const FARM_ITEM_BUFF = 1.6
+export const FARM_ITEM_BUFF = 2
 
 export const BASIC_PLAYER_SPEED = 180 + 25
 export const PLAYER_DECREASE_SPEED_WEAPON = 45
@@ -107,16 +110,10 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(96),
-  // itemFor(97),
-  // itemFor(98),
-  // itemFor(99),
-  // itemFor(100),
-  // itemFor(101),
-  // itemFor(102),
-  // itemFor(103),
-  // itemFor(104),
-  // itemFor(105),
-  // itemFor(106),
-  // itemFor(107),
+  // itemFor(88),
+  // itemFor(89),
+  // itemFor(118),
+  // itemFor(117),
+  // itemFor(113),
+  // itemFor(3),
 ]

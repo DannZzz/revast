@@ -4,7 +4,7 @@ import { Converter } from '../../structures/Converter'
 import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(7)
-  .sources('WORKBENCH', 'WORKBENCH')
+  .sources('WORKBENCH', 'ICON_WORKBENCH')
   .size(200, 200)
   .hp(300)
   .name('Workbench')

@@ -211,5 +211,8 @@ export class Player extends BasicPlayer<PlayerEvents> {
           ?.messages.addMessage(content)
       }
     })
+    socket.on("icons", (icons) => {
+      this.takeIcons(icons)
+    })
   }
 }

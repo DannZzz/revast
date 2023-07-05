@@ -11,13 +11,14 @@ import {
   ActionableItemHolder,
 } from './actionable-holder'
 import { ImageSource, Images } from 'src/structures/image-base'
-import { Size } from 'src/global/global'
+import { Point, Size } from 'src/global/global'
 
 export type ActionableInitializator = (settable: ActionableSettableItem) => void
 
 export interface ActionableSettableDrawOptions {
   backgroundSource: string
   size: Size
+  offset?: Point
 }
 
 export type ExtendedSettable<T = Settable> = {

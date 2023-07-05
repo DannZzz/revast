@@ -5,7 +5,7 @@ import { verifyItemOfTeam } from '../config-type'
 export default createSettable(62)
   .itIsWall('gold')
   .name('Golden Door')
-  .sources('GOLDEN_DOOR', 'GOLDEN_DOOR')
+  .sources('GOLDEN_DOOR', 'ICON_GOLDEN_DOOR')
   .craftable({
     state: { workbench: true },
     required: {

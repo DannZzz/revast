@@ -17,6 +17,7 @@ export type ExtendedSeed<T = Settable> = {
   resourceInterval: number
   resourceId: number
   configureMode: {
+    empty: number
     grown: number
     dehydrated: number
     dehydratedEmpty: number

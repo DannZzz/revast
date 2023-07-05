@@ -4,7 +4,7 @@ import { verifyItemOfTeam } from '../config-type'
 export default createSettable(104)
   .itIsSpike('gold', true)
   .name('Golden Spike Door')
-  .sources('GOLDEN_SPIKE_DOOR', 'GOLDEN_SPIKE_DOOR')
+  .sources('GOLDEN_SPIKE_DOOR', 'ICON_GOLDEN_SPIKE_DOOR')
   .craftable({
     state: { workbench: true },
     required: {

@@ -14,6 +14,7 @@ export class PlayerControllers {
   private controllersGroup: Konva.Group
   private autofood: Konva.Image
   private lastSentCraftOpen = 0
+  private lastSentMarketOpen = 0
   private gap = 5
 
   constructor(readonly player: Player, readonly dayInfo: DayInfo) {
@@ -134,8 +135,29 @@ export class PlayerControllers {
     })
     craftGroup.add(craftBook)
 
-    this.controllersGroup.add(timerGroup, craftGroup)
+    const market = new Konva.Image({
+      image: loadImage("/images/market.png", (img) => {
+        market.image(img).cache()
+      }),
+      name: "no-click",
+      height: iconSize.height + 10,
+      width: iconSize.width,
+      x: iconSize.width + this.gap,
+      y: (iconSize.height + this.gap) * 2,
+    }).cache()
+
+    this.controllersGroup.add(timerGroup, craftGroup, market)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
+
+    market.on("pointerclick", (e) => {
+      if (this.lastSentMarketOpen > Date.now()) return
+      this.lastSentMarketOpen = Date.now() + 2000
+      const t = setTimeout(() => {
+        this.player.game().events.emit("market")
+        clearTimeout(t)
+      }, 150)
+    })
+
     craftGroup.on("pointerclick", (e) => {
       if (this.lastSentCraftOpen > Date.now()) return
       this.lastSentCraftOpen = Date.now() + 2000

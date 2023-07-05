@@ -8,7 +8,7 @@ export interface BasicDropProps<T> {
   source: string
   hurtSource: string
   data: T
-  hp: number
+  hp?: number
   point: Point
   hitboxRadius: number
   take: (player: Player, data: T) => void
@@ -17,6 +17,7 @@ export interface BasicDropProps<T> {
   authorId?: string
   size: Size
   type?: string
+  oneClick?: boolean
 }
 
 export class BasicDrop<T = any> implements BasicDropProps<T> {
@@ -37,12 +38,14 @@ export class BasicDrop<T = any> implements BasicDropProps<T> {
   hitboxRadius: number
   source: string
   data: T
-  hp: number
+  hp?: number
+  oneClick?: boolean
   private _hp: number
   take: (player: Player, data: T) => void
   duration?: number
   onEnd: (drop: BasicDrop<T>) => void
   authorId: string
+  private got = false
 
   get universalHitbox() {
     return {
@@ -56,11 +59,18 @@ export class BasicDrop<T = any> implements BasicDropProps<T> {
   }
 
   hurt(damage: number, player: Player) {
-    if (this._hp <= 0) return
-    this._hp -= damage
-    if (this._hp <= 0) {
+    if (this.got) return
+    if (this.oneClick) {
+      this.got = true
       this.onEnd(this)
       this.take(player, this.data)
+    } else {
+      this._hp -= damage
+      if (this._hp <= 0) {
+        this.got = true
+        this.onEnd(this)
+        this.take(player, this.data)
+      }
     }
   }
 }

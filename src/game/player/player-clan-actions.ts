@@ -55,8 +55,9 @@ export class PLayerClanActions {
   }
 
   create(name: string) {
-    if (!this.cm.make(name.slice(0, CLAN_MAX_NAME_SIZE) || 'clan')) return
+    if (!this.cm.make(name?.slice?.(0, CLAN_MAX_NAME_SIZE) || 'clan')) return
     this.showInfo()
+    this.player.sendIcons()
   }
 
   join(clanId: string) {
@@ -76,7 +77,7 @@ export class PLayerClanActions {
     const player = this.player.gameServer.alivePlayers.find(
       (p) => p.id() === memberId,
     )
-    if (player && !player.clanMember.clanId)
+    if (player && !player.clanMember.clanId) {
       player.clanMember.join(this.cm.clanId, () => {
         this.cm.my().sendAll()
         this.cm
@@ -85,6 +86,8 @@ export class PLayerClanActions {
             member.player.serverMessage(`${player.name} has joined to clan.`),
           )
       })
+      player.sendIcons()
+    }
   }
 
   togglePrivacy() {
@@ -102,7 +105,7 @@ export class PLayerClanActions {
     const player = this.player.gameServer.alivePlayers.find(
       (p) => p.id() === memberId,
     )
-    if (player)
+    if (player) {
       this.cm.my().removeMember(player.uniqueId, () => {
         player.clanActions.showInfo()
         this.cm.my().sendAll()
@@ -112,10 +115,13 @@ export class PLayerClanActions {
             member.player.serverMessage(`${player.name} was kicked from clan.`),
           )
       })
+      player.sendIcons()
+    }
   }
 
   leave() {
     if (!this.cm.clanId) return
     this.cm.leave()
+    this.player.sendIcons()
   }
 }

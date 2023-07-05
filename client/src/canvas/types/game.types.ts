@@ -26,4 +26,5 @@ export type GameEvents = {
   "dropItem.response": [itemId: number, all: boolean]
   loaded: []
   "craft-book": []
+  market: []
 }

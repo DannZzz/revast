@@ -93,4 +93,7 @@ export default function registerListeners(this: Wss) {
     .on('requestClanLeave', ({ player }, []) => {
       player?.clanActions.leave()
     })
+    .on('market', ({ player }, [i, quantity]) => {
+      player?.gameServer.market.try(player, i, quantity)
+    })
 }

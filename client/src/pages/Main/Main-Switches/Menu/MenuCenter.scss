@@ -1,50 +1,74 @@
 .menu-center {
   width: 400px;
 
-  @include flex($dir: column);
-  .nickname {
-    width: 400px;
-    height: 256px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    padding: 12px 16px;
-    @include flex;
+  @include flex($dir: column, $content: flex-start);
+  gap: 40px;
 
-    input {
-      flex: 1;
-      margin-top: 65px;
-      height: 40px;
-      background: transparent;
-      outline: none;
-      border: none;
-      text-align: center;
-      color: #252525;
-      ::placeholder {
-        color: #252525;
-      }
-      font-size: large;
-    }
+  .game-title {
+    width: 652px;
+    @include no-select;
   }
 
-  .buttons {
-    width: 360px;
-    @include flex;
-    gap: 5px;
-    .servers {
-      flex: 1;
-      cursor: pointer;
-      background: rgba($color: #000000, $alpha: 0.8);
+  .join-group {
+    @include flex($dir: column);
+    gap: 20px;
+
+    .nickname {
+      width: 482px;
+      height: 115px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      padding: 12px 16px;
+      @include flex;
+
+      input {
+        flex: 1;
+        // margin-top: 65px;
+        height: 40px;
+        background: transparent;
+        outline: none;
+        border: none;
+        text-align: center;
+        color: white;
+        ::placeholder {
+          color: #252525;
+        }
+        font-size: xx-large;
+      }
     }
 
-    .play-button {
-      @include style-button($size: 20px);
+    .buttons {
+      @include flex;
+      gap: 5px;
+      @include no-select;
+
+      .servers {
+        width: 266px;
+        height: 95px;
+        cursor: pointer;
+        background: url(/images/server-button.png);
+        @include flex;
+      }
+
+      .play-button {
+        width: 210px;
+        height: 95px;
+        cursor: pointer;
+        transition: background 0.1s;
+        background: url(/images/play-button.png);
+        @include active-transform;
+
+        &:hover {
+          background: url(/images/play-button-h.png);
+        }
+      }
     }
   }
 }
 
 .custom.solid-select-container {
-  color: #606060;
+  color: #ffffff;
   background-color: transparent;
   cursor: pointer;
 }
@@ -53,8 +77,8 @@
   outline: none;
   height: calc(4rem - 0.5rem);
   text-align: center;
-  font-size: 1.25rem;
-  padding: calc((4rem - 0.5rem - 1.88rem) / 2);
+  font-size: 30px;
+  // padding: calc((4rem - 0.5rem - 1.88rem) / 2);
   vertical-align: middle;
   cursor: pointer;
 }

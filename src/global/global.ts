@@ -69,3 +69,13 @@ function __<T extends new (...args: any[]) => any>(
 ): obj is InstanceType<T> {
   return obj instanceof targetClass
 }
+
+export type Gettable<
+  T extends number | string | object | Array<any> | boolean,
+> = T | (() => T)
+
+export const Gettable = <
+  T extends number | string | object | Array<any> | boolean,
+>(
+  gettable: Gettable<T>,
+): T => (typeof gettable === 'function' ? gettable() : gettable)

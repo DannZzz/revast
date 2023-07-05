@@ -22,6 +22,7 @@ export class SeedSettableItem extends StaticSettableItem {
   readonly growthTime = GetSet(0)
   readonly resourceInterval = GetSet(0)
   readonly dehydrated = GetSet(false)
+  readonly dehydrateInterval = GetSet(0)
   constructor(
     authorId: number,
     data: ItemProps<ExtendedSettable>,
@@ -35,6 +36,7 @@ export class SeedSettableItem extends StaticSettableItem {
     super.preDraw(point, theta, rotation)
     this.growthTime(this.data.growthTime)
     this.resourceInterval(this.data.resourceInterval)
+    this.dehydrateInterval(this.data.dehydrateTime)
     const inPlot = this.staticItems
       .for(this.centerPoint)
       .itemWithin(this.centerPoint, {
@@ -45,8 +47,7 @@ export class SeedSettableItem extends StaticSettableItem {
     if (inPlot) {
       super.preDraw(inPlot.point.clone(), 0, 0)
       this.inPlot(true)
-      this.growthTime(this.growthTime() / FARM_ITEM_BUFF)
-      this.resourceInterval(this.resourceInterval() / FARM_ITEM_BUFF)
+      this.dehydrateInterval(this.dehydrateInterval() / 2)
     }
 
     if (
@@ -76,7 +77,7 @@ export class SeedSettableItem extends StaticSettableItem {
         this.currentModeIndex(
           this.dehydrated()
             ? this.data.configureMode.dehydratedEmpty
-            : this.data.configureMode.grown,
+            : this.data.configureMode.empty,
         )
       }
     })

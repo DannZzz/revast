@@ -8,8 +8,8 @@ export const GRID_SET_RANGE = 100
 
 export const BG_FOREST_BIOM = {
   day: "#133A2B",
-  night: "#1E1C2F88",
-  // night: "#00000099",
+  // night: "#1E1C2F88",
+  night: "#042b3088",
   // night: "#000",
 }
 

@@ -4,7 +4,7 @@ import { verifyItemOfTeam } from '../config-type'
 export default createSettable(107)
   .itIsSpike('ruby', true)
   .name('Ruby Spike Door')
-  .sources('RUBY_SPIKE_DOOR', 'RUBY_SPIKE_DOOR')
+  .sources('RUBY_SPIKE_DOOR', 'ICON_RUBY_SPIKE_DOOR')
   .craftable({
     state: { workbench: true },
     required: {

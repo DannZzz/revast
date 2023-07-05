@@ -28,6 +28,7 @@ import {
   getCrafts,
   sendCanvas,
 } from "../../../../api/requests"
+import Market from "./Market/Market"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
@@ -35,6 +36,7 @@ const Canvas: Component<{}> = (props) => {
   const [compactItems] = createResource(getCompactItems, {})
   const [crafts] = createResource(getCrafts)
   const [craftBookOpen, setCraftBookOpen] = createSignal(false)
+  const [marketOpen, setMarketOpen] = createSignal(false)
   const [dropItemId, setDropItemId] = createSignal<number>()
   const [clans, setClans] = createSignal<{
     visualClans?: ClanVisualInformationDto[]
@@ -99,6 +101,22 @@ const Canvas: Component<{}> = (props) => {
     })
   )
 
+  createEffect(
+    on(marketOpen, (cbOpen) => {
+      if (cbOpen) {
+        showModal({
+          content: <Market />,
+          containerStyle: { background: "unset", "box-shadow": "none" },
+          noCloseButton: true,
+          opacity: 0.7,
+          onClose: () => {
+            setMarketOpen(false)
+          },
+        })
+      }
+    })
+  )
+
   onCleanup(() => {
     disconnectWS()
   })
@@ -122,6 +140,10 @@ const Canvas: Component<{}> = (props) => {
 
     game.events.on("craft-book", () => {
       setCraftBookOpen(true)
+    })
+
+    game.events.on("market", () => {
+      setMarketOpen(true)
     })
 
     // events

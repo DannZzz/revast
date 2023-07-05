@@ -169,7 +169,6 @@ export class Wss {
         const { event, data } = message
         if (event !== 'joinServer' && !ws.requestToJoin)
           return console.log('not join server no request')
-
         this.takeMessage({ event, data }, ws)
       })
     })

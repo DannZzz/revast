@@ -18,6 +18,7 @@ import { Player } from './player'
 import { universalWithin } from 'src/utils/universal-within'
 import { ActionableSettableItem } from '../extended/settable/actionable.settable'
 import { MiscEntity } from 'src/entities/misc.entity'
+import { isNumber } from 'class-validator'
 
 export class PlayerLoop {
   readonly cache: Cache<PlayerCache>
@@ -148,6 +149,13 @@ export class PlayerLoop {
             duration: player.actions.click.duration,
             status: player.actions.click.clickStatus,
           },
+          icons: [
+            this.player.clanMember
+              .team()
+              .find((cm) => cm.playerId === player.uniqueId)
+              ? 0
+              : null,
+          ].filter((n) => isNumber(n)),
           name: this.player.settings.admin()
             ? `#${player.uniqueId} ${player.name}`
             : player.name,

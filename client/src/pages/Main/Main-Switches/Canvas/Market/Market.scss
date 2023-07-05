@@ -1,0 +1,92 @@
+.market-container {
+  @include flex($dir: column);
+  // width: 900px;
+
+  .title-container {
+    position: relative;
+    z-index: 1;
+    height: 50px;
+
+    .title {
+      // position: absolute;
+      width: 422px;
+      height: 100px;
+    }
+  }
+
+  .market {
+    background: #593b2a;
+    width: 100%;
+    border-radius: 25px;
+    border: 10px solid rgba($color: #000000, $alpha: 0.4);
+    position: relative;
+    padding: 90px 100px 70px 100px;
+    @include flex();
+    gap: 25px;
+
+    &-item {
+      @include flex($dir: column);
+      gap: 10px;
+
+      .icon-container {
+        width: 144px;
+        height: 144px;
+        background: url(/images/market-item-bg.png);
+        @include flex;
+        position: relative;
+
+        .icon {
+          width: 100px;
+        }
+
+        .result-count {
+          position: absolute;
+          bottom: 8px;
+          right: 8px;
+          border-radius: 5px;
+          width: 60px;
+          line-height: 37px;
+          color: white;
+          font-size: 25px;
+          text-align: center;
+          vertical-align: center;
+          background: rgba($color: #000000, $alpha: 0.2);
+        }
+      }
+
+      .buttons {
+        @include flex($content: space-between);
+        width: 172px;
+        .buy-btn {
+          width: 108px;
+          height: 46px;
+          cursor: pointer;
+          background: url(/images/buy-bread.png);
+          background-repeat: no-repeat;
+          background-position: center;
+          @include active-transform;
+          &.berry {
+            background: url(/images/buy-berry.png);
+          }
+        }
+
+        .input-container {
+          width: 53px;
+          height: 46px;
+          background: url(/images/market-amount.png);
+          @include flex;
+
+          .amount {
+            margin-left: 15px;
+            outline: none;
+            font-size: 15px;
+            color: white;
+            text-align: center;
+            border: none;
+            background: transparent;
+          }
+        }
+      }
+    }
+  }
+}

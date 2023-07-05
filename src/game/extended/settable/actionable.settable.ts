@@ -85,6 +85,7 @@ export class ActionableSettableItem extends StaticSettableItem {
             new ActionableSettableDrawOptionsEntity({
               backgroundSource: this.data.draw.backgroundSource,
               size: this.data.draw.size,
+              offset: this.data.draw.offset,
             }),
           ),
           this.allowed,
@@ -111,9 +112,16 @@ export class ActionableSettableItem extends StaticSettableItem {
     const item = player.items._items.get(id)
 
     q = item.quantity < q ? item.quantity : q
+
     if (q > 10) q = 10
     for (let holder of this.holders) {
       if (holder.allows(id) && (holder.id() === 0 || holder.id() === id)) {
+        if (holder.quantity() + q > holder.max) {
+          q = holder.max - holder.quantity()
+        }
+        if (q <= 0) {
+          return
+        }
         holder.add(id, q)
         player.items.addItem(id, -q)
         this.update()

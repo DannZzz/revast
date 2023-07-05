@@ -5,7 +5,7 @@ import { verifyItemOfTeam } from '../config-type'
 export default createSettable(68)
   .itIsWall('ruby')
   .name('Ruby Door')
-  .sources('RUBY_DOOR', 'RUBY_DOOR')
+  .sources('RUBY_DOOR', 'ICON_RUBY_DOOR')
   .craftable({
     state: { workbench: true },
     required: {

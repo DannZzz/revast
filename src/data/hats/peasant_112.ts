@@ -2,8 +2,8 @@ import createItem from 'src/structures/item-creator/create-item'
 import { SpecialItemTypes } from '../config-type'
 
 export default createItem(112, 'hat', SpecialItemTypes.peasant)
-  .sources('PEASANT', 'PEASANT')
-  .name('Hat')
+  .sources('PEASANT', 'ICON_PEASANT')
+  .name('Peasant')
   .wearable()
   .wearableEffect({
     tempLossPerc: {

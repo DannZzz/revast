@@ -176,6 +176,7 @@ export class Game {
       width: this.size.width,
       align: "center",
       y: 101,
+      strokeWidth: 0.5,
       listening: false,
       fill: "#ccc",
       fontSize: 30,
@@ -265,6 +266,7 @@ export class Game {
         this.otherPlayers[existIndex].items.equiped = playerData.equipment
         this.otherPlayers[existIndex].items.weared = playerData.wearing
         this.otherPlayers[existIndex].items.bagUrl = playerData.bagUrl
+        this.otherPlayers[existIndex].takeIcons(playerData.icons)
       } else {
         const {
           rotation,
@@ -369,6 +371,7 @@ export class Game {
         dayInfo: data.dayInfo,
         game: () => this,
         timeout: data.timeout,
+        icons: data.icons,
       })
       // player.moveToCenterOfScreen(this.size)
       this.player = player

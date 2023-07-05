@@ -60,7 +60,7 @@ export default new DJCommand({
       )
       if (item) {
         embed
-          .setThumbnail(SERVER_API('/api/assets/' + item.iconSource))
+          .setThumbnail(SERVER_API('/api/images/' + item.iconSource))
           .setAuthor({ name: item.data.name })
 
         return msg.reply({ embeds: [embed] })
@@ -75,7 +75,7 @@ export default new DJCommand({
       const itemTxt = `#${item.id} ${
         item.data.name
       } **[Посмотреть иконку](${SERVER_API(
-        '/api/assets/' + item.iconSource,
+        '/api/images/' + item.iconSource,
       )})**\n`
       if ((text + itemTxt).length > 4096) {
         texts.push(text)

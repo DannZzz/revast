@@ -221,6 +221,11 @@ class SettableCreator {
     return this
   }
 
+  onDraw(cb: (this: StaticSettableItem) => void) {
+    this.extend.onDraw = cb
+    return this
+  }
+
   actionable(
     settable: Partial<
       ExtendedSettable<{

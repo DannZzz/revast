@@ -3,7 +3,7 @@ import { Point, Size } from 'src/global/global'
 import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(88, 'chest')
-  .sources('CHEST', 'CHEST')
+  .sources('CHEST', 'ICON_CHEST')
   .name('Chest')
   .craftable({
     givesXp: 50,
@@ -18,14 +18,14 @@ export default createSettable(88, 'chest')
   .holders({
     takeable: true,
     allow: [],
-    drawOffset: new Point(0, 0),
+    drawOffset: new Point(0, 10),
     noBackground: true,
   })
   .actionable({
     reactRadius: 75,
     draw: {
-      backgroundSource: 'CHEST',
-      size: new Size(150, 150),
+      backgroundSource: 'CHEST_INTERFACE',
+      size: new Size(89, 112),
     },
   })
   .onInit((settable) => {})

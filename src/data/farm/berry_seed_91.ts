@@ -3,7 +3,7 @@ import { Point } from 'src/global/global'
 import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(91, 'berry-seed')
-  .sources('PRE_BERRY_BUSH', 'BERRY_SEEDS')
+  .sources('PRE_BERRY_BUSH', 'ICON_BERRY_SEEDS')
   .cover(-2)
   .name('Berry Seeds')
   .size(100, 100)
@@ -38,6 +38,7 @@ export default createSettable(91, 'berry-seed')
       dehydrated: 2,
       dehydratedEmpty: 2,
       grown: 1,
+      empty: 1,
     },
     growthTime: 7 * 60,
     dehydrateTime: 15 * 60,

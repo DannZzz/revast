@@ -1,4 +1,5 @@
 import Konva from "konva"
+import { loadImage } from "../structures/fetchImages"
 
 const ITEM_ICON_EMPTY_BG = "#252525"
 const ITEM_ICON_NOT_EMPTY_BG = "#397463"

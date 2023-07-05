@@ -1,10 +1,8 @@
 import { Component, Suspense, lazy, onMount } from "solid-js"
 import { Route, Router, Routes } from "@solidjs/router"
 import Merge from "./components/Merge/Merge"
-import { Transition } from "solid-transition-group"
 
 const Main = lazy(() => import("./pages/Main/Main"))
-const Crafts = lazy(() => import("./pages/Crafts/Crafts"))
 const Leaderboard = lazy(() => import("./pages/Leaderboard/Leaderboard"))
 const Changelog = lazy(() => import("./pages/Changelog/Changelog"))
 const Tos = lazy(() => import("./pages/Tos/Tos"))
@@ -51,7 +49,6 @@ const App: Component = () => {
       <Merge />
       <Routes>
         <Route path="/" component={Main} />
-        <Route path="/crafts" component={Crafts} />
         <Route path="/changelog" component={Changelog} />
         <Route path="/leaderboard" component={Leaderboard} />
         <Route path="/terms" component={Tos} />

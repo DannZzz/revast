@@ -6,6 +6,35 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
+          {cg_title(" 5/7/2023 - Time To Harvest!")}
+          <div class="content">
+            {cg_big_img("/images/bread-farm-preview.png")}
+            <h2>BREAD FARM ARRIVED!</h2>
+            <div class="group">
+              {cg_small_img("/api/images/wheat-icon.png")}
+              {cg_small_img("/api/images/flour.png")}
+              {cg_small_img("/api/images/wheat-seeds.png")}
+            </div>
+            <div class="group">
+              {cg_small_img("/api/images/bread.png")}
+              {cg_small_img("/api/images/bread-oven.png")}
+              {cg_small_img("/api/images/windmill-icon.png")}
+            </div>
+            {cg_list("Added", [
+              "Added wheat/bread/windmills and etc for bread",
+              "Added ovens for bread and windmills for flour",
+              "Added new spears textures",
+              "Added new textures for walls, doors, spikes and spike doors",
+              "Changed lobby interface",
+              "Added market",
+            ])}
+            {cg_list("Changed", [
+              "Increased spears range",
+              "And fixed some bugs",
+            ])}
+          </div>
+        </div>
+        <div class="version">
           {cg_title("- 30/6/2023 - Pitchfork and Peasant")}
           <div class="content">
             {cg_big_img("/images/peasant-preview.png")}

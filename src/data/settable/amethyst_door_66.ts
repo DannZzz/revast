@@ -5,7 +5,7 @@ import { verifyItemOfTeam } from '../config-type'
 export default createSettable(66)
   .itIsWall('amethyst')
   .name('Amethyst Door')
-  .sources('AMETHYST_DOOR', 'AMETHYST_DOOR')
+  .sources('AMETHYST_DOOR', 'ICON_AMETHYST_DOOR')
   .craftable({
     state: { workbench: true },
     required: {

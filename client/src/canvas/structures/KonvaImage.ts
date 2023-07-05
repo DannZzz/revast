@@ -2,7 +2,9 @@ import Konva from "konva"
 import { Image } from "konva/lib/shapes/Image"
 import { loadImage } from "./fetchImages"
 
-export type ImageConfig = Konva.ImageConfig & {
+type OmittedImage = Omit<Konva.ImageConfig, "image">
+
+export type ImageConfig = OmittedImage & {
   image: string
   cache?: boolean
   onLoad?: (this: KonvaImage, img: HTMLImageElement) => void

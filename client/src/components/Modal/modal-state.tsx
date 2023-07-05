@@ -6,56 +6,58 @@ export type ModalButton = { closeOnClick?: true } & ButtonProps
 
 export interface ModalStore {
   onClose?: () => any
+  opacity?: number
+  content?: JSX.Element
+  noCloseOutside?: boolean
+  buttons?: ModalButton[]
+  title?: string
+  noCloseButton?: boolean
+  containerStyle?: JSX.CSSProperties
 }
 
 const modalState = () => {
   const [open, setOpen] = createSignal(false)
 
-  const [title, setTitle] = createSignal<string>()
-  const [opacity, setOpacity] = createSignal<number>(1)
-  const [content, setContent] = createSignal<JSX.Element>(<span>Hello</span>)
-  const [buttons, setButtons] = createSignal<ModalButton[]>([])
-  const store = createMutable<ModalStore>({})
+  const [state, setState] = createSignal<ModalStore>()
 
-  const showModal = (options: {
-    content: JSX.Element
-    buttons?: ModalButton[]
-    title?: string
-    opacity?: number
-    onClose?: () => any
-  }) => {
-    const { content, buttons = [], onClose, title, opacity = 1 } = options
+  const showModal = (options: ModalStore) => {
+    const {
+      content,
+      buttons = [],
+      onClose,
+      title = null,
+      opacity = 1,
+      noCloseButton = false,
+      noCloseOutside = false,
+      containerStyle = null,
+    } = options
 
     batch(() => {
-      setTitle(title)
-      setOpacity(opacity)
-      setContent(content)
-      setButtons(buttons)
-      store.onClose = onClose
+      setState({
+        content,
+        buttons,
+        onClose,
+        title,
+        opacity,
+        noCloseButton,
+        noCloseOutside,
+        containerStyle,
+      })
       setOpen(true)
     })
   }
 
   const closeModal = () => {
     batch(() => {
-      setTitle()
-      setOpacity(1)
-      setContent(<></>)
-      setButtons([])
-      store.onClose = null
       setOpen(false)
     })
   }
 
   return {
-    title,
-    store,
-    opacity,
+    modal: state,
     open,
     setOpen,
-    content,
     showModal,
-    buttons,
     closeModal,
   }
 }

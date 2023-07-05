@@ -15,5 +15,5 @@ export default createItem(44, 'tool', 'bag')
     notAddable: true,
     maxAmount: 1,
   })
-  .sources('BAG', 'BAG')
+  .sources('BAG', 'ICON_BAG')
   .build()

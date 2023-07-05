@@ -113,6 +113,7 @@ export interface ServerToClientEvents {
   ) => void
   clanJoinApplication: (data: [memberName: string, memberId: string]) => void
   requestCanvas: (data: [id: string]) => void
+  icons: (data: number[]) => void
 }
 
 export interface ClientToServerEvents {
@@ -138,6 +139,7 @@ export interface ClientToServerEvents {
   requestClanMemberKick(data: [memberId: string]): void
   requestClanAcceptMember(data: [memberId: string]): void
   requestClanTogglePrivacy(data: []): void
+  market(data: [i: number, quantity: number]): void
 }
 
 export type MainServer = WebSocket.Server & {

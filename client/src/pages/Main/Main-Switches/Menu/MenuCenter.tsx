@@ -1,5 +1,6 @@
 import {
   Component,
+  Show,
   batch,
   createEffect,
   createResource,
@@ -13,10 +14,12 @@ import { ServerInformation } from "../../../../api/type"
 import gameState from "../../../../store/game-state"
 import { socket } from "../../../../socket/socket"
 import { PlayerInformationDto } from "../../../../socket/events"
+import modalState from "../../../../components/Modal/modal-state"
 const gc: any = (window as any).grecaptcha
 const MenuCenter: Component<{}> = (props) => {
   const { gs, startGame, leaveGame, started, loading, setLoading } = gameState
   const [servers] = createResource(getServers)
+  const { open } = modalState
   const [server, setServer] = createSignal<ServerInformation>()
 
   let nicknameInputRef: HTMLInputElement
@@ -56,37 +59,41 @@ const MenuCenter: Component<{}> = (props) => {
 
   return (
     <div class="menu-center">
-      <div
-        class="nickname"
-        style={{
-          "background-image": "url(images/nick-banner.png)",
-        }}
-      >
-        <input
-          ref={nicknameInputRef}
-          placeholder="Your Username.."
-          maxLength={18}
-          value={gs.nickname}
-          type="text"
-          class=""
-        />
-      </div>
-      <div class="buttons">
-        <div class="servers">
-          <Select
-            class="custom"
-            onChange={(value) => setServer(value)}
-            initialValue={server()}
-            format={(item: ServerInformation, type) =>
-              `${item.name} (${item.players})`
-            }
-            options={servers()}
-          />
+      <img src="images/revast.png" alt="" class="game-title" />
+      <Show when={!open()}>
+        <div class="join-group">
+          <div
+            class="nickname"
+            style={{
+              "background-image": "url(images/player-name.png)",
+            }}
+          >
+            <input
+              ref={nicknameInputRef}
+              placeholder="Your Username.."
+              maxLength={18}
+              value={gs.nickname}
+              type="text"
+              class=""
+            />
+          </div>
+          <div class="buttons">
+            <div class="servers">
+              <Select
+                class="custom"
+                onChange={(value) => setServer(value)}
+                initialValue={server()}
+                format={(item: ServerInformation, type) =>
+                  `${item.name} (${item.players})`
+                }
+                options={servers()}
+              />
+            </div>
+            {/* play button */}
+            <div onClick={onPlay} class="play-button"></div>
+          </div>
         </div>
-        <button onClick={onPlay} class="play-button">
-          PLAY
-        </button>
-      </div>
+      </Show>
     </div>
   )
 }

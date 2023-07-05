@@ -20,6 +20,7 @@ export class PlayerJoinedEntity {
   dayInfo: DayInfo
   @Transform(({ value }) => [value.weapon, value.helmet, value.building])
   timeout: PlayerItemTimeout
+  icons: number[]
 
   constructor(data: PlayerJoinedEntity) {
     Object.assign(this, data)

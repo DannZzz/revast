@@ -3,7 +3,7 @@ import createSettable from 'src/structures/item-creator/create-settable'
 export default createSettable(98)
   .itIsSpike('gold', false)
   .name('Golden Spike')
-  .sources('GOLDEN_SPIKE', 'GOLDEN_SPIKE')
+  .sources('GOLDEN_SPIKE', 'ICON_GOLDEN_SPIKE')
   .craftable({
     state: { workbench: true },
     required: {

@@ -2,7 +2,7 @@ import createItem from 'src/structures/item-creator/create-item'
 import { HelmetsDefenseByResourceType } from '../config-type'
 
 export default createItem(87, 'hat')
-  .sources('DIVING_MASK', 'DIVING_MASK')
+  .sources('DIVING_MASK', 'ICON_DIVING_MASK')
   .name('Diving Mask')
   .wearable()
   .wearableEffect({
