@@ -84,7 +84,7 @@ class SettableCreator {
     this.extend.hp = WallDoorByResourceType[wallType]
     this.size(125, 125).setMode(new Point(0, -125), {
       type: 'circle',
-      radius: 42,
+      radius: 43,
     })
     if (!this.extend.craftable) this.extend.craftable = {}
     if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
@@ -101,7 +101,7 @@ class SettableCreator {
       : SpikeHpByResourceType[resType]
     this.size(157, 157).setMode(new Point(0, -157), {
       type: 'circle',
-      radius: 42,
+      radius: 40,
     })
     if (!this.extend.craftable) this.extend.craftable = {}
     if (!this.extend.craftable[0]) this.extend.craftable[0] = {}
