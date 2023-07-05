@@ -17,7 +17,7 @@ export default createSettable(118, 'bread-oven')
   })
   .size(184, 162)
   .hp(1000)
-  .setMode(new Point(0, -162), { type: 'circle', radius: 60 })
+  .setMode(new Point(0, -162), { type: 'circle', radius: 55 })
   .holders(
     {
       takeable: false,
