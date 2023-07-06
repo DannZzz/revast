@@ -28,6 +28,8 @@ export const PLAYER_BODY_SIZE = new Size(120, 116)
 
 export const ONE_DAY_MS = 86400 * 1000
 
+export const GAME_FPS = 60
+
 export const PLAYER_BODY_ACUTAL_SIZE = new Size(50, 50)
 
 export const PLAYER_BODY_COLLISION_RADIUS = 21
@@ -110,11 +112,11 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(91),
-  // itemFor(114),
-  // itemFor(111),
-  // itemFor(93),
-  // itemFor(118),
+  itemFor(91),
+  itemFor(114),
+  itemFor(111),
+  itemFor(93),
+  itemFor(118),
   // itemFor(117),
   // itemFor(113),
   // itemFor(3),

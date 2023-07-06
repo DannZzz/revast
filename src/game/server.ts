@@ -9,6 +9,7 @@ import {
   GAME_DAY_SECONDS,
   XP_AFTER_EACH_DAY,
   MAX_SCREEN_SIZE,
+  GAME_FPS,
 } from 'src/constant'
 import { Mobs } from 'src/data/mobs'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
@@ -41,6 +42,7 @@ import { universalWithin } from 'src/utils/universal-within'
 import { RandomOnMap } from 'src/structures/random-on-map'
 import { Market, MarketItem } from 'src/structures/Market'
 import { Bio } from './basic/bio-item.basic'
+import { SeedSettableItem } from './extended/settable/seed.settable'
 
 export type TMap = typeof BasicMap
 
@@ -78,7 +80,7 @@ export class GameServer implements GameProps {
   readonly alivePlayers = new Chest<number, Player>()
   readonly staticItems: StaticItemsHandler = new StaticItemsHandler()
   private _gameLoopInterval: any
-  private _gameFPS = 60
+  private _gameFPS = GAME_FPS
   _lastFrame: number = Date.now()
   private _FPSInterval = 1000 / this._gameFPS
   readonly leaderboard = new Leaderboard()
@@ -347,6 +349,7 @@ export class GameServer implements GameProps {
         )
           return settable.destroy()
         settable.data?.loop?.(settable)
+        if (settable instanceof SeedSettableItem) settable.everySecond?.()
       })
       this.recharginBios.forEach((bio) => bio.everySecond())
     })

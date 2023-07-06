@@ -101,7 +101,6 @@ export class SeedSettableItem extends StaticSettableItem {
     })
 
     this.timeouts.resourceInterval = new Tick(this.resourceInterval())
-    this.data.loop = this.everySecond.bind(this)
   }
 
   everySecond() {
