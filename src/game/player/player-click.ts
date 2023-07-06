@@ -74,7 +74,7 @@ export class PlayerClick {
 
       const points = pointsOfRotatedRectangle(
         point,
-        new Size(range, 60),
+        new Size(range, 50),
         this.player.angle(),
       )
 
