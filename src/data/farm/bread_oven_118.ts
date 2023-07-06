@@ -1,6 +1,7 @@
 import { createGameTick } from 'src/constant'
 import { ActionableSettableItem } from 'src/game/extended/settable/actionable.settable'
 import { Point, Size } from 'src/global/global'
+import { Tick } from 'src/structures/Tick'
 import createSettable from 'src/structures/item-creator/create-settable'
 
 export default createSettable(118, 'bread-oven')
@@ -48,7 +49,7 @@ export default createSettable(118, 'bread-oven')
     source: 'BREAD_OVEN',
   })
   .onInit((settable) => {
-    settable.timeouts.tick = createGameTick()
+    settable.timeouts.tick = new Tick(8)
 
     const isWorking = (): boolean => {
       return (

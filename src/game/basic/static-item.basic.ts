@@ -143,15 +143,15 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
 
   getAttacked(from: Point, by: Player): void {
     if (this.currentMode.damageOnAttack) {
-      // if (
-      //   this.currentMode.damageOnAttack.all ||
-      //   !by.clanMember
-      //     .team()
-      //     .map((member) => member.playerId)
-      //     .includes(this.authorId)
-      // ) {
-      by.damage(this.currentMode.damageOnAttack.damage, 'settable')
-      // }
+      if (
+        this.currentMode.damageOnAttack.all ||
+        !by.clanMember
+          .team()
+          .map((member) => member.playerId)
+          .includes(this.authorId)
+      ) {
+        by.damage(this.currentMode.damageOnAttack.damage, 'settable')
+      }
     }
 
     const equiped = by.items.equiped
@@ -173,14 +173,14 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
 
   getTouched(player: Player) {
     if (!this.currentMode.damageOnTouch) return
-    // if (
-    //   !this.currentMode.damageOnAttack.all &&
-    //   player.clanMember
-    //     .team()
-    //     .map((member) => member.playerId)
-    //     .includes(this.authorId)
-    // )
-    //   return
+    if (
+      !this.currentMode.damageOnAttack.all &&
+      player.clanMember
+        .team()
+        .map((member) => member.playerId)
+        .includes(this.authorId)
+    )
+      return
     const id = (p: Player) => `${p.uniqueId}-${p.id()}`
     if (id(player) in this.timeouts.touch && this.timeouts.touch[id(player)])
       return
