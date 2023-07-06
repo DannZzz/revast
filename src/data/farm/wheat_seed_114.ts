@@ -48,7 +48,7 @@ export default createSettable(114)
       grown: 1,
       empty: 0,
     },
-    growthTime: 5,
+    growthTime: 5 * 60,
     dehydrateTime: 10 * 60,
     resourceInterval: 8,
     maxResource: 1,
