@@ -27,7 +27,7 @@ export interface ServerMobOptions {
   spawn: { startPoint: Point; size: Size }
 }
 
-export const DefaultMobAttackTacticSpeed = { duration: 0.4, interval: 0.7 }
+export const DefaultMobAttackTacticSpeed = { duration: 0.6, interval: 0.9 }
 
 export type ServerMobConfig = { [k in MobNames]?: ServerMobOptions }
 
