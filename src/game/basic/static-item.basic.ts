@@ -41,7 +41,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   theta: number = Math.PI
   readonly id: string = uuid(50)
   points: Point[] = []
-  timeouts: Record<any, any> = {}
+  timeouts = <any>{}
 
   readonly currentModeIndex = GetSet(0)
   destroyed = false

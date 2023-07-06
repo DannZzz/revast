@@ -113,14 +113,17 @@ export class Mob extends BasicMob {
   hurt(damage: number, player: Player) {
     if (damage === 0) return
     if (damage < 0) damage = -damage
+    console.log('mob damage', damage, this.hp)
     this.hp -= damage
-    if (this.hp <= 0 && !this.died) {
-      if (this.drop) {
-        $(this.drop).$forEach((quantity, id) => {
-          player.items?.addItem(+id, quantity)
-        })
+    if (this.hp <= 0) {
+      if (!this.died) {
+        if (this.drop) {
+          $(this.drop).$forEach((quantity, id) => {
+            player.items?.addItem(+id, quantity)
+          })
+        }
+        player.lbMember?.add(this.givesXP)
       }
-      player.lbMember?.add(this.givesXP)
       player.gameServer?.mobs.all.delete(this.id)
       this.died = true
     }

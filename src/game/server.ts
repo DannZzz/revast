@@ -40,6 +40,7 @@ import { isNumber } from 'src/utils/is-number-in-range'
 import { universalWithin } from 'src/utils/universal-within'
 import { RandomOnMap } from 'src/structures/random-on-map'
 import { Market, MarketItem } from 'src/structures/Market'
+import { Bio } from './basic/bio-item.basic'
 
 export type TMap = typeof BasicMap
 
@@ -88,6 +89,7 @@ export class GameServer implements GameProps {
   mobs: Mobs
   marketConfig: { items: MarketItem[]; maxAmount: number }
   market: Market
+  recharginBios = new Chest<string, Bio>()
 
   constructor(options: GameProps) {
     Object.assign(this, options)
@@ -117,6 +119,7 @@ export class GameServer implements GameProps {
         )
         if (!bio) return
         bio.players = this.alivePlayers
+        bio.gs = this
         this.staticItems.for(bio.universalHitbox).addBios(bio)
       })
     this.day = new GameDay(this.madeAt)
@@ -345,6 +348,7 @@ export class GameServer implements GameProps {
           return settable.destroy()
         settable.data?.loop?.(settable)
       })
+      this.recharginBios.forEach((bio) => bio.everySecond())
     })
   }
 

@@ -47,6 +47,9 @@ export class Clan {
       member.leave(true)
     })
     this.owner.player.gameServer.clans.clans.delete(this.id)
-    members.forEach((member) => member.player.clanActions.showInfo())
+    members.forEach((member) => {
+      member.player.clanActions.showInfo()
+      member.player.sendIcons()
+    })
   }
 }

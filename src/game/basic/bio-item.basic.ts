@@ -3,7 +3,7 @@ import { getAngle, getPointByTheta } from '../animations/rotation'
 import { PlayerItems } from '../player/player-items'
 import { ResourceGetting } from './item.basic'
 import { Point, Size, combineClasses } from 'src/global/global'
-import { Players } from '../server'
+import { GameServer, Players } from '../server'
 import { circleCircle, circlePolygon, polygonPolygon } from 'intersects'
 import { Player } from '../player/player'
 import { Converter } from 'src/structures/Converter'
@@ -11,6 +11,7 @@ import { GetSet } from 'src/structures/GetSet'
 import { rectToPolygon } from 'src/utils/polygons'
 import { Items } from 'src/data/items'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
+import { Tick } from 'src/structures/Tick'
 
 export type ResourceTypes =
   | 'wood'
@@ -86,9 +87,10 @@ export class BasicBioItem {
 export class Bio {
   readonly id: string = uuid(50)
   point: Point
-  private _interval
+  private tick = new Tick(() => $.randomNumber(8, 15))
   players: Players
   resources: GetSet<number>
+  gs: GameServer
   points: Point[] = []
   constructor(readonly data: BioItemProps) {
     this.resources = GetSet(data.resources)
@@ -152,24 +154,35 @@ export class Bio {
     )
   }
 
-  private checkResources() {
-    if (this.resources() !== this.data.resources) {
-      clearInterval(this._interval)
-      this._interval = setInterval(() => {
-        const recharging = this.rechargeResources()
-        if (!recharging) {
-          clearInterval(this._interval)
-          this._interval = null
-        }
-      }, 4000)
-    }
+  everySecond() {
+    if (this.tick.limited()) return
+    this.rechargeResources()
   }
 
+  // private checkResources() {
+  //   if (this.resources() !== this.data.resources) {
+  //     clearInterval(this._interval)
+  //     this._interval = setInterval(() => {
+  //       const recharging = this.rechargeResources()
+  //       if (!recharging) {
+  //         clearInterval(this._interval)
+  //         this._interval = null
+  //       }
+  //     }, 4000)
+  //   }
+  // }
+
   private rechargeResources() {
-    if (this.resources() === this.data.resources) return false
+    if (this.resources() === this.data.resources) {
+      this.gs.recharginBios.delete(this.id)
+      return false
+    }
     this.resources(this.resources() + this.data.rechargeAmount)
-    if (this.resources() > this.data.resources)
+    if (this.resources() > this.data.resources) {
       this.resources(this.data.resources)
+      this.gs.recharginBios.delete(this.id)
+    }
+    this.tick.take()
     return true
   }
 
@@ -188,7 +201,8 @@ export class Bio {
       validAmount = gets
     }
     if (validAmount === 0) return -1
-    this.checkResources()
+    this.tick.take()
+    this.gs.recharginBios.set(this.id, this)
     player.lbMember.add(this.data.givesXp * validAmount)
     player.items.addItem(getThisRes.id, validAmount)
     return 1

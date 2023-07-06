@@ -12,10 +12,11 @@ import { Timeout } from 'src/structures/timers/timeout'
 import { Interval } from 'src/structures/timers/interval'
 import { Timer } from 'src/structures/timers/timer'
 import { FARM_ITEM_BUFF } from 'src/constant'
+import { Tick } from 'src/structures/Tick'
 
 export class SeedSettableItem extends StaticSettableItem {
   data: ItemProps<ExtendedSeed>
-  timeouts: Record<'growthTime' | 'dehydrateTime' | 'resourceInterval', Timer>
+  timeouts: Record<'growthTime' | 'dehydrateTime' | 'resourceInterval', Tick>
   readonly resource = GetSet(0)
   readonly inPlot = GetSet(false)
   readonly isGrown = GetSet(false)
@@ -47,7 +48,7 @@ export class SeedSettableItem extends StaticSettableItem {
     if (inPlot) {
       super.preDraw(inPlot.point.clone(), 0, 0)
       this.inPlot(true)
-      this.dehydrateInterval(this.dehydrateInterval() / 2)
+      this.dehydrateInterval(this.dehydrateInterval() * 2)
     }
 
     if (
@@ -58,9 +59,8 @@ export class SeedSettableItem extends StaticSettableItem {
       this.resourceInterval(this.resourceInterval() / FARM_ITEM_BUFF)
     }
 
-    this.resource.onChange((val) => {
+    this.resource.onChange((val, old) => {
       if (val > this.data.maxResource) return this.data.maxResource
-      if (!this.dehydrated()) this.try()
       const playerSockets = this.players
         .filter(
           (player) =>
@@ -79,6 +79,12 @@ export class SeedSettableItem extends StaticSettableItem {
             ? this.data.configureMode.dehydratedEmpty
             : this.data.configureMode.empty,
         )
+      } else if (old === 0) {
+        this.currentModeIndex(
+          this.dehydrated()
+            ? this.data.configureMode.dehydrated
+            : this.data.configureMode.grown,
+        )
       }
     })
 
@@ -88,60 +94,89 @@ export class SeedSettableItem extends StaticSettableItem {
       item.timeouts.dehydrateTime.stop()
     })
 
-    this.timeouts.growthTime = new Timeout(
-      this.grown.bind(this),
-      this.growthTime() * 1000,
-    ).run()
+    this.timeouts.growthTime = new Tick(this.growthTime())
 
-    this.timeouts.dehydrateTime = new Timeout(() => {
-      this.currentModeIndex(
-        this.resource() === 0
-          ? this.data.configureMode.dehydratedEmpty
-          : this.data.configureMode.dehydrated,
-      )
-      this.dehydrated(true)
-      this.timeouts.resourceInterval.stop()
-    }, this.data.dehydrateTime * 1000)
+    this.timeouts.dehydrateTime = new Tick(this.dehydrateInterval(), {
+      reversed: true,
+    })
 
-    this.timeouts.resourceInterval = new Interval(() => {
-      if (this.resource() + 1 === this.data.maxResource) {
-        this.timeouts.resourceInterval.stop()
+    this.timeouts.resourceInterval = new Tick(this.resourceInterval())
+    this.data.loop = this.everySecond.bind(this)
+  }
+
+  everySecond() {
+    if (this.timeouts.growthTime.limited()) return
+    if (!this.isGrown()) {
+      this.isGrown(true)
+      this.currentModeIndex(this.data.configureMode.grown)
+      this.timeouts.dehydrateTime.take()
+      this.timeouts.resourceInterval.take()
+    }
+
+    if (this.timeouts.dehydrateTime.limited()) {
+      if (!this.dehydrated()) {
+        this.dehydrated(true)
+        this.currentModeIndex(
+          this.resource() === 0
+            ? this.data.configureMode.dehydratedEmpty
+            : this.data.configureMode.dehydrated,
+        )
       }
-      this.resource(this.resource() + 1)
-    }, this.resourceInterval() * 1000)
+      return
+    }
+
+    if (this.isFull()) {
+      this.timeouts.resourceInterval.take()
+      return
+    }
+
+    // if (this.resource() + 1 === this.data.maxResource) {
+    //   this.timeouts.resourceInterval.stop()
+    // }
+    if (this.timeouts.resourceInterval.limited()) return
+    this.resource(this.resource() + 1)
+    this.timeouts.resourceInterval.take()
   }
 
-  grown() {
-    this.isGrown(true)
-    this.try()
-    this.dehydrate()
+  isFull() {
+    return this.resource() >= this.data.maxResource
   }
 
-  dehydrate() {
-    this.timeouts.dehydrateTime.run()
-  }
+  // grown() {
+  //   this.isGrown(true)
+  //   this.try()
+  //   this.dehydrate()
+  // }
+
+  // dehydrate() {
+  //   this.timeouts.dehydrateTime.take()
+  // }
 
   hydrate() {
     if (!this.isGrown()) return
-    this.timeouts.dehydrateTime.stop()
-    this.dehydrate()
+    this.timeouts.dehydrateTime.take()
     if (this.dehydrated()) {
       this.dehydrated(false)
-      this.try()
+      this.currentModeIndex(
+        this.resource() === 0
+          ? this.data.configureMode.empty
+          : this.data.configureMode.grown,
+      )
+      this.timeouts.resourceInterval.take()
     }
   }
 
-  try() {
-    if (this.timeouts.resourceInterval.isRunning()) {
-      return
-    }
+  // try() {
+  //   if (this.timeouts.resourceInterval.limited()) {
+  //     return
+  //   }
 
-    this.currentModeIndex(this.data.configureMode.grown)
-    if (this.resource() >= this.data.maxResource) {
-      return
-    }
-    this.timeouts.resourceInterval.run()
-  }
+  //   this.currentModeIndex(this.data.configureMode.grown)
+  //   if (this.resource() >= this.data.maxResource) {
+  //     return
+  //   }
+  //   this.timeouts.resourceInterval.run()
+  // }
 
   getAttacked(from: Point, by: Player): void {
     // hydrating
@@ -152,6 +187,7 @@ export class SeedSettableItem extends StaticSettableItem {
     } else {
       if (this.resource() > 0) {
         if (by.items.addable(this.data.resourceId)) {
+          if (this.isFull()) this.timeouts.resourceInterval.take()
           by.items.addItem(
             this.data.resourceId,
             by.items.equiped?.item.data.specialName ===

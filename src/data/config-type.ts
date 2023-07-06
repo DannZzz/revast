@@ -37,7 +37,7 @@ export const RangeByType = {
   spear: 180,
   hammer: 110,
   shovel: 90,
-  pitchfork: 250,
+  pitchfork: 270,
 }
 
 export const CraftDuration = {
