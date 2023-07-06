@@ -49,7 +49,7 @@ export default createSettable(118, 'bread-oven')
     source: 'BREAD_OVEN',
   })
   .onInit((settable) => {
-    settable.timeouts.tick = new Tick(8)
+    settable.timeouts.tick = createGameTick(2)
 
     const isWorking = (): boolean => {
       return (

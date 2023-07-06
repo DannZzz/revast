@@ -20,7 +20,7 @@ export const SERVER_API: (combine?: string, ws?: boolean) => string = (
   return `${origin}${combine}`
 }
 
-export const createGameTick = () => new Tick(5)
+export const createGameTick = (x: number = 1) => new Tick(5 * x)
 
 export const MAXIMUM_MESSAGE_SIZE_FOR_WS_PER_5S = 600
 
