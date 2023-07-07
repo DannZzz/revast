@@ -17,7 +17,7 @@ import { BasicPlayerItems } from "../basic/player-items.basic"
 import { Game } from "../game"
 import { NB } from "../utils/NumberBoolean"
 import { CraftDto } from "../../socket/events"
-import { getPointByTheta } from "../animations/rotation"
+import { getDistance, getPointByTheta } from "../animations/rotation"
 import { GRID_SET_RANGE } from "../../constants"
 import { GetSet } from "../structures/GetSet"
 import {
@@ -179,18 +179,29 @@ export class PlayerItems extends BasicPlayerItems {
       new Point(screen),
       new Point(this.player.point.x - screen.x, this.player.point.y - screen.y)
     )
+
     const { item } = this._items.find(
       (item) => item.item.id == this.settingMode.id
     ) as PlayerItem<Settable>
+    const tile = this.player.game().map.tileSize
+
+    const cursor = combineClasses(this.player.cursor, screen)
+
+    const cursorTile = combineClasses(
+      cursor,
+      new Point(tile.width / 2, tile.height / 2)
+    )
+
     const pointAbsolutePos = combineClasses(
       new Point(screenPos),
       getPointByTheta(
         new Point(item.data.size.width / 2, item.data.size.height / 2),
         this.player.theta || 0,
-        this.gridMaxRange
+        getDistance(cursor, screenPos) <= this.gridMaxRange
+          ? getDistance(cursorTile, screenPos)
+          : this.gridMaxRange
       )
     )
-    const tile = this.player.game().map.tileSize
     const gridPos = new Point(
       pointAbsolutePos.x - (pointAbsolutePos.x % tile.width),
       pointAbsolutePos.y - (pointAbsolutePos.y % tile.height)
@@ -256,7 +267,11 @@ export class PlayerItems extends BasicPlayerItems {
 
   setItemRequest() {
     if (!this.settingMode.id) return
-    socket.emit("setItemRequest", [this.settingMode.id])
+    socket.emit("setItemRequest", [
+      this.settingMode.id,
+      this.player.cursor.x,
+      this.player.cursor.y,
+    ])
   }
 
   setItemResponse() {

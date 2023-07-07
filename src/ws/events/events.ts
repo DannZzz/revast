@@ -123,7 +123,7 @@ export interface ClientToServerEvents {
   joinServer(data: [JoinPlayerDto]): void
   mouseAngle(data: [angle: number, theta: number]): void
   toggles(data: ToggleKeys): void
-  setItemRequest(data: [itemId: number]): void
+  setItemRequest(data: [itemId: number, x: number, y: number]): void
   screenSize(data: [size: Size]): void
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void

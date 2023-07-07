@@ -36,18 +36,18 @@ export type Classes = Point | Size
 
 export const isValidClass = (obj: Classes): boolean => {
   if (!obj || typeof obj !== "object") return false
-  if (obj instanceof Point) {
+  if ("x" in obj && "y" in obj) {
     return !isNaN(obj.x) && !isNaN(obj.y)
-  } else if (obj instanceof Size) {
+  } else if ("width" in obj && "height" in obj) {
     return !isNaN(obj.width) && !isNaN(obj.height)
   }
 }
 
 export const combineClasses = <T extends Classes>(obj1: T, obj2: T): T => {
   if (!isValidClass(obj1) || !isValidClass(obj1)) return null
-  if (__(Point, obj1) && __(Point, obj2)) {
+  if ("x" in obj1 && "y" in obj2) {
     return new Point(obj1.x + obj2.x, obj1.y + obj2.y) as any
-  } else if (__(Size, obj1) && __(Size, obj2)) {
+  } else if ("width" in obj1 && "width" in obj2) {
     return new Size(obj1.width + obj2.width, obj1.height + obj2.height) as any
   }
 }

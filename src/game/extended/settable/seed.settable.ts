@@ -88,12 +88,6 @@ export class SeedSettableItem extends StaticSettableItem {
       }
     })
 
-    this.on('destroy', (item) => {
-      item.timeouts.growthTime.stop()
-      item.timeouts.resourceInterval.stop()
-      item.timeouts.dehydrateTime.stop()
-    })
-
     this.timeouts.growthTime = new Tick(this.growthTime())
 
     this.timeouts.dehydrateTime = new Tick(this.dehydrateInterval(), {

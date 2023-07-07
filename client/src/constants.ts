@@ -4,7 +4,7 @@ export const DISCORD_SERVER_LINK = "https://discord.gg/anevqcFqjS"
 
 export const SERVER_ASSET = (fileName: string) => `/api/images/${fileName}`
 
-export const GRID_SET_RANGE = 100
+export const GRID_SET_RANGE = 150
 
 export const BG_FOREST_BIOM = {
   day: "#133A2B",

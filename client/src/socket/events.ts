@@ -366,7 +366,7 @@ export interface ClientToServerEvents {
       clicking: NumberBoolean
     ]
   ): void
-  setItemRequest(data: [itemId: number]): void
+  setItemRequest(data: [itemId: number, x: number, y: number]): void
   screenSize(data: [size: Size]): void
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void

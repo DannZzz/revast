@@ -8,7 +8,7 @@ import {
 } from '../basic/item.basic'
 import type { Player } from './player'
 import { Chest } from 'anytool/dist/Chest'
-import { getPointByTheta } from '../animations/rotation'
+import { getDistance, getPointByTheta } from '../animations/rotation'
 import { itemById, Items } from 'src/data/items'
 import { EquipmentEntity } from 'src/entities/equipment.entity'
 import { ItemEntity } from 'src/entities/item.entity'
@@ -139,7 +139,7 @@ export class PlayerItems {
     return true
   }
 
-  setItem(itemId: number): number {
+  setItem(itemId: number, cursorX: number, cursorY: number): number {
     if (this.timeout.building > Date.now() || this.isCrafting) return -1
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
@@ -157,15 +157,28 @@ export class PlayerItems {
 
     if (item.data.setMode.grid) {
       theta = angle = 0
+
+      const cursor = combineClasses(
+        this.player.camera.point(),
+        new Point(cursorX, cursorY),
+      )
+      const tile = this.player.gameServer.map.tileSize
+
+      const cursorTile = combineClasses(
+        cursor,
+        new Point(tile.width / 2, tile.height / 2),
+      )
+
       const absolutePoint = getPointByTheta(
         combineClasses(
           new Point(item.data.size.width / 2, item.data.size.height / 2),
           this.player.point(),
         ),
         this.player.theta(),
-        GRID_SET_RANGE,
+        getDistance(cursor, this.player.point()) <= GRID_SET_RANGE
+          ? getDistance(cursorTile, this.player.point())
+          : GRID_SET_RANGE,
       )
-      const tile = this.player.gameServer.map.tileSize
       point = new Point(
         absolutePoint.x - (absolutePoint.x % tile.width),
         absolutePoint.y - (absolutePoint.y % tile.height),

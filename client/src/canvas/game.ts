@@ -319,6 +319,7 @@ export class Game {
       if (!this.player) return
       const angle = getAngle(this.player.bodyCenterOnScreen, point)
       this.player.theta = angle
+      this.player.cursor = point
       this.player.events.emit("set.angle", (angle / Math.PI) * 180 - 90)
     })
 

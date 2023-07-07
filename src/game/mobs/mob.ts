@@ -20,6 +20,8 @@ import { Bio } from '../basic/bio-item.basic'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { MOB_GLOBAL_ATTACK_SPEED_EFFECT } from 'src/constant'
 import { isSameVector } from 'src/utils/same-vector'
+import { isNumber } from 'src/utils/is-number-in-range'
+import { timingSafeEqual } from 'crypto'
 
 export interface MobProps {
   point: Point
@@ -111,10 +113,10 @@ export class Mob extends BasicMob {
   }
 
   hurt(damage: number, player: Player) {
-    if (damage === 0) return
+    if (!isNumber(damage) || damage === 0) return
     if (damage < 0) damage = -damage
-    console.log('mob damage', damage, this.hp)
     this.hp -= damage
+    if (!isNumber(this.hp)) this.hp = 0
     if (this.hp <= 0) {
       if (!this.died) {
         if (this.drop) {

@@ -31,13 +31,17 @@ export default function registerListeners(this: Wss) {
       player?.items.craftItem(data[0])
     })
     .on('setItemRequest', ({ ws, player }, data) => {
-      if (!isNumber(data[0], 1, 1000)) {
+      if (
+        !isNumber(data[0], 1, 1000) ||
+        !isNumber(data[1]) ||
+        !isNumber(data[2])
+      ) {
         return
       }
 
       if (!player) return
       this.emitable(ws.id).emit('setItemResponse', [
-        player.items.setItem(data[0]),
+        player.items.setItem(...data),
         NB.to(player.items.timeout.building > Date.now()),
       ])
     })

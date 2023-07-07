@@ -23,6 +23,7 @@ export abstract class BasicElement<T extends EventObject = {}> {
   private _size: Size = new Size(120, 116)
   angle?: number
   theta?: number
+  _cursor?: Point
   readonly events = new EventEmitter<T>()
 
   constructor(props: ElementProps) {
@@ -32,6 +33,14 @@ export abstract class BasicElement<T extends EventObject = {}> {
     if (props.size) this._size = props.size
     this.angle = props.angle
     this.registerEvents()
+  }
+
+  get cursor() {
+    return this._cursor || new Point(0, 0)
+  }
+
+  set cursor(val) {
+    this._cursor = new Point(val)
   }
 
   get stage() {
