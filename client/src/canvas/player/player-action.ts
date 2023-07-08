@@ -40,7 +40,7 @@ export class PlayerAction {
           amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
         )
       } else {
-        var amplitude = 1
+        var amplitude = 0.8
         var period = 1000
         this.player.handsGroup.y(0)
         hands.right.x(
