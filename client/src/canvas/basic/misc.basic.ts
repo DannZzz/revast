@@ -27,13 +27,13 @@ export class BasicMisc implements MiscDto {
     const group: Konva.Group = this.layer.findOne("#game-misc-1")
     this.imageNode = new Konva.Image({
       ...this.point,
-      image: loadImage(this.url, (img) => this.imageNode.image(img).cache()),
+      image: loadImage(this.url, (img) => this.imageNode.image(img)),
       ...this.size,
       // offset: {
       //   x: this.size.width / 2,
       //   y: this.size.height / 2,
       // },
-    }).cache()
+    })
 
     group.add(this.imageNode)
   }

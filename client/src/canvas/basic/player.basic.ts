@@ -194,7 +194,7 @@ export class BasicPlayer<
       ...this.equipment.hands.right,
       ...this.equipment.size,
       visible: false,
-    }).cache()
+    })
 
     const leftHand = new Konva.Group({
       id: `${id}-body-hand-left`,
@@ -218,7 +218,7 @@ export class BasicPlayer<
       visible: false,
       scaleX: -1,
       offsetX: this.equipment.size.width,
-    }).cache()
+    })
 
     rightHand.add(rightHandItem, handBase)
     leftHand.add(leftHandItem, handBase.clone())

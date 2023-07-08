@@ -20,7 +20,7 @@ const WaterWalkEffectGroup = new Konva.Group({ opacity: 0.5 })
       offsetX: -60,
     })
   )
-  .cache()
+  
 
 const FootPrint = new Konva.Rect({
   opacity: 0.4,
