@@ -238,7 +238,7 @@ export class Mob extends BasicMob {
           return
         } else if (itemWithin && !noCheck) {
           this.targetPoint = null
-          this.target = null
+          // this.target = null
           useTactic({
             tactic: this.moveTactic.idleTactic,
             theta:
