@@ -31,8 +31,8 @@ export class PlayerAction {
       }
 
       if (this.player.running) {
-        var amplitude = 0.5
-        var period = 800
+        var amplitude = 1.5
+        var period = 1000
 
         hands.right.x(this.player.handsPosition.right.x)
         hands.left.x(this.player.handsPosition.left.x)
