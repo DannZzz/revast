@@ -114,7 +114,7 @@ export const StaticItemsAddons: {
       $.$ArrayLength(bio.data.maxResources, (i) => {
         const show = i + 1 <= currentResources
         if (!show) {
-          bio.alsoSavedNodes[i]?.remove()
+          bio.alsoSavedNodes[i]?.destroy()
           bio.alsoSavedNodes[i] = null
           return
         }
@@ -287,10 +287,10 @@ export const StaticItemsAddons: {
         const show = i + 1 <= currentResources
 
         if (!show) {
-          bio.alsoSavedNodes[i]?.remove()
+          bio.alsoSavedNodes[i]?.destroy()
+          bio.alsoSavedNodes[i] = null
           return
         }
-        if (bio.alsoSavedNodes[i]) return
 
         bio.alsoSavedNodes[i] = createCircle(
           combineClasses(groupPos, getPoint(i))
