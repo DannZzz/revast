@@ -13,18 +13,44 @@ export class PlayerAction {
     this.click = new PlayerClick(player)
   }
 
+  get hands() {
+    return {
+      right: this.player.element(`#${this.player.id("body", "hand", "right")}`),
+      left: this.player.element(`#${this.player.id("body", "hand", "left")}`),
+    }
+  }
+
   running() {
+    const hands = this.hands
     new Konva.Animation((frame) => {
-      if (this.player.running && this.click.clickStatus !== "pending") {
+      if (this.click.clickStatus === "pending") {
+        this.player.handsGroup.y(0)
+        hands.right.position(this.player.handsPosition.right)
+        hands.left.position(this.player.handsPosition.left)
+        return false
+      }
+
+      if (this.player.running) {
         var amplitude = 1
         var period = 800
 
+        hands.right.x(this.player.handsPosition.right.x)
+        hands.left.x(this.player.handsPosition.left.x)
         this.player.handsGroup.y(
           amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
         )
       } else {
+        var amplitude = 1
+        var period = 1000
         this.player.handsGroup.y(0)
-        return false
+        hands.right.x(
+          amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
+            this.player.handsPosition.right.x
+        )
+        hands.left.x(
+          -amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
+            this.player.handsPosition.left.x
+        )
       }
     }).start()
   }
@@ -36,10 +62,7 @@ export class PlayerAction {
       !this.click.clickDuration
     )
       return
-    const hands = {
-      right: this.player.element(`#${this.player.id("body", "hand", "right")}`),
-      left: this.player.element(`#${this.player.id("body", "hand", "left")}`),
-    }
+    const hands = this.hands
     const handsItems = $({
       right: this.player.element(`#${this.player.id("equiped", "right")}`),
       left: this.player.element(`#${this.player.id("equiped", "left")}`),

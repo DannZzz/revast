@@ -305,6 +305,7 @@ export class BasicPlayer<
         )
       )
       this.messagesNode.position(this.point)
+      this.cache.data.point = this.point
       // this.body?.position(new Point(this.size.width / 2, this.size.height / 2))
     } else {
       this.running = false
