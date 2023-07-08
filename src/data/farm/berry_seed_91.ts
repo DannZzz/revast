@@ -40,7 +40,7 @@ export default createSettable(91, 'berry-seed')
       grown: 1,
       empty: 1,
     },
-    growthTime: 7 * 60,
+    growthTime: 7,
     dehydrateTime: 15 * 60,
     resourceInterval: 10,
     maxResource: 3,
