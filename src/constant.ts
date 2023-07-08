@@ -112,9 +112,9 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  itemFor(91),
-  itemFor(114),
-  // itemFor(111),
+  // itemFor(91),
+  // itemFor(114),
+  // itemFor(112),
   // itemFor(93),
   // itemFor(118),
   // itemFor(117),

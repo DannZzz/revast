@@ -187,12 +187,13 @@ export class SeedSettableItem extends StaticSettableItem {
             (isNumber(this.data.resourceAtOnce)
               ? this.data.resourceAtOnce
               : 1) *
-              (by.items.equiped?.item.data.specialName ===
-              SpecialItemTypes.pitchfork
+              (by.items.weared?.item.data.specialName ===
+              SpecialItemTypes.peasant
                 ? 2
                 : 1),
           )
           this.resource(this.resource() - 1)
+          by.lbMember.add(1)
         }
       }
     }

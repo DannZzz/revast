@@ -16,8 +16,8 @@ export class PlayerAction {
   running() {
     new Konva.Animation((frame) => {
       if (this.player.running && this.click.clickStatus !== "pending") {
-        var amplitude = -5
-        var period = 1000
+        var amplitude = -3
+        var period = 500
 
         this.player.handsGroup.y(
           amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
