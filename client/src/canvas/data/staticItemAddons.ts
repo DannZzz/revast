@@ -19,11 +19,10 @@ const size = new Size(20, 20)
 const berryPng = new Konva.Image({
   image: loadImage("/images/berry.png", (img) => {
     berryPng.image(img)
-    berryPng.cache()
   }),
   ...size,
   offset: new Point(size.width / 2, size.height / 2),
-}).cache()
+})
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -115,7 +114,7 @@ export const StaticItemsAddons: {
       $.$ArrayLength(bio.data.maxResources, (i) => {
         const show = i + 1 <= currentResources
         if (!show) {
-          bio.alsoSavedNodes[i]?.destroy()
+          bio.alsoSavedNodes[i]?.remove()
           bio.alsoSavedNodes[i] = null
           return
         }
@@ -288,8 +287,7 @@ export const StaticItemsAddons: {
         const show = i + 1 <= currentResources
 
         if (!show) {
-          bio.alsoSavedNodes[i]?.destroy()
-          bio.alsoSavedNodes[i] = null
+          bio.alsoSavedNodes[i]?.remove()
           return
         }
         if (bio.alsoSavedNodes[i]) return

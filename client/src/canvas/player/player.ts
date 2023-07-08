@@ -108,6 +108,7 @@ export class Player extends BasicPlayer<PlayerEvents> {
       cacheCamerPoint?.x !== this.camera.point.value.x ||
       cacheCamerPoint?.y !== this.camera.point.value.y
     ) {
+      this.running = true
       this.camera.update() //
       this.element().position(
         combineClasses(
@@ -119,6 +120,8 @@ export class Player extends BasicPlayer<PlayerEvents> {
       this.messagesNode.position(this.point)
       this.cache.data.point = new Point(this.point)
       this.cache.data.screen = this.camera.point.value
+    } else {
+      this.running = false
     }
     this.actions.clicking()
   }

@@ -55,7 +55,9 @@ export class BasicPlayer<
   messagesNode: Konva.Group
   messages: PlayerMessages
   private inBodyEffect = false
+  handsGroup: Konva.Group
   footPrint = false
+  running = false
   icons: number[] = []
   nameNodes: { group: Konva.Group; text: Konva.Text; icons: Konva.Group } = <
     any
@@ -219,8 +221,8 @@ export class BasicPlayer<
     }).cache()
 
     rightHand.add(rightHandItem, handBase)
-    rightHandItem.zIndex(-1)
     leftHand.add(leftHandItem, handBase.clone())
+    this.handsGroup = new Konva.Group().add(rightHand, leftHand)
 
     this.items.settingMode.node = new Konva.Image({
       image: null,
@@ -231,8 +233,7 @@ export class BasicPlayer<
 
     bodyGroup.add(
       this.items.settingMode.node,
-      rightHand,
-      leftHand,
+      this.handsGroup,
       this.bagNode,
       body,
       this.wearingNode
@@ -251,6 +252,7 @@ export class BasicPlayer<
     group.listening(false)
     ;(this.layer.findOne("#game-players") as any).add(group)
     this.takeIcons(this.icons, true)
+    this.actions.running()
   }
   registerEvents(): void {
     // throw new Error("Method not implemented.")
@@ -295,6 +297,7 @@ export class BasicPlayer<
   ): void {
     const cachePoint = this.cache.get("point")
     if (cachePoint?.x !== this.point.x || cachePoint?.y !== this.point.y) {
+      this.running = true
       this.element()?.position(
         combineClasses(
           this.point,
@@ -303,6 +306,8 @@ export class BasicPlayer<
       )
       this.messagesNode.position(this.point)
       // this.body?.position(new Point(this.size.width / 2, this.size.height / 2))
+    } else {
+      this.running = false
     }
     if (angle) {
       if (this.cache.get("angle") !== this.angle) {

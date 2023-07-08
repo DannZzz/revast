@@ -1,4 +1,3 @@
-import { MobMoveStatus } from 'src/game/basic/mob.basic'
 import { createMob } from 'src/structures/item-creator/create-mob'
 import { MobNames } from '../mobs'
 

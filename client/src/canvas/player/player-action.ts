@@ -1,3 +1,4 @@
+import Konva from "konva"
 import { Point, combineClasses } from "../../global/init"
 import { socket } from "../../socket/socket"
 import { animate2to, animateTo } from "../animations/to"
@@ -10,6 +11,22 @@ export class PlayerAction {
   readonly click: PlayerClick
   constructor(private player: BasicPlayer) {
     this.click = new PlayerClick(player)
+  }
+
+  running() {
+    new Konva.Animation((frame) => {
+      if (this.player.running && this.click.clickStatus !== "pending") {
+        var amplitude = -5
+        var period = 500
+
+        this.player.handsGroup.y(
+          amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
+        )
+      } else {
+        this.player.handsGroup.y(0)
+        return false
+      }
+    }).start()
   }
 
   clicking() {

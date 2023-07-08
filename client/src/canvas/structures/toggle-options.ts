@@ -59,4 +59,10 @@ export class Toggle {
       }
     }
   }
+
+  get isRunning(): boolean {
+    return (
+      this.is("up") || this.is("down") || this.is("right") || this.is("left")
+    )
+  }
 }
