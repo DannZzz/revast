@@ -3,10 +3,11 @@ import { Layer } from "konva/lib/Layer"
 import { NodeConfig, Node } from "konva/lib/Node"
 import { Point, Size, combineClasses } from "../../global/init"
 import { EventEmitter, EventObject } from "../utils/EventEmitter"
+import Konva from "konva"
 
 interface BasicElementProps {
   layer: Layer
-  layer2: Layer
+  layer2: Konva.Group
   point: Point
   size?: Size
   angle?: number
@@ -18,7 +19,7 @@ export type ElementProps<T extends object = {}> = T & BasicElementProps
 export abstract class BasicElement<T extends EventObject = {}> {
   protected _id: string
   layer: Layer
-  layer2: Layer
+  layer2: Konva.Group
   private _point: Point
   private _size: Size = new Size(120, 116)
   angle?: number

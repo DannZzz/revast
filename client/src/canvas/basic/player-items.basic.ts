@@ -7,7 +7,7 @@ import Konva from "konva"
 
 export class BasicPlayerItems {
   equiped: EquipmentDto
-  layer: Layer
+  layer: Konva.Group
   bagUrl: string
   weared: WearingDto
 
@@ -46,11 +46,11 @@ export class BasicPlayerItems {
         handLeft.setAttr(
           "image",
           loadImage(equiped.url, (img) =>
-            handLeft.setAttr("image", img)
+            handLeft.setAttr("image", img).cache()
           )
         )
       }
-      handLeft
+      handLeft.cache()
       handRight.visible(true)
       handRight.position(equiped.drawPosition)
       handRight.size(equipmentSize)
@@ -58,10 +58,10 @@ export class BasicPlayerItems {
         .setAttr(
           "image",
           loadImage(equiped.url, (img) =>
-            handRight.setAttr("image", img)
+            handRight.setAttr("image", img).cache()
           )
         )
-        
+        .cache()
       handRight.scaleX(equiped.flip ? -1 : 1)
       handRight.offsetX(equiped.flip ? equipmentSize.width : 0)
       handRight.rotation(
@@ -70,10 +70,10 @@ export class BasicPlayerItems {
     } else {
       handLeft.visible(false)
       handLeft.size(this.player.equipment.size)
-      handLeft.setAttr("image", null)
+      handLeft.setAttr("image", null).cache()
       handRight.visible(false)
       handRight.size(this.player.equipment.size)
-      handRight.setAttr("image", null)
+      handRight.setAttr("image", null).cache()
     }
   }
 

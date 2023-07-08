@@ -42,11 +42,13 @@ export class PlayerControllers {
 
     const timerGroup = new Konva.Group({
       x: iconSize.width + this.gap,
+      listening: false,
     })
     const timerBg = new Konva.Image({
       image: loadImage("images/clock.png", (img) => timerBg.image(img).cache()),
       width: iconSize.width,
       height: iconSize.height,
+      listening: false,
     }).cache()
     const timerArrow = new Konva.Image({
       image: loadImage("images/clock-arrow.png", (img) =>
@@ -54,6 +56,7 @@ export class PlayerControllers {
       ),
       width: iconSize.width,
       height: iconSize.height,
+      listening: false,
       x: iconSize.width / 2,
       y: iconSize.height / 2,
       // offsetX: 25,
@@ -99,6 +102,7 @@ export class PlayerControllers {
         bandageEffectIcon.image(img)
         bandageEffectGroup.cache()
       }),
+      listening: false,
       ...iconSize,
     })
     const bandageEffectCount = new KonvaText({
@@ -107,6 +111,7 @@ export class PlayerControllers {
       fontSize: 20,
       // lineHeight: 35,
       width: iconSize.width,
+      listening: false,
       y: iconSize.height - 20,
       align: "right",
     })

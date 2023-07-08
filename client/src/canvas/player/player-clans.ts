@@ -73,6 +73,7 @@ export class PlayerClans {
         width: 200,
         fill: "#ccc",
         wrap: "none",
+        listening: false,
       })
       text.x((maxWidth - text.width()) / 2)
 

@@ -35,7 +35,7 @@ export class Game {
   camera: Camera
   map: MapDto
   ended = false
-  layer2: Layer
+  layer2: Konva.Group
   otherPlayers: BasicPlayer[] = []
   private playerQueue: JoinPlayer[] = []
   private serverMessageNode: Konva.Text
@@ -45,7 +45,6 @@ export class Game {
 
   init(props: GameProps) {
     this.layer = props.layer
-    this.layer2 = props.layer2
     this.registerEvents()
     this.playerQueue.forEach((jp) => this.joinPlayer(jp))
     this.playerQueue = []
@@ -93,21 +92,51 @@ export class Game {
       listening: false,
     })
 
-    const gameAttr = new Konva.Group({ id: "game-attr" })
-    const miscsGroup1 = new Konva.Group({ id: "game-misc-1" })
-    const itemsGroup = new Konva.Group({ id: "game-settable" })
-    const itemsGroup1 = new Konva.Group({ id: "game-settable+1" })
-    const itemsGroup_1 = new Konva.Group({ id: "game-settable-1" })
-    const itemsGroup_2 = new Konva.Group({ id: "game-settable-2" })
-    const itemsGroup_3 = new Konva.Group({ id: "game-settable-3" })
-    const itemsGroup_4 = new Konva.Group({ id: "game-settable-4" })
-    const itemsGroup_5 = new Konva.Group({ id: "game-settable-5" })
-    const itemsGroup_6 = new Konva.Group({ id: "game-settable-6" })
-    const mobGroup = new Konva.Group({ id: "game-mobs" })
-    const bioGroup = new Konva.Group({ id: "game-bios" })
-    const playersGroup = new Konva.Group({ id: "game-players" })
-    const highlights = new Konva.Group({ id: "highlights", listening: false })
-    const messages = new Konva.Group({ id: "messages" })
+    const gameAttr = new Konva.Group({ listening: false, id: "game-attr" })
+    const miscsGroup1 = new Konva.Group({ listening: false, id: "game-misc-1" })
+    const itemsGroup = new Konva.Group({
+      listening: false,
+      id: "game-settable",
+    })
+    const itemsGroup1 = new Konva.Group({
+      listening: false,
+      id: "game-settable+1",
+    })
+    const itemsGroup_1 = new Konva.Group({
+      listening: false,
+      id: "game-settable-1",
+    })
+    const itemsGroup_2 = new Konva.Group({
+      listening: false,
+      id: "game-settable-2",
+    })
+    const itemsGroup_3 = new Konva.Group({
+      listening: false,
+      id: "game-settable-3",
+    })
+    const itemsGroup_4 = new Konva.Group({
+      listening: false,
+      id: "game-settable-4",
+    })
+    const itemsGroup_5 = new Konva.Group({
+      listening: false,
+      id: "game-settable-5",
+    })
+    const itemsGroup_6 = new Konva.Group({
+      listening: false,
+      id: "game-settable-6",
+    })
+    const mobGroup = new Konva.Group({ listening: false, id: "game-mobs" })
+    const bioGroup = new Konva.Group({ listening: false, id: "game-bios" })
+    const playersGroup = new Konva.Group({
+      listening: false,
+      id: "game-players",
+    })
+    // const highlights = new Konva.Group({
+    //   listening: false,
+    //   id: "highlights",
+    // })
+    const messages = new Konva.Group({ listening: false, id: "messages" })
     const alwaysTop = new Konva.Group({ id: "always-top" })
     mainGroup.add(
       gameBg,
@@ -128,7 +157,9 @@ export class Game {
     )
 
     this.layer.add(mainGroup)
-    this.layer2.add(highlights, alwaysTop)
+    this.layer2 = new Konva.Group()
+    this.layer.add(this.layer2)
+    this.layer2.add(alwaysTop)
     alwaysTop.zIndex(2)
   }
 
@@ -357,7 +388,6 @@ export class Game {
       this.draw()
       this.camera = new Camera(new Point(0, 0), [
         this.layer.findOne("#game-group"),
-        this.layer2.findOne("#highlights"),
       ])
 
       this.camera.point.value = data.screen
@@ -551,18 +581,18 @@ export class Game {
     ;(layer.findOne(id) as Group).add(...shapes)
   }
 
-  static createHighlight(layer2: Layer, ...shapes: any[]) {
+  static createHighlight(layer2: Konva.Group, ...shapes: any[]) {
     shapes.forEach((shape) => shape?.listening(false).cache())
     // ;(layer2.findOne("#highlights") as Group).add(...shapes)
   }
-  static createAbsoluteHighlight(layer2: Layer, ...shapes: any[]) {
+  static createAbsoluteHighlight(layer2: Konva.Group, ...shapes: any[]) {
     shapes.forEach((shape) => shape?.listening(false))
     // layer2.add(...shapes)
   }
-  static createAlwaysTop(layer2: Layer, ...shapes: any[]) {
+  static createAlwaysTop(layer2: Konva.Group, ...shapes: any[]) {
     ;(layer2.findOne("#always-top") as Group).add(...shapes)
   }
-  static createMessageGroup(layer: Layer, ...shapes: any[]) {
+  static createMessageGroup(layer: Layer | Konva.Group, ...shapes: any[]) {
     ;(layer.findOne("#messages") as Group).add(...shapes)
   }
 }

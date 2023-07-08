@@ -167,6 +167,7 @@ export class PlayerBars {
 
       const barGroup = new Konva.Group({
         x: (this.barWidth + this.barGap) * i,
+        listening: false,
       })
 
       const mainBar = new Konva.Rect({
@@ -174,6 +175,7 @@ export class PlayerBars {
         width: barWidthFromPercentage,
         cornerRadius: 5,
         fill: barColor,
+        listening: false,
       })
 
       this.barNodes[id].bar = mainBar
@@ -184,12 +186,14 @@ export class PlayerBars {
         stroke: barColor,
         strokeWidth: 5,
         cornerRadius: 5,
+        listening: false,
       })
 
       const mainBarPercentageText = new KonvaText({
         text: `${barWidthInPercentage.toFixed(0)}%`,
         fill: "white",
         width: this.barWidth,
+        listening: false,
         height: this.barHeight,
         verticalAlign: "middle",
         align: "center",
@@ -249,6 +253,7 @@ export class PlayerBars {
         y: this.barGap + this.barHeight,
       },
       visible: currentO2InPercentage !== 100,
+      listening: false,
     })
 
     const o2Rect = new Konva.Rect({
@@ -256,6 +261,7 @@ export class PlayerBars {
       height: this.o2BarHeight,
       width: this.o2BarWidth,
       cornerRadius: 5,
+      listening: false,
     })
 
     const o2Stroke = new Konva.Rect({
@@ -264,6 +270,7 @@ export class PlayerBars {
       height: this.o2BarHeight,
       width: percentOf(currentO2InPercentage, this.o2BarWidth),
       cornerRadius: 5,
+      listening: false,
     })
 
     this.barNodes.o2.bar = o2Rect

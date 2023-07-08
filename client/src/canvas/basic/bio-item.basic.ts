@@ -147,6 +147,7 @@ export class Bio {
       id: this.id,
       ...this.point,
       perfectDrawEnabled: false,
+      listening: false,
     })
 
     const image = new Konva.Image({
@@ -154,6 +155,7 @@ export class Bio {
         image.image(img)
       }),
       ...this.data.size,
+      listening: false,
     })
     this.node = bioGroup
     bioGroup.add(image)

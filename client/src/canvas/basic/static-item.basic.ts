@@ -50,7 +50,7 @@ export class StaticSettableItem
   type?: string
   highlight?: Highlight<HighlightType>
   layer: Layer
-  layer2: Layer
+  layer2: Konva.Group
   destroyed: boolean = false
   showHp?: { radius: number; angle: number }
   showHpArc: Konva.Arc
@@ -71,7 +71,7 @@ export class StaticSettableItem
     return new Point(this.point.x, this.point.y)
   }
 
-  take(layer: Layer, layer2: Layer) {
+  take(layer: Layer, layer2: Konva.Group) {
     this.layer = layer
     this.layer2 = layer2
     return this
@@ -133,6 +133,7 @@ export class StaticSettableItem
       id: this.id,
       x: this.point.x,
       y: this.point.y,
+      listening: false,
       offset: {
         x: this.size.width / 2,
         y: this.size.height / 2,
@@ -147,6 +148,7 @@ export class StaticSettableItem
       ...size,
       offsetX: size.width / 2,
       offsetY: size.height / 2,
+      listening: false,
       x: this.size.width / 2,
       y: this.size.height / 2,
       rotation: this.rotation,
@@ -176,13 +178,14 @@ export class StaticSettableItem
     if (this.showHp) {
       this.showHpArc = new Konva.Arc({
         x: this.size.width / 2,
+        listening: false,
         y: this.size.height / 2,
         outerRadius: this.showHp.radius,
         innerRadius: this.showHp.radius - 5,
         angle: this.showHp.angle,
         fill: "#fd5d00",
         stroke: "#252525",
-        strokeWidth: 1,
+        strokeWidth: 0.5,
         visible: this.showHp.angle !== 360,
       })
       itemGroup.add(this.showHpArc)
@@ -200,6 +203,7 @@ export class StaticSettableItem
         highlightNode = new Konva.Circle({
           ...this.point,
           ...this.highlight.data,
+          listening: false,
           id: `${this.id}-highlight`,
           globalCompositeOperation: "destination-out",
           fill: "rgba(255,255,255)",

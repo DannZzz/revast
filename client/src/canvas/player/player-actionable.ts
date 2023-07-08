@@ -14,7 +14,7 @@ export class PlayerActionable {
   actionableIconNode: Konva.Image
   rightMargin = 50
   readonly itemIconSize = new Size(50, 50)
-  constructor(private layer2: Konva.Layer, private items: PlayerItems) {
+  constructor(private layer2: Konva.Group, private items: PlayerItems) {
     this.draw()
     this.items.space.onChange(() => this.drawButtons())
     this.registerSocket()
@@ -27,9 +27,9 @@ export class PlayerActionable {
   readonly addButtonSize = new Size(20, 20)
 
   draw() {
-    this.actionableGroup = new Konva.Group()
+    this.actionableGroup = new Konva.Group({})
 
-    this.addButtonsGroup = new Konva.Group()
+    this.addButtonsGroup = new Konva.Group({})
     this.resize()
 
     this.actionableIconNode = new Konva.Image({

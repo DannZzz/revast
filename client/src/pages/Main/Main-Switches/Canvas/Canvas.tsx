@@ -130,11 +130,10 @@ const Canvas: Component<{}> = (props) => {
       height: window.innerHeight,
     })
 
-    const layer1 = new Konva.Layer({ listening: false })
-    const layer2 = new Konva.Layer()
-    stage.add(layer1, layer2)
+    const layer1 = new Konva.Layer()
+    stage.add(layer1)
     // init game
-    game.init({ layer: layer1, layer2: layer2 })
+    game.init({ layer: layer1 })
 
     game.events.on("loaded", showGame)
 
