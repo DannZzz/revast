@@ -16,6 +16,7 @@ export type ExtendedSeed<T = Settable> = {
   dehydrateTime: number
   resourceInterval: number
   resourceId: number
+  resourceAtOnce?: number
   configureMode: {
     empty: number
     grown: number

@@ -2,7 +2,7 @@ import { GAME_DAY_SECONDS } from 'src/constant'
 import { Point } from 'src/global/global'
 import createSettable from 'src/structures/item-creator/create-settable'
 
-export default createSettable(91, 'berry-seed')
+export default createSettable(91)
   .sources('PRE_BERRY_BUSH', 'ICON_BERRY_SEEDS')
   .cover(-2)
   .name('Berry Seeds')
@@ -22,7 +22,7 @@ export default createSettable(91, 'berry-seed')
       cover: -2,
       trigger: 'custom',
       verify: () => true,
-      source: 'BERRY_BUSH',
+      source: 'BERRY_BUSH_FULL',
     },
     {
       cover: -2,
@@ -30,20 +30,27 @@ export default createSettable(91, 'berry-seed')
       verify: () => true,
       source: 'DEHYDRATED_BERRY_BUSH',
     },
+    {
+      cover: -2,
+      trigger: 'custom',
+      verify: () => true,
+      source: 'PRE_DEHYDRATED_BERRY_BUSH',
+    },
   )
   .noAttackedAnimation()
   .duration(6 * GAME_DAY_SECONDS)
   .seed({
     configureMode: {
       dehydrated: 2,
-      dehydratedEmpty: 2,
+      dehydratedEmpty: 3,
       grown: 1,
-      empty: 1,
+      empty: 0,
     },
     growthTime: 7,
     dehydrateTime: 15 * 60,
-    resourceInterval: 10,
-    maxResource: 3,
+    resourceInterval: 25,
+    maxResource: 1,
     resourceId: 6,
+    resourceAtOnce: 3,
   })
   .buildSeed()

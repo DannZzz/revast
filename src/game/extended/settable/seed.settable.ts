@@ -13,6 +13,7 @@ import { Interval } from 'src/structures/timers/interval'
 import { Timer } from 'src/structures/timers/timer'
 import { FARM_ITEM_BUFF } from 'src/constant'
 import { Tick } from 'src/structures/Tick'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 export class SeedSettableItem extends StaticSettableItem {
   data: ItemProps<ExtendedSeed>
@@ -101,7 +102,7 @@ export class SeedSettableItem extends StaticSettableItem {
     if (this.timeouts.growthTime.limited()) return
     if (!this.isGrown()) {
       this.isGrown(true)
-      this.currentModeIndex(this.data.configureMode.grown)
+      this.currentModeIndex(this.data.configureMode.empty)
       this.timeouts.dehydrateTime.take()
       this.timeouts.resourceInterval.take()
     }
@@ -183,10 +184,13 @@ export class SeedSettableItem extends StaticSettableItem {
           if (this.isFull()) this.timeouts.resourceInterval.take()
           by.items.addItem(
             this.data.resourceId,
-            by.items.equiped?.item.data.specialName ===
+            (isNumber(this.data.resourceAtOnce)
+              ? this.data.resourceAtOnce
+              : 1) *
+              (by.items.equiped?.item.data.specialName ===
               SpecialItemTypes.pitchfork
-              ? 2
-              : 1,
+                ? 2
+                : 1),
           )
           this.resource(this.resource() - 1)
         }
