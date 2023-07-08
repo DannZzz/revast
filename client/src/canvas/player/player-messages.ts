@@ -22,7 +22,7 @@ export class PlayerMessages {
     if (this.currently.length >= this.maxShowMessages) return
     const text = this.messages.shift()
     if (!text) return
-    const group = new Konva.Group({ listening: false })
+    const group = new Konva.Group()
 
     const textNode = new KonvaText({
       text,
@@ -40,7 +40,6 @@ export class PlayerMessages {
       fill: "#252525cc",
       height: textNode.height(),
       cornerRadius: 5,
-      listening: false,
     })
     group.offsetY(textNode.height())
     group.add(rect, textNode)

@@ -10,7 +10,7 @@ import { Game } from "../game"
 import { MiniMap } from "../structures/MiniMap"
 
 export class PlayerLeaderboard {
-  constructor(private layer2: Group, private minimap: MiniMap) {
+  constructor(private layer: Layer, private minimap: MiniMap) {
     this.draw()
     this.socketRegister()
   }
@@ -27,7 +27,7 @@ export class PlayerLeaderboard {
 
   private position() {
     return new Point(
-      this.layer2.getStage().width() - this.screenGap - this.size.width,
+      this.layer.getStage().width() - this.screenGap - this.size.width,
       this.screenGap
     )
   }
@@ -36,14 +36,12 @@ export class PlayerLeaderboard {
     const mainGroup = new Konva.Group({
       ...this.size,
       ...this.position(),
-      listening: false,
     })
     const bg = new Konva.Rect({
       ...this.size,
       fill: "#3a7075",
       opacity: 0.7,
       cornerRadius: 10,
-      listening: false,
     })
 
     const title = new KonvaText({
@@ -54,14 +52,12 @@ export class PlayerLeaderboard {
       text: "LeaderBoard",
       align: "center",
       verticalAlign: "middle",
-      listening: false,
     })
 
     this.topGroup = new Konva.Group({ id: "leaderboard-top", y: 50 })
     this.myPointsNodeGroup = new Konva.Group({
       id: "leaderboard-me",
       y: this.size.height,
-      listening: false,
     })
 
     const myText1 = new KonvaText({
@@ -69,7 +65,6 @@ export class PlayerLeaderboard {
       fill: "white",
       text: "Your Score:",
       x: this.screenGap,
-      listening: false,
     })
 
     this.myPointsNode = new KonvaText({
@@ -79,12 +74,11 @@ export class PlayerLeaderboard {
       width: this.size.width - this.screenGap * 2,
       align: "right",
       x: this.screenGap,
-      listening: false,
     })
     this.myPointsNodeGroup.add(myText1, this.myPointsNode)
     mainGroup.add(bg, title, this.topGroup, this.myPointsNodeGroup)
     mainGroup.listening(false)
-    Game.createAlwaysTop(this.layer2, mainGroup)
+    Game.createAlwaysTop(this.layer, mainGroup)
     this.mainGroup = mainGroup
   }
 
@@ -105,13 +99,11 @@ export class PlayerLeaderboard {
           x: this.screenGap,
           width,
           y: i * (20 + this.textVerticalGap),
-          listening: false,
         })
         const indexText = new KonvaText({
           text: `${i + 1}.`,
           fontSize: this.fontSize,
           fill: "white",
-          listening: false,
           width: percentOf(10, width),
         })
 
@@ -121,7 +113,6 @@ export class PlayerLeaderboard {
           fill: "white",
           width: percentOf(65, width),
           x: percentOf(10, width),
-          listening: false,
           wrap: "none",
         })
 
@@ -132,7 +123,6 @@ export class PlayerLeaderboard {
           align: "right",
           width: percentOf(25, width),
           x: percentOf(75, width),
-          listening: false,
         })
 
         itemGroup.add(indexText, nameText, xpText)

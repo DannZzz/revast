@@ -5,6 +5,7 @@ import Konva from "konva"
 
 export interface GameProps {
   layer: Layer
+  layer2: Layer
 }
 
 export interface JoinPlayer {

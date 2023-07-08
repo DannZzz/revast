@@ -11,13 +11,13 @@ export class BasicMisc implements MiscDto {
   private imageNode: Konva.Image
   destroyed = false
   private layer: Konva.Layer
-  private layer2: Konva.Group
+  private layer2: Konva.Layer
 
   constructor(data: MiscDto) {
     Object.assign(this, data)
   }
 
-  take(layer: Konva.Layer, layer2: Konva.Group) {
+  take(layer: Konva.Layer, layer2: Konva.Layer) {
     this.layer = layer
     this.layer2 = layer2
     return this
@@ -27,14 +27,13 @@ export class BasicMisc implements MiscDto {
     const group: Konva.Group = this.layer.findOne("#game-misc-1")
     this.imageNode = new Konva.Image({
       ...this.point,
-      listening: false,
-      image: loadImage(this.url, (img) => this.imageNode.image(img).cache()),
+      image: loadImage(this.url, (img) => this.imageNode.image(img)),
       ...this.size,
       // offset: {
       //   x: this.size.width / 2,
       //   y: this.size.height / 2,
       // },
-    }).cache()
+    })
 
     group.add(this.imageNode)
   }

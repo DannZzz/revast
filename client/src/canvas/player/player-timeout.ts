@@ -34,7 +34,7 @@ export class PlayerTimeout {
 
   constructor(
     private layer: Konva.Layer,
-    private layer2: Konva.Group,
+    private layer2: Konva.Layer,
     timeout: PlayerJoinedDto["timeout"]
   ) {
     this.buildingNode.timeout = timeout[2]

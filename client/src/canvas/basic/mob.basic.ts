@@ -23,17 +23,16 @@ export class BasicMob implements MobDto {
   draw(layer: Konva.Group) {
     loadImage(this.hurtUrl)
     this.imageNode = new Konva.Image({
-      image: loadImage(this.url, (img) => this.imageNode.image(img).cache()),
+      image: loadImage(this.url, (img) => this.imageNode.image(img)),
       offset: {
         x: this.size.width / 2,
         y: this.size.height / 2,
       },
-      listening: false,
       ...this.point,
       ...this.size,
       rotation: this.angle,
       id: `mob-${this.id}`,
-    }).cache()
+    })
 
     layer.add(this.imageNode)
 
@@ -57,12 +56,12 @@ export class BasicMob implements MobDto {
     this.canHurt = false
     this.imageNode
       .image(
-        loadImage(this.hurtUrl, (img) => this.imageNode.image(img).cache())
+        loadImage(this.hurtUrl, (img) => this.imageNode.image(img))
       )
-      .cache()
+    
     const t = setTimeout(() => {
       this.canHurt = true
-      this.imageNode.image(loadImage(this.url)).cache()
+      this.imageNode.image(loadImage(this.url))
       clearTimeout(t)
     }, 150)
   }

@@ -20,7 +20,6 @@ export class GameMap {
         ...aS(biome.size),
         fill: biome.bgColor,
         stroke: biome.bgColor,
-        listening: false,
       })
       group.add(rect)
     })

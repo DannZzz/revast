@@ -14,13 +14,13 @@ export class BasicDrop implements DropDto {
   private canHurt: boolean = true
   destroyed = false
   private layer: Konva.Layer
-  private layer2: Konva.Group
+  private layer2: Konva.Layer
 
   constructor(data: DropDto) {
     Object.assign(this, data)
   }
 
-  take(layer: Konva.Layer, layer2: Konva.Group) {
+  take(layer: Konva.Layer, layer2: Konva.Layer) {
     this.layer = layer
     this.layer2 = layer2
     return this
@@ -33,7 +33,6 @@ export class BasicDrop implements DropDto {
       ...this.point,
       image: loadImage(this.url, (img) => this.imageNode.image(img)),
       ...this.size,
-      listening: false,
       offset: {
         x: this.size.width / 2,
         y: this.size.height / 2,

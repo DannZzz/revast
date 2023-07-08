@@ -19,12 +19,10 @@ const size = new Size(20, 20)
 const berryPng = new Konva.Image({
   image: loadImage("/images/berry.png", (img) => {
     berryPng.image(img)
-    berryPng.cache()
   }),
   ...size,
-  listening: false,
   offset: new Point(size.width / 2, size.height / 2),
-}).cache()
+})
 
 export const StaticItemsAddons: {
   [k in StaticItemAddonName]: {
@@ -43,7 +41,6 @@ export const StaticItemsAddons: {
     alsoDraw: (item: StaticSettableItem) => {
       const size = item.size
       const group = new Konva.Group({
-        listening: false,
         offset: new Point(size.width / 2, size.height / 2),
         ...new Point(size.width / 2, size.height / 2),
       })
@@ -51,14 +48,12 @@ export const StaticItemsAddons: {
         image: loadImage("/images/windmill-center.png", (img) =>
           center.image(img)
         ),
-        listening: false,
         ...size,
       })
       const wheel = new Konva.Image({
         image: loadImage("/images/windmill-circle.png", (img) =>
           wheel.image(img)
         ),
-        listening: false,
         offset: new Point(size.width / 2, size.height / 2),
         ...new Point(size.width / 2, size.height / 2),
         ...size,
@@ -140,7 +135,6 @@ export const StaticItemsAddons: {
         image: loadImage("/images/point-machine-ground.png", (img) =>
           ground.image(img)
         ),
-        listening: false,
         ...center,
         offset: new Point(size.width / 2, size.height / 2),
         ...size,
@@ -165,7 +159,6 @@ export const StaticItemsAddons: {
         image: loadImage("/images/point-machine-hole.png", (img) =>
           hole.image(img)
         ),
-        listening: false,
 
         offset: new Point(size.width / 2, size.height / 2),
         ...new Point(size.width / 2, size.height / 2),
@@ -197,34 +190,23 @@ export const StaticItemsAddons: {
         radius: 200,
         fill: "#FFC40066",
         opacity: 0.8,
-        listening: false,
         ...center,
       })
       const smallCircle = new Konva.Circle({
         radius: 120,
         fill: "#FFC40099",
-        listening: false,
         opacity: 0.8,
         ...center,
       })
 
-      const fireGroup = new Konva.Group({ ...center, listening: false })
+      const fireGroup = new Konva.Group({ ...center })
 
-      const circle1 = new Konva.Circle({
-        radius: 60,
-        fill: "#FFC4009E",
-        listening: false,
-      })
+      const circle1 = new Konva.Circle({ radius: 60, fill: "#FFC4009E" })
       const circle2 = new Konva.Circle({
-        listening: false,
         radius: 40,
         fill: "rgba(255,255,0,.8)",
       })
-      const circle3 = new Konva.Circle({
-        radius: 20,
-        fill: "#EA8033aa",
-        listening: false,
-      })
+      const circle3 = new Konva.Circle({ radius: 20, fill: "#EA8033aa" })
       fireGroup.add(circle1, circle2, circle3)
 
       const period = 2000
@@ -253,16 +235,14 @@ export const StaticItemsAddons: {
         radius: 200,
         fill: "#FFC40066",
         opacity: 0.8,
-        listening: false,
       })
       const smallCircle = new Konva.Circle({
         radius: 120,
         fill: "#FFC40099",
         opacity: 0.8,
-        listening: false,
       })
 
-      const fireGroup = new Konva.Group({ ...center, listening: false })
+      const fireGroup = new Konva.Group({ ...center })
       fireGroup.add(circle, smallCircle)
       Game.groupAdd(item.layer, Game.settableHoistId(0), fireGroup)
       item.on("destroy", (item) => {
@@ -311,7 +291,6 @@ export const StaticItemsAddons: {
           bio.alsoSavedNodes[i] = null
           return
         }
-        if (bio.alsoSavedNodes[i]) return
 
         bio.alsoSavedNodes[i] = createCircle(
           combineClasses(groupPos, getPoint(i))

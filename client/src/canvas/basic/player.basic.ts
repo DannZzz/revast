@@ -96,7 +96,6 @@ export class BasicPlayer<
         image: loadImage(GameIcons[icon], (img) => iconNode.image(img).cache()),
         x: i * 40,
         width: 30,
-        listening: false,
         height: 30,
         offset: {
           x: 0,
@@ -114,7 +113,6 @@ export class BasicPlayer<
     const nameGroup = new Konva.Group({
       offsetX: 150 - this.size.width / 2,
       y: -25,
-      listening: false,
     })
 
     const name = new KonvaText({
@@ -123,13 +121,12 @@ export class BasicPlayer<
       // width: 0,
       wrap: "none",
       fill: "white",
-      listening: false,
       fontSize: 20,
       strokeWidth: 0.5,
       stroke: "black",
     }).cache()
     name.offsetX(-(150 - name.width() / 2))
-    const iconsGroup = new Konva.Group({ listening: false })
+    const iconsGroup = new Konva.Group()
     nameGroup.add(iconsGroup, name)
     this.nameNodes.group = nameGroup
     this.nameNodes.text = name
@@ -139,7 +136,6 @@ export class BasicPlayer<
       offsetX: 150,
       offsetY: 100,
       name: "message-node",
-      listening: false,
       // ...absolutePoint,
     })
     Game.createMessageGroup(this.layer, this.messagesNode)
@@ -150,7 +146,6 @@ export class BasicPlayer<
       offsetY: this.size.height / 2,
       x: this.size.width / 2,
       y: this.size.height / 2,
-      listening: false,
     })
 
     this.bagNode = new Konva.Image({
@@ -161,14 +156,12 @@ export class BasicPlayer<
       // x: -60,
       y: -40,
       width: 120,
-      listening: false,
       height: 120,
     }).cache()
 
     this.wearingNode = new Konva.Image({
       image: null,
       ...this.size,
-      listening: false,
     }).cache()
 
     const body = new Konva.Image({
@@ -179,14 +172,12 @@ export class BasicPlayer<
       // filters: [],
       // red: 250,
       ...this.size,
-      listening: false,
     }).cache()
 
     const rightHand = new Konva.Group({
       id: `${id}-body-hand-right`,
       x: 5,
       y: 70,
-      listening: false,
     })
 
     const handBase = new Konva.Image({
@@ -195,7 +186,6 @@ export class BasicPlayer<
       height: 35,
       offsetX: 17.5,
       offsetY: 17.5,
-      listening: false,
     })
 
     const rightHandItem = new Konva.Image({
@@ -204,14 +194,12 @@ export class BasicPlayer<
       ...this.equipment.hands.right,
       ...this.equipment.size,
       visible: false,
-      listening: false,
-    }).cache()
+    })
 
     const leftHand = new Konva.Group({
       id: `${id}-body-hand-left`,
       x: this.size.width - 5,
       y: 70,
-      listening: false,
     })
 
     this.handsPosition = {
@@ -223,7 +211,6 @@ export class BasicPlayer<
       id: `${id}-equiped-left`,
       image: null,
       rotation: 180,
-      listening: false,
       ...this.equipment.hands.left,
       ...this.equipment.size,
       // stroke: "black",
@@ -231,19 +218,15 @@ export class BasicPlayer<
       visible: false,
       scaleX: -1,
       offsetX: this.equipment.size.width,
-    }).cache()
+    })
 
     rightHand.add(rightHandItem, handBase)
     leftHand.add(leftHandItem, handBase.clone())
-    this.handsGroup = new Konva.Group({ listening: false }).add(
-      rightHand,
-      leftHand
-    )
+    this.handsGroup = new Konva.Group().add(rightHand, leftHand)
 
     this.items.settingMode.node = new Konva.Image({
       image: null,
       id: `${id}-set`,
-      listening: false,
       visible: false,
       opacity: 0.7,
     })
@@ -264,7 +247,6 @@ export class BasicPlayer<
         getPointByTheta(this.point, this.theta, 30),
       ]),
       stroke: "red",
-      listening: false,
       visible: false,
     })
     group.listening(false)

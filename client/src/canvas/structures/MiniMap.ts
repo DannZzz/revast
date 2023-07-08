@@ -17,7 +17,7 @@ export class MiniMap {
   private killsNode: Konva.Text
   private kills: number = 0
   constructor(
-    readonly layer2: Konva.Group,
+    readonly layer2: Layer,
     readonly map: MapDto,
     readonly player: Player
   ) {
@@ -44,7 +44,6 @@ export class MiniMap {
     const pos = this.position()
     const group = new Konva.Group({
       ...pos,
-      listening: false,
     })
 
     const bg = new Konva.Image({
@@ -52,19 +51,16 @@ export class MiniMap {
       image: loadImage(this.map.url, (img) => bg.image(img).cache()),
       stroke: "#252525",
       opacity: 0.7,
-      listening: false,
     }).cache()
 
     const player = new Konva.Circle({
       radius: 3,
       fill: "red",
-      listening: false,
     })
     const killsContainerSize = new Size(70, 20)
     const killsGroup = new Konva.Group({
       x: this.containerSize.width - killsContainerSize.width,
       y: -(this.gap + killsContainerSize.height),
-      listening: false,
     })
 
     const skullImg = new Konva.Image({
@@ -72,7 +68,6 @@ export class MiniMap {
         skullImg.image(img).cache()
       ),
       width: 30,
-      listening: false,
       height: 30,
     }).cache()
     this.killsNode = new KonvaText({
@@ -82,7 +77,6 @@ export class MiniMap {
       fontSize: 15,
       height: 30,
       verticalAlign: "middle",
-      listening: false,
     })
     killsGroup.add(skullImg, this.killsNode)
 

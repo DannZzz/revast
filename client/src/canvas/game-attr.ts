@@ -8,22 +8,19 @@ const WaterWalkEffectGroup = new Konva.Group({ opacity: 0.5 })
     new Konva.Circle({
       radius: 40,
       fill: "cyan",
-      listening: false,
     }),
     new Konva.Circle({
       radius: 15,
       fill: "cyan",
       offsetX: 60,
-      listening: false,
     }),
     new Konva.Circle({
       radius: 15,
       fill: "cyan",
       offsetX: -60,
-      listening: false,
     })
   )
-  .cache()
+  
 
 const FootPrint = new Konva.Rect({
   opacity: 0.4,
@@ -35,7 +32,6 @@ const FootPrint = new Konva.Rect({
     y: 10,
   },
   cornerRadius: 5,
-  listening: false,
 }) // 50 30
 
 export class GameAttr {
