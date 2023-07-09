@@ -24,9 +24,6 @@ export class PlayerAction {
     const hands = this.hands
     new Konva.Animation((frame) => {
       if (this.click.clickStatus === "pending") {
-        this.player.handsGroup.y(0)
-        hands.right.position(this.player.handsPosition.right)
-        hands.left.position(this.player.handsPosition.left)
         return false
       }
 
@@ -69,6 +66,9 @@ export class PlayerAction {
     })
     // check is empty hand
     this.click.clickStatus = "pending"
+    this.player.handsGroup.y(0)
+    hands.right.position(this.player.handsPosition.right)
+    hands.left.position(this.player.handsPosition.left)
 
     // ...
 
