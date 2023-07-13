@@ -9,7 +9,7 @@ export default createMob(MobNames.megalodon)
   .damageBuilding(90, 0.6)
   .radius(300, 100)
   .size(250, 250)
-  .speed(105)
+  .speed(125)
   .sources('MEGALODON', 'HURT_MEGALODON')
   .drop({
     50: 1,

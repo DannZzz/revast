@@ -21,7 +21,7 @@ export default createMob(MobNames.golden_dragon)
       pl.serverMessage(`Golden Dragon was defeated by ${player.name}!`),
     )
   })
-  .speed(100)
+  .speed(120)
   .sources('GOLDEN_DRAGON', 'HURT_GOLDEN_DRAGON')
   .drop(() => {
     const percent = $.randomNumber(0, 100)

@@ -9,7 +9,7 @@ export default createMob(MobNames.dragon)
   .damageBuilding(90, 0.6)
   .radius(300, 100)
   .size(300, 300)
-  .speed(90)
+  .speed(110)
   .sources('DRAGON', 'HURT_DRAGON')
   .drop({
     51: 1,

@@ -9,7 +9,7 @@ export default createMob(MobNames.scorpion)
   .damageBuilding(90, 0.6)
   .radius(300, 90)
   .size(250, 250)
-  .speed(100)
+  .speed(120)
   .sources('SCORPION', 'HURT_SCORPION')
   .drop({
     52: 1,
