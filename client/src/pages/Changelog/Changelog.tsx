@@ -25,7 +25,7 @@ const Changelog = () => {
               "Updated Clans menu interface",
               "Hover over inventory items or crafts to see information",
               "New grid building method, press G to switch",
-              "Settings menu, you can change thre graphics for the best performance",
+              "Settings menu, you can change the graphics for the best performance",
               "Golden Dragon, winter dragons, megalodons and scorpions have building damage",
             ])}
             {cg_list("Changed", [
