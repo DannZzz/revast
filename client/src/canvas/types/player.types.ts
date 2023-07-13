@@ -27,6 +27,16 @@ export interface PlayerProps {
   timeout: PlayerJoinedDto["timeout"]
 }
 
+export enum PlayerGraphics {
+  low,
+  medium,
+  high,
+}
+
+export interface PlayerSettings {
+  graphics: PlayerGraphics
+}
+
 export type PlayerEvents = {
   "set.angle": [angle: number]
   "keyboard.up": [evt: KeyboardEvent]

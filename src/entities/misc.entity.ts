@@ -1,10 +1,10 @@
-import { uuid } from 'anytool'
 import { Exclude, Expose } from 'class-transformer'
 import { Misc } from 'src/game/basic/misc.basic'
 import { GameServer } from 'src/game/server'
 import { Size, Point } from 'src/global/global'
 import { AssetLink } from 'src/structures/Transformer'
 import { ImageSource } from 'src/structures/image-base'
+import { uniqueId } from 'src/utils/uniqueId'
 import { UniversalHitbox } from 'src/utils/universal-within'
 
 @Exclude()
@@ -16,7 +16,7 @@ export class MiscEntity implements Partial<Misc> {
   @Expose()
   size: Size
   @Expose()
-  readonly id = `misc-${uuid(35)}`
+  readonly id = uniqueId()
   @Expose()
   point: Point
   constructor(props: Misc) {

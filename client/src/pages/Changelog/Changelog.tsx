@@ -6,7 +6,44 @@ const Changelog = () => {
     <div class="changelog">
       <div class="container">
         <div class="version">
-          {cg_title(" 5/7/2023 - Time To Harvest!")}
+          {cg_title("- 13/7/2023 - Better Stuff!")}
+          <div class="content">
+            {cg_big_img("/images/golden-dragon-preview.png")}
+            <h2>New Mob And New Gear!</h2>
+            <div class="group">
+              {cg_small_img("/api/images/dragon-helmet.png")}
+              {cg_small_img("/api/images/dragon-spear-icon.png")}
+              {cg_small_img("/api/images/dragon-sword-icon.png")}
+            </div>
+            <div class="group">
+              {cg_small_img("/api/images/dragon-orb.png")}
+              {cg_small_img("/api/images/dragon-cube.png")}
+            </div>
+            {cg_list("Added", [
+              "New mob Golden Dragon",
+              "New Dragon Gear(HELMET, SWORD AND SPEAR)",
+              "Updated Clans menu interface",
+              "Hover over inventory items or crafts to see information",
+              "New grid building method, press G to switch",
+              "Settings menu, you can change thre graphics for the best performance",
+              "Golden Dragon, winter dragons, megalodons and scorpions have building damage",
+            ])}
+            {cg_list("Changed", [
+              "Building range was decreased",
+              "Market settings reset was removed",
+              "Spikes touch radius",
+              "Workbench and chest hitboxes",
+            ])}
+            {cg_list("A little bit about the new dragon!", [
+              "The Golden Dragon is our new Mob. He has 10.000 hp, 100 player damage and 120 building damage",
+              "Only one Golden Dragon can exist!",
+              "The Golden Dragon will back in 30 mins after his death",
+              "His drop is 30 meat and randomly dragon orb or cube!",
+            ])}
+          </div>
+        </div>
+        <div class="version">
+          {cg_title("- 5/7/2023 - Time To Harvest!")}
           <div class="content">
             {cg_big_img("/images/bread-farm-preview.png")}
             <h2>BREAD FARM ARRIVED!</h2>
@@ -35,12 +72,11 @@ const Changelog = () => {
           </div>
         </div>
         <div class="version">
-          {cg_title("- 30/6/2023 - Pitchfork and Peasant")}
+          {cg_title("- 30/6/2023 - Peasant")}
           <div class="content">
             {cg_big_img("/images/peasant-preview.png")}
             <div class="group">
               {cg_small_img("/api/images/bear-peasant.png")}
-              {cg_small_img("/api/images/pitchfork-icon.png")}
             </div>
             {cg_list("Added", [
               "New hat Peasant(PROTECTS FROM COLD AND INCREASES THE SPEED OF THE GROWING PLANTS)",

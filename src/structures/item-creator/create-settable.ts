@@ -34,6 +34,7 @@ import { ResourceTypes } from 'src/game/basic/bio-item.basic'
 
 class SettableCreator {
   readonly extend = <any>{
+    description: '',
     modes: [
       {
         cover: 1,
@@ -76,6 +77,15 @@ class SettableCreator {
 
   noAttackedAnimation() {
     this.extend.noAttackedAnimation = true
+    return this
+  }
+
+  description(str: string) {
+    if (this.extend.description) {
+      this.extend.description += `\n${str}`
+    } else {
+      this.extend.description = str
+    }
     return this
   }
 
@@ -276,11 +286,38 @@ class SettableCreator {
     this.extend.modes = this.extend.modes.map(
       (modeProps) => new SettableMode(modeProps),
     )
-
-    const { craftable, ...otherProps } = this.extend
+    const obj = { ...this.extend, ...this._data }
+    const { craftable, ...otherProps } = obj
     craftable.forEach((crft) => {
       Craft.addCraft(this.extend.id, crft)
     })
+
+    if (obj.durationSeconds) {
+      this.description('Duration: ' + obj.durationSeconds + ' seconds')
+    }
+
+    if (obj.hp) {
+      this.description('Health: ' + obj.hp)
+    }
+
+    if (obj.modes?.[0]?.damageOnTouch?.damage) {
+      this.description('Damage Touch: ' + obj.modes[0].damageOnTouch.damage)
+    }
+
+    if (obj.modes?.[0]?.damageOnAttack?.damage) {
+      this.description('Damage Attack: ' + obj.modes[0].damageOnAttack.damage)
+    }
+
+    if (obj.growthTime) {
+      this.description(`Grow time: ${obj.growthTime} seconds`)
+    }
+    if (obj.dehydrateTime) {
+      this.description(`Grow time: ${obj.dehydrateTime} seconds`)
+    }
+    if (obj.resourceInterval) {
+      this.description(`Harvest time: ${obj.resourceInterval} seconds`)
+    }
+
     delete this.extend.craftable
     return this
   }

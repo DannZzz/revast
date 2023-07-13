@@ -9,13 +9,14 @@
     "client": "npm run dev --prefix client",
     "client:install": "npm install --prefix client",
     "client:build": "npm run build --prefix client",
-    "build": "nest build",
+    "build": "npm run pre && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "pre": "cp -r src/data-templates client/src",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "dev": "cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run client\""
+    "dev": "npm run pre && cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run client\""
   },
   "dependencies": {
     "@nestjs/cache-manager": "^1.0.0",
@@ -26,6 +27,7 @@
     "@nestjs/serve-static": "^3.0.1",
     "@nestjs/throttler": "^4.0.0",
     "@nestjs/websockets": "^9.4.2",
+    "aeolz": "^1.0.6",
     "anytool": "^1.0.2",
     "cache-manager": "^5.2.2",
     "class-transformer": "^0.5.1",
@@ -41,6 +43,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "superagent": "^8.0.9",
+    "uuid": "^9.0.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
@@ -51,6 +54,7 @@
     "@types/intersects": "^2.5.0",
     "@types/node": "18.16.12",
     "@types/superagent": "^4.1.18",
+    "@types/uuid": "^9.0.2",
     "@types/ws": "^8.5.5",
     "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",

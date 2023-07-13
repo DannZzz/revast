@@ -7,10 +7,11 @@ import {
   MESSAGE_MAX_LENGTH,
 } from 'src/constant'
 import { Player } from 'src/game/player/player'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export class Message {
   content: string
-  readonly id = `msg-${uuid(50)}`
+  readonly id = uniqueId()
 
   @Transform(({ value }) => value?.id?.())
   author: Player

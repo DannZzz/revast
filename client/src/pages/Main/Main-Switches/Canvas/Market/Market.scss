@@ -1,6 +1,6 @@
 .market-container {
-  @include flex($dir: column);
   // width: 900px;
+  @include flex($dir: column);
 
   .title-container {
     position: relative;

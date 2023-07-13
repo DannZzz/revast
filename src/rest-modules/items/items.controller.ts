@@ -17,9 +17,13 @@ import CollectedIps from 'src/utils/collected-ips'
 @Controller('api/items')
 export class ItemsController {
   // @Throttle(20, 10)
-  @Get('/names')
+  @Get()
   getNames() {
-    return Items.map((item) => [item.id, item.data.name])
+    return Items.map((item) => ({
+      id: item.id,
+      name: item.data.name,
+      description: item.data.description,
+    }))
   }
 
   @Get('/skins')

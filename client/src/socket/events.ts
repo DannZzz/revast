@@ -1,5 +1,13 @@
-import { PlayerSkinName } from "../canvas/types/player.types"
+import { PlayerSettings, PlayerSkinName } from "../canvas/types/player.types"
 import { StaticItemAddonName } from "../canvas/data/staticItemAddons"
+import {
+  BioTemplateData,
+  DropTemplateData,
+  MiscTemplateData,
+  MobTemplateData,
+  StaticSettableTemplateData,
+  VisualPlayerTemplateData,
+} from "../data-templates/templates-types"
 
 export type PlayerBar =
   | "hp"
@@ -43,6 +51,7 @@ export interface JoinPlayerDto {
   token: string
   recaptcha_token: string
   skin: number
+  settings: PlayerSettings
 }
 
 export class PlayerJoinedDto {
@@ -100,7 +109,6 @@ export interface Biome {
 export interface BioDto {
   type: string
   size: Size
-  source: string
   id: string
   url: string
   point: Point
@@ -122,7 +130,7 @@ export interface VisualPlayerData {
 }
 
 export interface OtherPlayersDto {
-  players: VisualPlayerData[]
+  players: VisualPlayerTemplateData[]
   toRemoveIds: string[]
 }
 
@@ -136,7 +144,6 @@ export interface StaticSettableDto {
   currentMode: number
   modes: SettableModeDto[]
   type?: string
-  highlight?: Highlight<HighlightType>
   showHp?: {
     radius: number
     angle: number
@@ -169,12 +176,6 @@ export interface PlayerInformationDto {
   days: number
 }
 
-export type HighlightType = "circle" | "rect"
-export interface Highlight<T extends HighlightType> {
-  type: T
-  data: T extends "circle" ? { radius: number } : { point: Point; size: Size }
-}
-
 export interface DayInfo {
   thisDay: number
   oneDayDuration: number
@@ -182,7 +183,7 @@ export interface DayInfo {
 }
 
 export interface MobDynamicDto {
-  mobs: MobDto[]
+  mobs: MobTemplateData[]
   toRemoveIds: string[]
 }
 
@@ -212,6 +213,7 @@ export interface CraftDto {
   iconUrl: string
   id: string
   craftDuration: number
+  itemId: number
 }
 
 export interface ActionableHolderDto {
@@ -267,10 +269,13 @@ export interface MiscDto {
 
 export interface ServerToClientEvents {
   staticBios: (
-    data: [biosToDraw: BioDto[], staticIdsToRemove: string[]]
+    data: [biosToDraw: BioTemplateData[], staticIdsToRemove: string[]]
   ) => void
   staticSettables: (
-    data: [settables: StaticSettableDto[], staticSettablesToRemove: string[]]
+    data: [
+      settables: StaticSettableTemplateData[],
+      staticSettablesToRemove: string[]
+    ]
   ) => void
   clicking: (data: [isClicking: boolean, clickDuration: number]) => void
   joinServer: (data: [playerData: PlayerJoinedDto]) => void
@@ -293,8 +298,8 @@ export interface ServerToClientEvents {
     data: Array<[id: string, theta: number, showHpAngle?: number]>
   ) => void
   staticItemMode: (data: [settableId: string, mode: number]) => void
-  miscs: (data: [toAdd: MiscDto[], toRemoveIds: string[]]) => void
-  drops: (data: [toAdd: DropDto[], toRemoveIds: string[]]) => void
+  miscs: (data: [toAdd: MiscTemplateData[], toRemoveIds: string[]]) => void
+  drops: (data: [toAdd: DropTemplateData[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (
     data: [id: string, currentResources: number, type: StaticItemAddonName]
@@ -366,7 +371,9 @@ export interface ClientToServerEvents {
       clicking: NumberBoolean
     ]
   ): void
-  setItemRequest(data: [itemId: number, x: number, y: number]): void
+  setItemRequest(
+    data: [itemId: number, x: number, y: number, grid: boolean]
+  ): void
   screenSize(data: [size: Size]): void
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void
@@ -383,6 +390,7 @@ export interface ClientToServerEvents {
   requestClanAcceptMember(data: [memberId: string]): void
   requestClanTogglePrivacy(data: []): void
   market(data: [i: number, quantity: number]): void
+  settings(data: [type: number]): void
 }
 
 export type MainSocket = WebSocket

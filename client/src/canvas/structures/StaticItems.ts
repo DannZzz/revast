@@ -25,11 +25,11 @@ export class StaticItems {
   }
 
   get miscs() {
-    return [...this._drops]
+    return [...this._miscs]
   }
 
   set miscs(val) {
-    this._drops = val
+    this._miscs = val
   }
 
   addMisc(...miscs: BasicMisc[]) {

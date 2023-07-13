@@ -27,4 +27,6 @@ export type GameEvents = {
   loaded: []
   "craft-book": []
   market: []
+  settings: []
+  'setmode.toggle': []
 }

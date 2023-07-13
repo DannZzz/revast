@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer'
 import { MobEntity } from './mob.entity'
+import { MobTemplateData } from 'src/data-templates/templates-types'
 
 export class MobDynamicEntity {
-  @Type(() => MobEntity)
-  mobs: MobEntity[]
+  mobs: MobTemplateData[]
   toRemoveIds: string[]
 
   constructor(data: Partial<MobDynamicEntity>) {

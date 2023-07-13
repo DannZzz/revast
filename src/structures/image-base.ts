@@ -35,6 +35,8 @@ export const Images = {
   ICON_RUBY_SWORD: 'ruby-sword-icon.png',
   EMERALD_SWORD: 'emerald-sword.png',
   ICON_EMERALD_SWORD: 'emerald-sword-icon.png',
+  DRAGON_SWORD: 'dragon-sword.png',
+  ICON_DRAGON_SWORD: 'dragon-sword-icon.png',
 
   // spears
   STONE_SPEAR: 'stone-spear.png',
@@ -49,6 +51,8 @@ export const Images = {
   ICON_RUBY_SPEAR: 'ruby-spear-icon.png',
   EMERALD_SPEAR: 'emerald-spear.png',
   ICON_EMERALD_SPEAR: 'emerald-spear-icon.png',
+  DRAGON_SPEAR: 'dragon-spear.png',
+  ICON_DRAGON_SPEAR: 'dragon-spear-icon.png',
 
   // axes
   WOODEN_AXE: 'wooden-axe.png',
@@ -239,6 +243,8 @@ export const Images = {
   HURT_SCORPION: 'hurt-scorpion.png',
   DRAGON: 'dragon.png',
   HURT_DRAGON: 'hurt-dragon.png',
+  GOLDEN_DRAGON: 'golden-dragon.png',
+  HURT_GOLDEN_DRAGON: 'hurt-golden-dragon.png',
 
   // any
   BLACK_FUR: 'black-fur.png',
@@ -267,6 +273,8 @@ export const Images = {
   GROUND: 'ground.png',
   ICE: 'ice.png',
   BOTTLE: 'bottle.png',
+  DRAGON_CUBE: 'dragon-cube.png',
+  DRAGON_ORB: 'dragon-orb.png',
 
   // helemts
   STONE_HELMET: 'stone-helmet.png',
@@ -281,6 +289,8 @@ export const Images = {
   ICON_RUBY_HELMET: 'ruby-helmet.png',
   EMERALD_HELMET: 'emerald-helmet.png',
   ICON_EMERALD_HELMET: 'emerald-helmet.png',
+  DRAGON_HELMET: 'dragon-helmet.png',
+  ICON_DRAGON_HELMET: 'dragon-helmet.png',
 
   // hats
   DIVING_MASK: 'diving-mask.png',

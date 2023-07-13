@@ -16,6 +16,7 @@ export enum MobNames {
   piranha = 'PIRANHA',
   megalodon = 'MEGALODON',
   scorpion = 'SCORPION',
+  golden_dragon = 'GOLDEN_DRAGON',
 }
 
 export interface ServerMobOptions {
@@ -46,22 +47,25 @@ export class Mobs {
       if (!mobBasic) continue
       const conf = config[mobName]
       for (let i = 0; i < conf.maxCount; i++) {
-        const mob = new Mob({
-          ...mobBasic,
-          biome: conf.biome,
-          currentArea: conf.area,
-          spawn: conf.spawn,
-          point: game.randomEmptyPoint(
-            mobBasic.radius.collision,
-            conf.spawn.startPoint,
-            conf.spawn.size,
-            (point) =>
-              conf.biome !== Biome.water ||
-              game.map.biomeOf(point)[0] === Biome.water,
-          ),
-          staticItems: game.staticItems,
-          theta: 0,
-        })
+        const mob = new Mob(
+          {
+            ...mobBasic,
+            biome: conf.biome,
+            currentArea: conf.area,
+            spawn: conf.spawn,
+            point: game.randomEmptyPoint(
+              mobBasic.radius.collision,
+              conf.spawn.startPoint,
+              conf.spawn.size,
+              (point) =>
+                conf.biome !== Biome.water ||
+                game.map.biomeOf(point)[0] === Biome.water,
+            ),
+            staticItems: game.staticItems,
+            theta: 0,
+          },
+          game,
+        )
         mobs.all.set(mob.id, mob)
       }
     }
@@ -69,7 +73,7 @@ export class Mobs {
     return mobs
   }
 
-  private addTimes: { [k in MobNames]?: number } = {}
+  addTimes: { [k in MobNames]?: number } = {}
   readonly all = new Chest<string, Mob>()
   constructor(readonly config: ServerMobConfig, readonly game: GameServer) {}
 
@@ -87,22 +91,25 @@ export class Mobs {
           continue
         const mobBasic = Mobs.get(mobName)
 
-        const mob = new Mob({
-          ...mobBasic,
-          biome: conf.biome,
-          currentArea: conf.area,
-          spawn: conf.spawn,
-          point: this.game.randomEmptyPoint(
-            mobBasic.radius.collision,
-            conf.spawn.startPoint,
-            conf.spawn.size,
-            (point) =>
-              conf.biome !== Biome.water ||
-              this.game.map.biomeOf(point)[0] === Biome.water,
-          ),
-          staticItems: this.game.staticItems,
-          theta: 0,
-        })
+        const mob = new Mob(
+          {
+            ...mobBasic,
+            biome: conf.biome,
+            currentArea: conf.area,
+            spawn: conf.spawn,
+            point: this.game.randomEmptyPoint(
+              mobBasic.radius.collision,
+              conf.spawn.startPoint,
+              conf.spawn.size,
+              (point) =>
+                conf.biome !== Biome.water ||
+                this.game.map.biomeOf(point)[0] === Biome.water,
+            ),
+            staticItems: this.game.staticItems,
+            theta: 0,
+          },
+          this.game,
+        )
         this.all.set(mob.id, mob)
         this.addTimes[mobName] = Date.now() + conf.reAddEachSeconds * 1000
       }

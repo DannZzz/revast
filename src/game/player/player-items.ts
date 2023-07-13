@@ -139,7 +139,12 @@ export class PlayerItems {
     return true
   }
 
-  setItem(itemId: number, cursorX: number, cursorY: number): number {
+  setItem(
+    itemId: number,
+    cursorX: number,
+    cursorY: number,
+    grid: boolean,
+  ): number {
     if (this.timeout.building > Date.now() || this.isCrafting) return -1
     if (!this.has(itemId)) return -1
     const item = itemById(itemId) as BasicStaticItem
@@ -155,7 +160,7 @@ export class PlayerItems {
     }
     let point: Point, theta: number, angle: number
 
-    if (item.data.setMode.grid) {
+    if (grid || item.data.setMode.grid) {
       theta = angle = 0
 
       const cursor = combineClasses(
@@ -499,6 +504,7 @@ export class PlayerItems {
               id: crft.id,
               craftDuration: crft.craftable.duration,
               iconSource: Items.get(crft.itemId).iconSource,
+              itemId: crft.itemId,
             }),
           ),
         ),

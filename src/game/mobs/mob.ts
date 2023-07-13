@@ -1,6 +1,6 @@
 import { uuid } from 'anytool'
 import { boxPoint, circlePoint, polygonCircle, polygonPoint } from 'intersects'
-import { Point, Size } from 'src/global/global'
+import { Gettable, Point, Size } from 'src/global/global'
 import { getPointByTheta, getDistance, getAngle } from '../animations/rotation'
 import {
   BasicMob,
@@ -22,6 +22,10 @@ import { MOB_GLOBAL_ATTACK_SPEED_EFFECT } from 'src/constant'
 import { isSameVector } from 'src/utils/same-vector'
 import { isNumber } from 'src/utils/is-number-in-range'
 import { timingSafeEqual } from 'crypto'
+import { uniqueId } from 'src/utils/uniqueId'
+import { optimizeHandleAttackedItems } from 'src/utils/optimize-handle-attacked-items'
+import { Tick } from 'src/structures/Tick'
+import { GameServer } from '../server'
 
 export interface MobProps {
   point: Point
@@ -37,11 +41,18 @@ interface MobCache {
 }
 
 export class Mob extends BasicMob {
-  constructor(props: MobProps & BasicMobProps) {
+  constructor(
+    props: MobProps & BasicMobProps,
+    readonly gameServer: GameServer,
+  ) {
     super(props)
     Object.assign(this, props)
+    if (isNumber(this.damageBuilding))
+      this.damageBuildingTick = new Tick(this.damageBuildingInterval)
+
+    this.onInit?.(this.gameServer)
   }
-  readonly id = uuid(75)
+  readonly id = uniqueId()
   died: boolean = false
   biome: Biome
   spawn: { startPoint: Point; size: Size }
@@ -51,12 +62,13 @@ export class Mob extends BasicMob {
   target?: Player
   currentArea: MapAreaName
   theta: number
-  drop: { [k: number]: number }
-  damageInterval: number
+  drop: Gettable<{ [k: number]: number }>
+  damage: number
   private targetPoint: Point
   private nextStopTime: number
   private waitUntil: number
   private damageIntervalObj: any
+  private damageBuildingTick: Tick
 
   centerPoint(point: Point = this.point) {
     return point.clone()
@@ -112,6 +124,23 @@ export class Mob extends BasicMob {
     this.damageIntervalObj = Date.now() + this.damageInterval * 1000
   }
 
+  doDamageBuild() {
+    if (!isNumber(this.damageBuilding) || this.damageBuildingTick.limited())
+      return
+    const attackedSettables = this.staticItems
+      .for(this.universalHitbox)
+      .settable.filter((settable) =>
+        settable.withinStrict(this.universalHitbox),
+      )
+
+    if (attackedSettables.length > 0) this.damageBuildingTick.take()
+    attackedSettables.forEach((settable) => {
+      settable.hurt(this.damageBuilding)
+    })
+
+    optimizeHandleAttackedItems(attackedSettables, this.centerPoint())
+  }
+
   hurt(damage: number, player: Player) {
     if (!isNumber(damage) || damage === 0) return
     if (damage < 0) damage = -damage
@@ -119,8 +148,10 @@ export class Mob extends BasicMob {
     if (!isNumber(this.hp)) this.hp = 0
     if (this.hp <= 0) {
       if (!this.died) {
+        this.onRemove?.(this.gameServer, player)
+
         if (this.drop) {
-          $(this.drop).$forEach((quantity, id) => {
+          $(Gettable(this.drop)).$forEach((quantity, id) => {
             player.items?.addItem(+id, quantity)
           })
         }
@@ -193,6 +224,7 @@ export class Mob extends BasicMob {
           this.waitUntil = Date.now() + interval * 1000
         }
         this.doDamage(players)
+        if (isNumber(this.damageBuilding)) this.doDamageBuild()
       }
       if (this.targetPoint) {
         if (isSameVector(this.point, this.targetPoint)) return
@@ -259,9 +291,22 @@ export class Mob extends BasicMob {
 
     const inRadius = players
       .filter((player) => {
+        const angle = getAngle(this.centerPoint(), player.point())
+        const pointToGo = getPointByTheta(
+          this.centerPoint(),
+          angle,
+          speed(attackTactic.speed),
+        )
         return (
           getDistance(player.point(), this.centerPoint()) <=
-            this.radius.react && this.canIGo(player.point(), map)
+            this.radius.react &&
+          this.canIGo(player.point(), map) &&
+          !this.staticItems
+            .for({ point: pointToGo, radius: this.radius.collision })
+            .someWithin(
+              { point: pointToGo, radius: this.radius.collision },
+              true,
+            )
         )
       })
       .sort(

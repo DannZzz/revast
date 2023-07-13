@@ -1,8 +1,10 @@
 import { BasicMob, MobMoveStatus, MoveTactic } from 'src/game/basic/mob.basic'
 import { Images } from '../image-base'
-import { Size } from 'src/global/global'
+import { Gettable, Size } from 'src/global/global'
 import { DefaultMobAttackTacticSpeed, MobNames } from 'src/data/mobs'
 import { MOB_GLOBAL_SPEED_EFFECT } from 'src/constant'
+import { GameServer } from 'src/game/server'
+import { Player } from 'src/game/player/player'
 
 class MobCreator {
   extend: Partial<BasicMob> = { moveTactic: { otherTactics: [] } as any }
@@ -15,7 +17,7 @@ class MobCreator {
     return this
   }
 
-  drop(items: { [k: number]: number }) {
+  drop(items: Gettable<{ [k: number]: number }>) {
     this.extend.drop = items
     return this
   }
@@ -55,6 +57,12 @@ class MobCreator {
     return this
   }
 
+  damageBuilding(amount: number, interval: number) {
+    this.extend.damageBuilding = amount
+    this.extend.damageBuildingInterval = interval
+    return this
+  }
+
   idleTactic(idle: Omit<BasicMob['moveTactic']['idleTactic'], 'speed'>) {
     this.extend.moveTactic.idleTactic = { speed: this._speed, ...idle }
     return this
@@ -78,6 +86,16 @@ class MobCreator {
 
   data(data: Partial<BasicMob>) {
     this._data = data
+    return this
+  }
+
+  onInit(cb: (gs: GameServer) => void) {
+    this.extend.onInit = cb
+    return this
+  }
+
+  onRemove(cb: (gs: GameServer, player: Player) => void) {
+    this.extend.onRemove = cb
     return this
   }
 

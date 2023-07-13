@@ -8,10 +8,13 @@ export interface ModalStore {
   onClose?: () => any
   opacity?: number
   content?: JSX.Element
+  name?: string
+  noUnmountOnHide?: boolean
   noCloseOutside?: boolean
   buttons?: ModalButton[]
   title?: string
   noCloseButton?: boolean
+  closeButtonSrc?: string
   containerStyle?: JSX.CSSProperties
 }
 
@@ -30,6 +33,9 @@ const modalState = () => {
       noCloseButton = false,
       noCloseOutside = false,
       containerStyle = null,
+      name = null,
+      noUnmountOnHide = false,
+      closeButtonSrc = null,
     } = options
 
     batch(() => {
@@ -42,6 +48,9 @@ const modalState = () => {
         noCloseButton,
         noCloseOutside,
         containerStyle,
+        name,
+        closeButtonSrc,
+        noUnmountOnHide,
       })
       setOpen(true)
     })

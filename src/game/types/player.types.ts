@@ -84,6 +84,16 @@ export class VisualPlayerData {
   }
 }
 
+export enum PlayerGraphics {
+  low,
+  medium,
+  high,
+}
+
+export interface PlayerSettings {
+  graphics: PlayerGraphics
+}
+
 export interface PlayerCache {
   lastSentPosition?: Point
   biome?: MapAreaName[]
@@ -95,6 +105,7 @@ export interface PlayerCache {
   mobs?: Mob[]
   drops: BasicDrop[]
   miscs: Misc[]
+  settings: PlayerSettings
 }
 
 export const PlayerCacheInit: () => PlayerCache = () => {
@@ -106,6 +117,7 @@ export const PlayerCacheInit: () => PlayerCache = () => {
     biome: ['forest'],
     drops: [],
     miscs: [],
+    settings: { graphics: PlayerGraphics.high },
   }
 }
 

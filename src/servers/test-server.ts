@@ -22,8 +22,8 @@ export const TEST_GAME_SERVER = (server: Wss) =>
         { from: { id: 6, quantity: 1 }, to: { id: 3, quantity: 3 } },
         { from: { id: 116, quantity: 1 }, to: { id: 5, quantity: 4 } },
         { from: { id: 116, quantity: 1 }, to: { id: 19, quantity: 3 } },
-        { from: { id: 116, quantity: 4 }, to: { id: 20, quantity: 1 } },
-        { from: { id: 116, quantity: 8 }, to: { id: 21, quantity: 1 } },
+        { from: { id: 116, quantity: 3 }, to: { id: 20, quantity: 1 } },
+        { from: { id: 116, quantity: 5 }, to: { id: 21, quantity: 1 } },
       ],
     },
     initRandomOnMaps: (gs) => [
@@ -168,6 +168,36 @@ export const TEST_GAME_SERVER = (server: Wss) =>
             speed: -30,
           }),
         }),
+        new BiomeOptions({
+          type: Biome.desert,
+          digItemId: 83,
+          priority: 2,
+          name: 'island-1e1',
+          size: new Size(40, 30),
+          bgColor: '#d1c69b',
+          point: new Point(210, 220),
+          effect: new BiomeEffect({
+            speed: -20,
+            temperatureDay: 0,
+            temperatureNight: -20,
+            vast: -7,
+          }),
+        }),
+        new BiomeOptions({
+          type: Biome.cave,
+          digItemId: 82,
+          priority: 3,
+          name: 'big-island-cave',
+          notDrawAble: true,
+          size: new Size(20, 22),
+          point: new Point(230, 228),
+          effect: new BiomeEffect({
+            speed: -20,
+            temperatureDay: 0,
+            temperatureNight: -20,
+            vast: -7,
+          }),
+        }),
         generateLake(1, new Point(61, 110), new Size(28, 9)),
         generateLake(2, new Point(61, 131), new Size(28, 9)),
         generateLake(3, new Point(61, 119), new Size(8, 12)),
@@ -181,6 +211,7 @@ export const TEST_GAME_SERVER = (server: Wss) =>
       const ocean = game.map.absoluteBiome('ocean')
       const winterCave = game.map.absoluteBiome('winter-cave')
       const desertCave = game.map.absoluteBiome('desert-cave')
+      const bigIslandCave = game.map.absoluteBiome('big-island-cave')
       return Mobs.generateForServer(
         {
           [MobNames.wolf]: {
@@ -260,6 +291,17 @@ export const TEST_GAME_SERVER = (server: Wss) =>
             maxCount: 20,
             reAddEachSeconds: 10,
             spawn: { startPoint: desertCave.point, size: desertCave.size },
+          },
+          [MobNames.golden_dragon]: {
+            area: 'big-island-cave',
+            biome: Biome.desert,
+            canOut: false,
+            maxCount: 1,
+            reAddEachSeconds: 30 * 60,
+            spawn: {
+              startPoint: bigIslandCave.point,
+              size: bigIslandCave.size,
+            },
           },
         },
         game,

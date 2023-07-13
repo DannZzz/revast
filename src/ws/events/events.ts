@@ -1,4 +1,10 @@
 import { WsResponse } from '@nestjs/websockets'
+import {
+  BioTemplateData,
+  DropTemplateData,
+  MiscTemplateData,
+  StaticSettableTemplateData,
+} from 'src/data-templates/templates-types'
 import { JoinPlayerDto } from 'src/dto/join-player.dto'
 import { PlayerBarsEntity } from 'src/dto/player-bars.dto'
 import { ActionableHolderEntity } from 'src/entities/actionable-holder.entity'
@@ -29,11 +35,11 @@ import * as WebSocket from 'ws'
 
 export interface ServerToClientEvents {
   staticBios: (
-    data: [biosToDraw: BioEntity[], bioIdsToRemove: string[]],
+    data: [biosToDraw: BioTemplateData[], bioIdsToRemove: string[]],
   ) => void
   staticSettables: (
     data: [
-      settables: StaticSettableEntity[],
+      settables: StaticSettableTemplateData[],
       staticSettablesToRemove: string[],
     ],
   ) => void
@@ -60,8 +66,8 @@ export interface ServerToClientEvents {
     data: Array<[id: string, theta: number, showHpAngle?: number]>,
   ) => void
   staticItemMode: (data: [settableId: string, modeIndex: number]) => void
-  miscs: (data: [toAdd: MiscEntity[], toRemoveIds: string[]]) => void
-  drops: (data: [toAdd: DropEntity[], toRemoveIds: string[]]) => void
+  miscs: (data: [toAdd: MiscTemplateData[], toRemoveIds: string[]]) => void
+  drops: (data: [toAdd: DropTemplateData[], toRemoveIds: string[]]) => void
   dropAttacked: (data: [dropId: string]) => void
   staticItemMiscellaneous: (
     data: [id: string, currentResources: number, type: string],
@@ -123,7 +129,7 @@ export interface ClientToServerEvents {
   joinServer(data: [JoinPlayerDto]): void
   mouseAngle(data: [angle: number, theta: number]): void
   toggles(data: ToggleKeys): void
-  setItemRequest(data: [itemId: number, x: number, y: number]): void
+  setItemRequest(data: [itemId: number, x: number, y: number, grid: boolean]): void
   screenSize(data: [size: Size]): void
   dropRequest(data: [itemId: number, all: NumberBoolean]): void
   messageRequest(data: [content: string]): void
@@ -140,6 +146,7 @@ export interface ClientToServerEvents {
   requestClanAcceptMember(data: [memberId: string]): void
   requestClanTogglePrivacy(data: []): void
   market(data: [i: number, quantity: number]): void
+  settings(data: [type: number]): void
 }
 
 export type MainServer = WebSocket.Server & {

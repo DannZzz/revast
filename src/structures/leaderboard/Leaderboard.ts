@@ -1,6 +1,7 @@
 import { uuid } from 'anytool'
 import Chest from 'anytool/dist/Chest'
 import { isNumber } from 'src/utils/is-number-in-range'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export type LBKey = number | string
 
@@ -30,7 +31,7 @@ export class Leaderboard {
 }
 
 class LeaderboardMember {
-  private readonly _id = uuid(50)
+  private readonly _id = uniqueId()
   private _xp: number = 0
 
   constructor(readonly key: LBKey, private lb: () => Leaderboard) {}

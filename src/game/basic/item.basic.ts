@@ -186,6 +186,7 @@ type BasicItemPropsDefault = {
   specialName?: string
   notAddable?: boolean
   maxAmount?: number
+  description?: string
   name: string
   luckType?: ResourceTypes
 }

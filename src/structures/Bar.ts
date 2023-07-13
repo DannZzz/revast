@@ -1,5 +1,6 @@
 import { uuid } from 'anytool'
 import { GetSet } from './GetSet'
+import { uniqueId } from 'src/utils/uniqueId'
 
 type BarEvents = {
   change: [value: number, oldValue: number]
@@ -8,7 +9,7 @@ type BarEvents = {
 export class Bar {
   private _value: GetSet<number>
   readonly max: number
-  readonly id = uuid(30)
+  readonly id = uniqueId()
 
   constructor(max: number, currentValue: number) {
     this.max = max

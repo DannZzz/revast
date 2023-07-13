@@ -1,9 +1,10 @@
 import { Chest, uuid } from 'anytool'
 import { Player } from 'src/game/player/player'
 import { ClanMember } from './ClanMember'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export class Clan {
-  readonly id = `clan-${uuid(10)}`
+  readonly id = uniqueId()
   readonly maxMembers = 9
   readonly members = new Chest<number, ClanMember>()
   openForApps = true

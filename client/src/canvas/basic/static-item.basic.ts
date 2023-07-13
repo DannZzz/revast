@@ -5,8 +5,6 @@ import Konva from "konva"
 import { Group } from "konva/lib/Group"
 import { loadImage } from "../structures/fetchImages"
 import {
-  Highlight,
-  HighlightType,
   NumberBoolean,
   SetMode,
   SettableModeDto,
@@ -48,7 +46,6 @@ export class StaticSettableItem
   rotation: number = 0
   id: string
   type?: string
-  highlight?: Highlight<HighlightType>
   layer: Layer
   layer2: Layer
   destroyed: boolean = false
@@ -115,7 +112,7 @@ export class StaticSettableItem
     this.emit("mode", this)
     const node = <Konva.Image>this.node.findOne(`#${this.id}-image`)
 
-    const size = this.mode.size || this.size
+    const size = this.mode?.size?.width ? this.mode.size : this.size
 
     node.size(size).offset(new Point(size.width / 2, size.height / 2))
 
@@ -139,7 +136,7 @@ export class StaticSettableItem
       },
     })
 
-    const size = this.mode.size || this.size
+    const size = this.mode?.size?.width ? this.mode.size : this.size
 
     const image = new Konva.Image({
       id: `${this.id}-image`,
@@ -173,7 +170,7 @@ export class StaticSettableItem
         )
     }
 
-    if (this.showHp) {
+    if (this.showHp?.angle && this.showHp?.radius) {
       this.showHpArc = new Konva.Arc({
         x: this.size.width / 2,
         y: this.size.height / 2,
@@ -193,36 +190,6 @@ export class StaticSettableItem
     )
 
     this.emit("mode", this)
-
-    if (this.highlight) {
-      let highlightNode: Konva.Circle | Konva.Rect
-      if (this.highlight.type === "circle") {
-        highlightNode = new Konva.Circle({
-          ...this.point,
-          ...this.highlight.data,
-          id: `${this.id}-highlight`,
-          globalCompositeOperation: "destination-out",
-          fill: "rgba(255,255,255)",
-          stroke: "white",
-        })
-      } else {
-        highlightNode = new Konva.Rect({
-          id: `${this.id}-highlight`,
-
-          ...this.size,
-          offsetX: this.size.width / 2,
-          offsetY: this.size.height / 2,
-          x: this.point.x + this.size.width / 2,
-          y: this.point.y + this.size.height / 2,
-          rotation: this.rotation,
-          globalCompositeOperation: "destination-out",
-          fill: "rgba(255,255,255)",
-          stroke: "white",
-        })
-      }
-      // this.highlightNode = highlightNode
-      // Game.createHighlight(this.layer2, highlightNode)
-    }
   }
 
   tryArcAngle(angle: number) {

@@ -8,7 +8,7 @@ export default createSettable(7)
   .size(200, 200)
   .hp(300)
   .name('Workbench')
-  .setMode(new Point(0, -100), { type: 'rect', ...new Size(145, 80) })
+  .setMode(new Point(0, -100), { type: 'rect', ...new Size(130, 70) })
   .craftable({
     givesXp: 100,
     duration: 5,

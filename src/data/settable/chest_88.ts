@@ -32,7 +32,7 @@ export default createSettable(88, 'chest')
   .size(125, 125)
   .data<ExtendedSettable>({
     setMode: {
-      itemSize: { type: 'rect', width: 100, height: 60 },
+      itemSize: { type: 'rect', width: 90, height: 50 },
       offset: new Point(0, -125),
     },
   })

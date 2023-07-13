@@ -2,6 +2,7 @@ import {
   Component,
   For,
   Show,
+  batch,
   createEffect,
   createResource,
   createSignal,
@@ -21,7 +22,6 @@ import {
   ClanVisualInformationDto,
   ClanInformationDto,
 } from "../../../../socket/events"
-import Button from "../../../../components/Button/Button"
 import CraftBook from "./CraftBook/CraftBook"
 import {
   getCompactItems,
@@ -29,15 +29,18 @@ import {
   sendCanvas,
 } from "../../../../api/requests"
 import Market from "./Market/Market"
+import Clans from "./Clans/Clans"
+import Settings from "./Settings/Settings"
 
 const Canvas: Component<{}> = (props) => {
   const game = new Game()
-  let clanName: HTMLInputElement
   const [compactItems] = createResource(getCompactItems, {})
   const [crafts] = createResource(getCrafts)
   const [craftBookOpen, setCraftBookOpen] = createSignal(false)
   const [marketOpen, setMarketOpen] = createSignal(false)
+  const [settingsOpen, setSettingsOpen] = createSignal(false)
   const [dropItemId, setDropItemId] = createSignal<number>()
+  const [canMove, setCanMove] = createSignal<boolean>(true)
   const [clans, setClans] = createSignal<{
     visualClans?: ClanVisualInformationDto[]
     currentClan?: ClanInformationDto
@@ -46,6 +49,14 @@ const Canvas: Component<{}> = (props) => {
   const { showModal, closeModal, open: modalOpen } = modalState
   const [openChat, setOpenChat] = createSignal(false)
   const { gs, started, died, leaveGame, showGame } = gameState
+
+  createEffect(
+    on(compactItems, (items) => {
+      if (items) {
+        game.items = items
+      }
+    })
+  )
 
   createEffect(
     on(started, (started) => {
@@ -83,6 +94,28 @@ const Canvas: Component<{}> = (props) => {
         disconnectWS()
         game.end()
         closeModal()
+      }
+    })
+  )
+
+  createEffect(
+    on(settingsOpen, (cbOpen) => {
+      if (cbOpen) {
+        showModal({
+          title: "Settings",
+          closeButtonSrc: "/images/out-button.png",
+          content: (
+            <Settings
+              onChange={(settings) => {
+                game?.setSettings(settings)
+              }}
+            />
+          ),
+          opacity: 0.7,
+          onClose: () => {
+            setSettingsOpen(false)
+          },
+        })
       }
     })
   )
@@ -146,6 +179,10 @@ const Canvas: Component<{}> = (props) => {
       setMarketOpen(true)
     })
 
+    game.events.on("settings", () => {
+      setSettingsOpen(true)
+    })
+
     // events
     window.onresize = () => {
       game.events.emit(
@@ -165,7 +202,10 @@ const Canvas: Component<{}> = (props) => {
           game?.player?.clans.openClans()
         }
       } else if (["NumpadEnter", "Enter"].includes(evt.code)) {
-        setOpenChat(!openChat())
+        batch(() => {
+          setOpenChat(!openChat())
+          setCanMove(!openChat())
+        })
         if (openChat()) {
           chatInputRef?.focus()
         } else if (chatInputRef?.value.trim()) {
@@ -173,9 +213,13 @@ const Canvas: Component<{}> = (props) => {
             chatInputRef.value.trim().slice(0, 160),
           ])
         }
-      } else if (openChat() && evt.code === "Escape") {
+      } else if ((openChat() || modalOpen()) && evt.code === "Escape") {
+        closeModal()
         setOpenChat(false)
-      } else if (!openChat()) {
+        setCanMove(true)
+      } else if (evt.code == "KeyG") {
+        game.events.emit("setmode.toggle")
+      } else if (canMove()) {
         game.events.emit("keyboard.down", evt)
       }
     }
@@ -211,117 +255,26 @@ const Canvas: Component<{}> = (props) => {
         return
       }
       if (!game?.player?.clans?.waitingServer) return
-      if (visualClans) {
-        showModal({
-          opacity: 0.7,
-          title: "SERVER CLANS",
-          content: (
-            <div class="clans">
-              <div class="clans-list">
-                {visualClans.length > 0 ? (
-                  <For each={visualClans}>
-                    {(clan) => (
-                      <div class="visual-clan">
-                        <div class="info">
-                          <span class="clan-title">{clan.name}</span>
-                          <span class="clan-member-count">
-                            {clan.memberCount}
-                          </span>
-                        </div>
-                        <Button
-                          onClick={() =>
-                            socket.emit("requestClanJoin", [clan.id])
-                          }
-                        >
-                          Join
-                        </Button>
-                      </div>
-                    )}
-                  </For>
-                ) : (
-                  <span>Ooops! There's no clan yet!</span>
-                )}
-              </div>
-              <input
-                ref={clanName}
-                placeholder="clan name.."
-                type="text"
-                class="clan-name"
-                maxLength={20}
-              />
-            </div>
-          ),
-          buttons: [
-            {
-              children: "Create Clan",
-              onClick: () =>
-                socket.emit("requestClanCreate", [clanName.value || ""]),
-            },
-          ],
-          onClose: () => setClans({}),
-        })
-      } else if (currentClan) {
-        showModal({
-          opacity: 0.7,
-          title: currentClan.name,
-          content: (
-            <div class="clans">
-              <div
-                class="privacy"
-                onClick={(e) => {
-                  currentClan.playerOwner &&
-                    socket.emit("requestClanTogglePrivacy", [])
-                }}
-              >
-                <input
-                  disabled={!currentClan.playerOwner}
-                  type="checkbox"
-                  checked={currentClan.joinPrivacy}
-                />
-                <span>Players can see clan</span>
-              </div>
-              <div class="clans-list">
-                <For each={currentClan.members}>
-                  {(member) => (
-                    <div class="visual-clan">
-                      <div class="info">
-                        <span class="member-flex">
-                          {member.id === currentClan.ownerId && (
-                            <img
-                              src="/images/clan-leader.png"
-                              width={20}
-                              height={20}
-                            />
-                          )}
-                          {member.name}
-                        </span>
-                      </div>
-                      <Show when={member.kickable}>
-                        <img
-                          class="kick-button"
-                          src="/images/close.png"
-                          onClick={() =>
-                            socket.emit("requestClanMemberKick", [member.id])
-                          }
-                        />
-                      </Show>
-                    </div>
-                  )}
-                </For>
-              </div>
-            </div>
-          ),
-          onClose: () => setClans({}),
-          buttons: [
-            {
-              children: currentClan.playerOwner ? "Delete" : "Leave",
-              onClick: () => {
-                socket.emit("requestClanLeave", [])
-              },
-            },
-          ],
-        })
-      }
+      setCanMove(false)
+      showModal({
+        content: (
+          <Clans
+            onClose={() => {
+              closeModal()
+              setCanMove(true)
+              setClans({})
+            }}
+            clans={visualClans}
+            currentClan={currentClan}
+          />
+        ),
+        noCloseButton: true,
+        containerStyle: { background: "transparent", "box-shadow": "unset" },
+        onClose: () => {
+          setCanMove(true)
+          setClans({})
+        },
+      })
     })
   )
 

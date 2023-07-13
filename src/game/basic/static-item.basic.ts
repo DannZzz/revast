@@ -15,6 +15,7 @@ import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { StaticItemsHandler } from 'src/structures/StaticItemsHandler'
 import { SpecialItemTypes } from 'src/data/config-type'
 import { EventEmitter } from 'src/utils/EventEmitter'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export class BasicStaticItem extends Item<Settable> {
   constructor(props: ItemProps<Settable>) {
@@ -39,7 +40,7 @@ export class StaticSettableItem extends EventEmitter<SettableEvents> {
   rotation: number = 0
   tempHp: GetSet<number>
   theta: number = Math.PI
-  readonly id: string = uuid(50)
+  readonly id: string = uniqueId()
   points: Point[] = []
   timeouts = <any>{}
 

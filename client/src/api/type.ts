@@ -14,6 +14,7 @@ export interface CompactItem {
   id: number
   iconUrl: string
   name: string
+  description: string
 }
 
 export interface Highscore {
@@ -24,3 +25,4 @@ export interface Highscore {
   sub?: number
   beta: boolean
 }
+

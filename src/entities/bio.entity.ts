@@ -33,7 +33,6 @@ export class BioEntity implements BioItemProps {
 
   getWithEverything?: true
 
-  @Expose()
   source: string
 
   rechargeAmount: number

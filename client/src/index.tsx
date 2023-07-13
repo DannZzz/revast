@@ -8,6 +8,7 @@ import "@thisbeyond/solid-select/style.css"
 import initTypes from "datypes"
 initTypes()
 import "./index.scss"
+import "./data-templates/teamplates"
 import App from "./App"
 
 const root = document.getElementById("root")

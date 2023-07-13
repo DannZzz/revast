@@ -65,10 +65,10 @@ export class StaticSettableEntity implements Partial<StaticSettableItem> {
     return this.data.type
   }
 
-  @Expose()
-  get highlight() {
-    return this.data.highlight
-  }
+  // @Expose()
+  // get highlight() {
+  //   return this.data.highlight
+  // }
 
   @Expose()
   point: Point

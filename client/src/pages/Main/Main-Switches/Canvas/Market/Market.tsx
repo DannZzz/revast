@@ -1,4 +1,4 @@
-import { Component, For, Signal, createSignal } from "solid-js"
+import { Component, For, Signal, createSignal, onCleanup } from "solid-js"
 import "./Market.scss"
 import { socket } from "../../../../../socket/socket"
 
@@ -15,33 +15,48 @@ interface MarketItem {
 
 const Market: Component<{}> = () => {
   const max = 25
+  const localString = localStorage.getItem("market")
+  const local = localString ? JSON.parse(localString) : [1, 1, 1, 3, 5]
+
   const items: MarketItem[] = [
     {
       icon: "api/images/wood-icon.png",
       for: 1,
       cost: 3,
-      value: createSignal(1),
+      value: createSignal(local?.[0] || 1),
     },
     {
       icon: "api/images/stone-icon.png",
       for: 1,
       cost: 4,
-      value: createSignal(1),
+      value: createSignal(local?.[1] || 1),
     },
-    { icon: "api/images/gold2.png", for: 1, cost: 3, value: createSignal(1) },
+    {
+      icon: "api/images/gold2.png",
+      for: 1,
+      cost: 3,
+      value: createSignal(local?.[2] || 1),
+    },
     {
       icon: "api/images/diamond1.png",
-      for: 4,
+      for: 3,
       cost: 1,
-      value: createSignal(4),
+      value: createSignal(local?.[3] || 3),
     },
     {
       icon: "api/images/amethyst1.png",
-      for: 8,
+      for: 5,
       cost: 1,
-      value: createSignal(8),
+      value: createSignal(local?.[4] || 5),
     },
   ]
+
+  onCleanup(() => {
+    localStorage.setItem(
+      "market",
+      JSON.stringify(items.map((item) => item.value[0]()))
+    )
+  })
 
   return (
     <div class="market-container">

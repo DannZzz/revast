@@ -74,7 +74,7 @@ export class PlayerAction {
     }
     this.walking(true)
 
-    const point = getPointByTheta(
+    let point = getPointByTheta(
       new Point(),
       (angle / 180) * Math.PI,
       this.player.speed.current(),
@@ -84,12 +84,33 @@ export class PlayerAction {
       point.x = 0
     }
 
+    const absolute = combineClasses(point, this.player.point())
+    const { width: mapW, height: mapH } = this.player.camera.map()
+
+    if (absolute.x < 0) {
+      absolute.x = 0
+    } else if (absolute.x > mapW) {
+      absolute.x = mapW
+    }
+    if (absolute.y < 0) {
+      absolute.y = 0
+    } else if (absolute.y > mapH) {
+      absolute.y = mapH
+    }
+    point = combineClasses(
+      absolute,
+      new Point(-this.player.point().x, -this.player.point().y),
+    )
+
     const tryTo = (mainPoint: Point, combine: Point) => {
       const pos = this.player.bodyPositions(combine)
       const itemWithin = this.player.staticItems
         .for(pos.collision)
         .itemWithin(pos.collision)
-      if (itemWithin) {
+      if (
+        itemWithin ||
+        !this.player.gameServer.map.withinMap(pos.collision?.point)
+      ) {
         if (combine.x) {
           const absX = Math.abs(combine.x) / 4
 
@@ -98,6 +119,9 @@ export class PlayerAction {
               new Point(0, -absX),
             )
             if (
+              this.player.gameServer.map.withinMap(
+                posAfterPhysics.collision?.point,
+              ) &&
               !this.player.staticItems
                 .for(posAfterPhysics.collision)
                 .someWithin(posAfterPhysics.collision)
@@ -109,6 +133,9 @@ export class PlayerAction {
               new Point(0, absX),
             )
             if (
+              this.player.gameServer.map.withinMap(
+                posAfterPhysics.collision?.point,
+              ) &&
               !this.player.staticItems
                 .for(posAfterPhysics.collision)
                 .someWithin(posAfterPhysics.collision)
@@ -124,6 +151,9 @@ export class PlayerAction {
               new Point(-absY, 0),
             )
             if (
+              this.player.gameServer.map.withinMap(
+                posAfterPhysics.collision?.point,
+              ) &&
               !this.player.staticItems
                 .for(posAfterPhysics.collision)
                 .someWithin(posAfterPhysics.collision)
@@ -135,6 +165,9 @@ export class PlayerAction {
               new Point(absY, 0),
             )
             if (
+              this.player.gameServer.map.withinMap(
+                posAfterPhysics.collision?.point,
+              ) &&
               !this.player.staticItems
                 .for(posAfterPhysics.collision)
                 .someWithin(posAfterPhysics.collision)

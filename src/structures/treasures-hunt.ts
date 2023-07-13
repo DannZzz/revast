@@ -14,7 +14,7 @@ export interface TreasureHuntPlace {
 
 const Treasure = 'treasure'
 
-const exceptIds: number[] = [95, 44, 93, 109]
+const exceptIds: number[] = [95, 44, 93, 109, 119, 111]
 
 export class TreasuresHunt {
   /**
@@ -27,7 +27,7 @@ export class TreasuresHunt {
     (item) =>
       !item.isEatable() &&
       !item.isResource() &&
-      !['emerald', 'ruby'].includes(item.data.luckType) &&
+      !['emerald', 'ruby', 'dragon'].includes(item.data.luckType) &&
       !exceptIds.includes(item.data.id),
   )
 

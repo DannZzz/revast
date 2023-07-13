@@ -143,7 +143,7 @@ export class GameServer implements GameProps {
   joinPlayer(
     details: Omit<JoinPlayerDto, 'recaptcha_token'> & { socket: MainSocket },
   ) {
-    const { socket, name, screen, token, skin } = details
+    const { socket, name, screen, token, skin, settings } = details
     const socketId = socket.id
 
     const ipdata = CollectedIps.get(socket.ip)
@@ -162,7 +162,7 @@ export class GameServer implements GameProps {
         tokenData.currentSocketId = socketId
         socket.inGame = true
 
-        // console.log(player.cache.data)
+        player.setSettings(settings)
         player.socketRegistering()
         this.checkLoop()
         return
@@ -186,7 +186,10 @@ export class GameServer implements GameProps {
     })
     const player = new Player({
       skin: skin,
-      name: name
+      name: (typeof name !== 'string' || !name
+        ? 'unnamed#' + $.randomNumber(1, 100)
+        : name
+      )
         .slice(0, PLAYER_NAME_MAX_SIZE)
         .replace(/\W*(<script>)\W*/g, ''),
       token: newToken,
@@ -201,6 +204,7 @@ export class GameServer implements GameProps {
         map: this.map.absoluteSize,
       },
     })
+    player.setSettings(settings)
     this.players.set(login.playerId, player)
     this.alivePlayers.set(login.playerId, player)
 
@@ -245,8 +249,9 @@ export class GameServer implements GameProps {
         +$.randomNumber(forest.point.y, forest.point.y + forest.size.height),
       )
     let point = randomPoint()
+    let i = 0
     while (
-      (typeof check === 'function' ? !check(point) : false) ||
+      (i < 1000 && (typeof check === 'function' ? !check(point) : false)) ||
       this.staticItems
         .for({ radius: forObjectRadius * 2, point })
         .all.some((item) =>
@@ -257,6 +262,7 @@ export class GameServer implements GameProps {
         )
     ) {
       point = randomPoint()
+      i++
     }
     return point
   }

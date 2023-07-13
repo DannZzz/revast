@@ -11,6 +11,9 @@ export class CraftEntity {
   id: string
 
   @Expose()
+  itemId: number
+
+  @Expose()
   craftDuration: number
 
   constructor(data: CraftEntity) {

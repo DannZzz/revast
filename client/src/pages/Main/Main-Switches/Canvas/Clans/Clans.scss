@@ -1,0 +1,309 @@
+.clans-container {
+  @include flex($dir: column);
+
+  .title-container {
+    position: relative;
+    z-index: 1;
+    height: 50px;
+
+    .title {
+      // position: absolute;
+      width: 423px;
+      height: 100px;
+    }
+  }
+
+  .clans {
+    @mixin clan-box() {
+      max-width: 400px;
+      max-height: 500px;
+      width: 400px;
+      height: 500px;
+
+      @include screen("custom", max-height, 800) {
+        width: 100%;
+        height: 100%;
+      }
+      @include screen("small") {
+        width: 100%;
+        height: 100%;
+      }
+      @include screen("custom", $pixels: 1500) {
+        width: 100%;
+        height: 100%;
+      }
+      @include screen("med-small") {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    color: $text2-color;
+    @include flex($dir: column);
+    gap: 20px;
+    padding: 70px;
+    position: relative;
+
+    // width: 878px;
+    // height: 614px;
+
+    background: #593b2a;
+    border: 10px solid rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
+
+    /* Rectangle 17 */
+
+    box-sizing: border-box;
+
+    border: 7px solid rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+
+    &.big {
+      @include flex();
+    }
+
+    .out-button {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .btn-leave {
+      width: 134px;
+      height: 50px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      @include active-transform();
+      background: url(/images/leave-button.png);
+      transition: background 0.1s;
+
+      &:hover {
+        background: url(/images/leave-button-h.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      &.delete {
+        transition: background 0.1s;
+        background: url(/images/delete-button.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        &:hover {
+          background: url(/images/delete-button-h.png);
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .btn-create-clan {
+      @include active-transform();
+      background: url(/images/create-button.png);
+      width: 134px;
+      height: 50px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      transition: background 0.1s;
+
+      &:hover {
+        background: url(/images/create-button-h.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    }
+
+    .btn-join {
+      @include active-transform();
+      background: url(/images/join-button.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      transition: background 0.1s;
+
+      width: 115px;
+      height: 50px;
+    }
+
+    .create-clan {
+      @include clan-box();
+      @include flex($dir: column);
+      gap: 20px;
+
+      &-title {
+        color: #97684d;
+        font-size: 30px;
+        @include text-stroke(3.5px, rgba(0, 0, 0, 0.3));
+      }
+
+      .clan-name {
+        background: url(/images/create-clan-input-bg.png);
+        background-position: center;
+        background-size: contain;
+        width: 250px;
+        height: 63px;
+        outline: none;
+        padding: 20px;
+        border: none;
+        text-align: center;
+        font-size: 22px;
+        color: white;
+        &::placeholder {
+          color: #ccc;
+        }
+        // @include text-stroke(7px, rgba(0, 0, 0, 0.3));
+      }
+    }
+
+    .members {
+      @include flex($dir: column, $items: flex-start);
+      gap: 5px;
+
+      .clan-title {
+        color: #545251;
+        font-size: 35px;
+        letter-spacing: 1px;
+        @include text-stroke(3.5px, rgba(0, 0, 0, 0.3));
+      }
+    }
+
+    .buttons {
+      @include flex($content: space-evenly);
+
+      .privacy {
+        @include flex();
+        gap: 5px;
+        cursor: pointer;
+
+        &.disabled {
+          cursor: unset;
+        }
+
+        &-title {
+          color: #97684d;
+          font-size: 20px;
+          @include text-stroke(2.5px, rgba(0, 0, 0, 0.3));
+        }
+
+        .btn-checkbox {
+          position: relative;
+          width: 40px;
+          height: 40px;
+          background: url(/images/checkbox.png);
+          @include flex;
+
+          .check {
+            width: 26px;
+            height: 27px;
+          }
+        }
+      }
+    }
+
+    .clans-list {
+      display: grid;
+      gap: 10px;
+      @include clan-box();
+      overflow-y: scroll;
+      @include hide-scroll-bar();
+      background: rgba($color: #000000, $alpha: 0.1);
+      border: 7px solid rgba($color: #000000, $alpha: 0.2);
+      padding: 15px;
+      border-radius: 23px;
+      place-items: start;
+
+      .member-flex {
+        @include flex;
+        gap: 5px;
+
+        .btn-container {
+          width: 35px;
+          height: 35px;
+          @include flex;
+
+          .btn-owner {
+            width: 35px;
+            height: 25px;
+            background: url(/images/leader.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            transition: background 0.1s;
+
+            &.kickable {
+              height: 35px;
+              width: 35px;
+              cursor: pointer;
+              background: url(/images/kick-button.png);
+              background-position: center;
+              background-repeat: no-repeat;
+
+              &:hover {
+                height: 35px;
+                width: 35px;
+                cursor: pointer;
+                background: url(/images/kick-button-h.png);
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            }
+          }
+        }
+
+        .member-name {
+          color: #97684d;
+          font-size: 25px;
+          @include text-stroke(2.5px, rgba(0, 0, 0, 0.3));
+        }
+      }
+
+      .visual-clan {
+        padding: 10px;
+        border-radius: 23px;
+        width: 100%;
+
+        &:hover {
+          background: rgba($color: #000000, $alpha: 0.1);
+        }
+
+        .info {
+          @include flex($dir: column, $items: flex-start);
+
+          .clan-title {
+            color: #97684d;
+            font-size: larger;
+            @include text-stroke(2.5px, rgba(0, 0, 0, 0.3));
+          }
+          .clan-member-count {
+            color: #aaa;
+          }
+        }
+
+        @include flex($content: space-between);
+
+        .close-button {
+          width: 50px;
+          height: 50px;
+          transition: all 0.2s;
+          cursor: pointer;
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    // .clan-name {
+    //   padding: 10px;
+    //   background: rgba($color: #000000, $alpha: 0.1);
+    //   outline: none;
+    //   border: none;
+    //   text-align: center;
+    //   color: $text2-color;
+    //   ::placeholder {
+    //     color: #252525;
+    //   }
+    //   font-size: large;
+    // }
+  }
+}

@@ -20,10 +20,14 @@ import {
 import { Point, Size } from 'src/global/global'
 import { Images } from '../image-base'
 import { Craft } from '../Craft'
+import { isNumber } from 'src/utils/is-number-in-range'
 
 class ItemCreator {
   private _data: Partial<ItemProps<ItemsByTypes>>
-  readonly extend = <any>{ craftable: [] }
+  readonly extend = <any>{
+    description: '',
+    craftable: [],
+  }
 
   setVariant(variant: EquipableItemVariant) {
     this.extend.drawPosition = DrawPosByType[variant]
@@ -33,6 +37,15 @@ class ItemCreator {
 
   name(val: string) {
     this.extend.name = val
+    return this
+  }
+
+  description(str: string) {
+    if (this.extend.description) {
+      this.extend.description += `\n${str}`
+    } else {
+      this.extend.description = str
+    }
     return this
   }
 
@@ -124,11 +137,36 @@ class ItemCreator {
   build() {
     // if (this.extend.defense)
     // console.log(new Item({ ...this.extend, ...this._data }))
-    const { craftable, ...otherProps } = this.extend
+    const obj = { ...this.extend, ...this._data }
+    const { craftable, ...otherProps } = obj
     craftable.forEach((crft) => {
       Craft.addCraft(this.extend.id, crft)
     })
-    return new Item({ ...otherProps, ...this._data })
+
+    if (isNumber(obj.damage) || isNumber(obj.damageBuilding)) {
+      this.description(`Damage: ${obj.damage || 0}`)
+      this.description(`Damage Building: ${obj.damageBuilding || 0}`)
+    }
+
+    if (obj.defense) {
+      this.description('Defense Player: ' + obj.defense.player)
+      this.description('Defense Mob: ' + obj.defense.mob)
+    }
+
+    if (obj.toFood) {
+      this.description('Food: ' + obj.toFood)
+    }
+
+    if (obj.toHealth) {
+      this.description('Health: ' + obj.toHealth)
+    }
+
+    if (obj.toWater) {
+      this.description('Water: ' + obj.toWater)
+    }
+
+    otherProps.description = this.extend.description
+    return new Item(otherProps)
   }
 }
 

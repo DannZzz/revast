@@ -24,7 +24,6 @@ import { PlayerClans } from "./player-clans"
 
 export class Player extends BasicPlayer<PlayerEvents> {
   range: number
-  game: () => Game
   declare readonly actions: PlayerAction
   readonly toggle = new Toggle()
   private _speed: number
@@ -41,9 +40,8 @@ export class Player extends BasicPlayer<PlayerEvents> {
   readonly clans: PlayerClans
 
   constructor(props: ElementProps<PlayerProps>) {
-    const { camera, dayInfo, game, timeout, ...basic } = props
+    const { camera, dayInfo, timeout, ...basic } = props
     super({ ...basic })
-    this.game = game
     this.clans = new PlayerClans(this)
     this.items = new PlayerItems(this)
     this.actions = new PlayerAction(this)

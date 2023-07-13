@@ -12,6 +12,7 @@ import { rectToPolygon } from 'src/utils/polygons'
 import { Items } from 'src/data/items'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { Tick } from 'src/structures/Tick'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export type ResourceTypes =
   | 'wood'
@@ -22,6 +23,7 @@ export type ResourceTypes =
   | 'amethyst'
   | 'ruby'
   | 'emerald'
+  | 'dragon'
 
 class ShapeValidPosition {
   isRectPosition(): this is RectPosition {
@@ -85,7 +87,7 @@ export class BasicBioItem {
 }
 
 export class Bio {
-  readonly id: string = uuid(50)
+  readonly id: string = uniqueId()
   point: Point
   private tick = new Tick(() => $.randomNumber(8, 15))
   players: Players

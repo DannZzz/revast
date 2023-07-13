@@ -3,11 +3,12 @@ import { Wss } from './WSS'
 import { isNumber } from 'src/utils/is-number-in-range'
 import { verifyUserRecaptcha } from 'src/utils/verfify-recaptcha'
 import CameraViewQuery from 'src/structures/camera-view-query'
+import { JoinPlayerDto } from 'src/dto/join-player.dto'
 
 export default function registerListeners(this: Wss) {
   this.on('joinServer', async ({ ws, player }, [joinPlayerDto]) => {
     if (ws.inGame) return
-    const { recaptcha_token, ...props } = joinPlayerDto
+    const { recaptcha_token, ...props } = (joinPlayerDto || {}) as JoinPlayerDto
     ws.requestToJoin = true
     const verifyCaptcha = await verifyUserRecaptcha(recaptcha_token)
     if (verifyCaptcha) this.gameServer.joinPlayer({ ...props, socket: ws })
@@ -99,5 +100,8 @@ export default function registerListeners(this: Wss) {
     })
     .on('market', ({ player }, [i, quantity]) => {
       player?.gameServer.market.try(player, i, quantity)
+    })
+    .on('settings', ({ player }, [graphics]) => {
+      player?.setSettings({ graphics })
     })
 }

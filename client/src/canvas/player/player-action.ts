@@ -6,9 +6,12 @@ import { BasicPlayer } from "../basic/player.basic"
 import animationAsTween from "../utils/animationAsTween"
 import type { Player } from "./player"
 import { PlayerClick } from "./player-click"
+import { PlayerGraphics } from "../types/player.types"
 
 export class PlayerAction {
   readonly click: PlayerClick
+  runningAnimation: Konva.Animation
+
   constructor(private player: BasicPlayer) {
     this.click = new PlayerClick(player)
   }
@@ -22,34 +25,46 @@ export class PlayerAction {
 
   running() {
     const hands = this.hands
-    new Konva.Animation((frame) => {
-      if (this.click.clickStatus === "pending") {
-        return false
-      }
 
-      if (this.player.running) {
-        var amplitude = 1.5
-        var period = 1000
-
-        hands.right.x(this.player.handsPosition.right.x)
-        hands.left.x(this.player.handsPosition.left.x)
-        this.player.handsGroup.y(
-          amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
-        )
-      } else {
-        var amplitude = 1
-        var period = 2000
-        this.player.handsGroup.y(0)
-        hands.right.x(
-          amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
-            this.player.handsPosition.right.x
-        )
-        hands.left.x(
-          -amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
-            this.player.handsPosition.left.x
-        )
+    if (!this.player?.game?.()?.highGraphics) {
+      hands.right.x(this.player.handsPosition.right.x)
+      hands.left.x(this.player.handsPosition.left.x)
+      this.player.handsGroup.y(0)
+      this.runningAnimation?.stop()
+    } else {
+      if (this.runningAnimation) {
+        this.runningAnimation.start()
+        return
       }
-    }).start()
+      this.runningAnimation = new Konva.Animation((frame) => {
+        if (this.click.clickStatus === "pending") {
+          return false
+        }
+
+        if (this.player.running) {
+          var amplitude = 1.5
+          var period = 1000
+
+          hands.right.x(this.player.handsPosition.right.x)
+          hands.left.x(this.player.handsPosition.left.x)
+          this.player.handsGroup.y(
+            amplitude * Math.sin((frame.time * 2 * Math.PI) / period)
+          )
+        } else {
+          var amplitude = 1
+          var period = 2000
+          this.player.handsGroup.y(0)
+          hands.right.x(
+            amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
+              this.player.handsPosition.right.x
+          )
+          hands.left.x(
+            -amplitude * Math.sin((frame.time * 2 * Math.PI) / period) +
+              this.player.handsPosition.left.x
+          )
+        }
+      }).start()
+    }
   }
 
   clicking() {

@@ -68,7 +68,7 @@ export const MAX_SCREEN_SIZE = new Size(2540, 2000)
 export const CLAN_MAX_MEMBERS_SIZE = 9
 export const CLAN_MAX_NAME_SIZE = 20
 
-export const MOB_GLOBAL_SPEED_EFFECT = 90 + 25
+export const MOB_GLOBAL_SPEED_EFFECT = 50 + 25
 export const MOB_GLOBAL_ATTACK_SPEED_EFFECT = 1.5
 
 export const MOB_DIR_NAMES = ['mobs']
@@ -98,7 +98,7 @@ export const MAX_ITEM_QUANTITY_IN_CRATE = 500
 
 export const MAP_GRID_RENDER_AREA_SIZE = 2000
 
-export const GRID_SET_RANGE = 150
+export const GRID_SET_RANGE = 125
 
 export const MAX_TREASURES_ISLAND = 5
 
@@ -112,9 +112,9 @@ const itemFor = (i: number, quantity: number = 999) => [
 
 export const START_ITEMS = () => [
   itemFor(8, 3),
-  // itemFor(91),
-  // itemFor(114),
-  // itemFor(112),
+  // itemFor(120),
+  // itemFor(121),
+  // itemFor(122),
   // itemFor(93),
   // itemFor(118),
   // itemFor(117),

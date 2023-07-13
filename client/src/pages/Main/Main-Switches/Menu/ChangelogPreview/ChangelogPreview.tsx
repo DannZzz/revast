@@ -1,21 +1,12 @@
-import { useNavigate } from "@solidjs/router"
 import "./ChangelogPreview.scss"
+import { PREVIEW_URL } from "../../../../../constants"
 
 const ChangelogPreview = () => {
-  const navigate = useNavigate()
-  function navTo(to: string) {
-    navigate(to)
-  }
   return (
-    <div onClick={() => navTo("/changelog")} class="changelog-preview">
+    <a href="/changelog" target="_blank" class="changelog-preview">
       {/* <span class="title rainbow">CHANGELOG</span> */}
-      <img
-        crossorigin="anonymous"
-        src="/images/bread-farm-preview.png"
-        alt=""
-        class="preview"
-      />
-    </div>
+      <img crossorigin="anonymous" src={PREVIEW_URL} alt="" class="preview" />
+    </a>
   )
 }
 

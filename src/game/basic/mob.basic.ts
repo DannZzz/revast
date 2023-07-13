@@ -1,5 +1,7 @@
 import { MobNames } from 'src/data/mobs'
-import { Point, Size, combineClasses } from 'src/global/global'
+import { Gettable, Point, Size, combineClasses } from 'src/global/global'
+import { GameServer } from '../server'
+import { Player } from '../player/player'
 
 export enum MobMoveStatus {
   IDLE,
@@ -24,6 +26,7 @@ export interface BasicMobProps {
   givesXP: number
   size: Size
   damage: number
+  damageBuilding: number
   name: MobNames
   hp: number
   radius: {
@@ -32,7 +35,7 @@ export interface BasicMobProps {
     collision: number
   }
   damageInterval: number
-  drop: { [k: number]: number }
+  drop: Gettable<{ [k: number]: number }>
   moveTactic: MobDefaultMoveTactic
 }
 
@@ -41,14 +44,18 @@ export class BasicMob implements BasicMobProps {
     Object.assign(this, data)
   }
   radius: { attack: number; react: number; collision: number }
-  drop: { [k: number]: number }
+  drop: Gettable<{ [k: number]: number }>
   hurtSource: string
   hp: number
   givesXP: number
   damage: number
+  damageBuilding: number
+  damageBuildingInterval: number
   source: string
   name: MobNames
   damageInterval: number
   size: Size
   moveTactic: MobDefaultMoveTactic
+  onInit?: (gs: GameServer) => void
+  onRemove?: (gs: GameServer, player: Player) => void
 }

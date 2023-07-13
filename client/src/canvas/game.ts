@@ -25,13 +25,26 @@ import { BasicDrop } from "./basic/drop.basic"
 import { KonvaText } from "./structures/KonvaText"
 import { GameAttr } from "./game-attr"
 import { BasicMisc } from "./basic/misc.basic"
+import { Global } from "aeolz/lib/lib/Global"
+import {
+  BioTemplate,
+  DropTemplate,
+  MiscTemplate,
+  MobTemplate,
+  StaticSettableTemplate,
+  VisualPlayerTemplate,
+} from "../data-templates/teamplates"
+import { PlayerGraphics } from "./types/player.types"
+import { CompactItem } from "../api/type"
 
 export class Game {
   layer: Layer
+  settings: { graphics: PlayerGraphics }
   player: Player
   readonly events = new EventEmitter<GameEvents>()
   staticItems: StaticItems = new StaticItems()
   mobs: BasicMob[] = []
+  items: CompactItem[] = []
   camera: Camera
   map: MapDto
   ended = false
@@ -61,11 +74,36 @@ export class Game {
     }, 1000)
   }
 
+  setSettings(settings: Game["settings"]) {
+    if (settings.graphics !== this.settings.graphics) {
+      this.settings.graphics = settings.graphics
+      this.player?.actions?.running()
+      this.mobs.forEach((mob) => mob.animation())
+      if (this.settings.graphics === PlayerGraphics.low) {
+        this.staticItems.miscs.forEach((misc) => misc.destroy())
+        this.staticItems.miscs = []
+      }
+    }
+  }
+
   joinPlayer(playerData: JoinPlayer) {
     if (!this.layer && !this.layer2) {
       this.playerQueue.push(playerData)
     } else {
       this.ended = false
+      this.settings = { graphics: PlayerGraphics.high }
+      let graphics = +localStorage.getItem("graphics")
+      if (
+        typeof graphics !== "number" ||
+        PlayerGraphics.low > Math.floor(graphics) ||
+        PlayerGraphics.high < Math.floor(graphics)
+      ) {
+        graphics = PlayerGraphics.high
+      } else {
+        graphics = Math.floor(graphics)
+      }
+      localStorage.setItem("graphics", "" + graphics)
+      this.settings.graphics = graphics
       this.registerSockets()
       this.updateLoop()
       socket.emit("joinServer", [
@@ -75,6 +113,9 @@ export class Game {
           name: playerData.name,
           screen: this.size,
           token: playerData.token,
+          settings: {
+            graphics,
+          },
         },
       ])
     }
@@ -167,32 +208,43 @@ export class Game {
     }
   }
 
+  get highGraphics() {
+    return this.settings.graphics === PlayerGraphics.high
+  }
+
   showServerMessage(txt: string) {
+    const animationAllowed = this.highGraphics
     clearTimeout(this.serverMessageTimeout)
     this.serverMessageNode?.destroy?.()
     this.serverMessageNode = new KonvaText({
       text: txt,
-      opacity: 0,
+      opacity: animationAllowed ? 0 : 1,
       width: this.size.width,
       align: "center",
       y: 101,
+      stroke: "black",
       strokeWidth: 0.5,
       listening: false,
-      fill: "#ccc",
+      fill: "white",
       fontSize: 30,
     })
 
     Game.createAlwaysTop(this.layer2, this.serverMessageNode)
-    this.serverMessageNode.to({ opacity: 1, duration: 1 })
+    animationAllowed && this.serverMessageNode.to({ opacity: 1, duration: 1 })
     this.serverMessageTimeout = setTimeout(() => {
-      this.serverMessageNode.to({
-        opacity: 0,
-        duration: 1,
-        onFinish: () => {
-          this.serverMessageNode.destroy()
-          this.serverMessageNode = null
-        },
-      })
+      if (animationAllowed) {
+        this.serverMessageNode.to({
+          opacity: 0,
+          duration: 1,
+          onFinish: () => {
+            this.serverMessageNode.destroy()
+            this.serverMessageNode = null
+          },
+        })
+      } else {
+        this.serverMessageNode.destroy()
+        this.serverMessageNode = null
+      }
       clearTimeout(this.serverMessageTimeout)
     }, 5000)
   }
@@ -281,6 +333,7 @@ export class Game {
           layer2: this.layer2,
           layer: this.layer,
           angle: rotation,
+          game: () => this,
         })
         player.draw()
         player.items.equiped = equipment
@@ -308,6 +361,7 @@ export class Game {
         this.mobs[mobExistsIndex].angle = mob.angle
       } else {
         const createdMob = new BasicMob(mob)
+        createdMob.game = this
         createdMob.draw(this.layer.findOne(`#game-mobs`) as any)
         this.mobs.push(createdMob)
       }
@@ -385,21 +439,23 @@ export class Game {
 
     socket.on("staticBios", ([bios, toRemoveIds]) => {
       this.drawStaticBios(
-        bios.map((bio) => new Bio(bio)),
+        bios.map((bio) => new Bio(BioTemplate.toObject(bio))),
         toRemoveIds
       )
     })
 
     socket.on("miscs", ([miscs, toRemoveIds]) => {
       this.drawMiscs(
-        miscs.map((misc) => new BasicMisc(misc)),
+        miscs.map((misc) => new BasicMisc(MiscTemplate.toObject(misc))),
         toRemoveIds
       )
     })
 
     socket.on("staticSettables", ([settables, toRemodIds]) => {
       this.drawStaticSettables(
-        settables.map((dto) => new StaticSettableItem(dto)),
+        settables.map(
+          (dto) => new StaticSettableItem(StaticSettableTemplate.toObject(dto))
+        ),
         toRemodIds
       )
     })
@@ -445,16 +501,24 @@ export class Game {
     socket.on("dynamicItems", ([otherPlayers, mobs]) => {
       // console.log(typeof otherPlayers, otherPlayers?.players?.length, "plg")
       if (otherPlayers) {
-        this.drawOtherPlayers(otherPlayers.players, otherPlayers.toRemoveIds)
+        this.drawOtherPlayers(
+          otherPlayers.players.map((template) =>
+            VisualPlayerTemplate.toObject(template as any)
+          ),
+          otherPlayers.toRemoveIds
+        )
       }
       if (mobs) {
-        this.drawMobs(mobs.mobs, mobs.toRemoveIds)
+        this.drawMobs(
+          mobs.mobs.map((template) => MobTemplate.toObject(template)),
+          mobs.toRemoveIds
+        )
       }
     })
 
     socket.on("drops", ([drops, toRemoveIds]) => {
       this.drawDrops(
-        drops.map((drop) => new BasicDrop(drop)),
+        drops.map((drop) => new BasicDrop(DropTemplate.toObject(drop))),
         toRemoveIds
       )
     })

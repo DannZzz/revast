@@ -1,7 +1,8 @@
 import { uuid } from 'anytool'
+import { uniqueId } from './uniqueId'
 
 class Listener<T extends Record<any, any[]>, K extends keyof T> {
-  readonly id: string = uuid(50)
+  readonly id: string = uniqueId()
 
   constructor(readonly event: K, public cb: (...args: T[K]) => void) {}
 }

@@ -23,6 +23,7 @@ export interface BasicPlayerProps {
   skin: PlayerSkin
   id: string
   icons: number[]
+  game: () => Game
 }
 
 export interface BasicPlayerCache {
@@ -39,6 +40,7 @@ export class BasicPlayer<
 > extends BasicElement<T> {
   name: string
   skin: PlayerSkin
+  game: () => Game
   readonly equipment = {
     size: new Size(120, 120),
     hands: { left: { rotation: 0 }, right: { rotation: 180 } },
@@ -64,9 +66,10 @@ export class BasicPlayer<
   >{}
 
   constructor(props: ElementProps<BasicPlayerProps>) {
-    const { name, skin, id, icons, ...otherProps } = props
+    const { name, skin, id, icons, game, ...otherProps } = props
     super(otherProps)
     this.skin = skin
+    this.game = game
     this.icons = icons || []
     this.name = name
     this._id = id
@@ -124,7 +127,7 @@ export class BasicPlayer<
       fontSize: 20,
       strokeWidth: 0.5,
       stroke: "black",
-    }).cache()
+    })
     name.offsetX(-(150 - name.width() / 2))
     const iconsGroup = new Konva.Group()
     nameGroup.add(iconsGroup, name)

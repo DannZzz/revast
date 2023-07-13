@@ -3,6 +3,7 @@ import { Player } from '../player/player'
 import { Point, Size } from 'src/global/global'
 import { UniversalHitbox, universalWithin } from 'src/utils/universal-within'
 import { timer } from 'rxjs'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export interface BasicDropProps<T> {
   source: string
@@ -33,7 +34,7 @@ export class BasicDrop<T = any> implements BasicDropProps<T> {
   size: Size
   type?: string
   hurtSource: string
-  readonly id = `drop-${uuid(40)}`
+  readonly id = uniqueId()
   point: Point
   hitboxRadius: number
   source: string

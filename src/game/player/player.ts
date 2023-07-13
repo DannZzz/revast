@@ -23,6 +23,7 @@ import {
   PlayerCache,
   PlayerCacheInit,
   PlayerProps,
+  PlayerSettings,
 } from '../types/player.types'
 import { PlayerAction } from './player-action'
 import { PlayerBars } from './player-bars'
@@ -55,6 +56,7 @@ import CameraViewQuery from 'src/structures/camera-view-query'
 import { uuid } from 'anytool'
 import { NB } from 'src/utils/NumberBoolean'
 import { isNumber } from 'src/utils/is-number-in-range'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export class Player extends BasicElement<PlayerEvents> {
   readonly skin: PlayerSkin
@@ -150,7 +152,7 @@ export class Player extends BasicElement<PlayerEvents> {
 
     const size = new Size(50, 50)
     return {
-      collision: <UniversalHitbox>{
+      collision: {
         radius: PLAYER_BODY_COLLISION_RADIUS,
         point: combineClasses(this.point(), withPoint),
       },
@@ -216,13 +218,20 @@ export class Player extends BasicElement<PlayerEvents> {
             helmet: TIMEOUT_UNWEAR_HELMET,
             building: TIMEOUT_BUILDING,
           },
-          icons: [this.clanMember.clanId ? 0 : null].filter(n => isNumber(n)),
+          icons: [this.clanMember.clanId ? 0 : null].filter((n) => isNumber(n)),
         }),
       ),
     ])
     this.bars.socketUpdate()
     this.items.update()
     this.actions.actionablesUpdate()
+  }
+
+  setSettings(settings: PlayerSettings) {
+    if (isNumber(settings?.graphics)) {
+      const graphics = Math.floor(settings.graphics)
+      if (isNumber(graphics, 0, 2)) this.cache.data.settings.graphics = graphics
+    }
   }
 
   damage(
@@ -281,7 +290,7 @@ export class Player extends BasicElement<PlayerEvents> {
     const icons = <number[]>[]
 
     if (this.clanMember.clanId) icons.push(0)
-    
+
     this.socket().emit('icons', icons)
   }
 
@@ -384,7 +393,7 @@ export class Player extends BasicElement<PlayerEvents> {
   }
 
   requestView(cb: (dataUrl: string) => void) {
-    const id = `view-${uuid(5)}`
+    const id = uniqueId()
     CameraViewQuery.set(id, cb)
     this.socket().emit('requestCanvas', [id])
   }

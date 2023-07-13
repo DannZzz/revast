@@ -9,7 +9,6 @@
   gap: 20px;
 
   .container {
-    margin-top: 70px;
     width: 60%;
     @include bg-effect;
     padding: 40px;
@@ -46,7 +45,7 @@
         }
 
         .big-image {
-          max-width: 200px;
+          max-width: 450px;
         }
 
         .group {

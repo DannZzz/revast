@@ -1,5 +1,9 @@
 import { Cache } from 'src/structures/cache/cache'
-import { PlayerCache, VisualPlayerData } from '../types/player.types'
+import {
+  PlayerCache,
+  PlayerGraphics,
+  VisualPlayerData,
+} from '../types/player.types'
 import { pointPolygon } from 'intersects'
 import { Transformer } from 'src/structures/Transformer'
 import { BioEntity } from 'src/entities/bio.entity'
@@ -19,6 +23,16 @@ import { universalWithin } from 'src/utils/universal-within'
 import { ActionableSettableItem } from '../extended/settable/actionable.settable'
 import { MiscEntity } from 'src/entities/misc.entity'
 import { isNumber } from 'class-validator'
+import Aeolz from 'aeolz'
+import { VisualPlayerTemplateData } from 'src/data-templates/templates-types'
+import {
+  BioTemplate,
+  DropTemplate,
+  MiscTemplate,
+  MobTemplate,
+  StaticSettableTemplate,
+  VisualPlayerTemplate,
+} from 'src/data-templates/teamplates'
 
 export class PlayerLoop {
   readonly cache: Cache<PlayerCache>
@@ -50,27 +64,33 @@ export class PlayerLoop {
 
     const viewRect = this.player.camera.viewRect()
     const staticItems = this.player.staticItems.for(viewRect)
+    const graphics = this.cache.get('settings').graphics
 
     // miscs
-    const miscsInView = staticItems.miscs.filter((misc) =>
-      universalWithin(viewRect, misc.universalHitbox),
-    )
-    const miscIds = miscsInView.map((bio) => bio.id)
     const cacheMiscIds = this.cache.get('miscs', true)
-    if (!$(cacheMiscIds).same(miscIds)) {
-      const toRemoveIds = cacheMiscIds.filter(
-        (miscId) => !miscIds.includes(miscId),
+
+    if (graphics === PlayerGraphics.low) {
+      this.cache.data.miscs = []
+    } else {
+      const miscsInView = staticItems.miscs.filter((misc) =>
+        universalWithin(viewRect, misc.universalHitbox),
       )
-      const toAdd = miscsInView.filter(
-        (misc) => !cacheMiscIds.includes(misc.id),
-      )
-      socket.emit('miscs', [
-        toAdd.map(
-          (misc) => Transformer.toPlain(new MiscEntity(misc)) as MiscEntity,
-        ),
-        toRemoveIds,
-      ])
-      this.cache.data.miscs = miscsInView
+      const miscIds = miscsInView.map((bio) => bio.id)
+      if (!$(cacheMiscIds).same(miscIds)) {
+        const toRemoveIds = cacheMiscIds.filter(
+          (miscId) => !miscIds.includes(miscId),
+        )
+        const toAdd = miscsInView.filter(
+          (misc) => !cacheMiscIds.includes(misc.id),
+        )
+        socket.emit('miscs', [
+          toAdd.map((misc) =>
+            MiscTemplate.take(Transformer.toPlain(new MiscEntity(misc))),
+          ),
+          toRemoveIds,
+        ])
+        this.cache.data.miscs = miscsInView
+      }
     }
 
     // bios
@@ -83,8 +103,8 @@ export class PlayerLoop {
       )
       const toAdd = itemsInView.filter((bio) => !cacheBioIds.includes(bio.id))
       socket.emit('staticBios', [
-        toAdd.map(
-          (bio) =>
+        toAdd.map((bio) =>
+          BioTemplate.take(
             Transformer.toPlain(
               new BioEntity({
                 ...bio.data,
@@ -92,7 +112,8 @@ export class PlayerLoop {
                 point: bio.point,
                 _currentResources: bio.resources(),
               }),
-            ) as BioEntity,
+            ),
+          ),
         ),
         toRemoveIds,
       ])
@@ -114,7 +135,9 @@ export class PlayerLoop {
       )
       socket.emit('staticSettables', [
         toAdd.map((settable) =>
-          Transformer.toPlain(new StaticSettableEntity(settable)),
+          StaticSettableTemplate.take(
+            Transformer.toPlain(new StaticSettableEntity(settable)),
+          ),
         ),
         toRemoveIds,
       ])
@@ -182,13 +205,13 @@ export class PlayerLoop {
         )
         .map((pl) => pl.id)
 
-      otherPlayers = Transformer.toPlain(
-        new OtherPlayersEntity({
-          toRemoveIds,
-          players: visualPlayers,
-        }),
-      )
-      this.cache.data.otherPlayers = visualPlayers
+      ;(otherPlayers = new OtherPlayersEntity({
+        toRemoveIds,
+        players: visualPlayers.map((player) =>
+          VisualPlayerTemplate.take(Transformer.toPlain(player)),
+        ),
+      })),
+        (this.cache.data.otherPlayers = visualPlayers)
     }
     const dynamicItems = [otherPlayers]
 
@@ -202,13 +225,14 @@ export class PlayerLoop {
     const toRemoveIds = cachedMobs
       .filter((mob) => !mobInViewIds.includes(mob.id))
       .map((mob) => mob.id)
-    const mobsEntity = Transformer.toPlain(
-      new MobDynamicEntity({
-        mobs: mobsInView.map((mob) => new MobEntity(mob)),
-        toRemoveIds,
-      }),
-    )
-    dynamicItems.push(mobsEntity)
+    const mobsEntity = new MobDynamicEntity({
+      mobs: mobsInView.map((mob) =>
+        MobTemplate.take(Transformer.toPlain(new MobEntity(mob))),
+      ),
+      toRemoveIds,
+    })
+
+    dynamicItems.push(mobsEntity as any)
     this.cache.data.mobs = [...mobsInView.values()]
 
     // mobsInView.forEach(mob => console.log(mob.id, mob.point))
@@ -232,12 +256,14 @@ export class PlayerLoop {
 
       const toSend = dropsInView
         .filter((drop) => !cachedDropsIds.includes(drop.id))
-        .map((drop) => Transformer.toPlain(new DropEntity(drop)))
+        .map((drop) =>
+          DropTemplate.take(Transformer.toPlain(new DropEntity(drop))),
+        )
 
       socket.emit('drops', [toSend, toRemoveIds])
       this.cache.data.drops = dropsInView
     }
 
-    this.player.actions.walkEffect()
+    if (graphics === PlayerGraphics.high) this.player.actions.walkEffect()
   }
 }

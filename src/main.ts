@@ -15,6 +15,7 @@ import connectDiscordBot from './apps/discord/discord-bot'
 import helmet from 'helmet'
 import { loadBios } from './before/loadBios'
 import { json, urlencoded } from 'express'
+import './data-templates/teamplates'
 
 async function bootstrap() {
   await Promise.all([

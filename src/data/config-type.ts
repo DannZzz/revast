@@ -44,6 +44,7 @@ export const CraftDuration = {
   amethyst: 10,
   ruby: 14,
   emerald: 26,
+  dragon: 30,
 }
 
 export const CraftGivingXP = {
@@ -54,6 +55,7 @@ export const CraftGivingXP = {
   amethyst: 1250,
   ruby: 3500,
   emerald: 6000,
+  dragon: 20000,
 }
 
 export const EquipmentItemSize = {
@@ -89,6 +91,7 @@ export const HelmetsDefenseByResourceType: {
   amethyst: [6, 28],
   ruby: [7, 32],
   emerald: [8, 40],
+  dragon: [9, 45],
 }
 
 export const verifyItemOfTeam: SettableMode['verify'] = function (player) {
@@ -98,7 +101,7 @@ export const verifyItemOfTeam: SettableMode['verify'] = function (player) {
     .includes(this.authorId)
 }
 
-export const SpikeTouchDamageRadius = 70
+export const SpikeTouchDamageRadius = 80
 
 export const SpikeHpByResourceType = {
   wood: 250,

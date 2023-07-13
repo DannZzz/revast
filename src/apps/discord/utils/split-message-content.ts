@@ -1,5 +1,5 @@
-import { uuid } from 'anytool'
 import { isNumber } from 'src/utils/is-number-in-range'
+import { uniqueId } from 'src/utils/uniqueId'
 
 export const splitDiscordMessageContent = (content: string): string[] => {
   let ap = <any>{}
@@ -9,7 +9,7 @@ export const splitDiscordMessageContent = (content: string): string[] => {
       const char = content[i]
       if (char === '%') {
         if (isNumber(curr)) {
-          const id = uuid(6)
+          const id = uniqueId()
           content
           ap[id] = content.substring(curr, i)
           content =

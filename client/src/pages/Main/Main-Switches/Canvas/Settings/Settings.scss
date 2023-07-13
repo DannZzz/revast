@@ -1,0 +1,15 @@
+.settings {
+  padding: 20px;
+  @include flex($dir: column);
+  gap: 15px;
+
+  &-block {
+    @include flex;
+    gap: 30px;
+
+    span {
+      color: white;
+      font-size: 20px;
+    }
+  }
+}

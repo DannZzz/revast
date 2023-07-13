@@ -71,6 +71,9 @@ export class ItemCompactEntity implements ItemProps {
     return this.iconSource
   }
 
+  @Expose()
+  description?: string
+
   source?: string
   iconSource: string
   craftable?: Craftable

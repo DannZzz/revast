@@ -45,6 +45,9 @@ export class PlayerItems extends BasicPlayerItems {
   private isDrew: boolean = false
   declare player: Player
   private readonly gridMaxRange = GRID_SET_RANGE
+  private descriptionNode: Konva.Group
+  private setModeGrid: boolean = false
+  private setModeText: Konva.Text
 
   private invGroup: Konva.Group
 
@@ -141,9 +144,12 @@ export class PlayerItems extends BasicPlayerItems {
       })
       itemGroup.on("pointerenter", () => {
         document.body.style.cursor = "pointer"
+        this.showDescription(item.itemId, itemGroup.absolutePosition(), true)
       })
       itemGroup.on("pointerleave", () => {
         document.body.style.cursor = "default"
+        this.descriptionNode?.destroy()
+        this.descriptionNode = null
       })
       itemGroup.on("click", () => this.craftItemRequest(item.id))
       const containerRect = makeItemIconBg({
@@ -171,7 +177,8 @@ export class PlayerItems extends BasicPlayerItems {
   }
 
   updateGridSettingMode() {
-    if (!this.settingMode.id || !this.settingMode.grid) return
+    if (!this.settingMode.id || (!this.settingMode.grid && !this.setModeGrid))
+      return
     const node = this.settingMode.node
     node?.rotation(-this.player.angle || 0)
     const screen = this.player.camera.point.value
@@ -215,13 +222,14 @@ export class PlayerItems extends BasicPlayerItems {
     this.settingMode.node.absolutePosition(gridPos)
   }
 
-  startSetMode(itemId: number) {
+  startSetMode(itemId: number, newMode: boolean = false) {
     const itemNode = this.settingMode.node
     itemNode.rotation(0)
 
-    if (itemId === this.settingMode.id) {
+    if (!newMode && itemId === this.settingMode.id) {
       this.settingMode.id = null
       itemNode.visible(false)
+      this.showSetModeText()
       itemNode.setAttr("image", null)
       return
     }
@@ -229,7 +237,7 @@ export class PlayerItems extends BasicPlayerItems {
       (item) => item.item.id == itemId
     ) as PlayerItem<Settable>
     this.settingMode.id = itemId
-    this.settingMode.grid = item.item.data.setMode.grid
+    this.settingMode.grid = this.setModeGrid || item.item.data.setMode.grid
 
     const offset = this.settingMode.grid
       ? new Point(item.item.data.size.width / 2, item.item.data.size.height / 2)
@@ -261,7 +269,7 @@ export class PlayerItems extends BasicPlayerItems {
       .cache()
 
     this.updateGridSettingMode()
-
+    this.showSetModeText()
     itemNode.visible(true)
   }
 
@@ -271,6 +279,7 @@ export class PlayerItems extends BasicPlayerItems {
       this.settingMode.id,
       this.player.cursor.x,
       this.player.cursor.y,
+      this.setModeGrid,
     ])
   }
 
@@ -278,6 +287,7 @@ export class PlayerItems extends BasicPlayerItems {
     const itemNode = this.settingMode.node
     this.settingMode.id = null
     this.settingMode.grid = false
+    this.showSetModeText()
     itemNode.rotation(0).visible(false).setAttr("image", null).cache()
   }
 
@@ -307,9 +317,15 @@ export class PlayerItems extends BasicPlayerItems {
       })
       itemGroup.on("mouseenter", () => {
         document.body.style.cursor = "pointer"
+        this.showDescription(
+          this._items[i]?.item?.id,
+          itemGroup.absolutePosition()
+        )
       })
       itemGroup.on("mouseleave", () => {
         document.body.style.cursor = "default"
+        this.descriptionNode?.destroy()
+        this.descriptionNode = null
       })
       itemGroup.on("pointerclick", (e) => {
         if (e.evt.button === 0) this.click(i)
@@ -399,6 +415,76 @@ export class PlayerItems extends BasicPlayerItems {
     return i * this.itemSize.width + i * this.gap
   }
 
+  showDescription(id: number, pos: Point, crafts: boolean = false) {
+    const item = this.player.game().items.find((it) => it.id === id)
+    if (!item) return
+    this.descriptionNode?.destroy()
+
+    const textName = new KonvaText({
+      text: item.name,
+      fontSize: 20,
+      stroke: "black",
+      strokeWidth: 0.5,
+      fill: "white",
+      x: 15,
+      y: 15,
+    })
+
+    let width = 450
+
+    const description = new KonvaText({
+      text: item.description || "",
+      fontSize: 15,
+      fill: "#ccc",
+      wrap: "word",
+      x: 15,
+      y: 30 + textName.height(),
+    })
+
+    const longer = Math.max(textName.width(), description.width())
+
+    if (longer > width - 30) {
+      description.width(width - 30)
+    } else {
+      width = longer + 30
+    }
+
+    const bg = new Konva.Rect({
+      cornerRadius: 10,
+      width,
+      fill: "#593b2a",
+      opacity: 0.9,
+      height:
+        15 * (description.text() === "" ? 2 : 3) +
+        textName.height() +
+        (description.text() === "" ? 0 : description.height()),
+    })
+
+    const group = new Konva.Group({})
+
+    if (crafts) {
+      group.position(
+        combineClasses(
+          pos,
+          new Point(this.itemSize.width + 15, this.itemSize.height / 2)
+        )
+      )
+    } else {
+      group.position(
+        combineClasses(
+          pos,
+          new Point(
+            -(bg.width() / 2 - this.itemIconSize.width / 2),
+            -(this.itemSize.height / 2 + bg.height() + 15)
+          )
+        )
+      )
+    }
+    group.add(bg, textName, description).cache()
+    this.descriptionNode = group
+    Game.createAlwaysTop(this.layer, group)
+  }
+
   update() {
     this.drawCrafts()
     for (let i = 0; i < this.space(); i++) {
@@ -463,6 +549,12 @@ export class PlayerItems extends BasicPlayerItems {
   resize() {
     const startPos = this.getInventoryStartPos()
     this.invGroup.position(startPos)
+    this.setModeText?.position(
+      new Point(
+        5,
+        this.layer.getStage().height() - this.setModeText?.height() - 5
+      )
+    )
   }
 
   getInventoryStartPos() {
@@ -474,7 +566,43 @@ export class PlayerItems extends BasicPlayerItems {
     )
   }
 
+  showSetModeText() {
+    if (!this.settingMode.id) {
+      this.setModeText?.destroy()
+      this.setModeText = null
+    } else {
+      let text = `Building method: ${
+        this.setModeGrid ? "Grid" : "Free"
+      }. Press G to change`
+
+      if (this.setModeText) {
+        this.setModeText.text(text)
+      } else {
+        this.setModeText = new KonvaText({
+          fill: "#e2c340",
+          fontSize: 15,
+          text,
+          fontStyle: "bold",
+        })
+
+        this.setModeText?.position(
+          new Point(
+            5,
+            this.layer.getStage().height() - this.setModeText?.height() - 5
+          )
+        )
+        Game.createAlwaysTop(this.layer, this.setModeText)
+      }
+    }
+  }
+
   private registerEvents() {
+    this.player.game().events.on("setmode.toggle", () => {
+      if (!this.settingMode.id) return
+      this.setModeGrid = !this.setModeGrid
+      this.showSetModeText()
+      this.startSetMode(this.settingMode.id, true)
+    })
     socket.on("playerItems", ([items, crafts, space, bagUrl]) => {
       if (!this.bagUrl && bagUrl) {
         this.player.bagNode

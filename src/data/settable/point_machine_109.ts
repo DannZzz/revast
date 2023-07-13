@@ -14,7 +14,7 @@ export default createSettable(109, 'point-machine')
     givesXp: 2500,
     duration: 20,
     state: { workbench: true },
-    required: { 23: 350, 52: 1 },
+    required: { 21: 150, 52: 1 },
   })
   .data({
     showHpRadius: 40,

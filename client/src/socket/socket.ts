@@ -56,6 +56,9 @@ class WS {
         (l) => l.event === eventObj.event && l.cb(...eventObj.data)
       )
     }
+    this.socket.onclose = () => {
+      // console.log("closed")
+    }
   }
 
   on<K extends keyof SC>(event: K, cb: (...data: SC[K]) => void): void {

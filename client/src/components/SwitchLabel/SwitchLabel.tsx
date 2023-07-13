@@ -6,7 +6,7 @@ export interface SwitchLabelOption {
   label: string
   id: number | string
   onCheck?: () => void
-  checked?: true
+  checked?: boolean
 }
 
 export interface SwitchLabelProps {

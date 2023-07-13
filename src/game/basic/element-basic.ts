@@ -2,6 +2,7 @@ import { uuid } from 'anytool'
 import { Point, Size } from 'src/global/global'
 import { GetSet } from 'src/structures/GetSet'
 import { EventEmitter, EventObject } from 'src/utils/EventEmitter'
+import { uniqueId } from 'src/utils/uniqueId'
 
 interface BasicElementProps {
   point: Point
@@ -25,7 +26,7 @@ export abstract class BasicElement<T extends EventObject = {}> {
     this.size = GetSet(props.size)
     this.angle = GetSet(props.angle || 0)
     this.theta = GetSet(props.theta || 0)
-    this._id = uuid(50)
+    this._id = uniqueId()
   }
   id(): string
   id(...selectors: string[]): string

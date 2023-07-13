@@ -21,6 +21,7 @@ export class BiomeEffect {
 export type MapAreaName =
   | 'winter-cave'
   | 'desert-cave'
+  | 'big-island-cave'
   | 'winter'
   | 'desert'
   | 'beach'
@@ -91,6 +92,16 @@ export class GameMap implements GameMapOptions {
     Object.assign(this, data)
 
     this.loadAbsoluteBiomes()
+  }
+
+  withinMap(hitbox: UniversalHitbox): boolean {
+    return universalWithin(hitbox, {
+      point: new Point(0, 0),
+      size: new Size(
+        this.tileSize.width * this.size.width,
+        this.tileSize.height * this.size.height,
+      ),
+    })
   }
 
   private loadAbsoluteBiomes() {

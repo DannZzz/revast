@@ -1,9 +1,8 @@
 import { Type } from 'class-transformer'
-import { VisualPlayerData } from '../game/types/player.types'
+import { VisualPlayerTemplateData } from 'src/data-templates/templates-types'
 
 export class OtherPlayersEntity {
-  @Type(() => VisualPlayerData)
-  players: VisualPlayerData[]
+  players: VisualPlayerTemplateData[]
   toRemoveIds: string[]
 
   constructor(data: Partial<OtherPlayersEntity>) {

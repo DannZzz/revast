@@ -7,14 +7,16 @@ import { Game } from "../game"
 import { percentFrom, percentOf } from "../utils/percentage"
 import { DayInfo } from "../../socket/events"
 import { KonvaText } from "../structures/KonvaText"
+import Aeolz from "aeolz"
 
 export class PlayerControllers {
   readonly containerSize = new Size(140, 115)
   arrow: Konva.Image
   private controllersGroup: Konva.Group
   private autofood: Konva.Image
-  private lastSentCraftOpen = 0
-  private lastSentMarketOpen = 0
+  private lastSentCraftOpen = new Aeolz.Tick(2)
+  private lastSentMarketOpen = new Aeolz.Tick(2)
+  private lastSentSettingsOpen = new Aeolz.Tick(2)
   private gap = 5
 
   constructor(readonly player: Player, readonly dayInfo: DayInfo) {
@@ -146,12 +148,32 @@ export class PlayerControllers {
       y: (iconSize.height + this.gap) * 2,
     }).cache()
 
-    this.controllersGroup.add(timerGroup, craftGroup, market)
+    const settings = new Konva.Image({
+      image: loadImage("/images/settings.png", (img) => {
+        settings.image(img).cache()
+      }),
+      name: "no-click",
+      height: iconSize.height,
+      width: iconSize.width,
+      x: iconSize.width + this.gap,
+      y: (iconSize.height + this.gap) * 3 + 10,
+    }).cache()
+
+    this.controllersGroup.add(timerGroup, craftGroup, market, settings)
     Game.createAlwaysTop(this.player.layer2, this.controllersGroup)
 
+    settings.on("pointerclick", (e) => {
+      if (this.lastSentSettingsOpen.limited()) return
+      this.lastSentSettingsOpen.next()
+      const t = setTimeout(() => {
+        this.player.game().events.emit("settings")
+        clearTimeout(t)
+      }, 150)
+    })
+
     market.on("pointerclick", (e) => {
-      if (this.lastSentMarketOpen > Date.now()) return
-      this.lastSentMarketOpen = Date.now() + 2000
+      if (this.lastSentMarketOpen.limited()) return
+      this.lastSentMarketOpen.next()
       const t = setTimeout(() => {
         this.player.game().events.emit("market")
         clearTimeout(t)
@@ -159,8 +181,8 @@ export class PlayerControllers {
     })
 
     craftGroup.on("pointerclick", (e) => {
-      if (this.lastSentCraftOpen > Date.now()) return
-      this.lastSentCraftOpen = Date.now() + 2000
+      if (this.lastSentCraftOpen.limited()) return
+      this.lastSentCraftOpen.next()
       const t = setTimeout(() => {
         this.player.game().events.emit("craft-book")
         clearTimeout(t)
