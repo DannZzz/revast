@@ -71,7 +71,7 @@ export class PlayerLoop {
 
     const miscsInView = staticItems.miscs.filter(
       (misc) =>
-        (graphics === PlayerGraphics.low ? misc.always : true) &&
+        (graphics === PlayerGraphics.low ? !!misc.always : true) &&
         universalWithin(viewRect, misc.universalHitbox),
     )
     const miscIds = miscsInView.map((bio) => bio.id)
