@@ -79,10 +79,6 @@ export class Game {
       this.settings.graphics = settings.graphics
       this.player?.actions?.running()
       this.mobs.forEach((mob) => mob.animation())
-      if (this.settings.graphics === PlayerGraphics.low) {
-        this.staticItems.miscs.forEach((misc) => misc.destroy())
-        this.staticItems.miscs = []
-      }
     }
   }
 

@@ -1,6 +1,5 @@
 import { Point, Size } from 'src/global/global'
 import { ImageSource } from 'src/structures/image-base'
-import { unique, uuid } from 'anytool'
 import { UniversalHitbox } from 'src/utils/universal-within'
 import { GameServer } from '../server'
 import { uniqueId } from 'src/utils/uniqueId'
@@ -9,6 +8,7 @@ export interface BasicMiscProps {
   source: ImageSource
   size: Size
   mapId: number
+  always?: boolean
   afterCreating?: (this: Misc, gameServer: GameServer) => void
 }
 
@@ -24,6 +24,7 @@ export class Misc implements BasicMiscProps {
   mapId: number
   source: ImageSource
   size: Size
+  always?: boolean
   readonly id = uniqueId()
 
   point: Point

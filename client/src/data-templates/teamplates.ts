@@ -16,19 +16,19 @@ import {
 
 export const PlayerSkinTemplate = new Aeolz.Template<PlayerSkinTempalteData>(
   ['name', 'index', 'url', 'handUrl'],
-  { global: true, name: 'player-skin', default: null },
+  { default: null },
 )
 
 export const EquipmentTemplate = new Aeolz.Template<EquipmentTemplateData>(
   [
     'url',
     'range',
-    'drawPositionX',
-    'drawPositionY',
+    'drawPosition.x',
+    'drawPosition.y',
     'startRotationWith',
     'flip',
-    'width',
-    'height',
+    'size.width',
+    'size.height',
     'toggleClicks',
     'twoHandMode',
   ],
@@ -36,7 +36,7 @@ export const EquipmentTemplate = new Aeolz.Template<EquipmentTemplateData>(
 )
 
 export const WearingTemplate = new Aeolz.Template<WearingTemplateData>(
-  ['url', 'drawPositionX', 'drawPositionY', 'width', 'height'],
+  ['url', 'drawPosition.x', 'drawPosition.y', 'size.width', 'size.height'],
   { default: null },
 )
 

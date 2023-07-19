@@ -69,28 +69,26 @@ export class PlayerLoop {
     // miscs
     const cacheMiscIds = this.cache.get('miscs', true)
 
-    if (graphics === PlayerGraphics.low) {
-      this.cache.data.miscs = []
-    } else {
-      const miscsInView = staticItems.miscs.filter((misc) =>
+    const miscsInView = staticItems.miscs.filter(
+      (misc) =>
+        (graphics === PlayerGraphics.low ? misc.always : true) &&
         universalWithin(viewRect, misc.universalHitbox),
+    )
+    const miscIds = miscsInView.map((bio) => bio.id)
+    if (!$(cacheMiscIds).same(miscIds)) {
+      const toRemoveIds = cacheMiscIds.filter(
+        (miscId) => !miscIds.includes(miscId),
       )
-      const miscIds = miscsInView.map((bio) => bio.id)
-      if (!$(cacheMiscIds).same(miscIds)) {
-        const toRemoveIds = cacheMiscIds.filter(
-          (miscId) => !miscIds.includes(miscId),
-        )
-        const toAdd = miscsInView.filter(
-          (misc) => !cacheMiscIds.includes(misc.id),
-        )
-        socket.emit('miscs', [
-          toAdd.map((misc) =>
-            MiscTemplate.take(Transformer.toPlain(new MiscEntity(misc))),
-          ),
-          toRemoveIds,
-        ])
-        this.cache.data.miscs = miscsInView
-      }
+      const toAdd = miscsInView.filter(
+        (misc) => !cacheMiscIds.includes(misc.id),
+      )
+      socket.emit('miscs', [
+        toAdd.map((misc) =>
+          MiscTemplate.take(Transformer.toPlain(new MiscEntity(misc))),
+        ),
+        toRemoveIds,
+      ])
+      this.cache.data.miscs = miscsInView
     }
 
     // bios

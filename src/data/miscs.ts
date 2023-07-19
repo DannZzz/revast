@@ -82,6 +82,7 @@ export const MiscItems = new Chest<number, BasicMisc>(
     }),
     misc({
       source: 'ISLAND_0',
+      always: true,
       size: new Size(962, 729),
       afterCreating(gameServer) {
         gameServer.map.addBiome(
@@ -112,6 +113,7 @@ export const MiscItems = new Chest<number, BasicMisc>(
     }),
     misc({
       source: 'ISLAND_1',
+      always: true,
       size: new Size(970, 775),
       afterCreating(gameServer) {
         gameServer.map.addBiome(
@@ -143,6 +145,7 @@ export const MiscItems = new Chest<number, BasicMisc>(
     }),
     misc({
       source: 'ISLAND_2',
+      always: true,
       size: new Size(856, 693),
       afterCreating(gameServer) {
         gameServer.map.addBiome(

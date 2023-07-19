@@ -27,8 +27,8 @@ export const EquipmentTemplate = new Aeolz.Template<EquipmentTemplateData>(
     'drawPosition.y',
     'startRotationWith',
     'flip',
-    'width',
-    'height',
+    'size.width',
+    'size.height',
     'toggleClicks',
     'twoHandMode',
   ],
@@ -36,7 +36,7 @@ export const EquipmentTemplate = new Aeolz.Template<EquipmentTemplateData>(
 )
 
 export const WearingTemplate = new Aeolz.Template<WearingTemplateData>(
-  ['url', 'drawPosition.x', 'drawPosition.y', 'width', 'height'],
+  ['url', 'drawPosition.x', 'drawPosition.y', 'size.width', 'size.height'],
   { default: null },
 )
 

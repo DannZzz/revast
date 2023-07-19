@@ -18,6 +18,8 @@ export class MiscEntity implements Partial<Misc> {
   @Expose()
   readonly id = uniqueId()
   @Expose()
+  always?: boolean
+  @Expose()
   point: Point
   constructor(props: Misc) {
     Object.assign(this, props)
