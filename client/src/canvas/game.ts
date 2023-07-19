@@ -55,6 +55,7 @@ export class Game {
   private serverMessageTimeout: any
   private resizeCd: any
   private nightNode: Konva.Rect
+  //
 
   init(props: GameProps) {
     this.layer = props.layer
