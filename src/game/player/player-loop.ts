@@ -75,7 +75,10 @@ export class PlayerLoop {
         universalWithin(viewRect, misc.universalHitbox),
     )
     const miscIds = miscsInView.map((bio) => bio.id)
-    if (!$(cacheMiscIds).same(miscIds)) {
+    if (
+      cacheMiscIds.some((id) => !miscIds.includes(id)) ||
+      miscIds.some((id) => !cacheMiscIds.includes(id))
+    ) {
       const toRemoveIds = cacheMiscIds.filter(
         (miscId) => !miscIds.includes(miscId),
       )
