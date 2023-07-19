@@ -69,11 +69,12 @@ export class PlayerLoop {
     // miscs
     const cacheMiscIds = this.cache.get('miscs', true)
 
-    const miscsInView = staticItems.miscs.filter(
-      (misc) =>
+    const miscsInView = staticItems.miscs.filter((misc) => {
+      return (
         (graphics === PlayerGraphics.low ? !!misc.always : true) &&
-        universalWithin(viewRect, misc.universalHitbox),
-    )
+        universalWithin(viewRect, misc.universalHitbox)
+      )
+    })
     const miscIds = miscsInView.map((bio) => bio.id)
     if (
       cacheMiscIds.some((id) => !miscIds.includes(id)) ||
