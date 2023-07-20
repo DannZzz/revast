@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/config/default.json
+/config/production.json
 
 # Logs
 logs
