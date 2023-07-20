@@ -9,14 +9,14 @@
     "client": "npm run dev --prefix client",
     "client:install": "npm install --prefix client",
     "client:build": "npm run build --prefix client",
-    "build": "npm run pre && nest build",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "pre": "cp -r src/data-templates client/src",
+    "pre": "cp -r src/data-templates client/src && git add .",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "dev": "npm run pre && cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run client\""
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run client\""
   },
   "dependencies": {
     "@nestjs/cache-manager": "^1.0.0",

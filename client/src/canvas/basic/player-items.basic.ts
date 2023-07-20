@@ -31,7 +31,10 @@ export class BasicPlayerItems {
     )
     if (equiped) {
       handLeft.visible(!!equiped.twoHandMode)
-      const equipmentSize = equiped.size || this.player.equipment.size
+      const equipmentSize =
+        equiped.size?.width && equiped.size?.height
+          ? equiped.size
+          : this.player.equipment.size
       if (!!equiped.twoHandMode) {
         handLeft.position(
           new Point(
@@ -45,23 +48,18 @@ export class BasicPlayerItems {
         handLeft.size(equipmentSize)
         handLeft.setAttr(
           "image",
-          loadImage(equiped.url, (img) =>
-            handLeft.setAttr("image", img)
-          )
+          loadImage(equiped.url, (img) => handLeft.setAttr("image", img))
         )
       }
       handLeft
       handRight.visible(true)
       handRight.position(equiped.drawPosition)
       handRight.size(equipmentSize)
-      handRight
-        .setAttr(
-          "image",
-          loadImage(equiped.url, (img) =>
-            handRight.setAttr("image", img)
-          )
-        )
-        
+      handRight.setAttr(
+        "image",
+        loadImage(equiped.url, (img) => handRight.setAttr("image", img))
+      )
+
       handRight.scaleX(equiped.flip ? -1 : 1)
       handRight.offsetX(equiped.flip ? equipmentSize.width : 0)
       handRight.rotation(
