@@ -1,7 +1,7 @@
 import { Component, Show } from "solid-js"
 import MenuCenter from "./Menu/MenuCenter"
 import "./Menu.scss"
-import { DISCORD_SERVER_LINK } from "../../../constants"
+import * as Constants from "../../../constants"
 import Skins from "./Menu/Skins/Skins"
 import ChangelogPreview from "./Menu/ChangelogPreview/ChangelogPreview"
 import modalState from "../../../components/Modal/modal-state"
@@ -11,6 +11,13 @@ const Menu: Component<{}> = (props) => {
 
   return (
     <div class="menu">
+      {"PATREON_LINK" in Constants && (
+        <div class="patreon-container">
+          <a href={Constants.PATREON_LINK} target="_blank">
+            Subscribe to the source code of the game!
+          </a>
+        </div>
+      )}
       <MenuCenter />
 
       {/* <a href={DISCORD_SERVER_LINK} target="_blank" class="social discord">
@@ -25,7 +32,7 @@ const Menu: Component<{}> = (props) => {
           <a target="_blank" href="/leaderboard" class="action-button lb"></a>
           <Skins />
           <a
-            href={DISCORD_SERVER_LINK}
+            href={Constants.DISCORD_SERVER_LINK}
             target="_blank"
             class="action-button discord"
           ></a>

@@ -1,5 +1,7 @@
 export const DISCORD_SERVER_LINK = "https://discord.gg/anevqcFqjS"
 
+export const PATREON_LINK = "https://www.patreon.com/aeolz?fan_landing=true"
+
 export const SERVER_ASSET = (fileName: string) => `/api/images/${fileName}`
 
 export const PREVIEW_URL = "/images/golden-dragon-preview.png"
