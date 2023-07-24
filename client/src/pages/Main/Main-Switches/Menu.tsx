@@ -11,13 +11,6 @@ const Menu: Component<{}> = (props) => {
 
   return (
     <div class="menu">
-      {"PATREON_LINK" in Constants && (
-        <div class="patreon-container">
-          <a href={Constants.PATREON_LINK} target="_blank">
-            Subscribe to the source code of the game!
-          </a>
-        </div>
-      )}
       <MenuCenter />
 
       {/* <a href={DISCORD_SERVER_LINK} target="_blank" class="social discord">
