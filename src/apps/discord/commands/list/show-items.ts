@@ -1,10 +1,5 @@
 import { EmbedBuilder } from 'discord.js'
 import { DJCommand } from '../Command'
-import GameServers from 'src/servers/game-servers'
-import { DJGameServerInteraction } from '../collectors/game-server-interaction'
-import { GameServer } from 'src/game/server'
-import { isNumber } from 'src/utils/is-number-in-range'
-import { Cooldown, formatNumber } from 'anytool'
 import { Items } from 'src/data/items'
 import { SERVER_API } from 'src/constant'
 
@@ -13,18 +8,18 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'показать',
+          word: 'show',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 5,
+          validAmount: 0,
         },
       ],
     },
     {
       args: [
         {
-          word: 'предмет',
+          word: 'item',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
@@ -72,9 +67,7 @@ export default new DJCommand({
     let texts: string[] = []
 
     Items.sort((a, b) => a.id - b.id).forEach((item) => {
-      const itemTxt = `#${item.id} ${
-        item.data.name
-      } **[Посмотреть иконку](${SERVER_API(
+      const itemTxt = `#${item.id} ${item.data.name} **[Icon](${SERVER_API(
         '/api/images/' + item.iconSource,
       )})**\n`
       if ((text + itemTxt).length > 4096) {
@@ -86,7 +79,7 @@ export default new DJCommand({
 
     if (text) texts.push(text)
 
-    embed.setAuthor({ name: 'Предметы' })
+    embed.setAuthor({ name: 'Items' })
 
     msg.reply({
       embeds: [embed],

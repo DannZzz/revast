@@ -18,10 +18,9 @@ export const openAiFind = async (prompt: string): Promise<string> => {
       ],
       max_tokens: 2000,
     })
-    // console.log(completion.data.choices.length, completion.data.choices)
     return completion.data.choices[0]?.message?.content?.slice(0, 2000)
   } catch (e) {
-    console.log('OPEN_AI ERROR', e)
-    return 'Я получаю ошибку извините, либо не успеваю вам отвечать..'
+    console.log('OPEN_AI_ERROR', e)
+    return "I get an error. I'm sorry, or I don't have time to respond."
   }
 }

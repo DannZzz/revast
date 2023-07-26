@@ -13,18 +13,11 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'прими',
+          word: 'take',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
           validAmount: 1,
-        },
-        {
-          word: 'применить',
-          ignoreNextCount: 0,
-          ignoreWordIfLengthSmallerThan: 0,
-          lshOptions: {},
-          validAmount: 3,
         },
       ],
       notRequired: true,
@@ -32,7 +25,19 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'команда',
+          word: 'a',
+          ignoreNextCount: 0,
+          ignoreWordIfLengthSmallerThan: 0,
+          lshOptions: {},
+          validAmount: 0,
+        },
+      ],
+      notRequired: true,
+    },
+    {
+      args: [
+        {
+          word: 'command',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
@@ -58,20 +63,19 @@ export default new DJCommand({
     const serverName = DJGameServerInteraction.collectors.get(
       author.id,
     )?.currentServer
-    if (!serverName)
-      return msg.reply('Сэр, вы же не находитесь ни в одной сервере..')
+    if (!serverName) return msg.reply("Sir, you're not in any server.")
     let command: string = query.get('command')
 
     const fake_player = <Partial<Player>>{
       serverMessage: (content: string) =>
-        msg.channel.send(`Ответ от сервера: \`${content}\``),
+        msg.channel.send(`Server Response: \`${content}\``),
       point: GetSet(new Point()),
       socket: perfectSocket(<any>{}),
       gameServer: GameServers.find(
         (s) => s.information.name.toLowerCase() === serverName?.toLowerCase(),
       ),
     }
-    msg.reply('Сделано!')
+    msg.reply('Done!')
     AdminCommands.tryAny(`/${command}`, fake_player as Player)
   },
 })

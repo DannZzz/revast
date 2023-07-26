@@ -7,37 +7,18 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'поставить',
+          word: 'set',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 3,
-        },
-        {
-          word: 'ставить',
-          ignoreNextCount: 0,
-          ignoreWordIfLengthSmallerThan: 0,
-          lshOptions: {},
-          validAmount: 3,
+          validAmount: 0,
         },
       ],
     },
     {
       args: [
         {
-          word: 'себе',
-          ignoreNextCount: 0,
-          ignoreWordIfLengthSmallerThan: 0,
-          lshOptions: { replaceCase: 1, remove: 0 },
-          validAmount: 1,
-        },
-      ],
-      notRequired: true,
-    },
-    {
-      args: [
-        {
-          word: 'статус',
+          word: 'status',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: { remove: 0, replaceCase: 0 },
@@ -63,6 +44,6 @@ export default new DJCommand({
     let status: string = query.get('status')
 
     client.user.setActivity(status)
-    msg.reply('Сделано!')
+    msg.reply('done!')
   },
 })

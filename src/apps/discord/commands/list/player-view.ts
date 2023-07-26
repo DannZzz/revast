@@ -11,18 +11,18 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'показать',
+          word: 'show',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 5,
+          validAmount: 1,
         },
       ],
     },
     {
       args: [
         {
-          word: 'вид',
+          word: 'view',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
@@ -53,7 +53,7 @@ export default new DJCommand({
 
     if (!serverName)
       return msg.reply(
-        'Эй, я не могу читать твои мысли, подключись к серверу, либо добавь еще и название/номер сервера, чтобы я понял..',
+        "Hey, I can't read your mind, connect to the server, or add the server name/number tho, so I understand...",
       )
 
     const server = GameServers.find(
@@ -61,12 +61,14 @@ export default new DJCommand({
     )
 
     if (!server)
-      return msg.reply('Эу, кажется такого сервера не существует :thinking:')
+      return msg.reply("Eh, it seems such a server doesn't exist :thinking:")
 
     const player = server.alivePlayers.get(playerId)
     if (!player || !player.online())
-      return msg.reply('Эу, я не нашел игрока, либо игрок оффлайн :thinking:')
-    msg.reply('Подождите пожалуйста!')
+      return msg.reply(
+        "Uh, I can't find the player, or the player is offline. :thinking:",
+      )
+    msg.reply('Wait please!')
     player.requestView((dataUrl) => {
       const attachment = new AttachmentBuilder(
         Buffer.from(dataUrl.split(',')[1], 'base64'),

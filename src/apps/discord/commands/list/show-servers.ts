@@ -9,18 +9,18 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'показать',
+          word: 'show',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 5,
+          validAmount: 0,
         },
       ],
     },
     {
       args: [
         {
-          word: 'сервер',
+          word: 'server',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
@@ -31,7 +31,7 @@ export default new DJCommand({
   ],
 
   execute({ msg, author }) {
-    msg.reply('Нашел список серверов??')
+    msg.reply('Server list found!!')
     const embed = new EmbedBuilder()
       .setDescription(
         DJGameServerInteraction.servers()
@@ -55,8 +55,8 @@ export default new DJCommand({
               ignoreNextCount: 0,
               ignoreWordIfLengthSmallerThan: 3,
               lshOptions: {},
-              word: 'выбор',
-              validAmount: 4,
+              word: 'select',
+              validAmount: 2,
             },
           ],
           notRequired: true,
@@ -67,22 +67,22 @@ export default new DJCommand({
               ignoreNextCount: 0,
               ignoreWordIfLengthSmallerThan: 0,
               lshOptions: {},
-              word: 'первый',
-              validAmount: 4,
+              word: 'first',
+              validAmount: 2,
             },
             {
               ignoreNextCount: 0,
               ignoreWordIfLengthSmallerThan: 0,
               lshOptions: {},
-              word: 'второй',
-              validAmount: 4,
+              word: 'second',
+              validAmount: 2,
             },
             {
               ignoreNextCount: 0,
               ignoreWordIfLengthSmallerThan: 0,
               lshOptions: {},
-              word: 'третий',
-              validAmount: 4,
+              word: 'third',
+              validAmount: 2,
             },
             {
               ignoreNextCount: 0,
@@ -99,15 +99,15 @@ export default new DJCommand({
         const [select, num] = acceptedArgs
         let index: number
         switch (num) {
-          case 'первый':
+          case 'first':
             index = 0
             break
 
-          case 'второй':
+          case 'second':
             index = 1
             break
 
-          case 'третий':
+          case 'third':
             index = 2
             break
 
@@ -116,10 +116,13 @@ export default new DJCommand({
             break
         }
         const server: GameServer = DJGameServerInteraction.servers()[index]
-        if (!server) msg.channel.send('Эуу, я такого сервера ещё не видел.')
+        if (!server)
+          msg.channel.send(
+            "Eh, it seems such a server doesn't exist :thinking:",
+          )
         this.currentServer = server.information.name
         msg.channel.send(
-          'Буум, вы установили сервер: ' + server.information.name,
+          'Boom, you are in the server: ' + server.information.name,
         )
       },
     )

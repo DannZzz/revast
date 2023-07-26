@@ -1,1 +1,3 @@
-export class CraftItemDto {}
+export class CraftItemDto {
+  // to do
+}

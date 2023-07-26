@@ -34,8 +34,8 @@ export const resolveDJMessage = (
   if (
     args[0] &&
     !args[1] &&
-    ['отвали', 'выключить', 'уйди', 'отстань', 'ладно'].some(
-      (txt) => levenshtein(txt, args[0].toLowerCase()) < 3,
+    ['stop', 'off', 'away', 'stfu'].some(
+      (txt) => levenshtein(txt, args[0].toLowerCase()) < 2,
     )
   ) {
     const data = ListenBossCollectors.get(msg.author.id)

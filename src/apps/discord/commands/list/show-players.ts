@@ -11,18 +11,18 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'показать',
+          word: 'show',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: {},
-          validAmount: 5,
+          validAmount: 0,
         },
       ],
     },
     {
       args: [
         {
-          word: 'игрок',
+          word: 'player',
           ignoreNextCount: 0,
           ignoreWordIfLengthSmallerThan: 0,
           lshOptions: { remove: 0, replaceCase: 0 },
@@ -33,9 +33,9 @@ export default new DJCommand({
     {
       args: [
         {
-          word: 'сервер',
+          word: 'server',
           ignoreNextCount: 0,
-          ignoreWordIfLengthSmallerThan: 0,
+          ignoreWordIfLengthSmallerThan: 2,
           lshOptions: {},
           validAmount: 3,
         },
@@ -64,7 +64,7 @@ export default new DJCommand({
 
     if (!serverName)
       return msg.reply(
-        'Эй, я не могу читать твои мысли, подключись к серверу, либо добавь еще и название/номер сервера, чтобы я понял..',
+        "Hey, I can't read your mind, connect to the server, or add the server name/number tho, so I understand...",
       )
 
     const isIndex = isNumber(+serverName)
@@ -77,17 +77,17 @@ export default new DJCommand({
     )
 
     if (!server)
-      return msg.reply('Эу, кажется такого сервера не существует :thinking:')
+      return msg.reply("Eh, it seems such a server doesn't exist :thinking:")
 
     const lb = server.leaderboard.generate(100)
     const embed = new EmbedBuilder()
       .setColor('White')
       .setAuthor({
-        name: `Эйй Я нашел игроков сервера ${server.information.name}!`,
+        name: `Yoo I found the players of the server: ${server.information.name}!`,
       })
       .setDescription(
         lb.length === 0
-          ? 'Упс, кажется никого нет..'
+          ? 'Oops, empty..'
           : lb
               .map((lbm) => {
                 const player = server.alivePlayers.get(lbm.key as number)

@@ -105,6 +105,8 @@ export const MAX_TREASURES_ISLAND = 5
 export const ADMIN_PASSWORDS = ['i want admin']
 export const ADMIN_COMMAND_PREFIX = '/'
 
+// -------- Xuyna --------
+
 const itemFor = (i: number, quantity: number = 999) => [
   i,
   { quantity, equiped: false, item: itemById(i) },

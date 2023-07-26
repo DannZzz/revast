@@ -1,17 +1,17 @@
 export const randomImListening = () => {
   const answers = [
-    'Да, хозяин, я здесь!',
-    'Эуууу, я тут.',
-    'Чем могу помочь?',
-    'Как изобретение Дэна, даю слово не сломаться.\n\n||Но это не точно||',
-    'В небе птицы, в воде рыбки, в грязи червы, одни люди везде.',
-    'Программист сказал что, он знает всё, в итоге он начал свой блог в ютубе.',
-    'Иногда мне скучно, иногда я не окружён дебилами.',
-    'Хватит меня послать!!',
-    'Я же обычный ИИ, откуда мне знать о ваших чувств?',
-    'Даже не думай об этом!',
-    'Когда же отпуск.. эх.. ладно, я слушаю.',
-    'Я тоже имею КД, не забудь об этом!',
+    "Yes, master, I'm here!",
+    "Uh-oh, I'm here.",
+    'what can I do for you?',
+    "As Dann's invention, I give you my word not to break down!\n\n||But it's not certain||",
+    'There are birds in the sky, fish in the water, worms in the mud, only people everywhere.',
+    'The programmer said he knew everything, so he started a YouTube blog.',
+    "Sometimes I'm bored, sometimes I'm not surrounded by retards.",
+    'Stop messing with me!!!',
+    "I'm just an ordinary AI, how am I supposed to know how you feel?",
+    "Don't even think about it!",
+    "When is vacation... eh... okay, I'm listening.",
+    "I also have a cooldown, don't forget it!",
   ]
   return answers[$.randomNumber(1, answers.length) - 1]
 }
